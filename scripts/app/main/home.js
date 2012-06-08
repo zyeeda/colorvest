@@ -1,6 +1,6 @@
 
 define({
-    layout: 'main',
+    layout: '/main',
 
     views: [
         {name: 'header', region: 'north'},
