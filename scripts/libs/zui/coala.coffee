@@ -18,7 +18,7 @@ error = (base, messages...) ->
     messages.unshift getBaseName base
     throw new Error(messages.join ' ')
 
-_define = (require, $, _, Backbone, Marionette, Handlebars, loadResource) ->
+_define = ($, _, Backbone, Marionette, Handlebars, loadResource) ->
 
     # override marionette's template loader
     Marionette.TemplateCache.loadTemplate = (templateId, callback) ->
@@ -30,6 +30,9 @@ _define = (require, $, _, Backbone, Marionette, Handlebars, loadResource) ->
         applicationName: 'app'
         templateSuffix: '.html'
         featureContainer: 'body'
+        urlPrefix: 'invoke/'
+        modelDefinitionPath: 'definition'
+
         folders:
             layout: 'layouts/'
             view: 'views/'
@@ -65,8 +68,27 @@ _define = (require, $, _, Backbone, Marionette, Handlebars, loadResource) ->
 
 
     getPath = (type, path) ->
-        coala.folders[type] + path
+        root = true if path.charAt(0) is '/'
+        path = path.substring 1 if root is true
 
+        (if root then '/' else '') + coala.folders[type] + path
+
+    Sync =
+        methodMap:
+            'create': 'POST'
+            'update': 'PUT'
+            'delete': 'DELETE'
+            'read': 'GET'
+        fn: (method, model, options = {}) ->
+            type = Sync.methodMap[method]
+
+            params = type: type, dataType: 'json', url: model.url()
+            params.data = _.extend model.toJSON(), options.data or {}
+            delete options.data
+
+            $.ajax _.extend params, options
+
+    Backbone.sync = Sync.fn
 
     class coala.BaseView extends Marionette.ItemView
         constructor: (options) ->
@@ -74,16 +96,18 @@ _define = (require, $, _, Backbone, Marionette, Handlebars, loadResource) ->
             @module = options.module
             @feature = options.feature
             @baseName = options.baseName
-            @promises.push @initHandlers(options.handlersIn).done =>
-                super options
+            super options
+            @promises.push @initHandlers(options.handlersIn)
 
         initialize: (options) ->
             @events = options.events
             for name, value of options.events or {}
                 if not _.isFunction value
-                    method = @eventHandlers[value]
-                    error @, "no handler named #{value}" if not method
-                    @events[name] = _.bind method, @
+                    @events[name] = _.bind (n, args...) ->
+                        method = @eventHandlers[n]
+                        error @, "no handler named #{value}" if not method
+                        method.apply @, args
+                    , @, value
 
         initHandlers: (handler) ->
             path = getPath('handler', handler or @baseName)
@@ -95,7 +119,6 @@ _define = (require, $, _, Backbone, Marionette, Handlebars, loadResource) ->
 
         getTemplateSelector: ->
             template = @template or @options.template
-            log @, "getTemplateSelector", template
             if _.isFunction template
                 template = template.call this
             @module.resolveResoucePath template + coala.templateSuffix
@@ -138,9 +161,54 @@ _define = (require, $, _, Backbone, Marionette, Handlebars, loadResource) ->
     class coala.View extends coala.BaseView
         constructor: (options) ->
             @baseName = options.baseName
-            @region = options.region
             @feature = options.feature
+            @module = options.module
+            @model = options.model
+            @options = options
             super options
+
+            @deferredModel = @initModel()
+            @deferredCollection = @initCollection()
+            @promises?.push @deferredModel
+            @promises?.push @deferredCollection
+
+        url: ->
+            @feature.url() + '/' + @baseName
+
+        initModel: ->
+            return if @model
+            deferred = $.Deferred()
+            if not @options.path
+                @model = @feature.model
+                @collection = @feature.collection
+                deferred.resolve()
+                return deferred
+
+            @module.loadResource(getPath 'model', @options.path).done (def) =>
+                if not def
+                    @module.loadResource(@url() + '/' + @options.path + '/' + coala.modelDefinitionPath, null, true).done (data) =>
+                        if data
+                            data.feature = @feature
+                            data.path = @options.path
+                            @modelDefinition = coala.Model.extend data
+                            @model = new @modelDefinition()
+                            deferred.resolve()
+                        else
+                            @modelDefinition = coala.Model.extend feature: @feature, path: @options.path
+                            @model = new @modelDefinition()
+                            deferred.resolve()
+                else
+                    def.feature = @feature
+                    def.path = @options.path
+                    @modelDefinition = coala.Model.extend def
+                    @model = new @modelDefinition()
+                    deferred.resolve()
+            deferred
+
+        initCollection: ->
+            return if @collection
+            @deferredModel.done =>
+                @collection = new (coala.Collection.extend feature: @feature)(null, model: @modelDefinition)
 
     class coala.Layout extends coala.BaseView
         constructor: (options)->
@@ -150,7 +218,7 @@ _define = (require, $, _, Backbone, Marionette, Handlebars, loadResource) ->
             @regionManagers = {}
 
         template: ->
-            '/' + getPath('template', @baseName)
+            getPath('template', @baseName)
 
         render: ->
             @initializeRegions()
@@ -162,15 +230,25 @@ _define = (require, $, _, Backbone, Marionette, Handlebars, loadResource) ->
 
 
     class coala.Model extends Backbone.Model
+        url: ->
+            path = @path
+            url = @view?.url() or @feature?.url() or ''
+            if path then url + '/' + path else url
 
     class coala.Collection extends Backbone.Collection
+        url: ->
+            path = @path
+            url = @view?.url() or @feature?.url() or ''
+            if path then url + '/' + path else url
 
     class coala.Feature
         constructor: (@options) ->
             @cid = _.uniqueId 'feature'
             @baseName = options.baseName
             @module = options.module
-            @views = {}
+            @model = options.model if options.model
+            @collection = options.collection if options.collection
+
             @initRenderTarget()
             @deferredLayout = @initLayout()
             @deferredModel = @initModel()
@@ -197,29 +275,51 @@ _define = (require, $, _, Backbone, Marionette, Handlebars, loadResource) ->
 
         initModel: ->
             return if @model
+            deferred = $.Deferred()
+            @module.loadResource(getPath 'model', @baseName).done (def) =>
+                if not def
+                    @module.loadResource(@url() + '/' + coala.modelDefinitionPath, null, true).done (data) =>
+                        if data
+                            @modelDefinition = coala.Model.extend data
+                            @model = new @modelDefinition()
+                            deferred.resolve()
+                        else
+                            @modelDefinition = coala.Model.extend feature: @
+                            @model = new @modelDefinition()
+                            deferred.resolve()
+                else
+                    def.feature = @
+                    @modelDefinition = coala.Model.extend def
+                    @model = new @modelDefinition()
+                    deferred.resolve()
+            deferred.promise()
 
         initCollection: ->
+            return if @collection
+            @deferredModel.done =>
+                @collection = new (coala.Collection.extend feature: @)(null, model: @modelDefinition)
 
         initViews: () ->
             @inRegionViews = {}
             @views = {}
 
             views = []
-            promises = [@deferredLayout]
+            promises = [@deferredLayout,@deferredModel]
             for view in @options.views or []
                 view = if _.isString(view) then name: view else view
                 views.push view
                 promises.push @module.loadResource getPath 'view', view.name
 
-            defered = $.when.apply($, promises).then (unneeded, args...) =>
+            defered = $.when.apply($, promises).then _.bind (vs, u1,u2, args...) =>
                 for options, i in args
                     options or= {}
-                    options.baseName = views[i].name
+                    options.baseName = vs[i].name
                     options.feature = @
                     options.module = @module
-                    @views[i] = @views[views[i].name] = new coala.View options
-                    @inRegionViews[views[i].region] = @views[i] if views[i].region
+                    @views[i] = @views[vs[i].name] = new coala.View options
+                    @inRegionViews[vs[i].region] = @views[i] if vs[i].region
                 return
+            , @, views
             defered.promise()
 
         showView: (region, view) ->
@@ -231,6 +331,18 @@ _define = (require, $, _, Backbone, Marionette, Handlebars, loadResource) ->
 
             promise.done =>
                 @layout[region].show view
+
+        url: ->
+            prefix = coala.urlPrefix
+            prefix = if _.isFunction prefix then prefix @ else prefix
+            path = @module.path @baseName, true
+
+            prefix + path
+
+        # delegate $.ajax, do nothing but add url prefix
+        request:  (options) ->
+            options.url = @url() + '/' + options.url
+            $.ajax options
 
         active: ->
             #override this
@@ -312,11 +424,12 @@ _define = (require, $, _, Backbone, Marionette, Handlebars, loadResource) ->
         #
         # if resourcePath starts with '/', it will use root to load it
         # module.loadResource '/module.sub-module.resource'
-        loadResource: (resourcePath, plugin) ->
+        loadResource: (resourcePath, plugin, dontProcessPath) ->
+            return loadResource resourcePath, plugin if dontProcessPath is true
             return @getRoot().loadResource resourcePath.substring 1 if resourcePath.charAt(0) is '/'
             path = @resolveResoucePath resourcePath
 
-            log @, 'load resource:', resourcePath, ' in path:', path
+            #log @, 'load resource:', resourcePath, ' in path:', path
             loadResource path, plugin
 
         startFeature: (featurePath, container) ->
@@ -331,8 +444,6 @@ _define = (require, $, _, Backbone, Marionette, Handlebars, loadResource) ->
                 def.baseName = featureName
                 def.module = mod
                 def.container = container if container?
-
-                log @, 'feature definition:', def
 
                 feature = new coala.Feature def
                 mod.features[feature.cid] = feature
@@ -366,11 +477,12 @@ if define? and define.amd?
 
             log baseName: 'resource loader', 'load path:', path
 
-            require [path], (result) ->
+            require [path], _.bind (path, result) ->
                 deferred.resolve result
+            , @, path
             deferred.promise()
 
-        _define require, $, _, Backbone, Marionette, Handlebars, resourceLoader
+        _define $, _, Backbone, Marionette, Handlebars, resourceLoader
 else
 
     resourceLoader = (resource, plugin) ->
@@ -381,4 +493,4 @@ else
     scriptLoader = (modules) ->
         # not implement yet.
 
-    _define scriptLoader, $, _, Backbone, Marionette, Handlebars, resourceLoader
+    _define $, _, Backbone, Marionette, Handlebars, resourceLoader

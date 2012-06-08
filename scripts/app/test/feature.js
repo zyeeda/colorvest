@@ -1,5 +1,5 @@
 define({
-    layout: 'grid',
+    layout: '/grid',
     closable: true,
     
     views: [
