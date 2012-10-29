@@ -1,0 +1,19 @@
+<div class="ui-sidebar">
+    <div class="ui-sidebar-header">
+        <div class="ui-sidebar-title">导航菜单</div>
+        <div class="icon-sidebar-toggler ui-sidebar-toggler">缩进</div>
+    </div>
+    <div class="ui-sidebar-nav">
+        <ul>
+            {{#each data}}
+            <li>
+                <a id="{{id}}" href="javascript:void(0)">
+                    <i class="{{iconClass}}"></i>
+                    <span>{{name}}</span>
+                    <i class="icon-sidebar-nav-indicator ui-sidebar-nav-indicator"></i>
+                </a>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>

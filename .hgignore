@@ -1,0 +1,19 @@
+syntax: glob
+
+*.
+*.swp
+*.bak
+*~
+*.~ml
+*.orig
+.DS_Store
+
+zui/*.js
+zui/application/*.js
+zui/coala/*.js
+zui/components/*.js
+zui/features/*.js
+zui/plugins/*.js
+
+
+syntax: regexp
