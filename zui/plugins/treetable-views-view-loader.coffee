@@ -42,12 +42,17 @@ define [
             validator = view.$$('form').valid()
             return false if !validator
             $.when(view.model.save()).then (data) ->
-                if data.errors
+                if data.violations
                     msg = ''
-                    labels = (if _id then view.forms.edit.fields else view.forms.add.fields)
-                    for err in data.errors
+                    summary = ''
+                    labels = view.forms.fields
+                    for err in data.violations
+                        unless err.properties
+                            summary += err.message + '\n'
                         for label in labels
-                            msg += "#{[label.label]} #{err.message}\n" if label.name == err.property
+                            if label.name == err.properties
+                                msg += "#{[label.label]} #{err.message}\n"
+                    msg += summary
                     app.error msg, '验证提示'
                     return
                 view.feature.views['treeTableViews:grid'].components[0].trigger('reloadGrid')
@@ -67,20 +72,19 @@ define [
             _(v.components).each (component) ->
                 component.loadData data if _.isFunction(component.loadData)
         .done ->
-            view.feature.request url:'configuration/rules', success: (data) ->
-                return unless data
-                _id = view.model.get('id')
-                result = (if _id then data.edit else data.add)
-                view.$$('form').validate({
-                    rules: result.rules,
-                    messages: result.messages,
-                    highlight: (label) ->
-                        # $(label).closest('.control-group').addClass('error')
-                        $(label).addClass('error').closest('.control-group').addClass('error')
-                    ,
-                    success: (label) ->
-                        $(label).text('OK!').addClass('valid').closest('.control-group').addClass('success')
-                })
+            return unless view.forms.validator
+            result = view.forms.validator
+            view.$$('form').validate({
+                rules: view.forms.validator.rules,
+                messages: view.forms.validator.messages,
+                highlight: (label) ->
+                    $(label).closest('.control-group').removeClass('success')
+                    $(label).closest('.control-group').addClass('error')
+                ,
+                success: (label) ->
+                    $(label).text('OK!').addClass('valid').closest('.control-group').removeClass('error')
+                    $(label).text('OK!').addClass('valid').closest('.control-group').addClass('success')
+            })
 
     generateOperatorsView = (module, feature, deferred) ->
         feature.request url:'configuration/operators', success: (data) ->
@@ -133,7 +137,15 @@ define [
                 return app.info '请选择要操作的记录' if not selected
 
                 @feature.model.set 'id', selected
-                $.when(@feature.model.destroy()).then =>
+                $.when(@feature.model.destroy()).then (data) =>
+                    if data.violations
+                        msg = ''; summary = ''
+                        for err in data.violations
+                            unless err.properties
+                                summary += err.message + '\n'
+                        msg += summary
+                        app.error msg, '验证提示'
+                        return
                     grid.trigger 'reloadGrid'
             view.eventHandlers.show = ->
                 app = @feature.module.getApplication()

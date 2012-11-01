@@ -43,7 +43,8 @@ define [
             el.addClass 'ui-jqgrid-fit'
             cbGrid.resizeToFit el
 
-        el.jqGrid options
+        # el.jqGrid options
+        buildGrid el, options, view
 
     coala.registerComponentHandler 'tree-table', (->), (el, options, view) ->
         collection = view.collection
@@ -120,4 +121,39 @@ define [
             el.addClass 'ui-jqgrid-fit'
             cbGrid.resizeToFit el
 
+        # el.jqGrid options
+        buildGrid el, options, view
+
+    buildGrid = (el, options, view)->
+        fields = options.colModel
+        colModel = []
+        for f in fields
+            if f.type == 'enum'
+                data = f.editoptions.value.split ';'
+                f.searchoptions = sopt: ['in'],
+                dataInit: (el) ->
+                    _select = $('<select>')
+                    _select.append "<option value=#{d.split(':')[0]}>#{d.split(':')[1]}</option>" for d in data
+                    $(el).after(_select)
+                    $(el).hide()
+                    _select.css 'width', '100%'
+                    _select.attr 'multiple', 'multiple'
+                    _select.select2()
+                    _select.on 'change', ->
+                        $(el).val _select.val()
+                        $(el).trigger 'keydown'
+            else if f.type == 'date'
+                f.searchoptions = sopt: ['between'],
+                dataInit: (el) ->
+                    $(el).daterangepicker()
+            else if f.type == 'number'
+                f.searchoptions = sopt: ['between']
+            else if f.type == 'boolean'
+                f.stype = 'select'
+                f.editoptions = {value:':全部;1:是;0:否'}
+            else
+                f.searchoptions = sopt: ['like'] if(f.stype != 'select')
+            colModel.push f
+        options.colModel = colModel
         el.jqGrid options
+        el.jqGrid 'filterToolbar', stringResult: true, searchOnEnter: false

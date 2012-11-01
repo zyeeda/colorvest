@@ -3,7 +3,8 @@ define [
     'underscore'
     'zui/coala/view'
     'zui/coala/config'
-], ($, _, View, config) ->
+    'zui/coala/loader-plugin-manager'
+], ($, _, View, config, LoaderManager) ->
     {getPath} = config
 
     templates =
@@ -21,35 +22,38 @@ define [
             <div id="pager"/>
         '''
 
+    getFormData = (view) ->
+        values = view.$$('form').serializeArray()
+        data = {}
+        _(values).map (item) ->
+            if item.name of data
+                data[item.name] = if _.isArray(data[item.name]) then data[item.name].concat([item.value]) else [data[item.name], item.value]
+            else
+                data[item.name] = item.value
+        view.model.set data
+        _(view.components).each (component) ->
+            if _.isFunction(component.getFormData)
+                d = component.getFormData()
+                view.model.set d.name, d.value if d
+
+
     submitHandler = (viewName, title) ->
         view = @feature.views[viewName]
         app = @feature.module.getApplication()
         ok = ->
-            values = view.$$('form').serializeArray()
-            data = {}
-            _(values).map (item) ->
-                if item.name of data
-                    data[item.name] = if _.isArray(data[item.name]) then data[item.name].concat([item.value]) else [data[item.name], item.value]
-                else
-                    data[item.name] = item.value
-            view.model.set data
-            _(view.components).each (component) ->
-                if _.isFunction(component.getFormData)
-                    d = component.getFormData()
-                    view.model.set d.name, d.value if d
-
+            getFormData view
             validator = view.$$('form').valid()
             return false if !validator
             $.when(view.model.save()).then (data) ->
-                if data.errors
+                if data.violations
                     msg = ''
                     summary = ''
                     labels = view.forms.fields
-                    for err in data.errors
-                        unless err.property
+                    for err in data.violations
+                        unless err.properties
                             summary += err.message + '\n'
                         for label in labels
-                            if label.name == err.property
+                            if label.name == err.properties
                                 msg += "#{[label.label]} #{err.message}\n"
                     msg += summary
                     app.error msg, '验证提示'
@@ -88,18 +92,16 @@ define [
     generateOperatorsView = (module, feature, deferred) ->
         feature.request url:'configuration/operators', success: (data) ->
             strings = []
+            events = {}
             for name, value of data
                 value = label: value if _.isString value
                 strings.push templates.operator(id: name, label: value.label, icon: value.icon)
+                events['click ' + name] = name
             view = new View
                 baseName: 'operators'
                 module: module
                 feature: feature
-                events:
-                    'click add': 'add'
-                    'click edit': 'edit'
-                    'click del': 'del'
-                    'click show': 'show'
+                events: events
                 extend:
                     renderHtml: (su, data) ->
                         template = Handlebars.compile strings.join('') or ''
@@ -124,10 +126,17 @@ define [
                 return app.info '请选择要操作的记录' if not selected
 
                 @feature.model.set 'id', selected
-                $.when(@feature.model.destroy()).then =>
+                $.when(@feature.model.destroy()).then (data) =>
+                    if data.violations
+                        msg = ''; summary = ''
+                        for err in data.violations
+                            unless err.properties
+                                summary += err.message + '\n'
+                        msg += summary
+                        app.error msg, '验证提示'
+                        return
                     grid.trigger 'reloadGrid'
             view.eventHandlers.show = ->
-                app = @feature.module.getApplication()
                 grid = @feature.views['views:grid'].components[0]
                 view = @feature.views['forms:edit']
                 selected = grid.getGridParam('selrow')
@@ -142,7 +151,6 @@ define [
                         buttons: []
                     ).done ->
                         view.$$('form input').attr('readonly', true)
-
             deferred.resolve view
 
     generateGridView = (module, feature, deferred) ->

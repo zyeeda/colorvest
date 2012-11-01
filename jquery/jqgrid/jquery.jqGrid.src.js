@@ -1895,7 +1895,7 @@ $.fn.jqGrid = function( pin ) {
                     if (op.data.filters) {
                         filters = JSON.parse(op.data.filters);
                         _filters = [];
-                        for (i = 0; i < filters.rules; i++) {
+                        for (i = 0; i < filters.rules.length; i++) {
                             f = filters.rules[i];
                             _filters.push({
                                 name: f.field,
