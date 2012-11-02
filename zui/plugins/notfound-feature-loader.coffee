@@ -14,13 +14,13 @@ define [
             if data.views
                 views = data.views
             else
-                if data.type is 'grid'
+                if data.style is 'grid'
                     views.push name: 'views:operators', region: 'operators'
                     views.push name: 'views:grid', region: 'grid'
-                else if data.type is 'tree'
+                else if data.style is 'tree'
                     views.push name: 'treeViews:operators', region: 'operators'
                     views.push name: 'treeViews:tree', region: 'grid'
-                else if data.type is 'treeTable'
+                else if data.style is 'treeTable'
                     views.push name: 'treeTableViews:operators', region: 'operators'
                     views.push name: 'treeTableViews:grid', region: 'grid'
 
@@ -31,9 +31,16 @@ define [
                 baseName: featureName
                 module: module
                 container: container if container?
+                avoidLoadingModel: true
 
                 layout: '/grid'
 
                 views: views
-            deferred.resolve(new Feature opts, options)
+
+            if data.enableFrontendExtension is true
+                module.loadResource('__scaffold__/' + featureName).done (scaffold) ->
+                    opts.scaffold = scaffold
+                    deferred.resolve(new Feature opts, options)
+            else
+                deferred.resolve(new Feature opts, options)
         deferred

@@ -11,7 +11,8 @@ define(['jquery', 'underscore'], function($, _) {
 
     return {
         model: 'system/menuitems',
-
+        avoidLoadingHandlers: true,
+        
         extend: {
             serializeData: function() {
                 var deferred = $.Deferred(), me = this, app = me.feature.module.getApplication().applicationRoot;

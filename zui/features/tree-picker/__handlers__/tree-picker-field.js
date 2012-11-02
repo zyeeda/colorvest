@@ -23,7 +23,8 @@ define(['zui/coala/view', 'underscore'], function(View, _) {
                     feature: this.feature,
                     module: this.module,
                     model: options.url,
-                    components: [treeOptions]
+                    components: [treeOptions],
+                    avoidLoadingHandlers: true
                 }),
                 app = this.feature.module.getApplication()
                 root = app.applicationRoot;

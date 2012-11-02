@@ -16,7 +16,8 @@ define(['zui/coala/view', 'underscore'], function(View, _) {
                     feature: this.feature,
                     module: this.module,
                     model: options.url,
-                    components: [gridOptions]
+                    components: [gridOptions],
+                    avoidLoadingHandlers: true
                 })
             }
             root.showDialog({

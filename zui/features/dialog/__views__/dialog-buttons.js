@@ -1,6 +1,6 @@
 define(['underscore'], function(_) {
     return {
-
+        avoidLoadingHandlers: true,
         extend: {
             templateHelpers: function() {
                 var buttons = this.feature.startupOptions.buttons, i, id, e, el;

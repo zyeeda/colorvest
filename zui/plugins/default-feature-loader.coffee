@@ -7,6 +7,11 @@ define [
     fn: (module, feature, featureName, args) ->
         [container, options] = args
         deferred = $.Deferred()
+
+        if options?.avoidLoadingFeature is true
+            deferred.resolve null
+            return deferred
+
         module.loadResource(featureName).done (def) ->
             return deferred.resolve(null) if def is null
 

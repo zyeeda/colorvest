@@ -50,8 +50,14 @@ define [
             name: name, handler: handler
 
         initHandlers: (handler) ->
-            path = getPath(@feature, 'handler', handler or @baseName)
             @eventHandlers ?= {}
+
+            if @options.avoidLoadingHandlers is true
+                deferred = $.Deferred()
+                deferred.resolve {}
+                return deferred.promise()
+
+            path = getPath(@feature, 'handler', handler or @baseName)
             @module.loadResource(path).done (handlers = {}) =>
                 _.extend @eventHandlers, handlers
 

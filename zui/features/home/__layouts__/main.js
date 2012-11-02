@@ -35,7 +35,8 @@ define(['zui/components/callbacks/tabs'], function (cbTabs) {
             north: 'north',
             south: 'south',
             west: 'west'
-        }
+        },
+        avoidLoadingHandlers: true
     };
 
 });

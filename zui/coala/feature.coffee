@@ -53,6 +53,13 @@ define [
         initModel: ->
             return if @model
             deferred = $.Deferred()
+
+            if @options.avoidLoadingModel is true
+                @modelDefinition = Model.extend feature: @
+                @model = new @modelDefinition()
+                deferred.resolve()
+                return deferred.promise()
+
             @module.loadResource(getPath @, 'model', @baseName).done (def) =>
                 if not def
                     @modelDefinition = Model.extend feature: @

@@ -6,5 +6,7 @@ define({
                 title: title
             };
         }
-    }
+    },
+    
+    avoidLoadingHandlers: true
 });

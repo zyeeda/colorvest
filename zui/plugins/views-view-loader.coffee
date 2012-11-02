@@ -89,7 +89,59 @@ define [
                     $(label).text('OK!').addClass('valid').closest('.control-group').addClass('success')
             })
 
+    handlers =
+        add: ->
+            @feature.views['forms:add'].model.clear()
+            submitHandler.call @, 'forms:add', 'Create New Item'
+        edit: ->
+            grid = @feature.views['views:grid'].components[0]
+            view = @feature.views['forms:edit']
+            app = @feature.module.getApplication()
+            selected = grid.getGridParam('selrow')
+            return app.info '请选择要操作的记录' if not selected
+
+            view.model.set 'id', selected
+            $.when(view.model.fetch()).then =>
+                submitHandler.call @, 'forms:edit', 'Edit Item'
+        del: ->
+            grid = @feature.views['views:grid'].components[0]
+            selected = grid.getGridParam('selrow')
+            app = @feature.module.getApplication()
+            return app.info '请选择要操作的记录' if not selected
+
+            @feature.model.set 'id', selected
+            $.when(@feature.model.destroy()).then (data) =>
+                if data.violations
+                    msg = ''; summary = ''
+                    for err in data.violations
+                        unless err.properties
+                            summary += err.message + '\n'
+                    msg += summary
+                    app.error msg, '验证提示'
+                    return
+            grid.trigger 'reloadGrid'
+        show: ->
+            grid = @feature.views['views:grid'].components[0]
+            view = @feature.views['forms:edit']
+            selected = grid.getGridParam('selrow')
+            app = @feature.module.getApplication()
+            return app.info '请选择要操作的记录' if not selected
+
+            view.model.set 'id', selected
+            $.when(view.model.fetch()).then ->
+                app.showDialog(
+                    view: view
+                    title: 'View Item'
+                    buttons: []
+                ).done ->
+                    view.$$('form input').attr('readonly', true)
+        refresh: ->
+            grid = @feature.views['views:grid'].components[0]
+            grid.trigger('reloadGrid')
+
+
     generateOperatorsView = (module, feature, deferred) ->
+        eventHandlers = _.extend {}, handlers,feature.options.scaffold?.operators
         feature.request url:'configuration/operators', success: (data) ->
             strings = []
             events = {}
@@ -106,51 +158,7 @@ define [
                     renderHtml: (su, data) ->
                         template = Handlebars.compile strings.join('') or ''
                         template(data)
-            view.eventHandlers.add = ->
-                @feature.views['forms:add'].model.clear()
-                submitHandler.call @, 'forms:add', 'Create New Item'
-            view.eventHandlers.edit = ->
-                grid = @feature.views['views:grid'].components[0]
-                view = @feature.views['forms:edit']
-                app = @feature.module.getApplication()
-                selected = grid.getGridParam('selrow')
-                return app.info '请选择要操作的记录' if not selected
-
-                view.model.set 'id', selected
-                $.when(view.model.fetch()).then =>
-                    submitHandler.call @, 'forms:edit', 'Edit Item'
-            view.eventHandlers.del = ->
-                grid = @feature.views['views:grid'].components[0]
-                selected = grid.getGridParam('selrow')
-                app = @feature.module.getApplication()
-                return app.info '请选择要操作的记录' if not selected
-
-                @feature.model.set 'id', selected
-                $.when(@feature.model.destroy()).then (data) =>
-                    if data.violations
-                        msg = ''; summary = ''
-                        for err in data.violations
-                            unless err.properties
-                                summary += err.message + '\n'
-                        msg += summary
-                        app.error msg, '验证提示'
-                        return
-                    grid.trigger 'reloadGrid'
-            view.eventHandlers.show = ->
-                grid = @feature.views['views:grid'].components[0]
-                view = @feature.views['forms:edit']
-                selected = grid.getGridParam('selrow')
-                app = @feature.module.getApplication()
-                return app.info '请选择要操作的记录' if not selected
-
-                view.model.set 'id', selected
-                $.when(view.model.fetch()).then ->
-                    app.showDialog(
-                        view: view
-                        title: 'View Item'
-                        buttons: []
-                    ).done ->
-                        view.$$('form input').attr('readonly', true)
+            view.eventHandlers[name] = eventHandlers[name] for name of data
             deferred.resolve view
 
     generateGridView = (module, feature, deferred) ->

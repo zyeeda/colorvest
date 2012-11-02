@@ -9,7 +9,6 @@ define [
     'zui/coala/component-handler'
     'zui/coala/resource-loader'
     'zui/coala/config'
-    'zui/applications/default'
     'zui/coala/loader-plugin-manager'
     'zui/plugins/default-feature-loader'
     'zui/plugins/default-view-loader'
@@ -19,7 +18,7 @@ define [
     'zui/plugins/tree-views-view-loader'
     'zui/plugins/treetable-views-view-loader'
     'zui/coala/sync'
-], ($, _, Marionette, Handlebars, Backbone, Application, ComponentHandler, loadResource, config, defaultApplication, LoaderPluginManager, featureLoader, viewLoader, formsLoader, notFoundFeatureLoader, viewsLoader, treeViewsLoader, treeTableViewsLoader) ->
+], ($, _, Marionette, Handlebars, Backbone, Application, ComponentHandler, loadResource, config, LoaderPluginManager, featureLoader, viewLoader, formsLoader, notFoundFeatureLoader, viewsLoader, treeViewsLoader, treeTableViewsLoader) ->
 
     # override marionette's template loader
     Marionette.TemplateCache.loadTemplate = (templateId, callback) ->
@@ -69,7 +68,8 @@ define [
         ComponentHandler.register name, init, fn
 
     coala.startApplication = (path) ->
-        if path then require(path) else defaultApplication
+        path = 'zui/applications/default' if not path
+        require path
 
     coala.LoaderPluginManager = LoaderPluginManager
 
