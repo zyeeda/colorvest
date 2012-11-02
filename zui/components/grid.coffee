@@ -28,11 +28,12 @@ define [
         events = [
             'onSelectRow'
             'gridComplete'
+            'beforeRequest'
         ]
         for event in events
             do (event) ->
                 if options[event]
-                    options[event] = _.bind (name, args...)->
+                    options[event] = _.bind (name, args...) ->
                         method = @eventHandlers[name]
                         throw new Error('no handler is named ' + name) if not _.isFunction method
 
@@ -155,5 +156,6 @@ define [
                 f.searchoptions = sopt: ['like'] if(f.stype != 'select')
             colModel.push f
         options.colModel = colModel
-        el.jqGrid options
+        grid = el.jqGrid options
         el.jqGrid 'filterToolbar', stringResult: true, searchOnEnter: false
+        grid

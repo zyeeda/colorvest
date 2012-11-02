@@ -3,10 +3,10 @@ define(['jquery', 'zui/coala/loader-plugin-manager'], function($, LoaderManager)
     return {
         viewIt: function() {
             var me = this,
-                grid = me.feature.views['completed-grid'].components[0]
+                grid = me.feature.views['completed-grid'].components[0],
                 gridView = me.feature.views['completed-grid'],
                 selected = grid.getGridParam('selrow'),
-                app = me.feature.module.getApplication();
+                app = me.feature.module.getApplication().applicationRoot;
 
             if (!selected)
                 return app.info('请选择要操作的记录');

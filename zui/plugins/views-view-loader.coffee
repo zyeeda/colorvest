@@ -139,21 +139,33 @@ define [
             grid = @feature.views['views:grid'].components[0]
             grid.trigger('reloadGrid')
 
+    initOperatorsVisibility = (operators) ->
+        @$(o.id).hide() for o in operators when ['edit', 'del', 'show'].indexOf(o.id) isnt -1
+
+    ensureOperatorsVisibility = (operators, id) ->
+        (if id then @$(o.id).show() else @$(o.id).hide()) for o in operators when ['edit', 'del', 'show'].indexOf(o.id) isnt -1
 
     generateOperatorsView = (module, feature, deferred) ->
-        eventHandlers = _.extend {}, handlers,feature.options.scaffold?.operators
+        scaffold = feature.options.scaffold or {}
+        eventHandlers = _.extend {}, handlers, scaffold.operators
         feature.request url:'configuration/operators', success: (data) ->
             strings = []
             events = {}
+            ops = []
             for name, value of data
                 value = label: value if _.isString value
-                strings.push templates.operator(id: name, label: value.label, icon: value.icon)
-                events['click ' + name] = name
+                value.id = name
+                ops.push value
+            for o in ops
+                o.icon = 'icon-file' if not o.icon
+                strings.push templates.operator o
+                events['click ' + o.id] = o.id
             view = new View
                 baseName: 'operators'
                 module: module
                 feature: feature
                 events: events
+                operators: ops
                 extend:
                     renderHtml: (su, data) ->
                         template = Handlebars.compile strings.join('') or ''
@@ -162,18 +174,33 @@ define [
             deferred.resolve view
 
     generateGridView = (module, feature, deferred) ->
+        scaffold = feature.options.scaffold or {}
+        visibility = scaffold.ensureOperatorsVisibility or ensureOperatorsVisibility
+        initVisibility = scaffold.initOperatorsVisibility or initOperatorsVisibility
+
         feature.request url:'configuration/grid', success: (data) ->
             data.type = 'grid'
             data.selector = 'grid'
+            data.pager = 'pager'
+            data.onSelectRow = 'selectionChanged'
+            data.beforeRequest = 'refresh'
 
             view = new View
-                baseName: 'operators'
+                baseName: 'grid'
                 module: module
                 feature: feature
                 components: [data]
                 extend:
                     renderHtml: (su, data) ->
                         templates.grid
+            view.eventHandlers ?= {}
+            view.eventHandlers.selectionChanged = (id, status) ->
+                return if not status
+                v = @feature.views['views:operators']
+                visibility.call v, v.options.operators, id
+            view.eventHandlers.refresh = ->
+                v = @feature.views['views:operators']
+                initVisibility.call v, v.options.operators
             deferred.resolve view
 
     type: 'view'
