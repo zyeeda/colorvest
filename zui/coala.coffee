@@ -72,7 +72,7 @@ define [
         if not path
             startDefaultApplication()
         else
-            require(path).startApplication()
+            require(path)()
 
     coala.LoaderPluginManager = LoaderPluginManager
 
