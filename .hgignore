@@ -13,7 +13,6 @@ zui/applications/*.js
 zui/coala/*.js
 zui/components/*.js
 zui/components/callbacks/*.js
-zui/features/*.js
 zui/plugins/*.js
 
 
