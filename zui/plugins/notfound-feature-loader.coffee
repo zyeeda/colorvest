@@ -30,7 +30,7 @@ define [
             opts =
                 baseName: featureName
                 module: module
-                container: container if container?
+                target: container if container?
                 avoidLoadingModel: true
 
                 layout: '/grid'

@@ -132,7 +132,7 @@ define [
             $.when(loaderPluginManager.invoke('feature', module, null, featureName, container, options)).then (feature) ->
                 if feature is null
                     log module, "feature not found with path: #{featurePath}"
-                    return module.startFeature('notfound:' + featureName)
+                    return module.startFeature('notfound:' + featureName, container, options)
 
                 module.features[feature.cid] = feature
                 feature.start().done ->

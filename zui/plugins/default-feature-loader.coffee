@@ -17,7 +17,7 @@ define [
 
             def.baseName = featureName
             def.module = module
-            def.container = container if container?
+            def.target = container if container?
 
             feature = new Feature def, options
 
