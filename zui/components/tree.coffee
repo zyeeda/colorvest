@@ -25,9 +25,9 @@ define [
         callback = options.callback or (options.callback = {})
         cb = {}
         for name, value of callback
-            cb[name] = _.bind (value, args) ->
+            cb[name] = _.bind (value, args...) ->
                 method = @eventHandlers[value]
-                throw new Error('no handler is named ' + name) if not _.isFunction method
+                throw new Error('no handler is named ' + value) if not _.isFunction method
 
                 method.apply @, args
             , view, value

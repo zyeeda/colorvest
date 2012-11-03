@@ -175,6 +175,7 @@ define [
 
     generateGridView = (module, feature, deferred) ->
         scaffold = feature.options.scaffold or {}
+        handlers = scaffold.handlers
         visibility = scaffold.ensureOperatorsVisibility or ensureOperatorsVisibility
         initVisibility = scaffold.initOperatorsVisibility or initOperatorsVisibility
 
@@ -184,16 +185,19 @@ define [
             data.pager = 'pager'
             data.onSelectRow = 'selectionChanged'
             data.beforeRequest = 'refresh'
+            events = data.events or {}
 
             view = new View
                 baseName: 'grid'
                 module: module
                 feature: feature
                 components: [data]
+                events: events
                 extend:
                     renderHtml: (su, data) ->
                         templates.grid
             view.eventHandlers ?= {}
+            _.extend view.eventHandlers, handlers
             view.eventHandlers.selectionChanged = (id, status) ->
                 return if not status
                 v = @feature.views['views:operators']
