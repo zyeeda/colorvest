@@ -147,7 +147,7 @@ define [
 
     generateOperatorsView = (module, feature, deferred) ->
         scaffold = feature.options.scaffold or {}
-        eventHandlers = _.extend {}, handlers, scaffold.operators
+        eventHandlers = _.extend {}, handlers, scaffold.handlers
         feature.request url:'configuration/operators', success: (data) ->
             strings = []
             events = {}
@@ -170,7 +170,7 @@ define [
                     renderHtml: (su, data) ->
                         template = Handlebars.compile strings.join('') or ''
                         template(data)
-            view.eventHandlers[name] = eventHandlers[name] for name of data
+            _.extend view.eventHandlers, eventHandlers
             deferred.resolve view
 
     generateGridView = (module, feature, deferred) ->

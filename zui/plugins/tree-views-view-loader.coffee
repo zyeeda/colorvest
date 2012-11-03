@@ -163,7 +163,10 @@ define [
             deferred.resolve view
 
     generateTreeView = (module, feature, deferred) ->
-        feature.request url:'configuration/grid', success: (data = {}) ->
+        scaffold = feature.options.scaffold or {}
+        handlers = scaffold.handlers
+
+        feature.request url:'configuration/tree', success: (data = {}) ->
             data.type = 'tree'
             data.selector = 'tree'
 
@@ -181,6 +184,8 @@ define [
                 name = e.target.tagName
                 if name is 'LI' or name is 'UL'
                     view.components[0].cancelSelectedNode()
+            _.extend view.eventHandlers, handlers
+
             deferred.resolve view
 
     type: 'view'

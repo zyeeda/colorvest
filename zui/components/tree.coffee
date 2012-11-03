@@ -22,6 +22,17 @@ define [
         simpleData.pId = ((dataRow) -> dataRow.parent?.id) if not simpleData.pId
         options.data.simpleData = simpleData
 
+        callback = options.callback or (options.callback = {})
+        cb = {}
+        for name, value of callback
+            cb[name] = _.bind (value, args) ->
+                method = @eventHandlers[value]
+                throw new Error('no handler is named ' + name) if not _.isFunction method
+
+                method.apply @, args
+            , view, value
+        options.callback = cb
+
         if options.isAsync is true
             callback = options.callback or (options.callback = {})
 
