@@ -59,7 +59,7 @@ define [
             <form class="form-horizontal">
                 <%= content %>
                 <%= hiddens %>
-                <input type="hidden" name="_formName_" value="<%= formName %>"/>
+                <input type="hidden" name="__formName__" value="<%= formName %>"/>
             </form>
         '''
         tabLayout: _.template '''
