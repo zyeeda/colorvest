@@ -33,7 +33,7 @@ define [
             @deferredView = @initViews()
 
         initRenderTarget: ->
-            target = @container or @options.target or config.featureContainer
+            target = @container or @options.container or @startupOptions.container or config.featureContainer
             target = target @ if _.isFunction target
             # in this case, target must be a selector or dom element or $element
             @container = target

@@ -6,7 +6,7 @@ define [
     type: 'feature'
     name: 'notfound'
     fn: (module, feature, featureName, args) ->
-        [container, options] = args
+        options = args[0]
         deferred = $.Deferred()
 
         $.when($.get(module.url(featureName) + '/configuration/feature')).done (data) ->
@@ -30,7 +30,6 @@ define [
             opts =
                 baseName: featureName
                 module: module
-                target: container if container?
                 avoidLoadingModel: true
 
                 layout: '/grid'

@@ -97,7 +97,7 @@ define [
         application.showDialog = (options) ->
             deferred = $.Deferred()
             if not application._modalDialog
-                application.startFeature('coala/dialog', true, options).done (feature) ->
+                application.startFeature('coala/dialog', options).done (feature) ->
                     application._modalDialog = feature
                     deferred.resolve feature
             else

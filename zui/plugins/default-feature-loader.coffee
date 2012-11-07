@@ -5,7 +5,7 @@ define [
     type: 'feature'
     name: 'DEFAULT'
     fn: (module, feature, featureName, args) ->
-        [container, options] = args
+        options = args[0]
         deferred = $.Deferred()
 
         if options?.avoidLoadingFeature is true
@@ -17,7 +17,6 @@ define [
 
             def.baseName = featureName
             def.module = module
-            def.target = container if container?
 
             feature = new Feature def, options
 
