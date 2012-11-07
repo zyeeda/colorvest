@@ -148,7 +148,6 @@ define [
     generateOperatorsView = (module, feature, deferred) ->
         scaffold = feature.options.scaffold or {}
         eventHandlers = _.extend {}, handlers, scaffold.handlers
-        console.log eventHandlers, 'eventHandlers', handlers, scaffold.handlers
 
         feature.request url:'configuration/operators', success: (data) ->
             strings = []

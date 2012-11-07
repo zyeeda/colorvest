@@ -63,6 +63,7 @@ define [
             </form>
         '''
         tabLayout: _.template '''
+            <%= pinedGroups %>
             <div>
                 <ul class="nav nav-tabs">
                     <%= lis %>
@@ -118,21 +119,29 @@ define [
         (if field.type is 'hidden' then hiddens else others).push field for field in options.fields or []
 
         columns = 1
-        for groupName, group of options.groups
+        unusedGroups = (for groupName, group of options.groups
             group.columns = columns = 2 if group.columns > 1
+            groupName
+        )
 
         formContent = ''
         if options.tabs
             tabLiStrings = []
             tabContentStrings = []
+            unusedGroupStrings = []
             for tab, i in options.tabs
                 groupStrings = []
                 for groupName in tab.groups
                     generateGroup others, groupName, options.groups[groupName], components, groupStrings
+                    unusedGroups = _.without unusedGroups, groupName
                 id = _.uniqueId 'tab'
                 tabLiStrings.push templates.tabLi(i: i, id: id, title: tab.title)
                 tabContentStrings.push templates.tabContent(i: i, id: id, content: groupStrings.join(''))
-            formContent = templates.tabLayout(lis: tabLiStrings.join(''), content: tabContentStrings.join(''))
+
+            for groupName in unusedGroups
+                generateGroup others, groupName, options.groups[groupName], components, unusedGroupStrings
+
+            formContent = templates.tabLayout(lis: tabLiStrings.join(''), content: tabContentStrings.join(''), pinedGroups: unusedGroupStrings.join(''))
         else
             groupStrings = []
             generateGroup others, groupName, group, components, groupStrings for groupName, group of options.groups
