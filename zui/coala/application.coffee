@@ -124,7 +124,7 @@ define [
             [names..., featureName] = featurePath.split '/'
             module = @findModule(names) or @module(names)
             f = module.findFeature featureName
-            return f.active(options) if f and not container
+            return f.activate(options) if f and not container
 
             deferred = $.Deferred()
             module.addPromise deferred

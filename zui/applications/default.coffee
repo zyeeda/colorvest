@@ -52,7 +52,7 @@ define [
                         selected: true
                         fit: 'Home' isnt feature.startupOptions.name
 
-                    feature.active = _.bind (id) ->
+                    feature.activate = _.bind (id) ->
                         mainTab.selectTab id
                     , feature, id
 
