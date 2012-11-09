@@ -8,8 +8,8 @@ define [
     'libs/jquery/pnotify/jquery.pnotify'
 ], ($, _, Application, detectBrowser, ComponentHandler, config) ->
 
-    ->
-        detectBrowser()
+    (options = {}) ->
+        detectBrowser() if options.detectBrowser isnt false
 
         c = new Application()
         application = new Application()
@@ -24,74 +24,78 @@ define [
         c.initRouters()
 
         application.addPromise ComponentHandler.initialize()
-        application.addPromise $.get('invoke/scaffold/system/settings', (data) ->
-            settings = {}
-            _.each data.results, (d) ->
-                settings[d.name] = d.value
-            application.settings = settings
-            c.settings = settings
-        )
 
-        modifyFeatureContainerDeferred = $.Deferred()
+        if options.loadSettings isnt false
+            application.addPromise $.get('invoke/scaffold/system/settings', (data) ->
+                settings = {}
+                _.each data.results, (d) ->
+                    settings[d.name] = d.value
+                application.settings = settings
+                c.settings = settings
+            )
 
-        openedFeatures = {}
-        application.done ->
-            application.startFeature('coala/home').done (home) ->
-                application.mainTab = mainTab = home.layout.components[0]
+        if options.useDefaultHome isnt false
+            modifyFeatureContainerDeferred = $.Deferred()
 
-                mainTab.$el.bind 'tabsremove', (event, ui) ->
-                    application.stopFeature openedFeatures[ui.tab.hash]
+            openedFeatures = {}
+            application.done ->
+                application.startFeature('coala/home').done (home) ->
+                    application.mainTab = mainTab = home.layout.components[0]
 
-                config.featureContainer = (feature) ->
-                    id = '#' + feature.cid
-                    openedFeatures[id] = feature
-                    mainTab.addTab
-                        url: id
-                        label : feature.startupOptions.name or feature.baseName
-                        closable: feature.options.closable isnt false
-                        selected: true
-                        fit: 'Home' isnt feature.startupOptions.name
+                    mainTab.$el.bind 'tabsremove', (event, ui) ->
+                        application.stopFeature openedFeatures[ui.tab.hash]
 
-                    feature.activate = _.bind (id) ->
-                        mainTab.selectTab id
-                    , feature, id
+                    config.featureContainer = (feature) ->
+                        id = '#' + feature.cid
+                        openedFeatures[id] = feature
+                        mainTab.addTab
+                            url: id
+                            label : feature.startupOptions.name or feature.baseName
+                            closable: feature.options.closable isnt false
+                            selected: true
+                            fit: 'Home' isnt feature.startupOptions.name
 
-                    id
+                        feature.activate = _.bind (id) ->
+                            mainTab.selectTab id
+                        , feature, id
 
-                modifyFeatureContainerDeferred.resolve()
+                        id
 
-        application.addPromise modifyFeatureContainerDeferred
+                    modifyFeatureContainerDeferred.resolve()
 
-        # pnotify
-        $.pnotify.defaults.history = false
-        stack_bar_top = "dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0
-        application.message = (content, title = false) ->
-            content = if _.isObject content then content else {text: content}
-            content.title = title if _.isString title
+            application.addPromise modifyFeatureContainerDeferred
 
-            options = _.extend stack: stack_bar_top, addclass: 'stack-bar-top', width: '70%', cornerclass: "", content
-            $.pnotify options
+        if options.useDefaultNotifier isnt false
+            # pnotify
+            $.pnotify.defaults.history = false
+            stack_bar_top = "dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0
+            application.message = (content, title = false) ->
+                content = if _.isObject content then content else {text: content}
+                content.title = title if _.isString title
 
-        application.error = (content, title = false) ->
-            content = if _.isObject content then content else {text: content}
-            content.title = title if _.isString title
+                options = _.extend stack: stack_bar_top, addclass: 'stack-bar-top', width: '70%', cornerclass: "", content
+                $.pnotify options
 
-            options = _.extend type: 'error', content
-            application.message options
+            application.error = (content, title = false) ->
+                content = if _.isObject content then content else {text: content}
+                content.title = title if _.isString title
 
-        application.info = (content, title = false) ->
-            content = if _.isObject content then content else {text: content}
-            content.title = title if _.isString title
+                options = _.extend type: 'error', content
+                application.message options
 
-            options = _.extend type: 'info', content
-            application.message options
+            application.info = (content, title = false) ->
+                content = if _.isObject content then content else {text: content}
+                content.title = title if _.isString title
 
-        application.success = (content, title = false) ->
-            content = if _.isObject content then content else {text: content}
-            content.title = title if _.isString title
+                options = _.extend type: 'info', content
+                application.message options
 
-            options = _.extend type: 'success', content
-            application.message options
+            application.success = (content, title = false) ->
+                content = if _.isObject content then content else {text: content}
+                content.title = title if _.isString title
+
+                options = _.extend type: 'success', content
+                application.message options
 
         # dialog
         application.showDialog = (options) ->

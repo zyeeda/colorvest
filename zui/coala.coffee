@@ -69,10 +69,16 @@ define [
         ComponentHandler.register name, init, fn
 
     coala.startApplication = (path) ->
-        if not path
+        app = if not path
             startDefaultApplication()
         else
             require(path)()
+
+        app.loadView = (feature, name, args...) ->
+            throw new Error('a view must be within a feature') if not feature
+            args = ['view', feature.module, feature, name].concat args
+            LoaderPluginManager.invoke args...
+        app
 
     coala.LoaderPluginManager = LoaderPluginManager
 
