@@ -1,12 +1,9 @@
 
 define(['jquery', 'underscore'], function($, _) {
     var handler = function(app, featureName, id, data) {
-        app.startFeature(featureName, false, data);
+        app.startFeature(featureName, data);
         this.$$('li.active').removeClass('active');
-        //this.$$('i.icon-white').removeClass('icon-white');
-
         this.$(id).parent().addClass('active');
-        //this.$(id).children('i').addClass('icon-white');
     };
 
     return {

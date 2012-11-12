@@ -5,12 +5,28 @@ define [
 ], (View, Handlebars, _) ->
 
     templates =
+        unknown: _.template '''
+            <div class="control-group">
+              <label class="control-label" for="<%= id %>"><%= label %></label>
+              <div class="controls">
+                <input type="<%= type %>" class="input" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}" <% if (readOnly) {%> readonly="true" <%}%>/>
+              </div>
+            </div>
+        '''
         hidden: _.template '<input type="hidden" name="<%= name %>" value="{{<%= value %>}}"/>'
         string: _.template  '''
             <div class="control-group">
               <label class="control-label" for="<%= id %>"><%= label %></label>
               <div class="controls">
                 <input type="text" class="input" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}" <% if (readOnly) {%> readonly="true" <%}%>/>
+              </div>
+            </div>
+        '''
+        'long-string': _.template '''
+            <div class="control-group">
+              <label class="control-label" for="<%= id %>"><%= label %></label>
+              <div class="controls">
+                <textarea class="input" id="<%= id %>" name="<%= name %>" rows="<%= rowspan %>" <% if (readOnly) {%> readonly="true" <%}%>>{{<%= value %>}}</textarea>
               </div>
             </div>
         '''
@@ -43,10 +59,11 @@ define [
             <form class="form-horizontal">
                 <%= content %>
                 <%= hiddens %>
-                <input type="hidden" name="_formName_" value="<%= formName %>"/>
+                <input type="hidden" name="__formName__" value="<%= formName %>"/>
             </form>
         '''
         tabLayout: _.template '''
+            <%= pinedGroups %>
             <div>
                 <ul class="nav nav-tabs">
                     <%= lis %>
@@ -102,28 +119,34 @@ define [
         (if field.type is 'hidden' then hiddens else others).push field for field in options.fields or []
 
         columns = 1
-        for groupName, group of options.groups
+        unusedGroups = (for groupName, group of options.groups
             group.columns = columns = 2 if group.columns > 1
+            groupName
+        )
 
         formContent = ''
         if options.tabs
             tabLiStrings = []
             tabContentStrings = []
+            unusedGroupStrings = []
             for tab, i in options.tabs
                 groupStrings = []
                 for groupName in tab.groups
                     generateGroup others, groupName, options.groups[groupName], components, groupStrings
+                    unusedGroups = _.without unusedGroups, groupName
                 id = _.uniqueId 'tab'
                 tabLiStrings.push templates.tabLi(i: i, id: id, title: tab.title)
                 tabContentStrings.push templates.tabContent(i: i, id: id, content: groupStrings.join(''))
-            formContent = templates.tabLayout(lis: tabLiStrings.join(''), content: tabContentStrings.join(''))
+
+            for groupName in unusedGroups
+                generateGroup others, groupName, options.groups[groupName], components, unusedGroupStrings
+
+            formContent = templates.tabLayout(lis: tabLiStrings.join(''), content: tabContentStrings.join(''), pinedGroups: unusedGroupStrings.join(''))
         else
             groupStrings = []
             generateGroup others, groupName, group, components, groupStrings for groupName, group of options.groups
             formContent = groupStrings.join('')
         columns: columns, form: templates.form(content: formContent, hiddens: generateFields(hiddens, 1), formName: viewName)
-
-    checkFields = (columns, fields) ->
 
     generateGroup = (allFields, groupName, group, components, groupStrings) ->
         fields = findFieldsInGroup groupName, allFields
@@ -192,9 +215,10 @@ define [
                 grid:
                     datatype: 'local'
                     colModel: field.colModel
-        else
+        else if templates[field.type]
             fieldStrings.push templates[field.type](field)
-
+        else
+            fieldStrings.push templates.unknown(field)
 
     findFieldsInGroup = (name, fields) ->
         field for field in fields when field.group is name

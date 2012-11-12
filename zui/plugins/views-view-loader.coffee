@@ -148,6 +148,7 @@ define [
     generateOperatorsView = (module, feature, deferred) ->
         scaffold = feature.options.scaffold or {}
         eventHandlers = _.extend {}, handlers, scaffold.handlers
+
         feature.request url:'configuration/operators', success: (data) ->
             strings = []
             events = {}
@@ -175,7 +176,7 @@ define [
 
     generateGridView = (module, feature, deferred) ->
         scaffold = feature.options.scaffold or {}
-        handlers = scaffold.handlers
+        eventHandlers = scaffold.handlers
         visibility = scaffold.ensureOperatorsVisibility or ensureOperatorsVisibility
         initVisibility = scaffold.initOperatorsVisibility or initOperatorsVisibility
 
@@ -197,7 +198,7 @@ define [
                     renderHtml: (su, data) ->
                         templates.grid
             view.eventHandlers ?= {}
-            _.extend view.eventHandlers, handlers
+            _.extend view.eventHandlers, eventHandlers
             view.eventHandlers.selectionChanged = (id, status) ->
                 return if not status
                 v = @feature.views['views:operators']

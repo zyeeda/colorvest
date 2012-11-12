@@ -1,4 +1,4 @@
-define(['jquery', 'zui/coala/loader-plugin-manager'], function($, LoaderManager){
+define(['jquery'], function($){
     var getFormData = function(view) {
         var values = view.$$('form').serializeArray(),
             data = {};
@@ -20,14 +20,14 @@ define(['jquery', 'zui/coala/loader-plugin-manager'], function($, LoaderManager)
             });
 
         });
-                      
+
     };
 
     return {
         audit: function() {
             var me = this,
                 grid = me.feature.views['grid'].components[0],
-                ogrid = me.feature.views['completed-grid'].components[0]
+                ogrid = me.feature.views['completed-grid'].components[0],
                 selected = grid.getGridParam('selrow'),
                 app = me.feature.module.getApplication().applicationRoot;
             if (!selected)
@@ -35,7 +35,7 @@ define(['jquery', 'zui/coala/loader-plugin-manager'], function($, LoaderManager)
 
             me.feature.model.set('id', selected);
             $.when(me.feature.model.fetch()).done(function(){
-                LoaderManager.invoke('view', me.feature.module, me.feature, 'forms:' + selected).done(function(view){
+                app.loadView(me.feature, 'forms:' + selected).done(function(view){
                     app.showDialog({
                         view: view,
                         title: 'Task Process',

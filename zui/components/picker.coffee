@@ -6,17 +6,17 @@ define [
 
     coala.registerComponentHandler 'grid-picker', (->), (el, opt = {}, view) ->
         app = view.feature.module.getApplication()
-        options = _.extend el: el, opt
+        options = _.extend el: el, ignoreExists: true, opt
         options.valueField = view.$ options.valueField
         result = deferred: $.Deferred()
         if options.remoteDefined
             $.get view.feature.module.getApplication().url(options.url + '/configuration/picker'), (data) ->
                 _.extend options, data
-                app.startFeature('coala/grid-picker', true, options).done (feature) ->
+                app.startFeature('coala/grid-picker', options).done (feature) ->
                     result.feature = feature
                     result.deferred.resolve feature
         else
-            app.startFeature('coala/grid-picker', true, options).done (feature) ->
+            app.startFeature('coala/grid-picker', options).done (feature) ->
                 result.feature = feature
                 result.deferred.resolve feature
 
@@ -30,23 +30,23 @@ define [
 
     coala.registerComponentHandler 'tree-picker', (->), (el, opt = {}, view) ->
         app = view.feature.module.getApplication()
-        options = _.extend el: el, opt
+        options = _.extend el: el, ignoreExists: true, opt
         options.valueField = view.$ options.valueField
-        app.startFeature 'coala/tree-picker', true, options
+        app.startFeature 'coala/tree-picker', options
 
     coala.registerComponentHandler 'many-picker', (->), (el, opt = {}, view) ->
         app = view.feature.module.getApplication()
-        options = _.extend el: el, opt
+        options = _.extend el: el, ignoreExists: true, opt
         options.valueField = view.$ options.valueField
         result = deferred: $.Deferred()
         if options.remoteDefined
             $.get view.feature.module.getApplication().url(options.url + '/configuration/picker'), (data) ->
                 options.pickerGrid = data?.grid
-                app.startFeature('coala/pick-to-grid', true, options).done (feature) ->
+                app.startFeature('coala/pick-to-grid', options).done (feature) ->
                     result.feature = feature
                     result.deferred.resolve feature
         else
-            app.startFeature('coala/pick-to-grid', true, options).done (feature) ->
+            app.startFeature('coala/pick-to-grid', options).done (feature) ->
                 result.feature = feature
                 result.deferred.resolve feature
 

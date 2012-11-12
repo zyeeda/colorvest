@@ -120,19 +120,19 @@ define [
 
             loadResource path, plugin
 
-        startFeature: (featurePath, container, options) ->
+        startFeature: (featurePath, options) ->
             [names..., featureName] = featurePath.split '/'
             module = @findModule(names) or @module(names)
             f = module.findFeature featureName
-            return f.active(options) if f and not container
+            return f.activate(options) if f and f.ignoreExists isnt true
 
             deferred = $.Deferred()
             module.addPromise deferred
 
-            $.when(loaderPluginManager.invoke('feature', module, null, featureName, container, options)).then (feature) ->
+            $.when(loaderPluginManager.invoke('feature', module, null, featureName, options)).then (feature) ->
                 if feature is null
                     log module, "feature not found with path: #{featurePath}"
-                    return module.startFeature('notfound:' + featureName, container, options)
+                    return module.startFeature('notfound:' + featureName, options)
 
                 module.features[feature.cid] = feature
                 feature.start().done ->

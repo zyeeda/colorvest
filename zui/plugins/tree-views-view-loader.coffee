@@ -192,7 +192,6 @@ define [
     name: 'treeViews'
     fn: (module, feature, viewName, args) ->
         deferred = $.Deferred()
-        console.log viewName, 'name'
         if viewName is 'operators'
             generateOperatorsView(module, feature, deferred)
         else if viewName is 'tree'
