@@ -145,6 +145,9 @@ define [
                 f.editoptions = {value:':全部;1:是;0:否'}
             else
                 f.searchoptions = sopt: ['like'] if(f.stype != 'select')
+            if f.name.indexOf('.') isnt -1
+                f.sortable = false
+                f.search = false
             colModel.push f
         options.colModel = colModel
         grid = el.jqGrid options
