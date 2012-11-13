@@ -7,6 +7,16 @@ define [
     'order!libs/jquery/jqgrid/jquery.jqGrid.src'
 ], (_, coala, cbGrid) ->
 
+    delegateGridEvents = (view, obj, options, prefix) ->
+        events = [
+            'onSelectRow', 'gridComplete', 'beforeRequest', 'beforeSelectRow', 'onCellSelect'
+            'loadBeforeSend', 'loadComplete', 'ondblClickRow', 'onHeaderClick', 'onPaging'
+            'onRightClickRow', 'onSelectAll', 'onSortCol', 'serializeGridData'
+        ]
+        for event in events
+            do (event) ->
+                options[event] = view.feature.delegateComponentEvent view, obj, prefix + ':' + event, options[event]
+
     coala.registerComponentHandler 'grid', (->), (el, options, view) ->
 
         defaultOptions =
@@ -25,27 +35,17 @@ define [
         if options.pager and _.isString options.pager
             options.pager = view.$ options.pager
 
-        events = [
-            'onSelectRow'
-            'gridComplete'
-            'beforeRequest'
-        ]
-        for event in events
-            do (event) ->
-                if options[event]
-                    options[event] = _.bind (name, args...) ->
-                        method = @eventHandlers[name]
-                        throw new Error('no handler is named ' + name) if not _.isFunction method
-
-                        method.apply view, args
-                    , view, options[event]
+        obj = {}
+        delegateGridEvents view, obj, options, 'grid'
 
         if options.fit
             el.addClass 'ui-jqgrid-fit'
             cbGrid.resizeToFit el
 
         # el.jqGrid options
-        buildGrid el, options, view
+        grid = buildGrid el, options, view
+        obj.component = grid
+        grid
 
     coala.registerComponentHandler 'tree-table', (->), (el, options, view) ->
         collection = view.collection
@@ -104,26 +104,17 @@ define [
         if options.pager and _.isString options.pager
             options.pager = view.$ options.pager
 
-        events = [
-            'onSelectRow'
-            'gridComplete'
-        ]
-        for event in events
-            do (event) ->
-                if options[event]
-                    options[event] = _.bind (name, args...)->
-                        method = @eventHandlers[name]
-                        throw new Error('no handler is named ' + name) if not _.isFunction method
-
-                        method.apply view, args
-                    , view, options[event]
+        obj = {}
+        delegateGridEvents view, obj, options, 'treeTable'
 
         if options.fit
             el.addClass 'ui-jqgrid-fit'
             cbGrid.resizeToFit el
 
         # el.jqGrid options
-        buildGrid el, options, view
+        grid = buildGrid el, options, view
+        obj.component = grid
+        grid
 
     buildGrid = (el, options, view)->
         fields = options.colModel

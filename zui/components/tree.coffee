@@ -12,6 +12,16 @@ define [
         (_.extend(value, obj) if obj) for value in data
         tree.addNodes parent, data, true
 
+    normalEvents = [
+        'beforeAsync', 'beforeCheck', 'beforeClick', 'beforeCollapse', 'beforeDblClick'
+        'beforeExpand', 'beforeRightClick', 'onAsyncError', 'onAsyncSuccess', 'onCheck'
+        'onClick', 'onCollapse', 'onDblClick', 'onExpand', 'onRightClick'
+
+    ]
+    dndEvents = ['beforeDrag', 'beforeDragOpen', 'beforeDrop', 'onDrag', 'onDrop']
+    editEvents = ['beforeEditName', 'beforeRemove', 'beforeRename', 'onNodeCreated', 'onRemove', 'onRename']
+    mouseEvents = ['beforeMouseDown', 'beforeMouseUp', 'onMouseDown', 'onMouseUp']
+
     coala.registerComponentHandler 'tree', (->), (el, opt, view) ->
         options = _.extend {}, opt
         delete options.async
@@ -22,15 +32,21 @@ define [
         simpleData.pId = ((dataRow) -> dataRow.parent?.id) if not simpleData.pId
         options.data.simpleData = simpleData
 
-        callback = options.callback or (options.callback = {})
-        cb = {}
-        for name, value of callback
-            cb[name] = _.bind (value, args...) ->
-                method = @eventHandlers[value]
-                throw new Error('no handler is named ' + value) if not _.isFunction method
+        cbEvents = [].concat normalEvents
+        cbEvents = cbEvents.concat dndEvents if options.enableDndEvents is true
+        cbEvents = cbEvents.concat editEvents if options.enableEditEvents is true
+        cbEvents = cbEvents.concat mouseEvents if options.enableMouseEvents is true
 
-                method.apply @, args
-            , view, value
+        callback = _.extend {}, options.callback or {}
+        cb = {}
+        obj = {}
+
+        for name in cbEvents
+            cb[name] = view.feature.delegateComponentEvent(view, obj, 'tree:' + name, callback[name])
+            delete callback[name]
+
+        for name, value of callback
+            cb[name] = view.bindEventHandler value
         options.callback = cb
 
         if options.isAsync is true
@@ -50,7 +66,6 @@ define [
 
             tree = $.fn.zTree.init el, options, null
             beforeExpand tree.setting.treeId, null
-            tree
 
         else
             if options.treeData
@@ -60,4 +75,5 @@ define [
                 $.when(view.collection.fetch()).done ->
                     data = view.collection.toJSON()
                     addTreeData tree, options, data
-                tree
+        obj.component = tree
+        tree

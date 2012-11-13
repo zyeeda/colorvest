@@ -152,6 +152,7 @@ define [
         feature.request url:'configuration/operators', success: (data) ->
             strings = []
             events = {}
+            delegates = {}
             ops = []
             for name, value of data
                 value = label: value if _.isString value
@@ -161,11 +162,13 @@ define [
                 o.icon = 'icon-file' if not o.icon
                 strings.push templates.operator o
                 events['click ' + o.id] = o.id
+                delegates['click ' + o.id] = 'click:' + o.id if o.publish is true
             view = new View
                 baseName: 'operators'
                 module: module
                 feature: feature
                 events: events
+                delegates: delegates
                 operators: ops
                 extend:
                     renderHtml: (su, data) ->

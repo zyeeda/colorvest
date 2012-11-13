@@ -167,11 +167,12 @@ define [
         handlers = scaffold.handlers
 
         feature.request url:'configuration/tree', success: (data = {}) ->
+            data = {} if data is 'undefined'
             data.type = 'tree'
             data.selector = 'tree'
 
             view = new View
-                baseName: 'operators'
+                baseName: 'tree'
                 module: module
                 feature: feature
                 components: [data]

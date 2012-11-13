@@ -109,6 +109,9 @@ define [
         url: ->
             @module.url(@baseName)
 
+        path: ->
+            @module.path(@baseName, true)
+
         # delegate $.ajax, do nothing but add url prefix
         request:  (options) ->
             options.url = @url() + '/' + options.url
@@ -135,4 +138,32 @@ define [
                         , @, region, views, rendered)
                         @layout[region].show view
             @deferredStart.promise()
+
+        genEventName: (eventName) ->
+            @path() + '#' + eventName
+
+        isFeatureEvent: (eventName) ->
+            eventName.indexOf('#') isnt -1
+
+        on: (eventName, callback, context) ->
+            if eventName.indexOf('#') is -1
+                name = @genEventName eventName
+            else
+                name = if eventName.indexOf('this#') isnt -1 then @genEventName(eventName.split('#')[1]) else eventName
+            @module.getApplication().vent.on name, callback,context
+
+        trigger: (eventName, args...) ->
+            event = @genEventName eventName
+            @module.getApplication().vent.trigger [event, @].concat(args)...
+
+        delegateDomEvent: (view, eventName, exists) ->
+            (args...) ->
+                exists() if _.isFunction exists
+                view.feature.trigger [eventName, view].concat(args)...
+
+        delegateComponentEvent: (view, obj, eventName, exists) ->
+            (args...) ->
+                view.feature.trigger [eventName, view, obj.component].concat(args)...
+                view.bindEventHandler(exists).apply view, args if _.isString exists
+
     Feature

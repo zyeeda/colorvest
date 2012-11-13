@@ -32,22 +32,37 @@ define [
             @events = {}
 
             for name, value of events
-                e = @wrapEvent name, value
-                @events[e.name] = e.handler
+                if @feature.isFeatureEvent name
+                    @feature.on name, @bindEventHandler value
+                else
+                    e = @wrapEvent name, value
+                    @events[e.name] = e.handler
+
+            delegates = options.delegates or {}
+            delegates = delegates.apply @ if _.isFunction delegates
+            for name, value of delegates
+                e = @wrapEvent name, null
+                @events[e.name] = @feature.delegateDomEvent(@, value, @events[e.name])
 
         wrapEvent: (name, handlerName) ->
             parts = name.replace(/^\s+/g, '').replace(/\s+$/, '').split /\s+/
             if parts.length is 2
                 name = parts[0] + ' #' + @genId(parts[1])
 
+            return name: name if not handlerName
+
             if not _.isFunction handlerName
-                handler = _.bind (n, args...) ->
-                    method = @eventHandlers[n]
-                    error @, "no handler named #{n}" if not method
-                    method.apply @, args
-                , @, handlerName
+                handler = @bindEventHandler handlerName
+            else
+                handler = _.bind handlerName, @
 
             name: name, handler: handler
+
+        bindEventHandler: (name) ->
+            (args...) =>
+                method = @eventHandlers[name]
+                error @, "no handler named #{name}" if not method
+                method.apply @, args
 
         initHandlers: (handler) ->
             @eventHandlers ?= {}
