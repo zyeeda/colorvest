@@ -9,7 +9,7 @@ define [
 
     delegateGridEvents = (view, obj, options, prefix) ->
         events = [
-            'onSelectRow', 'gridComplete', 'beforeRequest', 'beforeSelectRow', 'onCellSelect'
+            'onSelectRow', 'gridComplete', 'beforeRequest', 'onCellSelect'
             'loadBeforeSend', 'loadComplete', 'ondblClickRow', 'onHeaderClick', 'onPaging'
             'onRightClickRow', 'onSelectAll', 'onSortCol', 'serializeGridData'
         ]

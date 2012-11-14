@@ -238,6 +238,7 @@ define [
                 components: components
                 avoidLoadingHandlers: true
                 dialogClass: if columns is 2 then 'two-column-dialog' else 'one-column-dialog'
+                entityLabel: data.entityLabel
                 extend:
                     renderHtml: (su, data) ->
                         template = Handlebars.compile form or ''

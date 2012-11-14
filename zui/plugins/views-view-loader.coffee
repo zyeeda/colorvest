@@ -22,6 +22,15 @@ define [
             <div id="pager"/>
         '''
 
+    getDialogTitle = (view, type, prefix) ->
+        dt = view.feature.options.scaffold?.defineDialogTitle
+        if _.isFunction dt
+            return dt.apply view, [view, type]
+        else if _.isObject dt
+            return dt[type]
+
+        return prefix + view.options.entityLabel if view.options.entityLabel
+
     getFormData = (view) ->
         values = view.$$('form').serializeArray()
         data = {}
@@ -92,7 +101,7 @@ define [
     handlers =
         add: ->
             @feature.views['forms:add'].model.clear()
-            submitHandler.call @, 'forms:add', 'Create New Item'
+            submitHandler.call @, 'forms:add', getDialogTitle(@feature.views['forms:add'], 'add', '新增')
         edit: ->
             grid = @feature.views['views:grid'].components[0]
             view = @feature.views['forms:edit']
@@ -102,7 +111,7 @@ define [
 
             view.model.set 'id', selected
             $.when(view.model.fetch()).then =>
-                submitHandler.call @, 'forms:edit', 'Edit Item'
+                submitHandler.call @, 'forms:edit', getDialogTitle(@feature.views['forms:edit'], 'edit', '编辑')
         del: ->
             grid = @feature.views['views:grid'].components[0]
             selected = grid.getGridParam('selrow')
@@ -131,7 +140,7 @@ define [
             $.when(view.model.fetch()).then ->
                 app.showDialog(
                     view: view
-                    title: 'View Item'
+                    title: getDialogTitle(@feature.views['forms:edit'], 'show', '查看')
                     buttons: []
                 ).done ->
                     view.$$('form input').attr('readonly', true)
