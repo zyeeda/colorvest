@@ -94,8 +94,12 @@ define [
             @options.afterRender.call @ if _.isFunction @options.afterRender
 
         render: (fn) ->
+            deferred = $.Deferred()
             $.when.apply($, @promises).then =>
-                super.done fn
+                super.done =>
+                    fn() if _.isFunction fn
+                    deferred.resolve()
+            deferred.promise()
 
         genId: (id) ->
             return "#{@cid}-#{id}"
@@ -156,8 +160,11 @@ define [
                 continue if not component
                 (if component.type then evalComponent else evalAction).call @, @, @$el, _.extend({}, component)
 
-            @components = components
+            componentDeferred = $.Deferred()
+            $.when.apply($, components).done (args...) =>
+                @components = args
+                componentDeferred.resolve(args)
 
-            @afterRender.call @
-            return
+            afterRenderDeferred = @afterRender.call @
+            $.when(componentDeferred, afterRenderDeferred).promise()
     BaseView

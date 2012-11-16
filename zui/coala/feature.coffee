@@ -129,12 +129,11 @@ define [
             rendered = {}
             @deferredView.done =>
                 @layout.render =>
+                    views.push region for region, view of @inRegionViews
                     for region, view of @inRegionViews
-                        views.push region
-                        view.on 'show', _.once _.bind( (rr, vs, rd)->
+                        view.on 'show', _.once _.bind( (rr, vs, rd) ->
                             rd[rr] = true
-                            if _.all(vs, (r) -> !!rd[r])
-                                @deferredStart.resolve @
+                            @deferredStart.resolve @ if _.all(vs, (r) -> !!rd[r])
                         , @, region, views, rendered)
                         @layout[region].show view
             @deferredStart.promise()

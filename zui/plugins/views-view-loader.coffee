@@ -30,6 +30,7 @@ define [
             return dt[type]
 
         return prefix + view.options.entityLabel if view.options.entityLabel
+        prefix
 
     getFormData = (view) ->
         values = view.$$('form').serializeArray()
@@ -137,7 +138,7 @@ define [
             return app.info '请选择要操作的记录' if not selected
 
             view.model.set 'id', selected
-            $.when(view.model.fetch()).then ->
+            $.when(view.model.fetch()).then =>
                 app.showDialog(
                     view: view
                     title: getDialogTitle(@feature.views['forms:edit'], 'show', '查看')

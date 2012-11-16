@@ -39,23 +39,25 @@ define [
         options = _.extend el: el, ignoreExists: true, opt
         options.valueField = view.$ options.valueField
         result = deferred: $.Deferred()
+        extendFeature = (feature) ->
+            feature.getFormData = ->
+                name: options.fieldName
+                value: result.feature.views['picker-field'].components[0].getDataIDs()
+            feature.loadData = (data) ->
+                values = data[options.fieldName]
+                @views['picker-field'].components[0][0].addJSONData rows: values
+
         if options.remoteDefined
             $.get view.feature.module.getApplication().url(options.url + '/configuration/picker'), (data) ->
                 options.pickerGrid = data?.grid
                 app.startFeature('coala/pick-to-grid', options).done (feature) ->
                     result.feature = feature
+                    extendFeature feature
                     result.deferred.resolve feature
         else
             app.startFeature('coala/pick-to-grid', options).done (feature) ->
                 result.feature = feature
+                extendFeature feature
                 result.deferred.resolve feature
 
-        result.getFormData = ->
-            name: options.fieldName
-            value: result.feature.views['picker-field'].components[0].getDataIDs()
-        result.loadData = (data) ->
-            values = data[options.fieldName]
-            result.deferred.done ->
-                result.feature.views['picker-field'].components[0][0].addJSONData rows: values
-
-        result
+        result.deferred

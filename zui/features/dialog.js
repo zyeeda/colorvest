@@ -37,8 +37,8 @@ define(['underscore', 'jquery', 'libs/bootstrap/bootstrap'],function(_, $) {
                 var promise, me = this, deferred = $.Deferred(),
                 startedOptions = me.startedOptions || (me.startedOptions = []);
                 startedOptions.push(me.startupOptions);
+                me.inRegionViews['body'] = me.startupOptions.view;
                 this.deferredView.done(function(){
-                    me.inRegionViews['body'] = me.startupOptions.view;
                     promise = su.call(me);
 
                     promise.done(function() {

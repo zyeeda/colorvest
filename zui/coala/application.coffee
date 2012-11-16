@@ -124,7 +124,8 @@ define [
             [names..., featureName] = featurePath.split '/'
             module = @findModule(names) or @module(names)
             f = module.findFeature featureName
-            return f.activate(options) if f and f.ignoreExists isnt true
+            ignoreExists = f?.ignoreExists or options?.ignoreExists
+            return f.activate(options) if f and ignoreExists isnt true
 
             deferred = $.Deferred()
             module.addPromise deferred
@@ -132,6 +133,7 @@ define [
             $.when(loaderPluginManager.invoke('feature', module, null, featureName, options)).then (feature) ->
                 if feature is null
                     log module, "feature not found with path: #{featurePath}"
+                    deferred.resolve null
                     return module.startFeature('notfound:' + featureName, options)
 
                 module.features[feature.cid] = feature
