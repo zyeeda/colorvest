@@ -10,7 +10,7 @@ define [
     templates =
         operator: _.template '''
             <div class="btn-group">
-              <button id="<%= id %>" class="btn">
+              <button id="<%= id %>" class="btn" onclick="return false;">
                 <% if (icon) { %>
                     <i class="<%= icon %>"/>&nbsp;
                 <% } %>

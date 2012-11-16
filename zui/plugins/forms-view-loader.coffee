@@ -112,8 +112,11 @@ define [
               </div>
             </div>
         '''
+        featureField: _.template '''
+            <div id="<%= id %>"></div>
+        '''
 
-    generateForm = (options = {}, components, viewName) ->
+    generateForm = (options = {}, components, viewName, features) ->
         hiddens = []
         others = []
         (if field.type is 'hidden' then hiddens else others).push field for field in options.fields or []
@@ -132,34 +135,34 @@ define [
             for tab, i in options.tabs
                 groupStrings = []
                 for groupName in tab.groups
-                    generateGroup others, groupName, options.groups[groupName], components, groupStrings
+                    generateGroup others, groupName, options.groups[groupName], components, groupStrings, features
                     unusedGroups = _.without unusedGroups, groupName
                 id = _.uniqueId 'tab'
                 tabLiStrings.push templates.tabLi(i: i, id: id, title: tab.title)
                 tabContentStrings.push templates.tabContent(i: i, id: id, content: groupStrings.join(''))
 
             for groupName in unusedGroups
-                generateGroup others, groupName, options.groups[groupName], components, unusedGroupStrings
+                generateGroup others, groupName, options.groups[groupName], components, unusedGroupStrings, features
 
             formContent = templates.tabLayout(lis: tabLiStrings.join(''), content: tabContentStrings.join(''), pinedGroups: unusedGroupStrings.join(''))
         else
             groupStrings = []
-            generateGroup others, groupName, group, components, groupStrings for groupName, group of options.groups
+            generateGroup others, groupName, group, components, groupStrings, features for groupName, group of options.groups
             formContent = groupStrings.join('')
         columns: columns, form: templates.form(content: formContent, hiddens: generateFields(hiddens, 1), formName: viewName)
 
-    generateGroup = (allFields, groupName, group, components, groupStrings) ->
+    generateGroup = (allFields, groupName, group, components, groupStrings, features) ->
         fields = findFieldsInGroup groupName, allFields
         return if fields.length is 0
-        groupStrings.push templates.group(label: group.label, groupContent: generateFields(fields, group.columns, components))
+        groupStrings.push templates.group(label: group.label, groupContent: generateFields(fields, group.columns, components, features))
 
-    generateFields = (fields, columns, components) ->
+    generateFields = (fields, columns, components, features) ->
         fieldStrings = []
         row = []
         if columns is 2
             items = 0
             for field in fields
-                generateField field, components, row
+                generateField field, components, row, features
                 row.push true if field.colspan is 2
                 throw new Error("the second column's colspan can not be 2") if row.length > 2
                 if row.length is 2
@@ -167,11 +170,11 @@ define [
                     fieldStrings.push template(field1: row.shift(), field2: row.shift())
             fieldStrings.push(templates.oneColumnRow(field1: row.shift())) if row.length isnt 0
         else
-            generateField(field, components, fieldStrings) for field in fields
+            generateField(field, components, fieldStrings, features) for field in fields
 
         fieldStrings.join ''
 
-    generateField = (field, components, fieldStrings) ->
+    generateField = (field, components, fieldStrings, features) ->
         field.id = _.uniqueId field.name
         field.value = field.name if not field.value
         field.readOnly = !!field.readOnly
@@ -215,6 +218,12 @@ define [
                 grid:
                     datatype: 'local'
                     colModel: field.colModel
+        else if field.type is 'feature'
+            fieldStrings.push templates['featureField'](field)
+            features.push
+                id: field.id
+                path: field.path
+                options: field.options
         else if templates[field.type]
             fieldStrings.push templates[field.type](field)
         else
@@ -229,7 +238,8 @@ define [
         deferred = $.Deferred()
         feature.request url:'configuration/forms/' + viewName, success: (data) ->
             components = []
-            {columns, form} = generateForm data, components, viewName
+            features = []
+            {columns, form} = generateForm data, components, viewName, features
 
             view = new View
                 baseName: viewName
@@ -243,6 +253,19 @@ define [
                     renderHtml: (su, data) ->
                         template = Handlebars.compile form or ''
                         template(data)
+                    afterRender: ->
+                        app = @feature.module.getApplication()
+                        deferred = $.Deferred()
+                        promises = []
+                        for featureConfig in features
+                            container = @$ featureConfig.id
+                            opts = _.extend {}, featureConfig.options
+                            opts.container = container
+                            opts.ignoreExists = true
+                            p = app.startFeature featureConfig.path, opts
+                            promises.push p
+                        $.when.apply($, promises).then -> deferred.resolve()
+                        deferred
             view.forms = data
             deferred.resolve view
         deferred
