@@ -148,6 +148,10 @@ define [
             if f.name.indexOf('.') isnt -1
                 f.sortable = false
                 f.search = false
+            if _.isString f.renderer
+                f.formatter = view.bindEventHandler f.renderer, 'renderers'
+            if _.isString f.peeler
+                f.unformat = view.bindEventHandler f.peeler, 'renderers'
             colModel.push f
         options.colModel = colModel
         grid = el.jqGrid options

@@ -58,9 +58,11 @@ define [
 
             name: name, handler: handler
 
-        bindEventHandler: (name) ->
+        bindEventHandler: (name, namespace) ->
             (args...) =>
-                method = @eventHandlers[name]
+                handlers = if namespace then @eventHandlers[namespace] else @eventHandlers
+                error @,  "no namespace named #{namespace}" if not handlers
+                method = handlers[name]
                 error @, "no handler named #{name}" if not method
                 method.apply @, args
 
