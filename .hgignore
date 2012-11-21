@@ -15,6 +15,6 @@ zui/coala/*.js
 zui/components/*.js
 zui/components/callbacks/*.js
 zui/plugins/*.js
-
+zui/features/*.js
 
 syntax: regexp
