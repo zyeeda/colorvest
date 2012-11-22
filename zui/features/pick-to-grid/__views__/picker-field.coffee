@@ -10,3 +10,6 @@ define
         options
     ]
 
+    extend:
+        templateHelpers: ->
+            fieldReadOnly: @feature.startupOptions.readOnly

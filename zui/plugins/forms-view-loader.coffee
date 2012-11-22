@@ -9,7 +9,11 @@ define [
             <div class="control-group">
               <label class="control-label" for="<%= id %>"><%= label %></label>
               <div class="controls">
-                <input type="<%= type %>" class="input" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}" <% if (readOnly) {%> readonly="true" <%}%>/>
+                <% if (readOnly) { %>
+                    <span>{{<%= value %>}}</span>
+                <% } else { %>
+                    <input type="<%= type %>" class="input" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}" />
+                <% } %>
               </div>
             </div>
         '''
@@ -18,7 +22,11 @@ define [
             <div class="control-group">
               <label class="control-label" for="<%= id %>"><%= label %></label>
               <div class="controls">
-                <input type="text" class="input" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}" <% if (readOnly) {%> readonly="true" <%}%>/>
+                <% if (readOnly) { %>
+                    <span>{{<%= value %>}}</span>
+                <% } else { %>
+                    <input type="text" class="input" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}"/>
+                <% } %>
               </div>
             </div>
         '''
@@ -26,7 +34,11 @@ define [
             <div class="control-group">
               <label class="control-label" for="<%= id %>"><%= label %></label>
               <div class="controls">
-                <textarea class="input" id="<%= id %>" name="<%= name %>" rows="<%= rowspan %>" <% if (readOnly) {%> readonly="true" <%}%>>{{<%= value %>}}</textarea>
+                <% if (readOnly) { %>
+                    <span>{{<%= value %>}}</span>
+                <% } else { %>
+                    <textarea class="input" id="<%= id %>" name="<%= name %>" rows="<%= rowspan %>">{{<%= value %>}}</textarea>
+                <%  } %>
               </div>
             </div>
         '''
@@ -42,7 +54,11 @@ define [
             <div class="control-group">
               <label class="control-label" for="<%= id %>"><%= label %></label>
               <div class="controls">
-                <input type="hidden" id="<%= id %>" name="<%= name %>" value="{{appearFalse <%= value %>}}"/>
+                <% if (readOnly) {%>
+                    <span id="<%= id %>"/>
+                <% } else { %>
+                    <input type="hidden" id="<%= id %>" name="<%= name %>" value="{{appearFalse <%= value %>}}"/>
+                <% } %>
               </div>
             </div>
         '''
@@ -174,17 +190,16 @@ define [
 
         fieldStrings.join ''
 
-    generateField = (field, components, fieldStrings, features) ->
-        field.id = _.uniqueId field.name
-        field.value = field.name if not field.value
-        field.readOnly = !!field.readOnly
-        if field.type is 'picker'
+    generators =
+        picker: (field, components, fieldStrings, features) ->
             if not _.isString(field.pickerSource)
                 fieldStrings.push templates['staticPicker'](field)
                 components.push
                     type: 'select'
                     selector: field.id
                     data: field.pickerSource
+                    fieldName: field.name
+                    readOnly: field.readOnly
                     initSelection: (el, fn) ->
                         val = $(el).val()
                         return fn(field.pickerSource[0]) if not val
@@ -199,14 +214,15 @@ define [
                     url: field.pickerSource
                     title: '选择' + field.label
                     fieldName: field.name
+                    readOnly: field.readOnly
                     valueField: field.id
                     remoteDefined: true
-        else if field.type is 'date'
+
+        date: (field, components, fieldStrings, features) ->
             fieldStrings.push templates['string'](field)
-            components.push
-                type: 'datepicker'
-                selector: field.id
-        else if field.type is 'many-picker'
+            components.push type: 'datepicker', selector: field.id if not field.readOnly
+
+        'many-picker': (field, components, fieldStrings, features) ->
             fieldStrings.push templates['gridPicker'](field)
             components.push
                 type: 'many-picker',
@@ -215,15 +231,24 @@ define [
                 title: '选择' + field.label
                 remoteDefined: true
                 fieldName: field.name
+                readOnly: field.readOnly
                 grid:
                     datatype: 'local'
                     colModel: field.colModel
-        else if field.type is 'feature'
+        feature: (field, components, fieldStrings, features) ->
             fieldStrings.push templates['featureField'](field)
             features.push
                 id: field.id
                 path: field.path
                 options: field.options
+
+
+    generateField = (field, components, fieldStrings, features) ->
+        field.id = _.uniqueId field.name
+        field.value = field.name if not field.value
+        field.readOnly = !!field.readOnly
+        if _.isFunction generators[field.type]
+            generators[field.type](field, components, fieldStrings, features)
         else if templates[field.type]
             fieldStrings.push templates[field.type](field)
         else

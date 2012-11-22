@@ -45,7 +45,7 @@ define [
             grid.trigger 'reloadGrid'
         show: ->
             grid = @feature.views['views:grid'].components[0]
-            view = @feature.views['forms:edit']
+            view = @feature.views['forms:show']
             selected = grid.getGridParam('selrow')
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
@@ -54,10 +54,12 @@ define [
             $.when(view.model.fetch()).then =>
                 app.showDialog(
                     view: view
-                    title: viewLoader.getDialogTitle(@feature.views['forms:edit'], 'show', '查看')
+                    title: viewLoader.getDialogTitle(@feature.views['forms:show'], 'show', '查看')
                     buttons: []
                 ).done ->
-                    view.$$('form input').attr('readonly', true)
+                    data = view.model.toJSON()
+                    _(view.components).each (component) ->
+                        component.loadData data if _.isFunction(component.loadData)
         refresh: ->
             grid = @feature.views['views:grid'].components[0]
             grid.trigger('reloadGrid')

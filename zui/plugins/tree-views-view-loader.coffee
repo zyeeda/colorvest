@@ -51,17 +51,20 @@ define [
             app = @feature.module.getApplication()
             tree = @feature.views['treeViews:tree'].components[0]
             selected = tree.getSelectedNodes()[0]
-            view = @feature.views['forms:edit']
+            view = @feature.views['forms:show']
             return app.info '请选择要操作的记录' if not selected
 
             view.model.set 'id', selected.id
             $.when(view.model.fetch()).then =>
                 app.showDialog(
                     view: view
-                    title: viewLoader.getDialogTitle(@feature.views['forms:edit'], 'show', '查看')
+                    title: viewLoader.getDialogTitle(@feature.views['forms:show'], 'show', '查看')
                     buttons: []
                 ).done ->
-                    view.$$('form input').attr('readonly', true)
+                    data = view.model.toJSON()
+                    _(view.components).each (component) ->
+                        component.loadData data if _.isFunction(component.loadData)
+
         refresh: ->
             tree = @feature.views['treeViews:tree'].components[0]
             tree.refresh()

@@ -26,6 +26,7 @@ define [
 
                 views.push 'forms:add'
                 views.push 'forms:edit'
+                views.push 'forms:show'
 
             opts =
                 baseName: featureName

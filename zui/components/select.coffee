@@ -13,8 +13,12 @@ define [
 
 
     coala.registerComponentHandler 'select', (->), (el, opt, view) ->
-        options = _.extend {minimumResultsForSearch: config.minimumResultsForSearch}, opt
+        if opt.readOnly is true
+            return loadData: (data) ->
+                _(opt.data).each (item) ->
+                    el.html(item.text) if String(item.id) == String(data[opt.fieldName])
 
+        options = _.extend {minimumResultsForSearch: config.minimumResultsForSearch}, opt
         if options.remote is true
             delete options.remote
             options.data = []

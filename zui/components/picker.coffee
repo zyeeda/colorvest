@@ -5,6 +5,10 @@ define [
 ], (_, $, coala) ->
 
     coala.registerComponentHandler 'grid-picker', (->), (el, opt = {}, view) ->
+        if opt.readOnly is true
+            return loadData: (data) ->
+                el.html data[opt.fieldName]['name']
+
         app = view.feature.module.getApplication()
         options = _.extend el: el, ignoreExists: true, opt
         options.valueField = view.$ options.valueField
@@ -29,6 +33,10 @@ define [
         result
 
     coala.registerComponentHandler 'tree-picker', (->), (el, opt = {}, view) ->
+        if opt.readOnly is true
+            return loadData: (data) ->
+                el.html data[opt.fieldName]['name']
+
         app = view.feature.module.getApplication()
         options = _.extend el: el, ignoreExists: true, opt
         options.valueField = view.$ options.valueField
