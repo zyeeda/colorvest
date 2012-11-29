@@ -22,6 +22,8 @@ define [
         c.getPromises = ->
             application.promises
         c.initRouters()
+        c.startFeature = (args...) ->
+            application.startFeature args...
 
         application.addPromise ComponentHandler.initialize()
 

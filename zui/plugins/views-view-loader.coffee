@@ -42,7 +42,7 @@ define [
                     msg += summary
                     app.error msg, '验证提示'
                     return
-            grid.trigger 'reloadGrid'
+                grid.trigger 'reloadGrid'
         show: ->
             grid = @feature.views['views:grid'].components[0]
             view = @feature.views['forms:show']

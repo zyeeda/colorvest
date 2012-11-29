@@ -1,5 +1,6 @@
 define ["jquery", "underscore"], ($, _) ->
     handler = (app, featureName, id, data) ->
+        data.option = eval '(' + data.option + ')' if data.option
         app.startFeature featureName, data
         @$$("li.active").removeClass "active"
         @$(id).parent().addClass "active"
@@ -24,4 +25,3 @@ define ["jquery", "underscore"], ($, _) ->
                 deferred.resolve data: me.collection.toJSON()
 
             deferred
-

@@ -8,7 +8,7 @@ define ["jquery", "zui/coala/loader-plugin-manager"], ($, LoaderManager) ->
         return app.info("请选择要操作的记录")  unless selected
         gridView.model.set "id", selected
         $.when(gridView.model.fetch()).done ->
-            LoaderManager.invoke("view", me.feature.module, me.feature, "forms:" + selected).done (view) ->
+            LoaderManager.invoke("view", me.feature.module, me.feature, "forms:p" + selected).done (view) ->
                 view.model = gridView.model
                 app.showDialog
                     view: view
@@ -25,3 +25,17 @@ define ["jquery", "zui/coala/loader-plugin-manager"], ($, LoaderManager) ->
 
         true
 
+    selectAll: ->
+        grid = @feature.views["completed-grid"].components[0]
+        grid.setGridParam(postData: status: null)
+        grid.trigger('reloadGrid')
+
+    selectFinished: ->
+        grid = @feature.views["completed-grid"].components[0]
+        grid.setGridParam(postData: status: 'finished')
+        grid.trigger('reloadGrid')
+
+    selectUnfinished: ->
+        grid = @feature.views["completed-grid"].components[0]
+        grid.setGridParam(postData: status: 'unfinished')
+        grid.trigger('reloadGrid')
