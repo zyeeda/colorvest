@@ -99,6 +99,13 @@ define [
                 options = _.extend type: 'success', content
                 application.message options
 
+            application.confirm = (content, fn) ->
+                fn() if window.confirm content
+
+            application.prompt = (content, fn) ->
+                s = window.prompt(content)
+                fn(s) if s
+
         # dialog
         application.showDialog = (options) ->
             deferred = $.Deferred()

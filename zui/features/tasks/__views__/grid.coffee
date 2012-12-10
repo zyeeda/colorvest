@@ -10,6 +10,7 @@ define ->
             type: "grid"
             selector: "grid"
             pager: "pager"
+            multiselect: true
             colModel: [
                 name: "id"
                 label: "ID"

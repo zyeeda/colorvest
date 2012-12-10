@@ -1,4 +1,4 @@
-define ["jquery"], ($) ->
+define ["jquery", 'underscore'], ($, _) ->
     getFormData = (view) ->
         values = view.$$("form").serializeArray()
         data = {}
@@ -17,23 +17,40 @@ define ["jquery"], ($) ->
                     view.model.set d.name, d.value  if d
 
 
+    initSelection: (feature, view, grid, args...) ->
+        @$('audit').hide()
+        @$('batchAudit').hide()
+        @$('reject').hide()
+        @$('batchReject').hide()
+
+    selectChanged: (feature, view, grid, args...) ->
+        @$('audit').hide()
+        @$('batchAudit').hide()
+        @$('reject').hide()
+        @$('batchReject').hide()
+        selected = grid.getGridParam('selarrrow')
+        if selected.length is 1
+            @$('audit').show()
+            @$('reject').show()
+        else if selected.length > 1
+            @$('batchReject').show()
+            @$('batchAudit').show()
 
     audit: ->
-        me = this
-        grid = me.feature.views["grid"].components[0]
-        ogrid = me.feature.views["completed-grid"].components[0]
+        grid = @feature.views["grid"].components[0]
+        ogrid = @feature.views["completed-grid"].components[0]
         selected = grid.getGridParam("selrow")
-        app = me.feature.module.getApplication().applicationRoot
+        app = @feature.module.getApplication().applicationRoot
         return app.info("请选择要操作的记录")  unless selected
-        me.feature.model.set "id", selected
-        $.when(me.feature.model.fetch()).done ->
-            app.loadView(me.feature, "forms:" + selected).done (view) ->
+        @feature.model.set "id", selected
+        $.when(@feature.model.fetch()).done =>
+            app.loadView(@feature, "forms:" + selected).done (view) =>
                 app.showDialog
                     view: view
                     title: "Task Process"
                     buttons: [
                         label: "Finish"
-                        fn: ->
+                        fn: =>
                             getFormData view
                             valid = view.$$("form").valid()
                             return false  unless valid
@@ -45,13 +62,45 @@ define ["jquery"], ($) ->
                             true
                     ,
                         label: "Reject"
-                        fn: ->
-                            me.feature.request(url: "reject/" + selected).done ->
+                        fn: =>
+                            @feature.request(url: "reject/" + selected, type: 'put').done ->
                                 grid.trigger "reloadGrid"
+                                ogrid.trigger "reloadGrid"
 
                     ]
 
-
-
         true
 
+    batchAudit: ->
+        grid = @feature.views['grid'].components[0]
+        ogrid = @feature.views["completed-grid"].components[0]
+        selected = grid.getGridParam('selarrrow')
+        app = @feature.module.getApplication().applicationRoot
+
+        app.confirm 'are you sure to audit these tasks?', =>
+            @feature.request(url: 'batch/audit', type: 'post', data: ids: selected).done ->
+                grid.trigger 'reloadGrid'
+                ogrid.trigger 'reloadGrid'
+
+    reject: ->
+        grid = @feature.views["grid"].components[0]
+        ogrid = @feature.views["completed-grid"].components[0]
+        selected = grid.getGridParam("selrow")
+        app = @feature.module.getApplication().applicationRoot
+
+        app.prompt 'why this task is rejected?', (str) =>
+            console.log str, 'str'
+            @feature.request(url: 'reject/' + selected, type: 'put', data: comment: str).done ->
+                grid.trigger 'reloadGrid'
+                ogrid.trigger 'reloadGrid'
+
+    batchReject: ->
+        grid = @feature.views['grid'].components[0]
+        ogrid = @feature.views["completed-grid"].components[0]
+        selected = grid.getGridParam('selarrrow')
+        app = @feature.module.getApplication().applicationRoot
+
+        app.prompt 'why this task is rejected?', (str) =>
+            @feature.request(url: 'batch/reject', type: 'post', data: {ids: selected, comment: str}).done ->
+                grid.trigger 'reloadGrid'
+                ogrid.trigger 'reloadGrid'
