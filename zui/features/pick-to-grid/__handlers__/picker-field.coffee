@@ -33,6 +33,7 @@ define ["zui/coala/view", "underscore"], (View, _) ->
                     exists = targetGrid.getRowData(selected)
                     return false  if _.include(targetGrid.getDataIDs(), rowData.id)
                     targetGrid.addRowData rowData.id, rowData
+                    options.valueField.trigger 'change' if options.statusChanger
                     true
                 , this, this)
             ]
@@ -45,4 +46,3 @@ define ["zui/coala/view", "underscore"], (View, _) ->
         selected = targetGrid.getGridParam("selrow")
         return  unless selected
         targetGrid.delRowData selected
-

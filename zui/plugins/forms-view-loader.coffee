@@ -2,7 +2,22 @@ define [
     'zui/coala/view'
     'handlebars'
     'underscore'
-], (View, Handlebars, _) ->
+    'jquery'
+], (View, Handlebars, _, $) ->
+
+    getFormData = (view) ->
+        values = view.$$('form').serializeArray()
+        data = {}
+        _(values).map (item) ->
+            if item.name of data
+                data[item.name] = if _.isArray(data[item.name]) then data[item.name].concat([item.value]) else [data[item.name], item.value]
+            else
+                data[item.name] = item.value
+        view.model.set data
+        _(view.components).each (component) ->
+            if _.isFunction(component.getFormData)
+                d = component.getFormData()
+                view.model.set d.name, d.value if d
 
     templates =
         unknown: _.template '''
@@ -132,7 +147,7 @@ define [
             <div id="<%= id %>"></div>
         '''
 
-    generateForm = (options = {}, components, viewName, features) ->
+    generateForm = (options = {}, components, viewName, features, events) ->
         hiddens = []
         others = []
         (if field.type is 'hidden' then hiddens else others).push field for field in options.fields or []
@@ -151,34 +166,34 @@ define [
             for tab, i in options.tabs
                 groupStrings = []
                 for groupName in tab.groups
-                    generateGroup others, groupName, options.groups[groupName], components, groupStrings, features
+                    generateGroup others, groupName, options.groups[groupName], components, groupStrings, features, events
                     unusedGroups = _.without unusedGroups, groupName
                 id = _.uniqueId 'tab'
                 tabLiStrings.push templates.tabLi(i: i, id: id, title: tab.title)
                 tabContentStrings.push templates.tabContent(i: i, id: id, content: groupStrings.join(''))
 
             for groupName in unusedGroups
-                generateGroup others, groupName, options.groups[groupName], components, unusedGroupStrings, features
+                generateGroup others, groupName, options.groups[groupName], components, unusedGroupStrings, features, events
 
             formContent = templates.tabLayout(lis: tabLiStrings.join(''), content: tabContentStrings.join(''), pinedGroups: unusedGroupStrings.join(''))
         else
             groupStrings = []
-            generateGroup others, groupName, group, components, groupStrings, features for groupName, group of options.groups
+            generateGroup others, groupName, group, components, groupStrings, features, events for groupName, group of options.groups
             formContent = groupStrings.join('')
         columns: columns, form: templates.form(content: formContent, hiddens: generateFields(hiddens, 1), formName: viewName)
 
-    generateGroup = (allFields, groupName, group, components, groupStrings, features) ->
+    generateGroup = (allFields, groupName, group, components, groupStrings, features, events) ->
         fields = findFieldsInGroup groupName, allFields
         return if fields.length is 0
-        groupStrings.push templates.group(label: group.label, groupContent: generateFields(fields, group.columns, components, features))
+        groupStrings.push templates.group(label: group.label, groupContent: generateFields(fields, group.columns, components, features, events))
 
-    generateFields = (fields, columns, components, features) ->
+    generateFields = (fields, columns, components, features, events) ->
         fieldStrings = []
         row = []
         if columns is 2
             items = 0
             for field in fields
-                generateField field, components, row, features
+                generateField field, components, row, features, events
                 row.push true if field.colspan is 2
                 throw new Error("the second column's colspan can not be 2") if row.length > 2
                 if row.length is 2
@@ -186,7 +201,7 @@ define [
                     fieldStrings.push template(field1: row.shift(), field2: row.shift())
             fieldStrings.push(templates.oneColumnRow(field1: row.shift())) if row.length isnt 0
         else
-            generateField(field, components, fieldStrings, features) for field in fields
+            generateField(field, components, fieldStrings, features, events) for field in fields
 
         fieldStrings.join ''
 
@@ -214,12 +229,14 @@ define [
                     url: field.pickerSource
                     title: '选择' + field.label
                     fieldName: field.name
-                    readOnly: field.readOnly
+                    readOnly: field.readOnlly
                     valueField: field.id
                     remoteDefined: true
+                    statusChanger: field.statusChanger
 
-        date: (field, components, fieldStrings, features) ->
+        date: (field, components, fieldStrings, features, events) ->
             fieldStrings.push templates['string'](field)
+            events['change ' + field.id] = 'formStatusChanged' if field.statusChanger is true
             components.push type: 'datepicker', selector: field.id if not field.readOnly
 
         'many-picker': (field, components, fieldStrings, features) ->
@@ -243,12 +260,13 @@ define [
                 options: field.options
 
 
-    generateField = (field, components, fieldStrings, features) ->
+    generateField = (field, components, fieldStrings, features, events) ->
         field.id = _.uniqueId field.name
         field.value = field.name if not field.value
         field.readOnly = !!field.readOnly
+        events['change ' + field.id] = 'innerFormStatusChanged' if field.statusChanger is true
         if _.isFunction generators[field.type]
-            generators[field.type](field, components, fieldStrings, features)
+            generators[field.type](field, components, fieldStrings, features, events)
         else if templates[field.type]
             fieldStrings.push templates[field.type](field)
         else
@@ -264,7 +282,8 @@ define [
         feature.request url:'configuration/forms/' + viewName, success: (data) ->
             components = []
             features = []
-            {columns, form} = generateForm data, components, viewName, features
+            events = {}
+            {columns, form} = generateForm data, components, viewName, features, events
 
             view = new View
                 baseName: viewName
@@ -274,6 +293,7 @@ define [
                 avoidLoadingHandlers: true
                 dialogClass: if columns is 2 then 'two-column-dialog' else 'one-column-dialog'
                 entityLabel: data.entityLabel
+                events: events
                 extend:
                     renderHtml: (su, data) ->
                         template = Handlebars.compile form or ''
@@ -291,6 +311,15 @@ define [
                             promises.push p
                         $.when.apply($, promises).then -> deferred.resolve()
                         deferred
+
+            view.eventHandlers.innerFormStatusChanged = (e) ->
+                fcs = @eventHandlers.formStatusChanged
+                if not fcs
+                    scaffold = @feature.options.scaffold or {}
+                    fsc = scaffold.handlers?.formStatusChanged
+                if _.isFunction fsc
+                    getFormData @
+                    fsc.call @, @model.toJSON(), $(e.target)
             view.forms = data
             deferred.resolve view
         deferred

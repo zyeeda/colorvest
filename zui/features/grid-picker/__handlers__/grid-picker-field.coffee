@@ -32,8 +32,7 @@ define ["zui/coala/view", "underscore"], (View, _) ->
                     )(rowData)
                     me.$("text").val text
                     options.valueField.val selected
+                    options.valueField.trigger 'change' if options.statusChanger
                     true
                 , this, this)
             ]
-
-
