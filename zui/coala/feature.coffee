@@ -117,7 +117,8 @@ define [
             options.url = @url() + '/' + options.url
             $.ajax options
 
-        activate: ->
+        activate: (options) ->
+            @startupOptions = options
             @start()
             #override this
 

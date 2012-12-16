@@ -30,3 +30,13 @@ define [
                     _.delay (-> callback q, view, textKey), 50
 
         selector = el.select2 options
+
+        id = el.attr('id').split('-')
+        id.shift()
+        id = id.join('-')
+
+        events = ['change']
+        for e in events
+          selector.on(e, view.feature.delegateComponentEvent(view, {component: selector}, "select:#{id}:#{e}"))
+
+        selector
