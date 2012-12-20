@@ -21,18 +21,21 @@ define [
     helperPath = config.helperPath or ''
     files = null
     filePromise = $.Deferred()
-    $.get(helperPath + '/development', (data) ->
-        config.development = if data is 'false' then false else true
-        if config.development is true and files is null
-            files = {}
-            $.get(helperPath, root: config.appRoot, (data) ->
-                _.extend files, data
-                filePromise.resolve()
-            , 'json')
-        else
-            filePromise.resolve()
+    if config.noBackend is true
         require.s.contexts._.config.urlArgs = if config.development then '_c=' + (new Date()).getTime() else ''
-    )
+    else
+        $.get(helperPath + '/development', (data) ->
+            config.development = if data is 'false' then false else true
+            if config.development is true and files is null
+                files = {}
+                $.get(helperPath, root: config.appRoot, (data) ->
+                    _.extend files, data
+                    filePromise.resolve()
+                , 'json')
+            else
+                filePromise.resolve()
+            require.s.contexts._.config.urlArgs = if config.development then '_c=' + (new Date()).getTime() else ''
+        )
 
     resourceLoader = (resource, plugin) ->
         deferred = $.Deferred()
