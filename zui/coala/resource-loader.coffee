@@ -46,7 +46,7 @@ define [
                 deferred.resolve result
 
         loadIt = ->
-            return load path if not config.development
+            return load path if config.noBackend is true or not config.development
             if resource.substring(0, config.appRoot.length) is config.appRoot
                 idx = resource.lastIndexOf '/'
                 folder = config.scriptRoot + '/' + (resource.substring 0, idx + 1)
