@@ -22,6 +22,7 @@ define [
     files = null
     filePromise = $.Deferred()
     if config.noBackend is true
+        filePromise.resolve()
         require.s.contexts._.config.urlArgs = if config.development then '_c=' + (new Date()).getTime() else ''
     else
         $.get(helperPath + '/development', (data) ->
