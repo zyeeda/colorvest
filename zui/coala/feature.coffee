@@ -97,14 +97,22 @@ define [
             defered.promise()
 
         showView: (region, view) ->
+            deferred = $.Deferred()
             view = @inRegionViews[region] if not view
             view = @views[index] if _.isNumber view
             return if not view
 
             promise = if @deferredStart then @deferredStart.promise() else @start()
 
-            promise.done =>
-                @layout[region].show view
+            if @layout[region].currentView?.cid is view.cid
+                deferred.resolve()
+            else
+                view.on 'show', _.once ->
+                    deferred.resolve()
+                promise.done =>
+                    @layout[region].show view
+
+            deferred.promise()
 
         url: ->
             @module.url(@baseName)
@@ -117,7 +125,8 @@ define [
             options.url = @url() + '/' + options.url
             $.ajax options
 
-        activate: ->
+        activate: (options) ->
+            @startupOptions = options
             @start()
             #override this
 
