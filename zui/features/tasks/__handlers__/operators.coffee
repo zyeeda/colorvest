@@ -29,11 +29,13 @@ define ["jquery", 'underscore'], ($, _) ->
         @$('reject').hide()
         @$('batchReject').hide()
         selected = grid.getGridParam('selarrrow')
+        isRejectable = _.every selected, (v) ->
+            view.collection.get(v).get('isRejectable') is true
         if selected.length is 1
-            @$('audit').show()
-            @$('reject').show()
+            @$('audit').show() 
+            @$('reject').show() if isRejectable
         else if selected.length > 1
-            @$('batchReject').show()
+            @$('batchReject').show() if isRejectable
             @$('batchAudit').show()
 
     audit: ->
@@ -45,30 +47,32 @@ define ["jquery", 'underscore'], ($, _) ->
         @feature.model.set "id", selected
         $.when(@feature.model.fetch()).done =>
             app.loadView(@feature, "forms:" + selected).done (view) =>
+                buttons = [
+                    label: "Finish"
+                    fn: =>
+                        getFormData view
+                        valid = view.$$("form").valid()
+                        return false  unless valid
+                        view.model.set "id", selected
+                        view.model.save().done ->
+                            grid.trigger "reloadGrid"
+                            ogrid.trigger "reloadGrid"
+
+                        true
+                ]
+
+                if @feature.model.get('task').isRejectable
+                    buttons.push
+                        label: "Reject"
+                        fn: =>
+                            @feature.request(url: "reject/" + selected, type: 'put', data: comment: '').done ->
+                                grid.trigger "reloadGrid"
+                                ogrid.trigger "reloadGrid"
+
                 app.showDialog
                     view: view
                     title: "Task Process"
-                    buttons: [
-                        label: "Finish"
-                        fn: =>
-                            getFormData view
-                            valid = view.$$("form").valid()
-                            return false  unless valid
-                            view.model.set "id", selected
-                            view.model.save().done ->
-                                grid.trigger "reloadGrid"
-                                ogrid.trigger "reloadGrid"
-
-                            true
-                    ,
-                        label: "Reject"
-                        fn: =>
-                            @feature.request(url: "reject/" + selected, type: 'put').done ->
-                                grid.trigger "reloadGrid"
-                                ogrid.trigger "reloadGrid"
-
-                    ]
-
+                    buttons: buttons
         true
 
     batchAudit: ->
@@ -89,7 +93,6 @@ define ["jquery", 'underscore'], ($, _) ->
         app = @feature.module.getApplication().applicationRoot
 
         app.prompt 'why this task is rejected?', (str) =>
-            console.log str, 'str'
             @feature.request(url: 'reject/' + selected, type: 'put', data: comment: str).done ->
                 grid.trigger 'reloadGrid'
                 ogrid.trigger 'reloadGrid'

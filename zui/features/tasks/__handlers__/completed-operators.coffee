@@ -15,8 +15,9 @@ define ["jquery", "zui/coala/loader-plugin-manager"], ($, LoaderManager) ->
                     title: "Task Process"
                     buttons: [
                         label: "Revoke"
-                        fn: ->
-                            me.feature.request(url: "revoke/" + selected).done ->
+                        status: 'disabled'
+                        fn: (btn) ->
+                            me.feature.request(url: "revoke/" + btn.taskId).done ->
                                 grid.trigger "reloadGrid"
 
                     ]

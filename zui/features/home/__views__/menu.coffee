@@ -1,6 +1,6 @@
 define ["jquery", "underscore"], ($, _) ->
     handler = (app, featureName, id, data) ->
-        data.option = eval '(' + data.option + ')' if data.option
+        data.option = eval '(' + data.option + ')' if data.option and _.isString(data.option)
         app.startFeature featureName, data
         @$$("li.active").removeClass "active"
         @$(id).parent().addClass "active"

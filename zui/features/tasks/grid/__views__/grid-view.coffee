@@ -1,4 +1,7 @@
 define
+    events:
+        'this#grid:onSelectRow': 'selectChanged'
+
     model: ->
         console.log @feature.startupOptions.model
         @feature.startupOptions.model
@@ -9,4 +12,3 @@ define
         pager: 'pager'
         colModel: @feature.startupOptions.colModel
     ]
-    avoidLoadingHandlers: true

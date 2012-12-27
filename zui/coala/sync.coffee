@@ -17,10 +17,6 @@ define [
             if _.isFunction beforeRequest
                 beforeRequest params, model, method
 
-            for key, value of params.data
-                if not value and (value isnt 0 and value isnt false)
-                    delete params.data[key]
-
             $.ajax _.extend params, options
         offline: (method, model, options = {}) ->
 

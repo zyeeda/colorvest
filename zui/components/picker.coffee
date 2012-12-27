@@ -29,6 +29,7 @@ define [
             return if not value
             result.deferred.done (feature) ->
                 feature.views['grid-picker-field'].$('text').val(value.name)
+                options.valueField.val(value.id)
 
         result
 

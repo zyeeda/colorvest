@@ -308,6 +308,8 @@ define [
                             opts.container = container
                             opts.ignoreExists = true
                             p = app.startFeature featureConfig.path, opts
+                            p.done (feature) =>
+                                feature.formView = @
                             promises.push p
                         $.when.apply($, promises).then -> deferred.resolve()
                         deferred
@@ -321,5 +323,6 @@ define [
                     getFormData @
                     fsc.call @, @model.toJSON(), $(e.target)
             view.forms = data
+            feature.views['forms:' + view.baseName] = view
             deferred.resolve view
         deferred

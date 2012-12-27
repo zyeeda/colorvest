@@ -33,6 +33,7 @@ define ["underscore", "jquery", "libs/bootstrap/bootstrap"], (_, $) ->
             startedOptions = me.startedOptions or (me.startedOptions = [])
             startedOptions.push me.startupOptions
             me.inRegionViews["body"] = me.startupOptions.view
+            me.startupOptions.view.dialogFeature = @
             @deferredView.done ->
                 promise = su.call(me)
                 promise.done ->
@@ -47,6 +48,7 @@ define ["underscore", "jquery", "libs/bootstrap/bootstrap"], (_, $) ->
             currentView = @startupOptions.view
             deferred = $.Deferred()
             unless view.size() is 0
+                currentView.dialogFeature = @
                 @dialogContainer.removeClass currentView.options.dialogClass  if currentView.options.dialogClass
                 @dialogContainer.addClass options.view.options.dialogClass  if options.view.options.dialogClass
                 @startedOptions.push options
@@ -65,8 +67,10 @@ define ["underscore", "jquery", "libs/bootstrap/bootstrap"], (_, $) ->
                 @start()
 
         close: -> # for close button
-            if @startedOptions.length > 1
-                options = @startedOptions.pop()
+            options = @startedOptions.pop()
+            delete options.view.dialogFeature
+
+            if @startedOptions.length > 0
                 current = @startedOptions[@startedOptions.length - 1]
                 @dialogContainer.removeClass options.view.options.dialogClass  if options.view.options.dialogClass
                 @dialogContainer.addClass current.view.options.dialogClass  if current.view.options.dialogClass
