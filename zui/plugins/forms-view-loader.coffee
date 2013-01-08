@@ -314,6 +314,8 @@ define [
                         $.when.apply($, promises).then -> deferred.resolve()
                         deferred
 
+            view.fillFormDataToModel = _.bind getFormData, null, view
+
             view.eventHandlers.innerFormStatusChanged = (e) ->
                 fcs = @eventHandlers.formStatusChanged
                 if not fcs
