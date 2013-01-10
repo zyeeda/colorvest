@@ -47,7 +47,13 @@ define [
         wrapEvent: (name, handlerName) ->
             parts = name.replace(/^\s+/g, '').replace(/\s+$/, '').split /\s+/
             if parts.length is 2
-                name = parts[0] + ' #' + @genId(parts[1])
+                if parts[1].endsWith('*')
+                    n = parts[1].substring 0, parts[1].length - 1
+                    n = @genId n
+                    n = ' [id^="' + n + '"]'
+                    name = parts[0] + n
+                else
+                    name = parts[0] + ' #' + @genId(parts[1])
 
             return name: name if not handlerName
 
