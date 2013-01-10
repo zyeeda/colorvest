@@ -28,7 +28,7 @@ define [
         application.addPromise ComponentHandler.initialize()
 
         if options.loadSettings isnt false and config.noBackend isnt true
-            application.addPromise $.get('invoke/scaffold/system/settings', (data) ->
+            application.addPromise $.get(config.urlPrefix + '/system/settings', (data) ->
                 settings = {}
                 _.each data.results, (d) ->
                     settings[d.name] = d.value
