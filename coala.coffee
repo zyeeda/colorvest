@@ -1,0 +1,85 @@
+
+define [
+    'jquery'
+    'underscore'
+    'marionette'
+    'handlebars'
+    'backbone'
+    'coala/core/application'
+    'coala/core/component-handler'
+    'coala/core/resource-loader'
+    'coala/core/config'
+    'coala/applications/default'
+    'coala/core/loader-plugin-manager'
+    'coala/core/loaders/default-feature-loader'
+    'coala/core/loaders/default-view-loader'
+    'coala/scaffold/forms-view-loader'
+    'coala/scaffold/notfound-feature-loader'
+    'coala/scaffold/views-view-loader'
+    'coala/scaffold/tree-views-view-loader'
+    'coala/scaffold/treetable-views-view-loader'
+    'coala/core/sync'
+], ($, _, Marionette, Handlebars, Backbone, Application, ComponentHandler, loadResource, config, startDefaultApplication, LoaderPluginManager, featureLoader, viewLoader, formsLoader, notFoundFeatureLoader, viewsLoader, treeViewsLoader, treeTableViewsLoader) ->
+
+    # override marionette's template loader
+    Marionette.TemplateCache.loadTemplate = (templateId, callback) ->
+        loadResource(templateId, 'text').done (template) ->
+            tpl = Handlebars.compile template or ''
+            callback.call @, tpl
+
+    Handlebars.registerHelper 'appearFalse', (value) -> if value is false then 'false' else value
+
+    coala = {}
+
+    LoaderPluginManager.register featureLoader
+    LoaderPluginManager.register viewLoader
+    LoaderPluginManager.register formsLoader
+    LoaderPluginManager.register notFoundFeatureLoader
+    LoaderPluginManager.register viewsLoader
+    LoaderPluginManager.register treeViewsLoader
+    LoaderPluginManager.register treeTableViewsLoader
+
+    coala.startBackboneHistory = (app) ->
+        Backbone.history = new Backbone.History() if not Backbone.history
+        processedUrl = {}
+        Backbone.history.handlers.push route:/^(.*)$/, callback: (name) ->
+            return if processedUrl[name] is true or not name
+
+            processedUrl[name] = true
+            names = name.split '/'
+            modules = {}
+            _.reduce names, (memo, n) ->
+                modules[memo] = app.findModule memo
+                [memo, n].join '/'
+
+            app.module name
+
+            app.done =>
+                i = names.length
+                while i--
+                    u = names[0..i].join '/'
+                    m = app.findModule u
+                    if not m.router and not modules[u]
+                        delete m.parent[names[i]]
+
+                Backbone.history.loadUrl name
+        Backbone.history.start()
+
+    coala.registerComponentHandler = (name, init, fn) ->
+        ComponentHandler.register name, init, fn
+
+    coala.startApplication = (path) ->
+        app = if not path
+            startDefaultApplication()
+        else
+            require(path)()
+
+        app.loadView = (feature, name, args...) ->
+            throw new Error('a view must be within a feature') if not feature
+            args = ['view', feature.module, feature, name].concat args
+            LoaderPluginManager.invoke args...
+        app
+
+    coala.LoaderPluginManager = LoaderPluginManager
+
+    coala
