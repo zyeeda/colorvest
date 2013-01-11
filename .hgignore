@@ -9,12 +9,13 @@ syntax: glob
 .DS_Store
 .settings
 .project
-zui/*.js
-zui/applications/*.js
-zui/coala/*.js
-zui/components/*.js
-zui/components/callbacks/*.js
-zui/plugins/*.js
-zui/features/**.js
+coala.js
+applications/*.js
+core/*.js
+core/loaders/*.js
+components/*.js
+components/callbacks/*.js
+scaffold/*.js
+features/**.js
 
 syntax: regexp
