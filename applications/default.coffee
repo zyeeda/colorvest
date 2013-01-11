@@ -1,30 +1,20 @@
 define [
     'jquery'
     'underscore'
+    'coala/coala'
     'coala/core/application'
     'coala/core/browser'
     'coala/core/component-handler'
     'coala/core/config'
     'coala/vendors/jquery/pnotify/jquery.pnotify'
-], ($, _, Application, detectBrowser, ComponentHandler, config) ->
+    'coala/scaffold/scaffold'
+    'coala/features/home'
+], ($, _, coala, Application, detectBrowser, ComponentHandler, config) ->
 
     (options = {}) ->
         detectBrowser() if options.detectBrowser isnt false
 
-        c = new Application()
         application = new Application()
-        application.coala = c
-
-        delete c.module
-        c.paths = [config.coalaFeaturesPath]
-        c.baseName = 'coala'
-        c.applicationRoot = application
-        c.getPromises = ->
-            application.promises
-        c.initRouters()
-        c.startFeature = (args...) ->
-            application.startFeature args...
-
         application.addPromise ComponentHandler.initialize()
 
         if options.loadSettings isnt false and config.noBackend isnt true
@@ -33,7 +23,6 @@ define [
                 _.each data.results, (d) ->
                     settings[d.name] = d.value
                 application.settings = settings
-                c.settings = settings
             )
 
         if options.useDefaultHome isnt false
@@ -106,16 +95,5 @@ define [
                 s = window.prompt(content)
                 fn(s) if s
 
-        # dialog
-        application.showDialog = (options) ->
-            deferred = $.Deferred()
-            if not application._modalDialog
-                application.startFeature('coala/dialog', options).done (feature) ->
-                    application._modalDialog = feature
-                    deferred.resolve feature
-            else
-                application._modalDialog.show(options).done (feature) ->
-                    deferred.resolve feature
-            deferred
 
         application

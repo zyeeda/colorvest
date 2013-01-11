@@ -7,17 +7,6 @@ define [
 ], ($, _, util, config) ->
     {log, error} = util
 
-    # handle 'timeout' error
-    defaultHandler = require.onError
-
-    require.onError = (err) ->
-        if err.requireType is 'timeout'
-            log baseName: 'NOTFOUND', "timeout when load modules:#{err.requireModules}"
-            for name in err.requireModules.split ' '
-                require.s.contexts._.completeLoad name
-        else
-            defaultHandler.call require, err
-
     helperPath = config.helperPath or ''
     files = null
     filePromise = $.Deferred()
@@ -44,6 +33,14 @@ define [
         load = (path) =>
             require [path], (result) ->
                 deferred.resolve result
+            , (err) ->
+                failedId = err.requireModules && err.requireModules[0]
+                if failedId is path
+                    require.undef path
+                    define path, null
+                    require [path], ->
+                else
+                    throw err
 
         loadIt = ->
             return load path if config.noBackend is true or not config.development

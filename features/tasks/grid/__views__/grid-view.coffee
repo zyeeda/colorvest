@@ -3,7 +3,6 @@ define
         'this#grid:onSelectRow': 'selectChanged'
 
     model: ->
-        console.log @feature.startupOptions.model
         @feature.startupOptions.model
 
     components: [ ->

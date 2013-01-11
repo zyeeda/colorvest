@@ -3,8 +3,8 @@ define [
     'underscore'
     'coala/coala'
     'coala/components/callbacks/grid'
-    'order!coala/vendors/jquery/jqgrid/i18n/grid.locale-cn'
-    'order!coala/vendors/jquery/jqgrid/jquery.jqGrid.src'
+    'coala/vendors/jquery/jqgrid/i18n/grid.locale-cn'
+    'coala/vendors/jquery/jqgrid/jquery.jqGrid.src'
 ], (_, coala, cbGrid) ->
 
     delegateGridEvents = (view, obj, options, prefix) ->
