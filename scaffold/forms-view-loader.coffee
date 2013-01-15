@@ -86,6 +86,15 @@ define [
               </div>
             </div>
         '''
+        treePicker: _.template '''
+            <div class="control-group">
+              <label class="control-label" for="<%= id %>"><%= label %></label>
+              <div class="controls">
+                <input type="hidden" id="<%= id %>" name="<%= name %>" value="{{appearFalse <%= value %>}}"/>
+                <div id="tree-<%= id %>"></div>
+              </div>
+            </div>
+        '''
         form: _.template '''
             <form class="form-horizontal">
                 <%= content %>
@@ -222,10 +231,10 @@ define [
                         _(field.pickerSource).each (item) ->
                             fn(item) if String(item.id) == String(val)
             else
-                fieldStrings.push templates['gridPicker'](field)
-                components.push
-                    type: 'grid-picker'
-                    selector: 'grid-' + field.id
+                type = field.minor
+                type = if type is 'tree' then 'treePicker' else 'gridPicker'
+                fieldStrings.push templates[type](field)
+                def = _.extend
                     url: field.pickerSource
                     title: '选择' + field.label
                     fieldName: field.name
@@ -233,6 +242,14 @@ define [
                     valueField: field.id
                     remoteDefined: true
                     statusChanger: field.statusChanger
+                ,
+                    if type is 'gridPicker'
+                        type: 'grid-picker'
+                        selector: 'grid-' + field.id
+                    else
+                        type: 'tree-picker'
+                        selector: 'tree-' + field.id
+                components.push def
 
         date: (field, components, fieldStrings, features, events) ->
             fieldStrings.push templates['string'](field)

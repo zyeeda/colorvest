@@ -42,6 +42,26 @@ define [
         options = _.extend el: el, ignoreExists: true, opt
         options.valueField = view.$ options.valueField
         app.startFeature 'coala/tree-picker', options
+        result = deferred: $.Deferred()
+        if options.remoteDefined
+            $.get view.feature.module.getApplication().url(options.url + '/configuration/picker'), (data) ->
+                _.extend options, data
+                app.startFeature('coala/tree-picker', options).done (feature) ->
+                    result.feature = feature
+                    result.deferred.resolve feature
+        else
+            app.startFeature('coala/tree-picker', options).done (feature) ->
+                result.feature = feature
+                result.deferred.resolve feature
+
+        result.loadData = (data) ->
+            value = data[options.fieldName]
+            return if not value
+            result.deferred.done (feature) ->
+                feature.views['tree-picker-field'].$('text').val(value.name)
+                options.valueField.val(value.id)
+
+        result
 
     coala.registerComponentHandler 'many-picker', (->), (el, opt = {}, view) ->
         app = view.feature.module.getApplication()

@@ -39,6 +39,7 @@ define [
 
         start: (su) ->
             me = this
+            console.log @, @container, @startupOptions.view
             deferred = $.Deferred()
             startedOptions = me.startedOptions or (me.startedOptions = [])
             startedOptions.push me.startupOptions
@@ -69,12 +70,14 @@ define [
             else
                 @dialogContainer.append '<div id=\"' + options.view.cid + '\"></div>'
                 @container = $('#' + options.view.cid)
-                @initLayout()
-                @dialogContainer.removeClass currentView.options.dialogClass  if currentView.options.dialogClass
-                @dialogContainer.addClass options.view.options.dialogClass  if options.view.options.dialogClass
-                $('#' + currentView.cid).hide()
-                @startupOptions = options
-                @start()
+                @initLayout().done =>
+                    @dialogContainer.removeClass currentView.options.dialogClass  if currentView.options.dialogClass
+                    @dialogContainer.addClass options.view.options.dialogClass  if options.view.options.dialogClass
+                    $('#' + currentView.cid).hide()
+                    @startupOptions = options
+                    @start().done =>
+                        deferred.resolve @
+                deferred.promise()
 
         close: -> # for close button
             options = @startedOptions.pop()
