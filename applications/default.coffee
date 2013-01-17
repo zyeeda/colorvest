@@ -11,6 +11,33 @@ define [
     'coala/features/home'
 ], ($, _, coala, Application, detectBrowser, ComponentHandler, config) ->
 
+    onContextLogin = false
+
+    $(document).on 'ajaxComplete', (e, response, options) ->
+        if response.status is 401 and not onContextLogin
+            onContextLogin = true
+
+            login = $ '#LOGIN-DIALOG'
+            if login.length is 0
+                $('''
+                    <div class="modal hide fade" id="LOGIN-DIALOG">
+                      <div class="modal-header">
+                        <h3>Login</h3>
+                      </div>
+                      <div class="modal-body">
+                        <iframe src="" class="context-login-iframe"></iframe>
+                      </div>
+                    </div>
+                ''').appendTo(document.body)
+                login = $ '#LOGIN-DIALOG'
+                login.on 'hidden', ->
+                    onContextLogin = false
+
+            $('iframe', login).attr('src', config.ssoProviderUrl)
+            login.modal
+                backdrop: 'static'
+                keyboard: false
+
     (options = {}) ->
         detectBrowser() if options.detectBrowser isnt false
 
