@@ -9,7 +9,7 @@ syntax: glob
 .DS_Store
 .settings
 .project
-coala.js
+./*.js
 applications/*.js
 core/*.js
 core/loaders/*.js
