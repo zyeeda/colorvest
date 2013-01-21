@@ -65,7 +65,11 @@ define [
         view = @feature.views[viewName]
         app = @feature.module.getApplication()
         ok = ->
+            id = view.model.get 'id'
+            view.model.clear()
             result.getFormData view
+            view.model.set 'id', id
+
             validator = view.$$('form').valid()
             return false if !validator
             $.when(view.model.save()).then (data) ->
