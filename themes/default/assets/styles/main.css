@@ -31,19 +31,18 @@
     font-size: 12px;
 }
 
-/* for sign-out page */
-.c-sso-consumer-signout-left {
+.c-sso-signout-left {
     margin-top: 100px;
     text-align: right;
 }
 
-.c-sso-consumer-signout-right {
+.c-sso-signout-right {
     margin-top: 160px;
     color: white;
     min-width: 280px;
 }
 
-.c-sso-consumer-signout-right h2 {
+.c-sso-signout-right h2 {
     color: white;
 }
 
