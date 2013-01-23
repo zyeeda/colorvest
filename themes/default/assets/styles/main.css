@@ -1,0 +1,64 @@
+.c-header {
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+    background-color: #f6f6f6;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+    height: 50px;
+    width: 100%;
+}
+
+.c-logo {
+    background: url("../images/zyeeda-logo.png") no-repeat scroll 0 0 transparent;
+    float: left;
+    height: 38px;
+    width: 128px;
+    margin-top: 6px;
+    margin-left: 15px;
+}
+
+.c-content {
+    margin-top: 50px;
+}
+
+.c-green-background {
+    background-color: #68B02A;
+}
+
+.c-icon-small {
+    font-size: 12px;
+}
+
+/* for sign-out page */
+.c-sso-consumer-signout-left {
+    margin-top: 100px;
+    text-align: right;
+}
+
+.c-sso-consumer-signout-right {
+    margin-top: 160px;
+    color: white;
+    min-width: 280px;
+}
+
+.c-sso-consumer-signout-right h2 {
+    color: white;
+}
+
+.c-sso-consumer-signout-resignin {
+    color: #FFFC00;
+    text-decoration: underline;
+}
+
+/* for sign-in page */
+.c-sso-consumer-signin-post {
+    margin-top: 100px;
+    text-align: center;
+}
+
+.c-sso-consumer-signin-post img {
+    margin-bottom: 20px;
+}
+
