@@ -36,20 +36,6 @@ define [
         return prefix + view.options.entityLabel if view.options.entityLabel
         prefix
 
-    result.getFormData = (view) ->
-        values = view.$$('form').serializeArray()
-        data = {}
-        _(values).map (item) ->
-            if item.name of data
-                data[item.name] = if _.isArray(data[item.name]) then data[item.name].concat([item.value]) else [data[item.name], item.value]
-            else
-                data[item.name] = item.value
-        view.model.set data
-        _(view.components).each (component) ->
-            if _.isFunction(component.getFormData)
-                d = component.getFormData()
-                view.model.set d.name, d.value if d
-
     result.initOperatorsVisibility = (operators) ->
         @$(o.id).hide() for o in operators when ['edit', 'del', 'show'].indexOf(o.id) isnt -1
 
@@ -66,30 +52,10 @@ define [
         app = @feature.module.getApplication()
         ok = ->
             id = view.model.get 'id'
-            view.model.clear()
-            result.getFormData view
-            view.model.set 'id', id
-
-            validator = view.$$('form').valid()
-            return false if !validator
-            $.when(view.model.save()).then (data) ->
-                if data.violations
-                    msg = ''
-                    summary = ''
-                    labels = view.forms.fields
-                    for err in data.violations
-                        unless err.properties
-                            summary += err.message + '\n'
-                        for label in labels
-                            if label.name == err.properties
-                                msg += "#{[label.label]} #{err.message}\n"
-                    msg += summary
-                    app.error msg, '验证提示'
-                    return
+            view.submit(id: id).done((data) ->
                 options.submitSuccess(type)
-                app.success '操作成功'
                 app._modalDialog.modal.modal 'hide'
-            , ->
+            ).fail ->
                 app.error '系统出错！'
             false
 
@@ -99,22 +65,7 @@ define [
             buttons: [label: 'Ok', fn: ok]
         ).done (dialog) ->
             v = dialog.startupOptions.view
-            data = v.model.toJSON()
-            _(v.components).each (component) ->
-                component.loadData data if _.isFunction(component.loadData)
-        .done ->
-            return unless view.forms.validator
-            view.$$('form').validate({
-                rules: view.forms.validator.rules,
-                messages: view.forms.validator.messages,
-                highlight: (label) ->
-                    $(label).closest('.control-group').removeClass('success')
-                    $(label).closest('.control-group').addClass('error')
-                ,
-                success: (label) ->
-                    $(label).text('OK!').addClass('valid').closest('.control-group').removeClass('error')
-                    $(label).text('OK!').addClass('valid').closest('.control-group').addClass('success')
-            })
+            v.setFormData(v.model.toJSON())
 
     result.generateOperatorsView = (options, module, feature, deferred) ->
         feature.request(url: options.url or 'configuration/operators').done (data) ->

@@ -65,3 +65,13 @@ define [
             return if @collection
             @deferredModel.done =>
                 @collection = new (Collection.extend {feature: @feature, path: @options.path})(null, model: @modelDefinition)
+
+    viewTypes = {}
+    View.add = (type, clazz) ->
+        viewTypes[type] = clazz
+    View.build = (options) ->
+        type = options.type
+        return new View options if not type or not viewTypes[type]
+        new viewTypes[type] options
+
+    View

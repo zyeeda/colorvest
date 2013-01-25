@@ -118,6 +118,10 @@ define [
         $$: (selector) ->
             @$el.find selector
 
+        findComponent: (selector) ->
+            o = c for c in @components when c['__options__']?.selector is selector
+            o
+
         onRender: ->
             used = {}
             @$el.find('[id]').each (i, el) =>
@@ -147,8 +151,10 @@ define [
                 $el.attr 'for', @genId(f)
 
             components = []
+            originalOptions = []
             evalComponent = (view, $el, options) ->
                 {type, selector} = options
+                originalOptions.push _.extend {}, options
 
                 delete options.type
                 delete options.selector
@@ -171,6 +177,8 @@ define [
             componentDeferred = $.Deferred()
             $.when.apply($, components).done (args...) =>
                 @components = args
+                for arg, i in args
+                    arg['__options__'] = originalOptions[i]
                 componentDeferred.resolve(args)
 
             afterRenderDeferred = @afterRender.call @

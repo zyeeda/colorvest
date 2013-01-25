@@ -137,7 +137,6 @@ define [
             views = []
             rendered = {}
             @deferredView.done =>
-                console.log @layout, 'layout'
                 @layout.render =>
                     views.push region for region, view of @inRegionViews
                     for region, view of @inRegionViews

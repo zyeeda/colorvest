@@ -33,7 +33,7 @@ define [
             if selected
                 rowData = grid.getRowData selected
                 rowData.id = selected
-                @feature.views['forms:add'].model.set 'parent', rowData
+                @feature.views['forms:edit'].model.set 'parent', rowData
 
             $.when(view.model.fetch()).then =>
                 viewLoader.submitHandler.call @,
@@ -73,9 +73,7 @@ define [
                     title: viewLoader.getDialogTitle(@feature.views['forms:show'], 'show', '查看')
                     buttons: []
                 ).done ->
-                    data = view.model.toJSON()
-                    _(view.components).each (component) ->
-                        component.loadData data if _.isFunction(component.loadData)
+                    view.setFormData view.model.toJSON()
 
         refresh: ->
             grid = @feature.views['treeTableViews:grid'].components[0]

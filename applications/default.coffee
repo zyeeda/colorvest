@@ -6,6 +6,7 @@ define [
     'coala/core/browser'
     'coala/core/component-handler'
     'coala/core/config'
+    'coala/core/form-view'
     'coala/vendors/jquery/pnotify/jquery.pnotify'
     'coala/scaffold/scaffold'
     'coala/features/home'

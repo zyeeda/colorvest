@@ -39,7 +39,6 @@ define [
 
         start: (su) ->
             me = this
-            console.log @, @container, @startupOptions.view
             deferred = $.Deferred()
             startedOptions = me.startedOptions or (me.startedOptions = [])
             startedOptions.push me.startupOptions
