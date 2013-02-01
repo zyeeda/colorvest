@@ -10,6 +10,7 @@ define [
     'coala/vendors/jquery/pnotify/jquery.pnotify'
     'coala/scaffold/scaffold'
     'coala/features/home'
+    'coala/components/launcher'
 ], ($, _, coala, Application, detectBrowser, ComponentHandler, config) ->
 
     onContextLogin = false
@@ -81,7 +82,6 @@ define [
                         id
 
                     modifyFeatureContainerDeferred.resolve()
-
             application.addPromise modifyFeatureContainerDeferred
 
         if options.useDefaultNotifier isnt false

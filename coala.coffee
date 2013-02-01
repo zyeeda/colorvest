@@ -11,10 +11,11 @@ define [
     'coala/core/loader-plugin-manager'
     'coala/core/loaders/default-feature-loader'
     'coala/core/loaders/default-view-loader'
+    'coala/core/loaders/default-layout-loader'
     'coala/core/sync'
     'bootstrap'
     'coala/features/dialog'
-], ($, _, Marionette, Handlebars, Backbone, Application, ComponentHandler, loadResource, config, LoaderPluginManager, featureLoader, viewLoader) ->
+], ($, _, Marionette, Handlebars, Backbone, Application, ComponentHandler, loadResource, config, LoaderPluginManager, featureLoader, viewLoader, layoutLoader) ->
 
     # override marionette's template loader
     Marionette.TemplateCache.loadTemplate = (templateId, callback) ->
@@ -28,6 +29,7 @@ define [
 
     LoaderPluginManager.register featureLoader
     LoaderPluginManager.register viewLoader
+    LoaderPluginManager.register layoutLoader
 
     attachDefaultApplicationMethods = (app) ->
 
