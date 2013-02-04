@@ -57,9 +57,7 @@ define [
                     title: viewLoader.getDialogTitle(@feature.views['forms:show'], 'show', '查看')
                     buttons: []
                 ).done ->
-                    data = view.model.toJSON()
-                    _(view.components).each (component) ->
-                        component.loadData data if _.isFunction(component.loadData)
+                    view.setFormData view.model.toJSON()
         refresh: ->
             grid = @feature.views['views:grid'].components[0]
             grid.trigger('reloadGrid')

@@ -42,13 +42,8 @@ define [
             layout = @options.layout
             layout = @baseName if not layout
 
-            @module.loadResource(getPath @, 'layout', layout).done (def) =>
-                error @, 'no layout defined with name:', getPath @, 'layout', layout if not def
-                def.el = @container
-                def.baseName = if layout.charAt(0) is '/' then layout.substring(1) else layout
-                def.feature = @
-                def.module = @module
-                @layout = new Layout def
+            loaderPluginManager.invoke('layout', @module, @, layout).done (layout) =>
+                @layout = layout
 
         initModel: ->
             return if @model
@@ -137,7 +132,6 @@ define [
             views = []
             rendered = {}
             @deferredView.done =>
-                console.log @layout, 'layout'
                 @layout.render =>
                     views.push region for region, view of @inRegionViews
                     for region, view of @inRegionViews
