@@ -12,10 +12,11 @@
  *		- it also looks for ANY visible layout *inside* teh tab and resize/init it
  *
  *	SAMPLE:
- *	$("#elem").tabs({ show: $.layout.callbacks.resizeTabLayout });
+ *	< jQuery UI 1.9: $("#elem").tabs({ show: $.layout.callbacks.resizeTabLayout });
+ *	> jQuery UI 1.9: $("#elem").tabs({ activate: $.layout.callbacks.resizeTabLayout });
  *	$("body").layout({ center__onresize: $.layout.callbacks.resizeTabLayout });
  *
- *	Version:	1.2 - 2012-01-13
+ *	Version:	1.3 - 2013-01-12
  *	Author:		Kevin Dalman (kevin.dalman@gmail.com)
  */
 ;(function ($) {
@@ -26,8 +27,8 @@ if (!_.callbacks) _.callbacks = {};
 
 // this callback is bound to the tabs.show event OR to layout-pane.onresize event
 _.callbacks.resizeTabLayout = function (x, ui) {
-	// may be called EITHER from layout-pane.onresize OR tabs.show
-	var $P = ui.jquery ? ui : $(ui.panel);
+	// may be called EITHER from layout-pane.onresize OR tabs.show/activate
+	var $P = ui.jquery ? ui : $(ui.newPanel || ui.panel);
 	// find all VISIBLE layouts inside this pane/panel and resize them
 	$P.filter(":visible").find(".ui-layout-container:visible").andSelf().each(function(){
 		var layout = $(this).data("layout");
