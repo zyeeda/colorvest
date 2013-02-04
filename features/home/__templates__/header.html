@@ -1,27 +1,20 @@
-<div class="ui-header">
-    <div class="ui-header-top">
-        <div class="ui-app-logo">
-            <img src="{{settings.application-logo}}"></img>
-        </div>
-        <div class="ui-app-name">{{settings.application-name}}</div>
-        <div class="ui-global-feature">
-            <div class="ui-welcome-message">
-                <i class="icon-user icon-white"></i>
-                欢迎您，张三
-            </div>
-            <a class="btn btn-danger ui-todo-indicator" href="#">15</a>
-            <div class="btn-group ui-shortcut-group">
-                <a class="btn">
-                    <i class="icon-th icon-black"></i>
-                    快捷菜单
-                </a>
-                <a class="btn" title="退出">
-                    <img src="assets/images/sign-out.png" class="ui-sign-out"></img>
-                </a>
-            </div>
+<div class="navbar navbar-fixed-top coala-viewport-header">
+    {{#if settings.application-logo}}
+    <img class="coala-app-logo" src="{{settings.application-logo}}" alt="Application Logo" />
+    {{else}}
+    <img class="coala-app-logo" src="scripts/coala/themes/default/assets/images/zyeeda-logo.png" alt="Application Logo" />
+    {{/if}}
+    {{#if settings.application-name}}
+    <div class="coala-app-name">{{settings.application-name}}</div>
+    {{else}}
+    <div class="coala-app-name">Zyeeda Coala Drivebox</div>
+    {{/if}}
+    <div class="coala-global-feature">
+        <div class="btn-group">
+            <button class="btn"><i class="icon-user" />&nbsp;tangrui</button>
+            <button class="btn"><i class="icon-th" /></button>
+            <button class="btn"><i class="icon-unlock" /></button>
         </div>
     </div>
-    <div class="ui-header-bottom">
-        <div class="edge"></div>
-    </div>
+    <button class="btn" id="clickMe">Click Me</button>
 </div>

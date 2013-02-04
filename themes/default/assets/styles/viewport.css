@@ -1,0 +1,114 @@
+.coala-viewport-header {
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+    background-color: #f6f6f6;
+    height: 50px;
+}
+
+.coala-app-logo {
+    display: block;
+    float: left;
+    height: 38px;
+    width: 128px;
+    margin-top: 6px;
+    margin-left: 15px;
+}
+
+.coala-app-name {
+    float: left;
+    margin-left: 15px;
+    margin-top: 20px;
+    font-size: 23px;
+    color: #605956;
+}
+
+.coala-global-feature {
+    float: right;
+    margin-right: 15px;
+    margin-top: 5px;
+}
+
+.coala-viewport-footer {
+    height: 120px;
+    background-color: #f6f6f6;
+}
+
+.coala-viewport-main {
+    padding: 50px 0 120px 0;
+}
+
+.coala-taskbar-pin {
+    float: left;
+    margin-top: 5px;
+}
+
+.coala-taskbar-carousel {
+    margin-top: 5px;
+}
+
+.coala-taskbar-pin ul,
+.coala-taskbar-carousel ul {
+    margin: 0;
+    padding: 0;
+}
+
+.coala-taskbar-pin li,
+.coala-taskbar-carousel li {
+    display: block;
+    float: left;
+    list-style: none outside none;
+    text-align: center;
+    font-size: 13px;
+    width: 80px;
+    cursor: pointer;
+}
+
+.coala-taskbar-pin li img,
+.coala-taskbar-carousel li img {
+    border: 5px solid #68B02A;
+    margin: 6px;
+}
+
+.coala-taskbar-pin li div,
+.coala-taskbar-carousel-text {
+    line-height: 18px;
+    height: 36px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.coala-taskbar-carousel a {
+    display: block;
+    width: 15px;
+    height: 21px;
+    margin-top: -10px;
+    position: absolute;
+    top: 50%;
+}
+
+.coala-taskbar-prev {
+    left: 10px;
+}
+
+.coala-taskbar-next {
+    right: 10px;
+}
+
+.coala-taskbar-carousel li:hover .coala-taskbar-carousel-icon div {
+    display: block;
+}
+
+.coala-taskbar-carousel-icon {
+    width: 70px;
+    height: 70px;
+    position: relative;
+    left: 50%;
+    margin-left: -35px;
+}
+
+.coala-taskbar-carousel-icon div {
+    font-size: 18px;
+    position: relative;
+    top: -70px;
+    left: 25px;
+    display: none;
+}

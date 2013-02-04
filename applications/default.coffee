@@ -63,6 +63,7 @@ define [
                     mainTab.$el.bind 'tabsremove', (event, ui) ->
                         application.stopFeature openedFeatures[ui.tab.hash]
 
+                    ###
                     config.featureContainer = (feature) ->
                         id = '#' + feature.cid
                         openedFeatures[id] = feature
@@ -78,6 +79,7 @@ define [
                         , feature, id
 
                         id
+                    ###
 
                     modifyFeatureContainerDeferred.resolve()
 
