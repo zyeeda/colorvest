@@ -57,33 +57,28 @@ define [
         if options.useDefaultHome isnt false
             modifyFeatureContainerDeferred = $.Deferred()
 
-            openedFeatures = {}
             application.done ->
-                application.startFeature('coala/home').done (home) ->
-                    application.mainTab = mainTab = home.layout.components[0]
+                application.startFeature('coala/home').done (homeFeature) ->
+                    viewport = homeFeature.views['content'].components[1]
 
-                    mainTab.$el.bind 'tabsremove', (event, ui) ->
-                        application.stopFeature openedFeatures[ui.tab.hash]
-
-                    ###
                     config.featureContainer = (feature) ->
-                        id = '#' + feature.cid
-                        openedFeatures[id] = feature
-                        mainTab.addTab
-                            url: id
-                            label : feature.startupOptions.name or feature.baseName
-                            closable: feature.options.closable isnt false
-                            selected: true
-                            fit: 'Home' isnt feature.startupOptions.name
+                        feature.activate = ->
+                            viewport.showFeature feature
 
-                        feature.activate = _.bind (id) ->
-                            mainTab.selectTab id
-                        , feature, id
+                        start0 = _.bind feature.start, feature
+                        feature.start = ->
+                            start0().done ->
+                                viewport.showFeature feature
 
-                        id
-                    ###
+                        stop0 = _.bind feature.stop, feature
+                        feature.stop = ->
+                            stop0()
+                            viewport.closeFeature feature
+
+                        $ "<div data-feature-id='#{feature.cid}'></div>"
 
                     modifyFeatureContainerDeferred.resolve()
+
             application.addPromise modifyFeatureContainerDeferred
 
         if options.useDefaultNotifier isnt false

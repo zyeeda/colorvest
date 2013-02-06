@@ -4,5 +4,5 @@ define
         console.log viewport
         viewport.showFeature
             path: 'test/bar'
-            name: 'Boo'
+            name: 'Bar'
             icon: 'http://fakeimg.pl/48'

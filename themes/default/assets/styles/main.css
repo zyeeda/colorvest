@@ -1,3 +1,11 @@
+.coala-fakeimg-48 {
+    background-image: url('//fakeimg.pl/48');
+}
+
+.coala-icon-close {
+    background-image: url('../images/close.png');
+}
+
 .c-content {
     margin-top: 50px;
 }

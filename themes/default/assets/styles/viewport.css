@@ -4,7 +4,7 @@
     height: 50px;
 }
 
-.coala-app-logo {
+.coala-system-logo {
     display: block;
     float: left;
     height: 38px;
@@ -13,7 +13,7 @@
     margin-left: 15px;
 }
 
-.coala-app-name {
+.coala-system-name {
     float: left;
     margin-left: 15px;
     margin-top: 20px;
@@ -34,15 +34,17 @@
 
 .coala-viewport-main {
     padding: 50px 0 120px 0;
+    width: 100%;
+    overflow: hidden;
 }
 
 .coala-taskbar-pin {
-    float: left;
-    margin-top: 5px;
+    /*float: left;*/
+    margin-top: 10px;
 }
 
 .coala-taskbar-carousel {
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 .coala-taskbar-pin ul,
@@ -62,21 +64,24 @@
     cursor: pointer;
 }
 
-.coala-taskbar-pin li img,
-.coala-taskbar-carousel li img {
+.coala-taskbar-app-icon {
     border: 5px solid #68B02A;
-    margin: 6px;
+    height: 48px;
+    width: 48px;
+    position: relative;
+    left: 50%;
+    margin: 10px 0 5px -29px;
 }
 
-.coala-taskbar-pin li div,
-.coala-taskbar-carousel-text {
+.coala-taskbar-app-text {
     line-height: 18px;
     height: 36px;
     width: 100%;
     overflow: hidden;
 }
 
-.coala-taskbar-carousel a {
+.coala-taskbar-prev,
+.coala-taskbar-next {
     display: block;
     width: 15px;
     height: 21px;
@@ -93,22 +98,22 @@
     right: 10px;
 }
 
-.coala-taskbar-carousel li:hover .coala-taskbar-carousel-icon div {
-    display: block;
-}
-
 .coala-taskbar-carousel-icon {
     width: 70px;
-    height: 70px;
     position: relative;
     left: 50%;
     margin-left: -35px;
 }
 
-.coala-taskbar-carousel-icon div {
-    font-size: 18px;
+.coala-taskbar-remove-sign {
+    height: 24px;
+    width: 24px;
     position: relative;
-    top: -70px;
-    left: 25px;
+    top: -107px;
     display: none;
 }
+
+.coala-taskbar-carousel li:hover .coala-taskbar-remove-sign {
+    display: block;
+}
+

@@ -7,12 +7,11 @@ define [
     class FeatureBar
 
         constructor: (footerEl) ->
-            console.log footerEl
             pinWrapper = footerEl.children '.coala-taskbar-pin'
             carouselWrapper = footerEl.children '.coala-taskbar-carousel'
-            @carouselContainer = carouselWrapper.children 'ul'
+            carouselContainer = carouselWrapper.children 'ul'
 
-            @carouselContainer.carouFredSel
+            carouselContainer.carouFredSel
                 circular: false
                 infinite: false
                 auto: false
@@ -26,29 +25,49 @@ define [
                     $(window).on 'resize', ->
                         carouselContainer.trigger 'updateSizes'
 
-        add: (featureDef) ->
-            itemTemplate = """
-            <li>
-                <div class="coala-taskbar-carousel-icon">
-                    <img src="#{featureDef.icon}" alt="#{featureDef.name}" />
-                    <div><i class="icon-remove-sign"></i></div>
-                </div>
-                <div class="coala-taskbar-carousel-text">#{featureDef.name}</div>
+            @carouselContainer = carouselContainer
+
+        add: (feature) ->
+            item = $ """
+            <li data-feature-id="#{feature.cid}">
+                <div class="coala-taskbar-app-icon #{feature.startupOptions.icon}"></div>
+                <div class="coala-taskbar-app-text">#{feature.startupOptions.name}</div>
+                <div class="coala-taskbar-remove-sign coala-icon-close"></div>
             </li>
             """
-            @carouselContainer.trigger 'insertItem', [itemTemplate]
+            @carouselContainer.trigger 'insertItem', [item]
 
-        scrollTo: (item) ->
+        scrollTo: (featureId) ->
+            item = @carouselContainer.children "[data-feature-id=#{featureId}]"
+            @carouselContainer.trigger 'slideTo', item
 
-        remove: (item) ->
+        remove: (featureId) ->
+            item = @carouselContainer.children "[data-feature-id=#{featureId}]"
+            @carouselContainer.trigger 'removeItem', item
 
     class FeatureWindow
 
-        add: (item) ->
+        constructor: (mainEl) ->
+            @viewportCarousel = mainEl.children '.coala-viewport-carousel'
+            @viewportCarousel.carouFredSel
+                circular: false
+                infinite: false
+                auto: false
+                items:
+                    visible: 1
+                scroll:
+                    fx: 'crossfade'
 
-        switchTo: (item) ->
+        add: (feature) ->
+            @viewportCarousel.trigger 'insertItem', [feature.container]
 
-        remove: (item) ->
+        switchTo: (featureId) ->
+            item = @viewportCarousel.children "[data-feature-id=#{featureId}]"
+            @viewportCarousel.trigger 'slideTo', item
+
+        remove: (featureId) ->
+            item = @viewportCarousel.children "[data-feature-id=#{featureId}]"
+            @viewportCarousel.trigger 'removeItem', item
 
     class FeatureRegistry
 
@@ -57,32 +76,35 @@ define [
             @list = []
 
         add: (feature) ->
-            path = feature.path()
-            @registry[path] = feature
-            @list.push path
+            featureId = feature.cid
+            @registry[featureId] = feature
+            @list.push featureId
 
-        remove: (featurePath) ->
-            feature = @registry[featurePath]
+        remove: (featureId) ->
+            feature = @registry[featureId]
             if feature?
-                idx = _.lastIndexOf @list, featurePath
+                idx = _.lastIndexOf @list, featureId
                 @list.splice idx, 1
-                delete @registry[featurePath]
+                delete @registry[featureId]
             feature
 
-        promote: (featurePath) ->
-            feature = @registry[featurePath]
+        promote: (featureId) ->
+            feature = @registry[featureId]
             if feature?
-                idx = _.lastIndexOf @list, featurePath
+                idx = _.lastIndexOf @list, featureId
                 item = @list.splice idx, 1
-                @list.push item
+                @list.push item[0]
             feature
 
-        contains: (featurePath) ->
-            _.has @registry, featurePath
+        contains: (featureId) ->
+            _.has @registry, featureId
 
         pick: ->
-            featurePath = _.last @list
-            @registry[featurePath]
+            featureId = _.last @list
+            @registry[featureId]
+
+        get: (featureId) ->
+            @registry[featureId]
 
     coala.registerComponentHandler 'viewport', (->), (el, options, view) ->
 
@@ -98,33 +120,47 @@ define [
         featureRegistry = new FeatureRegistry()
 
         viewport =
-            showFeature: (opts) ->
-                if featureRegistry.contains opts.path
-                    feature = featureRegistry.promote opts.path
-                    this._showFeature feature if feature?
+            showFeature: (feature) ->
+                me = this
+                featureId = feature.cid
+                if featureRegistry.contains featureId
+                    _feature = featureRegistry.promote featureId
+                    me._showFeature _feature.cid
                 else
-                    featureContainer = $ '<div></div>'
-                    console.log opts.path
-                    app.startFeature(opts.path, container: featureContainer).done (feature) ->
-                    #app.startFeature(opts.path).done (feature) ->
-                        console.log feature
-                        featureRegistry.add feature
-                        featureBar.add opts
-                        featureWindow.add feature
-                        this._showFeature feature
+                    featureRegistry.add feature
+                    featureBar.add feature
+                    featureWindow.add feature
+                    me._showFeature featureId
 
-            _showFeature: (feature) ->
-                featureBar.scrollTo feature
-                featureWindow.switchTo feature
+            _showFeature: (featureId) ->
+                featureBar.scrollTo featureId
+                featureWindow.switchTo featureId
 
-            closeFeature: (featurePath) ->
-                if featureRegistry.contains featurePath
-                    feature = featureRegistry.remove featurePath
-                    if feature?
-                        app.stopFeature feature
-                        featureBar.remove feature
-                        featureWindow.remove feature
+            closeFeature: (feature) ->
+                featureId = feature.cid
+                if featureRegistry.contains featureId
+                    featureRegistry.remove featureId
+                    featureBar.remove featureId
+                    featureWindow.remove featureId
 
                     nextFeature = featureRegistry.pick()
-                    this._showFeature nextFeature
+                    this._showFeature nextFeature.cid
+
+        footerEl.delegate 'li', 'click', ->
+            if $(@).hasClass 'coala-taskbar-app'
+                view.feature.trigger 'viewport:show-launcher', view
+                return
+
+            featureId = $(@).attr 'data-feature-id'
+            if featureId?
+                viewport._showFeature featureId
+
+        footerEl.delegate '.coala-taskbar-remove-sign', 'click', ->
+            li = $(@).parent 'li'
+            featureId = li.attr 'data-feature-id'
+            feature = featureRegistry.get featureId
+            view.feature.trigger 'viewport:close-feature', view, feature
+            #app.stopFeature feature
+
+        viewport
 
