@@ -39,7 +39,6 @@
 }
 
 .coala-taskbar-pin {
-    /*float: left;*/
     margin-top: 10px;
 }
 
@@ -62,6 +61,13 @@
     font-size: 13px;
     width: 80px;
     cursor: pointer;
+}
+
+.coala-taskbar-carousel li {
+    -webkit-transition: width .5s, opacity .5s;
+    -moz-transition: width .5s, opacity .5s;
+    -o-transition: width .5s, opacity .5s;
+    transition: width .5s, opacity .5s;
 }
 
 .coala-taskbar-app-icon {

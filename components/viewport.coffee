@@ -42,8 +42,15 @@ define [
             @carouselContainer.trigger 'slideTo', item
 
         remove: (featureId) ->
-            item = @carouselContainer.children "[data-feature-id=#{featureId}]"
-            @carouselContainer.trigger 'removeItem', item
+            me = @
+            item = me.carouselContainer.children "[data-feature-id=#{featureId}]"
+            item.css 'opacity', 0
+            item.css 'width', 0
+            if $.support.transition
+                item.one $.support.transition.end, ->
+                    me.carouselContainer.trigger 'removeItem', item
+            else
+                me.carouselContainer.trigger 'removeItem', item
 
     class FeatureWindow
 
@@ -141,10 +148,9 @@ define [
                 if featureRegistry.contains featureId
                     featureRegistry.remove featureId
                     featureBar.remove featureId
-                    featureWindow.remove featureId
-
                     nextFeature = featureRegistry.pick()
-                    this._showFeature nextFeature.cid
+                    this._showFeature nextFeature.cid if nextFeature?
+                    featureWindow.remove featureId
 
         footerEl.delegate 'li', 'click', ->
             if $(@).hasClass 'coala-taskbar-app'
@@ -160,7 +166,6 @@ define [
             featureId = li.attr 'data-feature-id'
             feature = featureRegistry.get featureId
             view.feature.trigger 'viewport:close-feature', view, feature
-            #app.stopFeature feature
 
         viewport
 
