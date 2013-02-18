@@ -38,6 +38,10 @@
     overflow: hidden;
 }
 
+.coala-viewport-feature {
+    display: none;
+}
+
 .coala-taskbar-pin {
     margin-top: 10px;
 }
@@ -111,7 +115,7 @@
     margin-left: -35px;
 }
 
-.coala-taskbar-remove-sign {
+.coala-taskbar-app-remove {
     height: 24px;
     width: 24px;
     position: relative;
@@ -119,7 +123,7 @@
     display: none;
 }
 
-.coala-taskbar-carousel li:hover .coala-taskbar-remove-sign {
+.coala-taskbar-carousel li:hover .coala-taskbar-app-remove {
     display: block;
 }
 

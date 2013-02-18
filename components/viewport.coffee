@@ -32,7 +32,7 @@ define [
             <li data-feature-id="#{feature.cid}">
                 <div class="coala-taskbar-app-icon #{feature.startupOptions.icon}"></div>
                 <div class="coala-taskbar-app-text">#{feature.startupOptions.name}</div>
-                <div class="coala-taskbar-remove-sign coala-icon-close"></div>
+                <div class="coala-taskbar-app-remove coala-icon-close"></div>
             </li>
             """
             @carouselContainer.trigger 'insertItem', [item]
@@ -44,11 +44,11 @@ define [
         remove: (featureId) ->
             me = @
             item = me.carouselContainer.children "[data-feature-id=#{featureId}]"
-            item.css 'opacity', 0
-            item.css 'width', 0
             if $.support.transition
                 item.one $.support.transition.end, ->
                     me.carouselContainer.trigger 'removeItem', item
+                item.css 'opacity', 0
+                item.css 'width', 0
             else
                 me.carouselContainer.trigger 'removeItem', item
 
@@ -56,25 +56,19 @@ define [
 
         constructor: (mainEl) ->
             @viewportCarousel = mainEl.children '.coala-viewport-carousel'
-            @viewportCarousel.carouFredSel
-                circular: false
-                infinite: false
-                auto: false
-                items:
-                    visible: 1
-                scroll:
-                    fx: 'crossfade'
 
         add: (feature) ->
-            @viewportCarousel.trigger 'insertItem', [feature.container]
+            @viewportCarousel.append feature.container.addClass 'coala-viewport-feature'
 
         switchTo: (featureId) ->
-            item = @viewportCarousel.children "[data-feature-id=#{featureId}]"
-            @viewportCarousel.trigger 'slideTo', item
+            current = @viewportCarousel.children ':visible'
+            next = @viewportCarousel.children "[data-feature-id=#{featureId}]"
+            current.hide()
+            next.show()
 
         remove: (featureId) ->
             item = @viewportCarousel.children "[data-feature-id=#{featureId}]"
-            @viewportCarousel.trigger 'removeItem', item
+            item.remove()
 
     class FeatureRegistry
 
@@ -152,20 +146,22 @@ define [
                     this._showFeature nextFeature.cid if nextFeature?
                     featureWindow.remove featureId
 
-        footerEl.delegate 'li', 'click', ->
-            if $(@).hasClass 'coala-taskbar-app'
+        footerEl.delegate 'li', 'click', (event) ->
+            $this = $ @
+            $target = $ event.target
+            if $this.hasClass 'coala-taskbar-show-launcher'
                 view.feature.trigger 'viewport:show-launcher', view
                 return
 
-            featureId = $(@).attr 'data-feature-id'
+            if $target.hasClass 'coala-taskbar-app-remove'
+                featureId = $this.attr 'data-feature-id'
+                feature = featureRegistry.get featureId
+                view.feature.trigger 'viewport:close-feature', view, feature
+                return
+
+            featureId = $this.attr 'data-feature-id'
             if featureId?
                 viewport._showFeature featureId
-
-        footerEl.delegate '.coala-taskbar-remove-sign', 'click', ->
-            li = $(@).parent 'li'
-            featureId = li.attr 'data-feature-id'
-            feature = featureRegistry.get featureId
-            view.feature.trigger 'viewport:close-feature', view, feature
 
         viewport
 
