@@ -38,8 +38,11 @@
     overflow: hidden;
 }
 
+.coala-viewport-feature {
+    display: none;
+}
+
 .coala-taskbar-pin {
-    /*float: left;*/
     margin-top: 10px;
 }
 
@@ -62,6 +65,13 @@
     font-size: 13px;
     width: 80px;
     cursor: pointer;
+}
+
+.coala-taskbar-carousel li {
+    -webkit-transition: width .5s, opacity .5s;
+    -moz-transition: width .5s, opacity .5s;
+    -o-transition: width .5s, opacity .5s;
+    transition: width .5s, opacity .5s;
 }
 
 .coala-taskbar-app-icon {
@@ -105,7 +115,7 @@
     margin-left: -35px;
 }
 
-.coala-taskbar-remove-sign {
+.coala-taskbar-app-remove {
     height: 24px;
     width: 24px;
     position: relative;
@@ -113,7 +123,7 @@
     display: none;
 }
 
-.coala-taskbar-carousel li:hover .coala-taskbar-remove-sign {
+.coala-taskbar-carousel li:hover .coala-taskbar-app-remove {
     display: block;
 }
 
