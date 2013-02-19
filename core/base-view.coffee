@@ -178,6 +178,7 @@ define [
             $.when.apply($, components).done (args...) =>
                 @components = args
                 for arg, i in args
+                    continue if not arg
                     arg['__options__'] = originalOptions[i]
                 componentDeferred.resolve(args)
 
