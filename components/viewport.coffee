@@ -57,8 +57,12 @@ define [
         constructor: (mainEl) ->
             @viewportCarousel = mainEl.children '.coala-viewport-carousel'
 
+        ###
         add: (feature) ->
             @viewportCarousel.append feature.container.addClass 'coala-viewport-feature'
+        ###
+        add: (featureContainer) ->
+            @viewportCarousel.append featureContainer
 
         switchTo: (featureId) ->
             current = @viewportCarousel.children ':visible'
@@ -130,7 +134,7 @@ define [
                 else
                     featureRegistry.add feature
                     featureBar.add feature
-                    featureWindow.add feature
+                    #featureWindow.add feature
                     me._showFeature featureId
 
             _showFeature: (featureId) ->
@@ -145,6 +149,11 @@ define [
                     nextFeature = featureRegistry.pick()
                     this._showFeature nextFeature.cid if nextFeature?
                     featureWindow.remove featureId
+
+            createFeatureContainer: (feature) ->
+                container = $ "<div data-feature-id='#{feature.cid}' class='coala-viewport-feature'></div>"
+                featureWindow.add container
+                container
 
         footerEl.delegate 'li', 'click', (event) ->
             $this = $ @

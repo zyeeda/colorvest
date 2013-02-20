@@ -40,7 +40,7 @@ define [
 
         if options.fit
             el.addClass 'ui-jqgrid-fit'
-            cbGrid.resizeToFit el
+            #cbGrid.resizeToFit el
 
         # el.jqGrid options
         grid = buildGrid el, options, view
