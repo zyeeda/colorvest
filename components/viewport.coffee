@@ -55,12 +55,8 @@ define [
     class FeatureWindow
 
         constructor: (mainEl) ->
-            @viewportCarousel = mainEl.children '.coala-viewport-carousel'
+            @viewportCarousel = mainEl
 
-        ###
-        add: (feature) ->
-            @viewportCarousel.append feature.container.addClass 'coala-viewport-feature'
-        ###
         add: (featureContainer) ->
             @viewportCarousel.append featureContainer
 
@@ -111,13 +107,18 @@ define [
         get: (featureId) ->
             @registry[featureId]
 
-    coala.registerComponentHandler 'viewport', (->), (el, options, view) ->
+    initializer = ->
+        $(window).on 'resize', ->
+            viewportContent = $ '.coala-viewport-main'
+            viewportContent.outerHeight $(window).height()
+
+    coala.registerComponentHandler 'viewport', initializer, (el, options, view) ->
 
         defaultOptions = {}
 
         options = _.extend defaultOptions, options
 
-        mainEl = el.children '.coala-viewport-main'
+        mainEl = el.children '.coala-viewport-content'
         footerEl = el.children '.coala-viewport-footer'
 
         featureWindow = new FeatureWindow mainEl
@@ -158,9 +159,11 @@ define [
         footerEl.delegate 'li', 'click', (event) ->
             $this = $ @
             $target = $ event.target
+            ###
             if $this.hasClass 'coala-taskbar-show-launcher'
                 view.feature.trigger 'viewport:show-launcher', view
                 return
+            ###
 
             if $target.hasClass 'coala-taskbar-app-remove'
                 featureId = $this.attr 'data-feature-id'

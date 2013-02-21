@@ -1,13 +1,11 @@
-define ['coala/components/viewport'], ->
+define
     events:
-        'this#launcher:launch': 'launchApp'
         'this#viewport:show-launcher': 'showLauncher'
         'this#viewport:close-feature': 'closeFeature'
 
     components: [
         type: 'launcher'
-        selector: 'launcher'
-        trigger: false
+        selector: 'launcherEntry'
         data: [
             {id: 'f1', name: 'Foo', icon: ''}
             {id: 'f2', name: 'Row 1', icon: '', parent: {id: 'f1'}}
@@ -28,5 +26,5 @@ define ['coala/components/viewport'], ->
         ]
     ,
         type: 'viewport'
-        selector: 'viewportContent'
+        selector: 'viewport'
     ]

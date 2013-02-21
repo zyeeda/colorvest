@@ -1,3 +1,7 @@
+html, body {
+    height: 100%;
+}
+
 .coala-fakeimg-48 {
     background-image: url('//fakeimg.pl/48');
 }

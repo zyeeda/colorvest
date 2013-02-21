@@ -32,16 +32,26 @@
     background-color: #f6f6f6;
 }
 
-.coala-viewport-main {
-    padding: 50px 0 120px 0;
+.coala-viewport-region {
+    height: 100%;
+    min-height: 100%;
+}
+
+.coala-viewport {
+    height: 100%;
+}
+
+.coala-viewport-content {
+    position: absolute;
+    /*padding: 50px 0 120px 0;*/
     width: 100%;
+    height: 100%;
+    top: 50px;
+    bottom: 120px;
     overflow: hidden;
 }
 
 .coala-viewport-feature {
-}
-
-.coala-viewport-carousel {
 }
 
 .coala-taskbar-pin {
