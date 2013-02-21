@@ -1,6 +1,6 @@
 define
     events:
-        'this#viewport:show-launcher': 'showLauncher'
+        'this#launcher:launch': 'launchApp'
         'this#viewport:close-feature': 'closeFeature'
 
     components: [
