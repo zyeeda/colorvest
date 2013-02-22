@@ -58,7 +58,7 @@ define [
             modifyFeatureContainerDeferred = $.Deferred()
 
             application.done ->
-                application.startFeature('coala/home').done (homeFeature) ->
+                application.startFeature('coala:home').done (homeFeature) ->
                     viewport = homeFeature.views['content'].components[1]
 
                     config.featureContainer = (feature) ->

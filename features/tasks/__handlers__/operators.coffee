@@ -32,7 +32,7 @@ define ["jquery", 'underscore'], ($, _) ->
         isRejectable = _.every selected, (v) ->
             view.collection.get(v).get('isRejectable') is true
         if selected.length is 1
-            @$('audit').show() 
+            @$('audit').show()
             @$('reject').show() if isRejectable
         else if selected.length > 1
             @$('batchReject').show() if isRejectable
@@ -42,7 +42,7 @@ define ["jquery", 'underscore'], ($, _) ->
         grid = @feature.views["grid"].components[0]
         ogrid = @feature.views["completed-grid"].components[0]
         selected = grid.getGridParam("selrow")
-        app = @feature.module.getApplication().applicationRoot
+        app = @feature.module.getApplication()
         return app.info("请选择要操作的记录")  unless selected
         @feature.model.set "id", selected
         $.when(@feature.model.fetch()).done =>
@@ -79,7 +79,7 @@ define ["jquery", 'underscore'], ($, _) ->
         grid = @feature.views['grid'].components[0]
         ogrid = @feature.views["completed-grid"].components[0]
         selected = grid.getGridParam('selarrrow')
-        app = @feature.module.getApplication().applicationRoot
+        app = @feature.module.getApplication()
 
         app.confirm 'are you sure to audit these tasks?', =>
             @feature.request(url: 'batch/audit', type: 'post', data: ids: selected).done ->
@@ -90,7 +90,7 @@ define ["jquery", 'underscore'], ($, _) ->
         grid = @feature.views["grid"].components[0]
         ogrid = @feature.views["completed-grid"].components[0]
         selected = grid.getGridParam("selrow")
-        app = @feature.module.getApplication().applicationRoot
+        app = @feature.module.getApplication()
 
         app.prompt 'why this task is rejected?', (str) =>
             @feature.request(url: 'reject/' + selected, type: 'put', data: comment: str).done ->
@@ -101,7 +101,7 @@ define ["jquery", 'underscore'], ($, _) ->
         grid = @feature.views['grid'].components[0]
         ogrid = @feature.views["completed-grid"].components[0]
         selected = grid.getGridParam('selarrrow')
-        app = @feature.module.getApplication().applicationRoot
+        app = @feature.module.getApplication()
 
         app.prompt 'why this task is rejected?', (str) =>
             @feature.request(url: 'batch/reject', type: 'post', data: {ids: selected, comment: str}).done ->

@@ -3,8 +3,7 @@ define ["coala/core/view", "underscore"], (View, _) ->
         options = @feature.startupOptions
         gridOptions = undefined
         targetGrid = @components[0]
-        app = @feature.module.getApplication()
-        root = app.applicationRoot
+        root = @feature.module.getApplication()
 
         unless @dialogView
             gridOptions = _.extend(options.pickerGrid or {},

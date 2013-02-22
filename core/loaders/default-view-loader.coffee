@@ -15,7 +15,8 @@ define [
                 baseName: viewName
                 module: module
                 feature: feature
-            def.avoidLoadingHandlers = true if options.avoidLoadingHandlers is true
+                avoidLoadingModel: true
+                avoidLoadingHandlers: if options.avoidLoadingHandlers is false then false else true
 
             deferred.resolve View.build def
             return deferred

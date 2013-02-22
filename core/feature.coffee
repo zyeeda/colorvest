@@ -13,6 +13,7 @@ define [
 
     class Feature
         constructor: (@options, @startupOptions = {}) ->
+            options.avoidLoadingModel = if options.avoidLoadingModel is false then false else true
             @cid = _.uniqueId 'feature'
             @baseName = options.baseName
             @module = options.module
@@ -81,7 +82,7 @@ define [
             for view in @options.views or []
                 view = if _.isString(view) then name: view else view
                 views.push view
-                promises.push loaderPluginManager.invoke('view', @module, @, view.name, view)
+                promises.push loaderPluginManager.invoke('view', @module, @, view)
 
             defered = $.when.apply($, promises).then _.bind (vs, u1,u2, args...) =>
                 for v, i in args

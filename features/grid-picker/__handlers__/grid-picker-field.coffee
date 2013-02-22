@@ -2,8 +2,7 @@ define ["coala/core/view", "underscore"], (View, _) ->
     showPicker: ->
         options = @feature.startupOptions
         gridOptions = undefined
-        app = @feature.module.getApplication()
-        root = app.applicationRoot
+        root = @feature.module.getApplication()
         unless @dialogView
             gridOptions = _.extend(options.grid or {},
                 type: "grid"

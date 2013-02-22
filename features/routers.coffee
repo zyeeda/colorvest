@@ -3,5 +3,4 @@ define
         "start/*path": "hello"
 
     hello: (path) ->
-        @module.getApplication().applicationRoot.startFeature path
-
+        @module.getApplication().startFeature path
