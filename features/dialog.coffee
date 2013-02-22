@@ -92,5 +92,5 @@ define [
             else
                 app = @module.getApplication()
                 app.stopFeature this
-                app.applicationRoot._modalDialog = null
+                app._modalDialog = null
                 @dialogContainer.remove()

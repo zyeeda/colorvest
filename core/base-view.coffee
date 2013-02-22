@@ -11,6 +11,7 @@ define [
 
     class BaseView extends Marionette.ItemView
         constructor: (@options) ->
+            options.avoidLoadingModel = if options.avoidLoadingModel is false then false else true
             @promises or= []
             @module = options.module
             @feature = options.feature

@@ -164,7 +164,7 @@ define [
                     <div class="coala-launcher-top-row-title">{{name}}</div>
                     <div class="coala-launcher-top-row-items">
                     {{#each items}}
-                        <div class="coala-launcher-top-row-item" id={{id}}>
+                        <div class="coala-launcher-top-row-item" id="{{id}}">
                             <div class="coala-launcher-top-row-item-icon">{{icon}}</div>
                             <div class="coala-launcher-top-row-item-label">{{name}}</div>
                         </div>

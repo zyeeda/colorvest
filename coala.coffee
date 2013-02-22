@@ -12,10 +12,13 @@ define [
     'coala/core/loaders/default-feature-loader'
     'coala/core/loaders/default-view-loader'
     'coala/core/loaders/default-layout-loader'
+    'coala/core/loaders/inline-view-loader'
+    'coala/core/loaders/coala-layout-loader'
+    'coala/core/loaders/coala-feature-loader'
     'coala/core/sync'
     'bootstrap'
     'coala/features/dialog'
-], ($, _, Marionette, Handlebars, Backbone, Application, ComponentHandler, loadResource, config, LoaderPluginManager, featureLoader, viewLoader, layoutLoader) ->
+], ($, _, Marionette, Handlebars, Backbone, Application, ComponentHandler, loadResource, config, LoaderPluginManager, featureLoader, viewLoader, layoutLoader, inlineViewloader, coalaLayoutLoader, coalaFeatureLoader) ->
 
     # override marionette's template loader
     Marionette.TemplateCache.loadTemplate = (templateId, callback) ->
@@ -30,22 +33,11 @@ define [
     LoaderPluginManager.register featureLoader
     LoaderPluginManager.register viewLoader
     LoaderPluginManager.register layoutLoader
+    LoaderPluginManager.register inlineViewloader
+    LoaderPluginManager.register coalaLayoutLoader
+    LoaderPluginManager.register coalaFeatureLoader
 
     attachDefaultApplicationMethods = (app) ->
-
-        # default coala
-        c = new Application()
-        app.coala = c
-        delete c.module
-        c.paths = [config.coalaFeaturesPath]
-        c.baseName = 'coala'
-        c.applicationRoot = app
-        c.getPromises = ->
-            app.promises
-        c.initRouters()
-        c.startFeature = (args...) ->
-            app.startFeature args...
-        c.settings = app.settings
 
         # load view
         app.loadView = (feature, name, args...) ->
@@ -57,14 +49,13 @@ define [
         app.showDialog = (options) ->
             deferred = $.Deferred()
             if not app._modalDialog
-                app.startFeature('coala/dialog', options).done (feature) ->
+                app.startFeature('coala:dialog', options).done (feature) ->
                     app._modalDialog = feature
                     deferred.resolve feature
             else
                 app._modalDialog.show(options).done (feature) ->
                     deferred.resolve feature
             deferred
-
 
         if not app.confirm then app.confirm = (content, fn) ->
             fn() if window.confirm content

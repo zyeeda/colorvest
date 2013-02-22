@@ -13,6 +13,10 @@ define [
             @
         invoke: (type, module, feature, name, args...) ->
             throw new Error('must specify a plugin type') if not type
+            if _.isObject name
+                args.unshift name
+                name = name.name or ''
+
             if name.indexOf(':') is -1
                 pluginName = 'DEFAULT'
             else

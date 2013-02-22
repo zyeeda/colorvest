@@ -25,6 +25,9 @@ define [
     'coala/features/pick-to-grid'
     'coala/features/tasks'
 
+    # layouts
+    'coala/layouts/grid'
+
 ], (LoaderPluginManager, formsLoader, notFoundFeatureLoader, viewsLoader, treeViewsLoader, treeTableViewsLoader) ->
 
     LoaderPluginManager.register formsLoader
