@@ -61,7 +61,7 @@ define [
             application.done ->
                 application.startFeature('coala:home').done (homeFeature) ->
                     config.featureContainer = (feature) ->
-                        viewport = homeFeature.views['viewport'].components[1]
+                        viewport = homeFeature.views['inline:viewport'].components[1]
 
                         feature.activate = ->
                             viewport.showFeature feature

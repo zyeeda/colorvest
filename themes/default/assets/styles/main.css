@@ -52,3 +52,11 @@ html, body {
     margin-bottom: 20px;
 }
 
+/* layout */
+.coala-layout-grid-container {
+    height: 100%;
+}
+
+.coala-layout-grid-main {
+    height: 100%;
+}
