@@ -10,6 +10,7 @@ define [
     'coala/vendors/jquery/pnotify/jquery.pnotify'
     'coala/scaffold/scaffold'
     'coala/features/home'
+    'coala/components/viewport'
     'coala/components/launcher'
 ], ($, _, coala, Application, detectBrowser, ComponentHandler, config) ->
 
@@ -59,9 +60,9 @@ define [
 
             application.done ->
                 application.startFeature('coala:home').done (homeFeature) ->
-                    viewport = homeFeature.views['content'].components[1]
-
                     config.featureContainer = (feature) ->
+                        viewport = homeFeature.views['viewport'].components[1]
+
                         feature.activate = ->
                             viewport.showFeature feature
 
@@ -75,7 +76,7 @@ define [
                             stop0()
                             viewport.closeFeature feature
 
-                        $ "<div data-feature-id='#{feature.cid}'></div>"
+                        viewport.createFeatureContainer feature
 
                     modifyFeatureContainerDeferred.resolve()
 
