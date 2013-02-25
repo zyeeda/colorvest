@@ -37,6 +37,7 @@ define [
                         baseName: featureName
                         module: module
                         avoidLoadingModel: true
+                        avoidLoadingTemplate: true
 
                         layout: 'coala:grid'
 

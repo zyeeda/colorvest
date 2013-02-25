@@ -23,6 +23,13 @@ define [
                     getTemplateSelector: ->
                         'coala/layouts/templates/' + @baseName + config.templateSuffix
 
+                    renderHtml: (su, data) ->
+                        t = @feature.template
+                        delete @feature.template
+                        d = su.call(@, data)
+                        @feature.template = t
+                        d
+
                     initHandlers: (su, handler) ->
                         @eventHandlers ?= {}
 
