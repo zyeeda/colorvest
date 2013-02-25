@@ -103,6 +103,9 @@ define [
             data.type = 'grid'
             data.selector = 'grid'
             data.pager = 'pager'
+            data.fit = true unless data.fit?
+            data.alwaysShowVerticalScroll = true
+            data.resizePager = true
             events = data.events or {}
 
             viewOptions =
