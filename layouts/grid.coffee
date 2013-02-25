@@ -1,4 +1,7 @@
-define ['text!coala/layouts/templates/grid.html'], ->
+define [
+    'coala/components/callbacks/grid'
+    'text!coala/layouts/templates/grid.html'
+], (cbGrid) ->
     components: [
         type: 'layout'
         selector: 'gridLayout'
@@ -8,6 +11,9 @@ define ['text!coala/layouts/templates/grid.html'], ->
             resizable: false
         north:
             togglerLength_open: 0
+        center:
+            onresize: (paneName, paneElement) ->
+                cbGrid.onLayoutResize(paneName, paneElement)
     ],
     regions:
         operators: 'operators-area'

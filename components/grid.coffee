@@ -39,23 +39,14 @@ define [
         obj = {}
         delegateGridEvents view, obj, options, 'grid'
 
-        el.addClass 'ui-jqgrid-fit' if options.fit
-        #if options.fit
-            #el.addClass 'ui-jqgrid-fit'
-            #cbGrid.resizeToFit el
+        buildGrid el, options, view
+        obj.component = el
 
-        # el.jqGrid options
-        grid = buildGrid el, options, view
-        obj.component = grid
-
-        ###
         if options.fit
-            $(window).on 'resize', ->
-                parent = grid.closest('.ui-jqgrid').parent()
-                grid.jqGrid 'setGridWidth', parent.width()
-        ###
+            el.addClass 'coala-jqgrid-fit'
+            cbGrid.resizeToFit el
 
-        grid
+        el
 
     coala.registerComponentHandler 'tree-table', (->), (el, options, view) ->
         collection = view.collection

@@ -107,12 +107,7 @@ define [
         get: (featureId) ->
             @registry[featureId]
 
-    initializer = ->
-        $(window).on 'resize', ->
-            viewportContent = $ '.coala-viewport-main'
-            viewportContent.outerHeight $(window).height()
-
-    coala.registerComponentHandler 'viewport', initializer, (el, options, view) ->
+    coala.registerComponentHandler 'viewport', (->), (el, options, view) ->
 
         defaultOptions = {}
 

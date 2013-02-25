@@ -1,23 +1,20 @@
 
 define
-    resizeToFit: ($grid) ->
-        $parent = $grid.closest('.ui-jqgrid').parent()
-
-        # adjust height
-        marginTop = parseInt $parent.css 'margin-top'
-        targetHeight = $parent.height() - marginTop
+    resizeToFit: ($grid, $parent) ->
+        $parent = $grid.closest('.ui-jqgrid').parent() unless $parent?
 
         $bdiv = $grid.parents '.ui-jqgrid-bdiv'
         $header = $bdiv.prev()
+        $pager = $bdiv.parent().siblings().last()
 
-        $grid.jqGrid 'setGridHeight', targetHeight - $header.height() - 10
+        $grid.jqGrid 'setGridHeight', $parent.height() - $header.height() - $pager.height() - 4
 
         # adjust width
-        $grid.jqGrid 'setGridWidth', $parent.width()
+        $grid.jqGrid 'setGridWidth', $parent.width() - 2
 
     onLayoutResize: (x, ui) ->
         me = this
         $ui = if ui.jquery then ui else $ ui.panel
-        $ui.filter(':visible').find('.ui-jqgrid-fit:visible').each ->
+        $ui.filter(':visible').find('.coala-jqgrid-fit:visible').each ->
             $grid = $ @
             me.resizeToFit $grid, $ui
