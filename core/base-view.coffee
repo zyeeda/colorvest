@@ -95,6 +95,17 @@ define [
                 template = template.call this
             @module.resolveResoucePath template + config.templateSuffix
 
+        renderHtml: (data) ->
+            if @feature.template
+                @feature.template data
+            else
+                super data
+
+        serializeData: ->
+            data = super()
+            data['__viewName__'] = @baseName
+            data
+
         mixinTemplateHelpers: (target) ->
             data = super(target)
             _.extend data, settings: @feature.module.getApplication().settings

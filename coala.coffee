@@ -15,6 +15,7 @@ define [
     'coala/core/loaders/inline-view-loader'
     'coala/core/loaders/coala-layout-loader'
     'coala/core/loaders/coala-feature-loader'
+    'coala/core/handlebar-helpers'
     'coala/core/sync'
     'bootstrap'
     'coala/features/dialog'
@@ -23,10 +24,10 @@ define [
     # override marionette's template loader
     Marionette.TemplateCache.loadTemplate = (templateId, callback) ->
         loadResource(templateId, 'text').done (template) ->
-            tpl = Handlebars.compile template or ''
-            callback.call @, tpl
-
-    Handlebars.registerHelper 'appearFalse', (value) -> if value is false then 'false' else value
+            if template
+                callback.call @, Handlebars.compile template
+            else
+                callback.call @, null
 
     coala = {}
 

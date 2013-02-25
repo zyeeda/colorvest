@@ -27,6 +27,7 @@ define [
 
     # layouts
     'coala/layouts/grid'
+    'coala/layouts/one-region'
 
 ], (LoaderPluginManager, formsLoader, notFoundFeatureLoader, viewsLoader, treeViewsLoader, treeTableViewsLoader) ->
 

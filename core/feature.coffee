@@ -1,13 +1,14 @@
 define [
     'jquery'
     'underscore'
+    'marionette'
     'coala/core/config'
     'coala/core/util'
     'coala/core/model'
     'coala/core/collection'
     'coala/core/layout'
     'coala/core/loader-plugin-manager'
-], ($, _, config, util, Model, Collection, Layout, loaderPluginManager) ->
+], ($, _, M, config, util, Model, Collection, Layout, loaderPluginManager) ->
     {getPath} = config
     {log, error} = util
 
@@ -28,10 +29,16 @@ define [
                     @[key] = value
 
             @initRenderTarget()
+            @deferredTemplate = @initTemplate()
             @deferredLayout = @initLayout()
             @deferredModel = @initModel()
             @deferredCollection = @initCollection()
             @deferredView = @initViews()
+
+        initTemplate: ->
+            return null if @options.avoidLoadingTemplate is true
+            M.TemplateCache.get(@module.resolveResoucePath(@baseName + '/templates' + config.templateSuffix)).done (template) =>
+                @template = template
 
         initRenderTarget: ->
             target = @container or @options.container or @startupOptions.container or config.featureContainer
@@ -78,13 +85,13 @@ define [
             @views = {}
 
             views = []
-            promises = [@deferredLayout,@deferredModel]
+            promises = [@deferredTemplate, @deferredLayout, @deferredModel]
             for view in @options.views or []
                 view = if _.isString(view) then name: view else view
                 views.push view
                 promises.push loaderPluginManager.invoke('view', @module, @, view)
 
-            defered = $.when.apply($, promises).then _.bind (vs, u1,u2, args...) =>
+            defered = $.when.apply($, promises).then _.bind (vs, u1,u2,u3, args...) =>
                 for v, i in args
                     @views[i] = @views[vs[i].name] = v
                     @inRegionViews[vs[i].region] = @views[i] if vs[i].region

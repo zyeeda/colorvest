@@ -2,13 +2,16 @@ define [
     'underscore'
     'jquery'
     'bootstrap'
-    'coala/features/dialog/__layouts__/dialog'
     'coala/features/dialog/__views__/dialog-title'
     'coala/features/dialog/__views__/dialog-buttons'
-    'text!coala/features/dialog/__templates__/dialog-title.html'
-    'text!coala/features/dialog/__templates__/dialog.html'
-    'text!coala/features/dialog/__templates__/dialog-buttons.html'
+    'text!coala/features/dialog/templates.html'
 ], (_, $) ->
+    layout:
+        regions:
+            title: "modal-header"
+            body: "modal-body"
+            buttons: "modal-footer"
+
     views: [
         name: 'dialog-title'
         region: 'title'

@@ -18,6 +18,11 @@ define [
             @initializeRegions()
             super
 
+        serializeData: ->
+            data = super()
+            data['__layout__'] = true
+            data
+
         initializeRegions: Marionette.Layout.prototype.initializeRegions
         closeRegions: Marionette.Layout.prototype.closeRegions
         close: Marionette.Layout.prototype.close
