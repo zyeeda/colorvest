@@ -77,6 +77,7 @@ define [
         grid
 
     buildGrid = (el, options, view)->
+        console.log '--------' +  options.filterToolbar
         fields = options.colModel
         colModel = []
         for f in fields
@@ -115,5 +116,5 @@ define [
             colModel.push f
         options.colModel = colModel
         grid = el.jqGrid options
-        el.jqGrid 'filterToolbar', stringResult: true, searchOnEnter: false
+        el.jqGrid('filterToolbar', stringResult: true, searchOnEnter: false) if options.filterToolbar == undefined  or options.filterToolbar
         grid
