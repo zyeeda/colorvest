@@ -61,9 +61,7 @@ define [
                     title: viewLoader.getDialogTitle(@feature.views['forms:show'], 'show', '查看')
                     buttons: []
                 ).done ->
-                    data = view.model.toJSON()
-                    _(view.components).each (component) ->
-                        component.loadData data if _.isFunction(component.loadData)
+                    view.setFormData view.model.toJSON()
 
         refresh: ->
             tree = @feature.views['treeViews:tree'].components[0]

@@ -19,14 +19,15 @@ define [
     'coala/components/tabs'
     'coala/components/datetimepicker'
 
-    # who is this?
-    'coala/vendors/jquery/jquery.validate'
-
     # features
     'coala/features/grid-picker'
     'coala/features/tree-picker'
     'coala/features/pick-to-grid'
     'coala/features/tasks'
+
+    # layouts
+    'coala/layouts/grid'
+    'coala/layouts/one-region'
 
 ], (LoaderPluginManager, formsLoader, notFoundFeatureLoader, viewsLoader, treeViewsLoader, treeTableViewsLoader) ->
 

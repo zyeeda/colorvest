@@ -1,18 +1,20 @@
 define [
     'jquery'
     'underscore'
+    'marionette'
     'coala/core/config'
     'coala/core/util'
     'coala/core/model'
     'coala/core/collection'
     'coala/core/layout'
     'coala/core/loader-plugin-manager'
-], ($, _, config, util, Model, Collection, Layout, loaderPluginManager) ->
+], ($, _, M, config, util, Model, Collection, Layout, loaderPluginManager) ->
     {getPath} = config
     {log, error} = util
 
     class Feature
         constructor: (@options, @startupOptions = {}) ->
+            options.avoidLoadingModel = if options.avoidLoadingModel is false then false else true
             @cid = _.uniqueId 'feature'
             @baseName = options.baseName
             @module = options.module
@@ -27,10 +29,16 @@ define [
                     @[key] = value
 
             @initRenderTarget()
+            @deferredTemplate = @initTemplate()
             @deferredLayout = @initLayout()
             @deferredModel = @initModel()
             @deferredCollection = @initCollection()
             @deferredView = @initViews()
+
+        initTemplate: ->
+            return null if @options.avoidLoadingTemplate is true
+            M.TemplateCache.get(@module.resolveResoucePath(@baseName + '/templates' + config.templateSuffix)).done (template) =>
+                @template = template
 
         initRenderTarget: ->
             target = @container or @options.container or @startupOptions.container or config.featureContainer
@@ -42,13 +50,8 @@ define [
             layout = @options.layout
             layout = @baseName if not layout
 
-            @module.loadResource(getPath @, 'layout', layout).done (def) =>
-                error @, 'no layout defined with name:', getPath @, 'layout', layout if not def
-                def.el = @container
-                def.baseName = if layout.charAt(0) is '/' then layout.substring(1) else layout
-                def.feature = @
-                def.module = @module
-                @layout = new Layout def
+            loaderPluginManager.invoke('layout', @module, @, layout).done (layout) =>
+                @layout = layout
 
         initModel: ->
             return if @model
@@ -82,13 +85,13 @@ define [
             @views = {}
 
             views = []
-            promises = [@deferredLayout,@deferredModel]
+            promises = [@deferredTemplate, @deferredLayout, @deferredModel]
             for view in @options.views or []
                 view = if _.isString(view) then name: view else view
                 views.push view
-                promises.push loaderPluginManager.invoke('view', @module, @, view.name, view)
+                promises.push loaderPluginManager.invoke('view', @module, @, view)
 
-            defered = $.when.apply($, promises).then _.bind (vs, u1,u2, args...) =>
+            defered = $.when.apply($, promises).then _.bind (vs, u1,u2,u3, args...) =>
                 for v, i in args
                     @views[i] = @views[vs[i].name] = v
                     @inRegionViews[vs[i].region] = @views[i] if vs[i].region
@@ -137,7 +140,6 @@ define [
             views = []
             rendered = {}
             @deferredView.done =>
-                console.log @layout, 'layout'
                 @layout.render =>
                     views.push region for region, view of @inRegionViews
                     for region, view of @inRegionViews

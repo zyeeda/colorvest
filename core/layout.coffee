@@ -6,7 +6,8 @@ define [
     {getPath} = config
 
     class Layout extends BaseView
-        constructor: (@options)->
+        constructor: (@options) ->
+            options.avoidLoadingHandlers = if options.avoidLoadingHandlers is false then false else true
             @feature = options.feature
             @vent = new Marionette.EventAggregator()
             @regions = options.regions or {}
@@ -16,6 +17,11 @@ define [
         render: ->
             @initializeRegions()
             super
+
+        serializeData: ->
+            data = super()
+            data['__layout__'] = true
+            data
 
         initializeRegions: Marionette.Layout.prototype.initializeRegions
         closeRegions: Marionette.Layout.prototype.closeRegions

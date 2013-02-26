@@ -1,0 +1,13 @@
+{{#view "grid-picker-grid-view"}}
+<table id="grid"></table>
+{{/view}}
+
+{{#view "picker-field"}}
+<div class="input-append">
+  {{#unless fieldReadOnly}}
+  <a href="javascript:void 0" class="btn" id="show-picker"><i class="icon-search"/></a>
+  <a href="javascript:void 0" class="btn" id="remove-item"><i class="icon-remove"/></a>
+  {{/unless}}
+  <table id="grid"></table>
+</div>
+{{/view}}

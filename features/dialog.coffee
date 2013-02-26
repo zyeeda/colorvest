@@ -2,13 +2,16 @@ define [
     'underscore'
     'jquery'
     'bootstrap'
-    'coala/features/dialog/__layouts__/dialog'
     'coala/features/dialog/__views__/dialog-title'
     'coala/features/dialog/__views__/dialog-buttons'
-    'text!coala/features/dialog/__templates__/dialog-title.html'
-    'text!coala/features/dialog/__templates__/dialog.html'
-    'text!coala/features/dialog/__templates__/dialog-buttons.html'
+    'text!coala/features/dialog/templates.html'
 ], (_, $) ->
+    layout:
+        regions:
+            title: "modal-header"
+            body: "modal-body"
+            buttons: "modal-footer"
+
     views: [
         name: 'dialog-title'
         region: 'title'
@@ -22,7 +25,7 @@ define [
             root = @module.getApplication()
             id = _.uniqueId('dialog')
             me = this
-            $('<div class=\"modal hide\" id=\"' + id + '\"><div id=\"' + @startupOptions.view.cid + '\"></div>').appendTo document.body
+            $('<div class=\"modal fade hide\" id=\"' + id + '\"><div id=\"' + @startupOptions.view.cid + '\"></div>').appendTo document.body
             @containerId = id
             @dialogContainer = c = $('#' + id)
             c.on 'hide', (event) ->
@@ -39,7 +42,6 @@ define [
 
         start: (su) ->
             me = this
-            console.log @, @container, @startupOptions.view
             deferred = $.Deferred()
             startedOptions = me.startedOptions or (me.startedOptions = [])
             startedOptions.push me.startupOptions
@@ -93,5 +95,5 @@ define [
             else
                 app = @module.getApplication()
                 app.stopFeature this
-                app.applicationRoot._modalDialog = null
+                app._modalDialog = null
                 @dialogContainer.remove()

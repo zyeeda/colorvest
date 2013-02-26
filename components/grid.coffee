@@ -21,6 +21,7 @@ define [
 
         defaultOptions =
             autowidth: options.fit
+            forceFit: options.fit
             cellLayout: 11 # padding: 0 5px; border-left: 1px;
             viewrecords: true
             rownumbers: true
@@ -38,14 +39,14 @@ define [
         obj = {}
         delegateGridEvents view, obj, options, 'grid'
 
+        buildGrid el, options, view
+        obj.component = el
+
         if options.fit
-            el.addClass 'ui-jqgrid-fit'
+            el.addClass 'coala-jqgrid-fit'
             cbGrid.resizeToFit el
 
-        # el.jqGrid options
-        grid = buildGrid el, options, view
-        obj.component = grid
-        grid
+        el
 
     coala.registerComponentHandler 'tree-table', (->), (el, options, view) ->
         collection = view.collection

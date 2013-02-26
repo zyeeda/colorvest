@@ -22,8 +22,7 @@ define ["coala/core/view", "underscore"], (View, _) ->
             components: [treeOptions]
             avoidLoadingHandlers: true
         )
-        app = @feature.module.getApplication()
-        root = app.applicationRoot
+        root = @feature.module.getApplication()
         root.showDialog
             title: options.title
             view: view

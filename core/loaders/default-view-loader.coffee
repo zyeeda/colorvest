@@ -15,9 +15,10 @@ define [
                 baseName: viewName
                 module: module
                 feature: feature
-            def.avoidLoadingHandlers = true if options.avoidLoadingHandlers is true
+                avoidLoadingModel: true
+                avoidLoadingHandlers: if options.avoidLoadingHandlers is false then false else true
 
-            deferred.resolve new View def
+            deferred.resolve View.build def
             return deferred
 
         module.loadResource(getPath(feature, 'view', viewName)).done (def = {}) ->
@@ -26,6 +27,6 @@ define [
             def.module = module
             def.feature = feature
 
-            view = new View def
+            view = View.build def
             deferred.resolve view
         deferred

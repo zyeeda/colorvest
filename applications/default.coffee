@@ -6,9 +6,12 @@ define [
     'coala/core/browser'
     'coala/core/component-handler'
     'coala/core/config'
+    'coala/core/form-view'
     'coala/vendors/jquery/pnotify/jquery.pnotify'
     'coala/scaffold/scaffold'
     'coala/features/home'
+    'coala/components/viewport'
+    'coala/components/launcher'
 ], ($, _, coala, Application, detectBrowser, ComponentHandler, config) ->
 
     onContextLogin = false
@@ -55,29 +58,25 @@ define [
         if options.useDefaultHome isnt false
             modifyFeatureContainerDeferred = $.Deferred()
 
-            openedFeatures = {}
             application.done ->
-                application.startFeature('coala/home').done (home) ->
-                    application.mainTab = mainTab = home.layout.components[0]
-
-                    mainTab.$el.bind 'tabsremove', (event, ui) ->
-                        application.stopFeature openedFeatures[ui.tab.hash]
-
+                application.startFeature('coala:home').done (homeFeature) ->
                     config.featureContainer = (feature) ->
-                        id = '#' + feature.cid
-                        openedFeatures[id] = feature
-                        mainTab.addTab
-                            url: id
-                            label : feature.startupOptions.name or feature.baseName
-                            closable: feature.options.closable isnt false
-                            selected: true
-                            fit: 'Home' isnt feature.startupOptions.name
+                        viewport = homeFeature.views['inline:viewport'].components[1]
 
-                        feature.activate = _.bind (id) ->
-                            mainTab.selectTab id
-                        , feature, id
+                        feature.activate = ->
+                            viewport.showFeature feature
 
-                        id
+                        start0 = _.bind feature.start, feature
+                        feature.start = ->
+                            start0().done ->
+                                viewport.showFeature feature
+
+                        stop0 = _.bind feature.stop, feature
+                        feature.stop = ->
+                            stop0()
+                            viewport.closeFeature feature
+
+                        viewport.createFeatureContainer feature
 
                     modifyFeatureContainerDeferred.resolve()
 
