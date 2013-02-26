@@ -4065,7 +4065,7 @@ $.jgrid.extend({
             $.each($t.p.colModel,function(){
                 var cm=this, thd , th, soptions,surl,self;
                 th = $("<th role='columnheader' class='ui-state-default ui-th-column ui-th-"+$t.p.direction+"'></th>");
-                thd = $("<div style='width:100%;position:relative;height:100%;padding-right:0.3em;'></div>");
+                thd = $("<div style='width:100%;position:relative;'></div>");
                 if(this.hidden===true) { $(th).css("display","none");}
                 this.search = this.search === false ? false : true;
                 if(typeof this.stype == 'undefined' ) {this.stype='text';}
@@ -4092,7 +4092,7 @@ $.jgrid.extend({
                                     if(soptions.defaultValue !== undefined) { $("select",self).val(soptions.defaultValue); }
                                     $("select",self).attr({name:cm.index || cm.name, id: "gs_"+cm.name});
                                     if(soptions.attr) {$("select",self).attr(soptions.attr);}
-                                    $("select",self).css({width: "100%"});
+                                    //$("select",self).css({width: "100%"});
                                     // preserve autoserch
                                     if(soptions.dataInit !== undefined) { soptions.dataInit($("select",self)[0]); }
                                     if(soptions.dataEvents !== undefined) { bindEvents($("select",self)[0],soptions.dataEvents); }
@@ -4118,7 +4118,7 @@ $.jgrid.extend({
                             }
                             if (oSv) {
                                 var elem = document.createElement("select");
-                                elem.style.width = "100%";
+                                //elem.style.width = "100%";
                                 $(elem).attr({name:cm.index || cm.name, id: "gs_"+cm.name});
                                 var so, sv, ov;
                                 if(typeof oSv === "string") {
@@ -4154,7 +4154,7 @@ $.jgrid.extend({
                         break;
                     case 'text':
                         var df = soptions.defaultValue !== undefined ? soptions.defaultValue: "";
-                        $(thd).append("<input type='text' style='width:95%;padding:0px;' name='"+(cm.index || cm.name)+"' id='gs_"+cm.name+"' value='"+df+"'/>");
+                        $(thd).append("<input type='text' name='"+(cm.index || cm.name)+"' id='gs_"+cm.name+"' value='"+df+"'/>");
                         if(soptions.attr) {$("input",thd).attr(soptions.attr);}
                         if(soptions.dataInit !== undefined) { soptions.dataInit($("input",thd)[0]); }
                         if(soptions.dataEvents !== undefined) { bindEvents($("input",thd)[0], soptions.dataEvents); }

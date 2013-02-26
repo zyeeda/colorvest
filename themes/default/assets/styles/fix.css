@@ -2,3 +2,12 @@
     padding: 0;
     border: 0;
 }
+
+.coala-layout-grid-main .ui-corner-all {
+    border-radius: 0;
+}
+
+.coala-layout-grid-main .ui-widget-content {
+    border: 0;
+}
+

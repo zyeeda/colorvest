@@ -7,7 +7,7 @@ define
         $header = $bdiv.prev()
         $pager = $bdiv.parent().siblings().last()
 
-        $grid.jqGrid 'setGridHeight', $parent.height() - $header.height() - $pager.height() - 4
+        $grid.jqGrid 'setGridHeight', $parent.height() - $header.height() - $pager.height() - 2
 
         # adjust width
         $grid.jqGrid 'setGridWidth', $parent.width() - 2
