@@ -48,7 +48,14 @@ define [
         application.addPromise ComponentHandler.initialize()
 
         if options.loadSettings isnt false and config.noBackend isnt true
-            application.addPromise $.get(config.urlPrefix + '/system/settings', (data) ->
+            path = 'system/settings'
+            prefix = config.urlPrefix
+            path = if _.isFunction prefix
+                prefix application, path
+            else
+                prefix + path
+
+            application.addPromise $.get(path, (data) ->
                 settings = {}
                 _.each data.results, (d) ->
                     settings[d.name] = d.value
