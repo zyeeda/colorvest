@@ -9,13 +9,14 @@ syntax: glob
 .DS_Store
 .settings
 .project
-./*.js
-applications/*.js
-core/*.js
-core/loaders/*.js
-components/*.js
-components/callbacks/*.js
-scaffold/*.js
+
+coala.js
+require-config.js
+applications/**.js
+components/**.js
+core/**.js
 features/**.js
+layouts/**.js
+scaffold/**.js
 
 syntax: regexp
