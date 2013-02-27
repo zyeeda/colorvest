@@ -78,7 +78,6 @@ define [
         grid
 
     buildGrid = (el, options, view)->
-        console.log '--------' +  options.filterToolbar
         fields = options.colModel
         colModel = []
         for f in fields
