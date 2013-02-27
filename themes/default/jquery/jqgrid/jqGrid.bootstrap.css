@@ -79,7 +79,7 @@
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
     border: 0px;
-    background: #F5F5F5;
+    background: #E6F0FF;
 }
 
 .ui-state-active,
@@ -151,5 +151,13 @@
 }
 
 .ui-jqgrid-altrow {
-    background-color: #F5F8FA;
+    background-color: #F3F6FA;
+}
+
+.ui-state-highlight,
+.ui-widget-content .ui-state-highlight,
+.ui-widget-header .ui-state-highlight {
+    position: inherit;
+    background-color: #FBFEC0;
+    box-shadow: none;
 }

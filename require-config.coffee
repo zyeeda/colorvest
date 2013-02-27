@@ -16,6 +16,7 @@ require =
         'coala/coala': ['jquery']
         bootstrap: ['jquery']
         jqgrid: ['coala/vendors/jquery/jqgrid/i18n/grid.locale-cn']
+        'coala/vendors/jquery/layout/jquery.layout': ['jqueryui/draggable', 'jqueryui/effect-slide', 'jqueryui/effect-drop', 'jqueryui/effect-scale']
         'coala/vendors/jquery/layout/jquery.layout.resizeTabLayout': ['coala/vendors/jquery/layout/jquery.layout']
         'coala/vendors/jquery/timepicker/jquery-ui-timepicker': ['jqueryui/datepicker']
         'coala/vendors/jquery/timepicker/jquery-ui-timepicker-zh-CN': ['coala/vendors/jquery/timepicker/jquery-ui-timepicker']
