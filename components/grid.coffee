@@ -116,5 +116,5 @@ define [
             colModel.push f
         options.colModel = colModel
         grid = el.jqGrid options
-        el.jqGrid('filterToolbar', stringResult: true, searchOnEnter: false) if options.filterToolbar == undefined  or options.filterToolbar
+        el.jqGrid('filterToolbar', stringResult: true, searchOnEnter: false) if options.filterToolbar is true
         grid

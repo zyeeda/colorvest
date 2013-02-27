@@ -9,8 +9,13 @@ define [
     result = {}
 
     result.templates =
+        buttonGroup: _.template '''
+            <div class="btn-group">
+                <%= buttons %>
+            </div>
+        '''
         operator: _.template '''
-            <button id="<%= id %>" class="btn" onclick="return false;">
+            <button id="<%= id %>" class="btn <% if (style) { %> <%=style%> <% } %>" onclick="return false;">
             <% if (icon) { %>
                 <i class="<%= icon %>"/>&nbsp;
             <% } %>
@@ -67,19 +72,27 @@ define [
 
     result.generateOperatorsView = (options, module, feature, deferred) ->
         feature.request(url: options.url or 'configuration/operators').done (data) ->
-            strings = []
+            strings = {}
             events = {}
             delegates = {}
             ops = []
+            opGroups = {}
             for name, value of data
                 value = label: value if _.isString value
                 value.id = name
+                value.style or value.style = ''
+
+                group = value.group or 'default'
+                groups = opGroups[group] or (opGroups[group] = [])
+                groups.push value
                 ops.push value
-            for o in ops
-                o.icon = 'icon-file' if not o.icon
-                strings.push result.templates.operator o
-                events['click ' + o.id] = o.id
-                delegates['click ' + o.id] = 'click:' + o.id if o.publish is true
+            for name, value of opGroups
+                strings[name] = []
+                for o in value
+                    o.icon = 'icon-file' if not o.icon
+                    strings[name].push result.templates.operator o
+                    events['click ' + o.id] = o.id
+                    delegates['click ' + o.id] = 'click:' + o.id if o.publish is true
             viewOptions =
                 baseName: 'operators'
                 module: module
@@ -89,7 +102,7 @@ define [
                 operators: ops
                 extend:
                     renderHtml: (su, data) ->
-                        template = Handlebars.compile strings.join('') or ''
+                        template = Handlebars.compile (result.templates.buttonGroup buttons: value.join('') for name, value of strings).join('')
                         template(data)
 
             view = if options.createView then options.createView(viewOptions) else new View(viewOptions)

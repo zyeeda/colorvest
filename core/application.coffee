@@ -65,7 +65,6 @@ define [
             path = @path(null, true)
             path += '/' + append if append
             prefix = config.urlPrefix
-            console.log prefix, prefix
             path = if _.isFunction prefix then prefix @, path else prefix + '/' + path
             path.replace /\/{2,}/g, '/'
 
