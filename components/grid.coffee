@@ -22,7 +22,7 @@ define [
         defaultOptions =
             autowidth: options.fit
             forceFit: options.fit
-            cellLayout: 11 # padding: 0 5px; border-left: 1px;
+            cellLayout: 17 # padding: 0 8px; border-left: 1px;
             viewrecords: true
             rownumbers: true
 

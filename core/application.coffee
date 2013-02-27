@@ -20,7 +20,6 @@ define [
             super
 
             @promises = []
-            @initRouters()
 
         getPromises: ->
             @getApplication().promises
@@ -35,13 +34,16 @@ define [
             $.when.apply($, @getPromises()).done fn
 
         initRouters: ->
-            idx = @addPromise(@loadResource config.routerFileName)
+            deferred = $.Deferred()
+            @addPromise deferred
 
-            @done _.bind (index, args...) ->
-                def = args[index]
+            @loadResource(config.routerFileName).done (def) =>
                 return if not def
                 def = _.extend {}, def
                 nrs = {}
+                mounts = def.mounts or []
+                ps = (@module(name).initRouters() for name in mounts)
+
                 routes = def.routes
                 nrs[@path name, true] = value for name, value of routes
                 def.routes = nrs
@@ -49,7 +51,9 @@ define [
                 def.module = @
                 Router = Backbone.Router.extend def
                 @router = new Router()
-            , @, idx
+
+                $.when.apply($, ps).done -> deferred.resolve()
+            deferred
 
         path: (append, withoutRoot) ->
             paths = if withoutRoot is true then @paths.slice 1 else @paths
@@ -58,10 +62,11 @@ define [
             paths.join '/'
 
         url: (append) ->
-            prefix = config.urlPrefix
-            prefix = if _.isFunction prefix then prefix @ else prefix
-            path = prefix + '/' + @path(null, true)
+            path = @path(null, true)
             path += '/' + append if append
+            prefix = config.urlPrefix
+            console.log prefix, prefix
+            path = if _.isFunction prefix then prefix @, path else prefix + '/' + path
             path.replace /\/{2,}/g, '/'
 
         # rewrite module

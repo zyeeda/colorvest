@@ -10,7 +10,7 @@ define ['config', 'underscore'], (projectConfig, _) ->
         appRoot: 'app'
         helperPath: 'invoke/helper'
         coalaFeaturesPath: 'coala/features'
-        urlPrefix: 'invoke/scaffold'
+        urlPrefix: 'invoke/scaffold/'
         minimumResultsForSearch: 10
 
         folders:

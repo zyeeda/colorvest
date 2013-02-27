@@ -171,4 +171,3 @@ define [
                 viewport._showFeature featureId
 
         viewport
-

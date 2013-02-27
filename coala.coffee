@@ -72,29 +72,8 @@ define [
 
     coala.startBackboneHistory = (app) ->
         Backbone.history = new Backbone.History() if not Backbone.history
-        processedUrl = {}
-        Backbone.history.handlers.push route:/^(.*)$/, callback: (name) ->
-            return if processedUrl[name] is true or not name
-
-            processedUrl[name] = true
-            names = name.split '/'
-            modules = {}
-            _.reduce names, (memo, n) ->
-                modules[memo] = app.findModule memo
-                [memo, n].join '/'
-
-            app.module name
-
-            app.done =>
-                i = names.length
-                while i--
-                    u = names[0..i].join '/'
-                    m = app.findModule u
-                    if not m.router and not modules[u]
-                        delete m.parent[names[i]]
-
-                Backbone.history.loadUrl name
-        Backbone.history.start()
+        app.initRouters().done ->
+            Backbone.history.start()
 
     coala.registerComponentHandler = (name, init, fn) ->
         ComponentHandler.register name, init, fn

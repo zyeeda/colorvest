@@ -12,8 +12,8 @@ define [
         coala = module.getApplication().findModule('coala-features')
         if not coala
             coala = module.getApplication().module('coala-features')
-            coala.paths = ['coala', 'features']
-
+            coala.paths = ['coala/features']
+            coala.initRouters()
 
         coala.loadResource(featureName).done (def) ->
             return deferred.resolve(null) if def is null
