@@ -1,6 +1,7 @@
 define [
     'coala/core/feature'
-], (Feature) ->
+    'coala/core/config'
+], (Feature, config) ->
 
     type: 'feature'
     name: 'DEFAULT'
@@ -12,7 +13,8 @@ define [
             deferred.resolve null
             return deferred
 
-        module.loadResource(featureName).done (def) ->
+        module.loadResource(featureName + '/' + config.featureFileName).done (def) ->
+            console.log 'hello'
             return deferred.resolve(null) if def is null
 
             def.baseName = featureName

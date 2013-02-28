@@ -1,7 +1,8 @@
 define [
     'coala/core/feature'
     'coala/core/resource-loader'
-], (Feature, loadResource) ->
+    'coala/core/config'
+], (Feature, loadResource, config) ->
 
     type: 'feature'
     name: 'coala'
@@ -15,7 +16,8 @@ define [
             coala.paths = ['coala/features']
             coala.initRouters()
 
-        coala.loadResource(featureName).done (def) ->
+        console.log 'coala', featureName + '/' + config.featureFileName
+        coala.loadResource(featureName + '/' + config.featureFileName).done (def) ->
             return deferred.resolve(null) if def is null
 
             def.baseName = featureName

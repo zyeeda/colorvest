@@ -12,6 +12,7 @@ define ['config', 'underscore'], (projectConfig, _) ->
         coalaFeaturesPath: 'coala/features'
         urlPrefix: 'invoke/scaffold/'
         minimumResultsForSearch: 10
+        featureFileName: 'feature'
 
         folders:
             layout: '__layouts__'
