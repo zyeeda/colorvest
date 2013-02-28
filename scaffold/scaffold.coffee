@@ -20,10 +20,10 @@ define [
     'coala/components/datetimepicker'
 
     # features
-    'coala/features/grid-picker'
-    'coala/features/tree-picker'
-    'coala/features/pick-to-grid'
-    'coala/features/tasks'
+    'coala/features/grid-picker/feature'
+    'coala/features/tree-picker/feature'
+    'coala/features/pick-to-grid/feature'
+    'coala/features/tasks/feature'
 
     # layouts
     'coala/layouts/grid'
