@@ -19,6 +19,7 @@ define [
                     el.html(item.text) if String(item.id) == String(data[opt.fieldName])
 
         options = _.extend {minimumResultsForSearch: config.minimumResultsForSearch}, opt
+        options.width = '100%'
         if options.remote is true
             delete options.remote
             options.data = []
