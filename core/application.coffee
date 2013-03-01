@@ -38,7 +38,9 @@ define [
             @addPromise deferred
 
             @loadResource(config.routerFileName).done (def) =>
-                return if not def
+                if not def
+                    deferred.resolve null
+                    return
                 def = _.extend {}, def
                 nrs = {}
                 mounts = def.mounts or []

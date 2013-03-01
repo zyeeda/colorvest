@@ -97,7 +97,7 @@ define [
                 app.startFeature name, featureOptions[i] for name, i in features
 
         app.done ->
-            coala.startBackboneHistory(app);
+            coala.startBackboneHistory app
 
         app
 
