@@ -7,6 +7,7 @@ define [
     class FormGroup
         constructor: (@form, @options, @fieldOptions) ->
             @options = options = name: options if _.isString options
+            @cols = @options.columns if @options.columns
             @fieldOptions = fieldOptions = [fieldOptions] if not _.isArray fieldOptions
             @containerId = _.uniqueId 'group'
 
