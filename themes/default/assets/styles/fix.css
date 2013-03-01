@@ -11,3 +11,10 @@
     border: 0;
 }
 
+.ztree * {
+    font-size: 13px;
+}
+
+.ztree li {
+    padding: 2px 0;
+}

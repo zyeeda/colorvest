@@ -26,7 +26,7 @@ define [
             <div id="pager"/>
         '''
         tree: '''
-            <ul style="width:100%;" id="tree" class="ztree"/>
+            <ul id="tree" class="ztree"/>
         '''
 
     result.getDialogTitle = (view, type, prefix) ->
