@@ -118,6 +118,11 @@ define [
 
             deferred.promise()
 
+        getMaxColumns: ->
+            i = 1
+            i = group.getColumns() for group in @groups when i < group.getColumns()
+            i
+
         afterRender: ->
             deferred = $.Deferred()
             promises = []
