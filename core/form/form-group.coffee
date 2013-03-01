@@ -67,7 +67,7 @@ define [
                 contents.push @getRowTemplate(1) field1: field.getTemplate() for field in @fields
             else if @getColumns() is 2
                 row = []
-                for field in @fields
+                for field, i in @fields
                     if row.length + field.colspan > 2
                         contents.push @getRowTemplate(2) field1: row.join(''), field2: ''
                         row = []
@@ -76,6 +76,8 @@ define [
                     if row.length is 2
                         contents.push @getRowTemplate(if row[1] isnt true then 2 else 1) field1: row[0], field2: row[1] or ''
                         row = []
+                    if (i + 1) is @fields.length and row.length is 1
+                        contents.push @getRowTemplate(2) field1: row[0], field2: ''
             _.template(@getTemplateString()) label: @options.label, groupContent: contents.join(''), containerId: @containerId
 
         getHiddenFieldsTemplate: ->
