@@ -78,13 +78,28 @@ define [
     coala.registerComponentHandler = (name, init, fn) ->
         ComponentHandler.register name, init, fn
 
-    coala.startApplication = (path) ->
+    coala.startApplication = (path, options = {}) ->
+        if _.isObject path
+            options = path
+            path = null
+
         app = if not path
-            require('coala/applications/default')()
+            require('coala/applications/default')(options)
         else
-            require(path)()
+            require(path)(options)
 
         attachDefaultApplicationMethods app
+
+        if options?.initFeatures
+            features = if _.isString(options.initFeatures) then [options.initFeatures] else options.initFeatures
+            featureOptions = if _.isArray(options.initFeatureOptions) then options.initFeatureOptions else [options.initFeatureOptions]
+            app.done ->
+                app.startFeature name, featureOptions[i] for name, i in features
+
+        app.done ->
+            coala.startBackboneHistory(app);
+
+        app
 
     coala.LoaderPluginManager = LoaderPluginManager
 

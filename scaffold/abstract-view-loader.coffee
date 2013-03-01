@@ -81,6 +81,7 @@ define [
                 value = label: value if _.isString value
                 value.id = name
                 value.style or value.style = ''
+                value.label or value.label = ''
 
                 group = value.group or 'default'
                 groups = opGroups[group] or (opGroups[group] = [])

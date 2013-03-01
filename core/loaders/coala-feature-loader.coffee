@@ -16,7 +16,6 @@ define [
             coala.paths = ['coala/features']
             coala.initRouters()
 
-        console.log 'coala', featureName + '/' + config.featureFileName
         coala.loadResource(featureName + '/' + config.featureFileName).done (def) ->
             return deferred.resolve(null) if def is null
 

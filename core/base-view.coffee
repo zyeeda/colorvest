@@ -25,7 +25,8 @@ define [
                     @[key] = value
 
             super options
-            @promises.push @initHandlers(options.handlersIn)
+            @deferHandlers = @initHandlers(options.handlersIn)
+            @promises.push @deferHandlers
 
         initialize: (options) ->
             events = options.events or {}
@@ -67,11 +68,12 @@ define [
 
         bindEventHandler: (name, namespace) ->
             (args...) =>
-                handlers = if namespace then @eventHandlers[namespace] else @eventHandlers
-                error @,  "no namespace named #{namespace}" if not handlers
-                method = handlers[name]
-                error @, "no handler named #{name}" if not method
-                method.apply @, args
+                @deferHandlers.done =>
+                    handlers = if namespace then @eventHandlers[namespace] else @eventHandlers
+                    error @,  "no namespace named #{namespace}" if not handlers
+                    method = handlers[name]
+                    error @, "no handler named #{name}" if not method
+                    method.apply @, args
 
         initHandlers: (handler) ->
             @eventHandlers ?= {}

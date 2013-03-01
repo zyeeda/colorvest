@@ -25,7 +25,7 @@ define [
             root = @module.getApplication()
             id = _.uniqueId('dialog')
             me = this
-            $('<div class=\"modal fade hide\" id=\"' + id + '\"><div id=\"' + @startupOptions.view.cid + '\"></div>').appendTo document.body
+            $('<div class=\"modal hide\" id=\"' + id + '\"><div id=\"' + @startupOptions.view.cid + '\"></div>').appendTo document.body
             @containerId = id
             @dialogContainer = c = $('#' + id)
             c.on 'hide', (event) ->

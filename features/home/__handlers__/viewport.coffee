@@ -1,6 +1,6 @@
 define
     launchApp: (feature, view, component, obj) ->
-        app.startFeature obj.featurePath, obj
+        feature.module.getApplication().startFeature obj.featurePath, obj
 
     closeFeature: (feature, view, targetFeature) ->
-        app.stopFeature targetFeature
+        feature.module.getApplication().stopFeature targetFeature

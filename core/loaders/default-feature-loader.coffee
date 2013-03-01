@@ -14,7 +14,6 @@ define [
             return deferred
 
         module.loadResource(featureName + '/' + config.featureFileName).done (def) ->
-            console.log 'hello'
             return deferred.resolve(null) if def is null
 
             def.baseName = featureName
