@@ -56,7 +56,7 @@ define [
                 <% if (readOnly) { %>
                     <span id="<%= id %>">{{<%= value %>}}</span>
                 <% } else { %>
-                    <input type="<%= type %>" class="input" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}" />
+                    <input type="<%= type %>" class="input span12" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}" />
                 <% } %>
               </div>
             </div>

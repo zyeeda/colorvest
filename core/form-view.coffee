@@ -147,7 +147,7 @@ define [
                     $(label).text('OK!').addClass('valid').closest('.control-group').addClass('success')
 
         getTemplate: ->
-            o = formClass: 'form-horizontal container-fluid', formName: @options.formName
+            o = formClass: 'container-fluid', formName: @options.formName
 
             if @options.form.tabs
                 unused = @groups.slice 0

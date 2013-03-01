@@ -65,3 +65,12 @@ html, body {
     height: 100%;
 }
 
+.coala-double-column-modal .control-label {
+    font-weight: bold;
+}
+
+/*.coala-double-column-modal {
+    width: 580px;
+    margin-left: -290px;
+}*/
+

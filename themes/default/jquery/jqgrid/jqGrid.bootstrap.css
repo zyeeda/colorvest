@@ -47,9 +47,12 @@
     font-size: 13px;
 }
 
-.ui-search-toolbar input[type="text"],
+.ui-search-toolbar input[type="text"] {
+    width: 89%;
+}
+
 .ui-search-toolbar select {
-    width: 90%;
+    width: 100%;
 }
 
 .ui-state-default,

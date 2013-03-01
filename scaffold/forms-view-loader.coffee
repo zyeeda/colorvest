@@ -79,7 +79,7 @@ define [
                 tabs: data.tabs
 
             view = new FormView def
-            view.options.dialogClass = if view.getMaxColumns() is 2 then 'two-column-dialog' else 'one-column-dialog'
+            view.options.dialogClass = if view.getMaxColumns() is 2 then 'coala-double-column-modal' else 'coala-single-column-modal'
             view.eventHandlers.formStatusChanged = (e) ->
                 scaffold = @feature.options.scaffold or {}
                 fsc = scaffold.handlers?.formStatusChanged
