@@ -15,7 +15,7 @@ define [
                     <% if (readOnly) { %>
                         <span id="<%= id %>">{{<%= value %>}}</span>
                     <% } else { %>
-                        <textarea class="input" id="<%= id %>" name="<%= name %>" rows="<%= rowspan %>">{{<%= value %>}}</textarea>
+                        <textarea class="input span12" id="<%= id %>" name="<%= name %>" rows="<%= rowspan %>">{{<%= value %>}}</textarea>
                     <%  } %>
                   </div>
                 </div>

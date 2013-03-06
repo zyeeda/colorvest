@@ -32,17 +32,18 @@ define [
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
 
-            @feature.model.set 'id', selected
-            $.when(@feature.model.destroy()).then (data) =>
-                if data.violations
-                    msg = ''; summary = ''
-                    for err in data.violations
-                        unless err.properties
-                            summary += err.message + '\n'
-                    msg += summary
-                    app.error msg, '验证提示'
-                    return
-                grid.trigger 'reloadGrid'
+            app.confirm '确定要删除选中的记录吗?', =>
+                @feature.model.set 'id', selected
+                $.when(@feature.model.destroy()).then (data) =>
+                    if data.violations
+                        msg = ''; summary = ''
+                        for err in data.violations
+                            unless err.properties
+                                summary += err.message + '\n'
+                        msg += summary
+                        app.error msg, '验证提示'
+                        return
+                    grid.trigger 'reloadGrid'
         show: ->
             grid = @feature.views['views:grid'].components[0]
             view = @feature.views['forms:show']

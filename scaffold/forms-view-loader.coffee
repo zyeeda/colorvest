@@ -73,6 +73,7 @@ define [
                 feature: feature
                 avoidLoadingHandlers: true
                 entityLabel: data.entityLabel
+                formName: viewName
             , data
             def.form =
                 groups: data.groups
