@@ -11,7 +11,8 @@ define [
     'coala/core/form/dropdown-field'
     'coala/core/form/feature-field'
     'coala/core/form/hidden-field'
-    'coala/vendors/jquery/jquery.validate' # check it later
+    'coala/vendors/jquery/validation/messages_zh'
+    #'coala/vendors/jquery/validation/jquery.validate' # check it later
 ], ($, _, View, Handlebars, FormField, FormGroup) ->
 
     ###
@@ -138,13 +139,21 @@ define [
             # check it later
             if @options.validation then @$$('form').validate
                 rules: @options.validation.rules
-                messages: @options.validation.messages
+                #messages: @options.validation.messages
+                errorPlacement: (error, element) ->
+                    elPos = $(element).position()
+                    #$(error).addClass 'label label-important'
+                    $(error).css
+                        color: '#CC0000'
+                        position: 'absolute'
+                        top: elPos.top + $(element).outerHeight()
+                        left: elPos.left
+                    $(error).insertAfter element
                 highlight: (label) ->
-                    $(label).closest('.control-group').removeClass('success')
                     $(label).closest('.control-group').addClass('error')
                 success: (label) ->
-                    $(label).text('OK!').addClass('valid').closest('.control-group').removeClass('error')
-                    $(label).text('OK!').addClass('valid').closest('.control-group').addClass('success')
+                    $(label).closest('.control-group').removeClass('error')
+                    $(label).remove()
 
         getTemplate: ->
             style = 'container-fluid '

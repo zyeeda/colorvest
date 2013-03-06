@@ -65,7 +65,7 @@ define [
         app.showDialog(
             view: view
             title: title
-            buttons: [label: 'Ok', fn: ok]
+            buttons: [label: '确定', status: 'btn-primary', fn: ok]
         ).done (dialog) ->
             v = dialog.startupOptions.view
             v.setFormData(v.model.toJSON())
