@@ -66,6 +66,8 @@ define [
             view: view
             title: title
             buttons: [label: '确定', status: 'btn-primary', fn: ok]
+            onClose: ->
+                view.model.clear()
         ).done (dialog) ->
             v = dialog.startupOptions.view
             v.setFormData(v.model.toJSON())

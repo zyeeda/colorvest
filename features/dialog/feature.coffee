@@ -83,6 +83,9 @@ define [
 
         close: -> # for close button
             options = @startedOptions.pop()
+            if _.isFunction(options.onClose)
+                options.onClose.apply options
+
             delete options.view.dialogFeature
 
             if @startedOptions.length > 0

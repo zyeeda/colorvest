@@ -5,14 +5,18 @@ define ["coala/core/view", "underscore"], (View, _) ->
         treeOptions = _.extend(options.tree or {},
             type: "tree"
             selector: "tree"
-            check:
-                enable: true
-                chkStyle: "radio"
-                radioType: "all"
-
             data:
                 simpleData:
                     enable: true
+        ,
+            if options.multiple is true
+                check:
+                    enable: true
+            else
+                check:
+                    enable: true
+                    chkStyle: "radio"
+                    radioType: "all"
         )
         view = new View(
             baseName: "tree-picker-tree-view"
@@ -33,11 +37,10 @@ define ["coala/core/view", "underscore"], (View, _) ->
                     selected = tree.getCheckedNodes()
                     return false  if selected.length is 0
                     rowData = selected[0]
-                    text = (options.toText or (data) ->
-                        data.name
-                    )(rowData)
-                    me.$("text").val text
-                    options.valueField.val rowData["id"]
+                    text = ((options.toText or (data) -> data.name)(d) for d in selected)
+                    id = (d['id'] for d in selected)
+                    me.$("text").val text.join ','
+                    options.valueField.val id
                     options.valueField.trigger 'change' if options.statusChanger
                     true
             ]

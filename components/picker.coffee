@@ -28,7 +28,7 @@ define [
             value = data[options.fieldName]
             return if not value
             result.deferred.done (feature) ->
-                feature.views['grid-picker-field'].$('text').val(value.name)
+                feature.views['inline:grid-picker-field'].$('text').val(value.name)
                 options.valueField.val(value.id)
 
         result
@@ -58,7 +58,7 @@ define [
             value = data[options.fieldName]
             return if not value
             result.deferred.done (feature) ->
-                feature.views['tree-picker-field'].$('text').val(value.name)
+                feature.views['inline:tree-picker-field'].$('text').val(value.name)
                 options.valueField.val(value.id)
 
         result

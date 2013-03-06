@@ -8,7 +8,6 @@ define [
 
     handlers =
         add: ->
-            @feature.views['forms:add'].model.clear()
             viewLoader.submitHandler.call @,
                 submitSuccess: (type) =>
                     @feature.views['views:grid'].components[0].trigger('reloadGrid')
