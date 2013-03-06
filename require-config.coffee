@@ -20,4 +20,5 @@ require =
         'coala/vendors/jquery/layout/jquery.layout.resizeTabLayout': ['coala/vendors/jquery/layout/jquery.layout']
         'coala/vendors/jquery/timepicker/jquery-ui-timepicker': ['jqueryui/datepicker']
         'coala/vendors/jquery/timepicker/jquery-ui-timepicker-zh-CN': ['coala/vendors/jquery/timepicker/jquery-ui-timepicker']
-        'jqueryui/datepicker-zh-CN': 'jqueryui/datepicker'
+        'coala/vendors/jquery/validation/messages_zh': ['coala/vendors/jquery/validation/jquery.validate']
+        'jqueryui/datepicker-zh-CN': ['jqueryui/datepicker']
