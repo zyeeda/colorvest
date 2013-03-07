@@ -9,6 +9,7 @@ define ["coala/core/view", "underscore"], (View, _) ->
             gridOptions = _.extend(options.pickerGrid or {},
                 type: "grid"
                 selector: "grid"
+                multiselect: true
             )
             @dialogView = new View(
                 baseName: "grid-picker-grid-view"
@@ -25,14 +26,15 @@ define ["coala/core/view", "underscore"], (View, _) ->
                 label: "OK"
                 fn: _.bind((me) ->
                     grid = me.dialogView.components[0]
-                    selected = grid.getGridParam("selrow")
-                    rowData = undefined
-                    return false  unless selected
-                    rowData = grid.getRowData(selected)
-                    exists = targetGrid.getRowData(selected)
-                    return false  if _.include(targetGrid.getDataIDs(), rowData.id)
-                    targetGrid.addRowData rowData.id, rowData
-                    options.valueField.trigger 'change' if options.statusChanger
+                    selected = grid.getGridParam("selarrrow")
+                    return false if selected.length is 0
+                    changed = false
+                    for id in selected
+                        continue if _.include(targetGrid.getDataIDs(), id)
+                        changed = true
+                        data = grid.getRowData id
+                        targetGrid.addRowData id, data
+                    options.valueField.trigger 'change' if changed and options.statusChanger
                     true
                 , this, this)
             ]

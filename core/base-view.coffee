@@ -68,12 +68,17 @@ define [
 
         bindEventHandler: (name, namespace) ->
             (args...) =>
-                @deferHandlers.done =>
+                fn = =>
                     handlers = if namespace then @eventHandlers[namespace] else @eventHandlers
                     error @,  "no namespace named #{namespace}" if not handlers
                     method = handlers[name]
                     error @, "no handler named #{name}" if not method
                     method.apply @, args
+
+                if @options.avoidLoadingHandlers
+                    fn()
+                else
+                    @deferHandlers.done => fn()
 
         initHandlers: (handler) ->
             @eventHandlers ?= {}

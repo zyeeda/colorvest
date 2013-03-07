@@ -2,8 +2,7 @@ define [
     'jquery'
     'underscore'
     'coala/core/form/form-field'
-    'coala/core/form/placeholder-field'
-], ($, _, FormField, PlaceholderField) ->
+], ($, _, FormField) ->
 
     class FormGroup
         constructor: (@form, @options, @fieldOptions) ->
@@ -78,8 +77,7 @@ define [
                         contents.push @getRowTemplate(if row[1] isnt true then 2 else 1) field1: row[0], field2: row[1] or ''
                         row = []
                     if (i + 1) is @fields.length and row.length is 1
-                        placeholder = new PlaceholderField @form, @, {name: 'placeholder'}
-                        contents.push @getRowTemplate(2) field1: row[0], field2: placeholder.getTemplate()
+                        contents.push @getRowTemplate(2) field1: row[0], field2: '<div class="control-group"></div>'
             _.template(@getTemplateString()) label: @options.label, groupContent: contents.join(''), containerId: @containerId
 
         getHiddenFieldsTemplate: ->
