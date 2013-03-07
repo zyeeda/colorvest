@@ -65,12 +65,38 @@ html, body {
     height: 100%;
 }
 
-.coala-double-column-modal .control-label {
-    font-weight: bold;
+.coala-form-action-show fieldset:first-of-type .row-fluid:first-of-type .control-group {
+    border: 0 none;
 }
 
-/*.coala-double-column-modal {
-    width: 580px;
-    margin-left: -290px;
-}*/
+.coala-form-action-show fieldset:first-of-type {
+    border-top: 2px solid;
+}
+
+.coala-form-action-show fieldset:last-of-type {
+    border-bottom: 2px solid;
+}
+
+.coala-form-action-show .control-group {
+    margin-bottom: 0;
+    border-top: 1px solid;
+}
+
+.coala-form-action-show .control-label {
+    font-weight: bold;
+    text-align: left;
+    font-size: 15px;
+    margin-bottom: 0;
+    padding: 0;
+    line-height: 31px;
+}
+
+.coala-form-action-show .controls {
+    line-height: 31px;
+}
+
+.coala-form-size-large {
+    width: 780px;
+    margin-left: -390px;
+}
 

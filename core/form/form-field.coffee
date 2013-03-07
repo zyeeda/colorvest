@@ -10,7 +10,7 @@ define [
             @id = options.id or _.uniqueId options.name
             @name = options.name
             @value = options.value or options.name
-            @label = options.label or @name
+            @label = options.label
             @readOnly = !!options.readOnly
             @visible = true
             @type = options.type
@@ -51,14 +51,14 @@ define [
 
         getTemplateString: -> '''
             <div class="control-group">
-              <label class="control-label" for="<%= id %>"><%= label %></label>
-              <div class="controls">
-                <% if (readOnly) { %>
-                    <span id="<%= id %>">{{<%= value %>}}</span>
-                <% } else { %>
-                    <input type="<%= type %>" class="input span12" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}" />
-                <% } %>
-              </div>
+                <label class="control-label" <% if (id) { %>for="<%= id%>"<% } %>><% if (label) { %><%= label %><% } %></label>
+                <div class="controls">
+                    <% if (readOnly) { %>
+                        <span <% if (id) { %>id="<%= id %>"<% } %>><% if (name) { %>{{<%= name %>}}<% } %></span>
+                    <% } else { %>
+                        <input type="<%= type %>" class="input span12" id="<%= id %>" name="<%= name %>" value="{{<%= name %>}}" />
+                    <% } %>
+                </div>
             </div>
         '''
 
@@ -69,10 +69,10 @@ define [
         afterRender: ->
             @
 
-
     fieldTypes = {}
     FormField.add = (type, clazz) ->
         fieldTypes[type] = clazz
+
     FormField.build = (options, group, form) ->
         options = name: options if _.isString options
         type = options.type or 'text'

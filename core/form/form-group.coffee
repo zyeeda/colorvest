@@ -2,7 +2,8 @@ define [
     'jquery'
     'underscore'
     'coala/core/form/form-field'
-], ($, _, FormField) ->
+    'coala/core/form/placeholder-field'
+], ($, _, FormField, PlaceholderField) ->
 
     class FormGroup
         constructor: (@form, @options, @fieldOptions) ->
@@ -18,6 +19,9 @@ define [
                     filed = name: field if _.isString field
                     field.readOnly = true
                 (if field.type is 'hidden' then @hiddenFields else @fields).push FormField.build field, @, form
+
+            if @fields.length % 2 isnt 0
+                @fields.push new PlaceholderField form, @, {name: 'placeholder'}
 
         getColumns: ->
             if not @cols
