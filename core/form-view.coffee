@@ -158,7 +158,7 @@ define [
         getTemplate: ->
             style = 'container-fluid'
             style += ' form-horizontal' if @options.labelOnTop is false
-            style += ' coala-form-action-' + @options.formName if @options.formName?
+            style += ' coala-action-form coala-action-form-' + @options.formName if @options.formName?
 
             o = formClass: style, formName: @options.formName
 

@@ -65,25 +65,28 @@ html, body {
     height: 100%;
 }
 
-.coala-form-action-show fieldset:first-of-type .row-fluid:first-of-type .control-group {
+.coala-action-form .control-label {
+    font-weight: bold;
+}
+
+.coala-action-form-show fieldset:first-of-type .row-fluid:first-of-type .control-group {
     border: 0 none;
 }
 
-.coala-form-action-show fieldset:first-of-type {
+.coala-action-form-show fieldset:first-of-type {
     border-top: 2px solid;
 }
 
-.coala-form-action-show fieldset:last-of-type {
+.coala-action-form-show fieldset:last-of-type {
     border-bottom: 2px solid;
 }
 
-.coala-form-action-show .control-group {
+.coala-action-form-show .control-group {
     margin-bottom: 0;
     border-top: 1px solid;
 }
 
-.coala-form-action-show .control-label {
-    font-weight: bold;
+.coala-action-form-show .control-label {
     text-align: left;
     font-size: 15px;
     margin-bottom: 0;
@@ -91,7 +94,7 @@ html, body {
     line-height: 31px;
 }
 
-.coala-form-action-show .controls {
+.coala-action-form-show .controls {
     line-height: 31px;
 }
 
