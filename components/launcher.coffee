@@ -165,7 +165,7 @@ define [
                     <div class="coala-launcher-top-row-items">
                     {{#each items}}
                         <div class="coala-launcher-top-row-item" id="{{id}}">
-                            <div class="coala-launcher-top-row-item-icon">{{icon}}</div>
+                            <div class="coala-launcher-top-row-item-icon {{iconClass}}-small">{{icon}}</div>
                             <div class="coala-launcher-top-row-item-label">{{name}}</div>
                         </div>
                     {{/each}}
@@ -182,7 +182,7 @@ define [
             <div class="coala-launcher-folder" id="{{id}}">
               <div class="coala-launcher-arrow"/>
               <div class="coala-launcher-box">
-                <div class="coala-launcher-icon">{{icon}}</div>
+                <div class="coala-launcher-icon {{iconClass}}">{{icon}}</div>
                 <div class="coala-launcher-label">{{name}}</div>
               </div>
             </div>

@@ -34,8 +34,8 @@
 }
 
 .coala-viewport-footer {
-    height: 110px;
-    background: url('../images/footer-bg.jpg') repeat-y;
+    height: 120px;
+    background: url('../images/footer-bg.png') repeat-y;
 }
 
 .coala-viewport-region {
@@ -51,7 +51,7 @@
     position: absolute;
     width: 100%;
     top: 50px;
-    bottom: 110px;
+    bottom: 120px;
     overflow: hidden;
 }
 
@@ -60,7 +60,8 @@
 }
 
 .coala-taskbar-pin {
-    margin: 0 20px;
+    /*margin: 0 20px;*/
+    margin: 5px 20px 0 20px;
 }
 
 .coala-taskbar-carousel {
@@ -92,15 +93,16 @@
 }
 
 .coala-taskbar-app-icon {
-    /*border: 5px solid #68B02A;*/
     height: 60px;
     width: 60px;
     position: relative;
     left: 50%;
     margin: 10px 0 5px -29px;
+    background: url('../images/default-app-icon.png') no-repeat;
 }
 
 .coala-taskbar-app-text {
+    color: #444;
     line-height: 18px;
     height: 36px;
     width: 100%;
