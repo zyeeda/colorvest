@@ -186,7 +186,7 @@
 }
 
 .coala-launcher-top-row-item {
-    width: 135px;
+    width: 148px;
     height: 56px;
     float: left;
     margin-left: 20px;
@@ -206,8 +206,8 @@
     font-size: 13px;
     float: left;
     margin-left: 6px;
-    width: 75px;
-    margin-top: 8px;
+    width: 88px;
+    margin-top: 6px;
 }
 
 .coala-launcher-top-row-item:hover {

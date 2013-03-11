@@ -74,10 +74,12 @@ define [
         add: (featureContainer) ->
             @viewportCarousel.append featureContainer
 
-        switchTo: (featureId) ->
+        hideCurrent: ->
             current = @viewportCarousel.children ':visible'
-            next = @viewportCarousel.children "[data-feature-id=#{featureId}]"
             current.hide()
+
+        showNext: (featureId) ->
+            next = @viewportCarousel.children "[data-feature-id=#{featureId}]"
             next.show()
 
         remove: (featureId) ->
@@ -140,17 +142,18 @@ define [
             showFeature: (feature) ->
                 me = this
                 featureId = feature.cid
-                if featureRegistry.contains featureId
+                if featureRegistry.contains featureId # already shown
                     _feature = featureRegistry.promote featureId
                     me._showFeature _feature.cid
-                else
+                else # the first time show
                     featureRegistry.add feature
                     featureBar.add feature
-                    me._showFeature featureId
+                    featureWindow.showNext featureId
 
             _showFeature: (featureId) ->
                 featureBar.scrollTo featureId
-                featureWindow.switchTo featureId
+                featureWindow.hideCurrent()
+                featureWindow.showNext featureId
 
             closeFeature: (feature) ->
                 featureId = feature.cid
@@ -162,6 +165,8 @@ define [
                     featureWindow.remove featureId
 
             createFeatureContainer: (feature) ->
+                # hide current feature first to prevent scrollbar to display
+                featureWindow.hideCurrent()
                 container = $ "<div data-feature-id='#{feature.cid}' class='coala-viewport-feature'></div>"
                 featureWindow.add container
                 container

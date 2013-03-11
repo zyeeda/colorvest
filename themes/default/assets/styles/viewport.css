@@ -52,7 +52,8 @@
     width: 100%;
     top: 50px;
     bottom: 120px;
-    overflow: hidden;
+    /*overflow: hidden;*/
+    overflow: auto;
 }
 
 .coala-viewport-feature {
@@ -60,7 +61,6 @@
 }
 
 .coala-taskbar-pin {
-    /*margin: 0 20px;*/
     margin: 5px 20px 0 20px;
 }
 
