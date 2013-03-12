@@ -1,10 +1,10 @@
-define ["coala/core/view", "underscore"], (View, _) ->
+define ['coala/core/view', 'underscore'], (View, _) ->
     showPicker: ->
         options = @feature.startupOptions
         me = this
         treeOptions = _.extend(options.tree or {},
-            type: "tree"
-            selector: "tree"
+            type: 'tree'
+            selector: 'tree'
             data:
                 simpleData:
                     enable: true
@@ -15,11 +15,11 @@ define ["coala/core/view", "underscore"], (View, _) ->
             else
                 check:
                     enable: true
-                    chkStyle: "radio"
-                    radioType: "all"
+                    chkStyle: 'radio'
+                    radioType: 'all'
         )
         view = new View(
-            baseName: "tree-picker-tree-view"
+            baseName: 'tree-picker-tree-view'
             feature: @feature
             module: @module
             model: options.url
@@ -31,7 +31,8 @@ define ["coala/core/view", "underscore"], (View, _) ->
             title: options.title
             view: view
             buttons: [
-                label: "OK"
+                label: '确定'
+                status: 'btn-primary'
                 fn: ->
                     tree = view.components[0]
                     selected = tree.getCheckedNodes()
@@ -39,7 +40,7 @@ define ["coala/core/view", "underscore"], (View, _) ->
                     rowData = selected[0]
                     text = ((options.toText or (data) -> data.name)(d) for d in selected)
                     id = (d['id'] for d in selected)
-                    me.$("text").val text.join ','
+                    me.$('text').val text.join ','
                     options.valueField.val id
                     options.valueField.trigger 'change' if options.statusChanger
                     true

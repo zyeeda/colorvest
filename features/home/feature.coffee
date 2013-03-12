@@ -13,9 +13,11 @@ define
             type: 'launcher'
             selector: 'launcherEntry'
             data: @collection.toJSON()
-        ,
+        , ->
             type: 'viewport'
             selector: 'viewport'
+            defaultFeatureStartupOptions: @collection.toJSON()
+            homepageFeaturePath: 'main/home-page'
         ]
 
         model: 'system/menuitems'

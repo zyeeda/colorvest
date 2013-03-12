@@ -7,7 +7,7 @@ define [
     coala.registerComponentHandler 'grid-picker', (->), (el, opt = {}, view) ->
         if opt.readOnly is true
             return loadData: (data) ->
-                el.html data[opt.fieldName]['name']
+                el.html data[opt.fieldName]?['name']
 
         app = view.feature.module.getApplication()
         options = _.extend el: el, ignoreExists: true, opt
@@ -36,7 +36,7 @@ define [
     coala.registerComponentHandler 'tree-picker', (->), (el, opt = {}, view) ->
         if opt.readOnly is true
             return loadData: (data) ->
-                el.html data[opt.fieldName]['name']
+                el.html data[opt.fieldName]?['name']
 
         app = view.feature.module.getApplication()
         options = _.extend el: el, ignoreExists: true, opt
@@ -70,8 +70,7 @@ define [
         result = deferred: $.Deferred()
         extendFeature = (feature) ->
             feature.getFormData = ->
-                name: options.fieldName
-                value: result.feature.views['picker-field'].components[0].getDataIDs()
+                result.feature.views['picker-field'].components[0].getDataIDs()
             feature.loadData = (data) ->
                 values = data[options.fieldName]
                 @views['picker-field'].components[0][0].addJSONData rows: values

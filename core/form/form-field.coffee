@@ -69,10 +69,10 @@ define [
         afterRender: ->
             @
 
-
     fieldTypes = {}
     FormField.add = (type, clazz) ->
         fieldTypes[type] = clazz
+
     FormField.build = (options, group, form) ->
         options = name: options if _.isString options
         type = options.type or 'text'

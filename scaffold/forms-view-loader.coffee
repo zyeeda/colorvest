@@ -28,6 +28,10 @@ define [
         loadFormData: (value, data) ->
             @form.findComponent('a-' + @id).loadData data
 
+        getFormData: ->
+            data = super()
+            if data and data.indexOf(',') isnt -1 then data.split(',') else data
+
         getTemplateString: -> '''
             <div class="control-group">
               <label class="control-label" for="<%= id %>"><%= label %></label>
@@ -55,6 +59,10 @@ define [
                 colModel: @options.colModel
             o
 
+        getFormData: ->
+            @form.findComponent('a-' + @id).getFormData()
+
+
     FormField.add 'grid-picker', GridPickerField
     FormField.add 'tree-picker', TreePickerField
     FormField.add 'many-picker', ManyPickerField
@@ -80,7 +88,8 @@ define [
                 tabs: data.tabs
 
             view = new FormView def
-            view.options.dialogClass = if view.getMaxColumns() is 2 then 'coala-double-column-modal' else 'coala-single-column-modal'
+            view.options.dialogClass = "coala-form-size-#{view.options.size}" if view.options.size?
+            #view.options.dialogClass = if view.getMaxColumns() is 2 then 'coala-double-column-modal' else 'coala-single-column-modal'
             view.eventHandlers.formStatusChanged = (e) ->
                 scaffold = @feature.options.scaffold or {}
                 fsc = scaffold.handlers?.formStatusChanged

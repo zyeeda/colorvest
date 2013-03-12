@@ -52,14 +52,12 @@ define [
 
     result.submitHandler = (options, viewName, title, type) ->
         view = @feature.views[viewName]
+        id = view.model.get 'id'
         app = @feature.module.getApplication()
         ok = ->
-            id = view.model.get 'id'
-            view.submit(id: id).done((data) ->
+            view.submit(id: id).done (data) ->
                 options.submitSuccess(type)
                 app._modalDialog.modal.modal 'hide'
-            ).fail ->
-                app.error '系统出错！'
             false
 
         app.showDialog(
@@ -103,6 +101,7 @@ define [
                 events: events
                 delegates: delegates
                 operators: ops
+                avoidLoadingHandlers: true
                 extend:
                     renderHtml: (su, data) ->
                         template = Handlebars.compile (result.templates.buttonGroup buttons: value.join('') for name, value of strings).join('')
@@ -130,6 +129,7 @@ define [
                 feature: feature
                 components: [data]
                 events: events
+                avoidLoadingHandlers: true
                 extend:
                     renderHtml: (su, data) ->
                         result.templates.grid
@@ -151,6 +151,7 @@ define [
                 feature: feature
                 components: [data]
                 events: events
+                avoidLoadingHandlers: true
                 extend:
                     renderHtml: (su, data) ->
                         result.templates.tree

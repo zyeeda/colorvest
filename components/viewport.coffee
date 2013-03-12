@@ -6,8 +6,15 @@ define [
 
     class FeatureBar
 
-        constructor: (footerEl) ->
-            pinWrapper = footerEl.children '.coala-taskbar-pin'
+        constructor: (options) ->
+            @defaultStartupOptionMap = {}
+            for opt in options.defaultFeatureStartupOptions
+                @defaultStartupOptionMap[opt.featurePath] = opt if opt.featurePath
+
+            @homepageFeaturePath = options.homepageFeaturePath
+
+            footerEl = options.el
+            @pinWrapper = footerEl.children '.coala-taskbar-pin'
             carouselWrapper = footerEl.children '.coala-taskbar-carousel'
             carouselContainer = carouselWrapper.children 'ul'
 
@@ -24,18 +31,25 @@ define [
                 onCreate: ->
                     $(window).on 'resize', ->
                         carouselContainer.trigger 'updateSizes'
+            ,
+                debug: true
 
             @carouselContainer = carouselContainer
 
         add: (feature) ->
-            item = $ """
-            <li data-feature-id="#{feature.cid}">
-                <div class="coala-taskbar-app-icon #{feature.startupOptions.icon}"></div>
-                <div class="coala-taskbar-app-text">#{feature.startupOptions.name}</div>
-                <div class="coala-taskbar-app-remove coala-icon-close"></div>
-            </li>
-            """
-            @carouselContainer.trigger 'insertItem', [item]
+            if feature.path() is @homepageFeaturePath
+                homepageEntry = @pinWrapper.find '.coala-taskbar-show-homepage'
+                homepageEntry.attr 'data-feature-id', feature.cid
+            else
+                _.extend feature.startupOptions, @defaultStartupOptionMap[feature.path()]
+                item = $ """
+                <li data-feature-id="#{feature.cid}">
+                    <div class="coala-taskbar-app-icon #{feature.startupOptions.iconClass}"></div>
+                    <div class="coala-taskbar-app-text">#{feature.startupOptions.name}</div>
+                    <div class="coala-taskbar-app-remove coala-icon-close"></div>
+                </li>
+                """
+                @carouselContainer.trigger 'insertItem', [item]
 
         scrollTo: (featureId) ->
             item = @carouselContainer.children "[data-feature-id=#{featureId}]"
@@ -60,10 +74,12 @@ define [
         add: (featureContainer) ->
             @viewportCarousel.append featureContainer
 
-        switchTo: (featureId) ->
+        hideCurrent: ->
             current = @viewportCarousel.children ':visible'
-            next = @viewportCarousel.children "[data-feature-id=#{featureId}]"
             current.hide()
+
+        showNext: (featureId) ->
+            next = @viewportCarousel.children "[data-feature-id=#{featureId}]"
             next.show()
 
         remove: (featureId) ->
@@ -110,32 +126,34 @@ define [
     coala.registerComponentHandler 'viewport', (->), (el, options, view) ->
 
         defaultOptions = {}
-
         options = _.extend defaultOptions, options
 
         mainEl = el.children '.coala-viewport-content'
         footerEl = el.children '.coala-viewport-footer'
 
+        featureBar = new FeatureBar
+            el: footerEl
+            defaultFeatureStartupOptions: options.defaultFeatureStartupOptions
+            homepageFeaturePath: options.homepageFeaturePath
         featureWindow = new FeatureWindow mainEl
-        featureBar = new FeatureBar footerEl
         featureRegistry = new FeatureRegistry()
 
         viewport =
             showFeature: (feature) ->
                 me = this
                 featureId = feature.cid
-                if featureRegistry.contains featureId
+                if featureRegistry.contains featureId # already shown
                     _feature = featureRegistry.promote featureId
                     me._showFeature _feature.cid
-                else
+                else # the first time show
                     featureRegistry.add feature
                     featureBar.add feature
-                    #featureWindow.add feature
-                    me._showFeature featureId
+                    featureWindow.showNext featureId
 
             _showFeature: (featureId) ->
                 featureBar.scrollTo featureId
-                featureWindow.switchTo featureId
+                featureWindow.hideCurrent()
+                featureWindow.showNext featureId
 
             closeFeature: (feature) ->
                 featureId = feature.cid
@@ -147,6 +165,8 @@ define [
                     featureWindow.remove featureId
 
             createFeatureContainer: (feature) ->
+                # hide current feature first to prevent scrollbar to display
+                featureWindow.hideCurrent()
                 container = $ "<div data-feature-id='#{feature.cid}' class='coala-viewport-feature'></div>"
                 featureWindow.add container
                 container
@@ -154,11 +174,6 @@ define [
         footerEl.delegate 'li', 'click', (event) ->
             $this = $ @
             $target = $ event.target
-            ###
-            if $this.hasClass 'coala-taskbar-show-launcher'
-                view.feature.trigger 'viewport:show-launcher', view
-                return
-            ###
 
             if $target.hasClass 'coala-taskbar-app-remove'
                 featureId = $this.attr 'data-feature-id'

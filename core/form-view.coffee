@@ -139,7 +139,7 @@ define [
             # check it later
             if @options.validation then @$$('form').validate
                 rules: @options.validation.rules
-                #messages: @options.validation.messages
+                messages: @options.validation.messages
                 errorPlacement: (error, element) ->
                     elPos = $(element).position()
                     #$(error).addClass 'label label-important'
@@ -156,9 +156,9 @@ define [
                     $(label).remove()
 
         getTemplate: ->
-            style = 'container-fluid '
-            style += 'form-horizontal ' if @options.labelOnTop is false
-            style += 'coala-form-' + @options.formName if @options.formName
+            style = 'container-fluid'
+            style += ' form-horizontal' if @options.labelOnTop is false
+            style += ' coala-action-form coala-action-form-' + @options.formName if @options.formName?
 
             o = formClass: style, formName: @options.formName
 
