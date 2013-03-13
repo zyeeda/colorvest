@@ -19,6 +19,7 @@ define [
     'coala/core/sync'
     'bootstrap'
     'coala/features/dialog/feature'
+    'coala/features/routers'
 ], ($, _, Marionette, Handlebars, Backbone, Application, ComponentHandler, loadResource, config, LoaderPluginManager, featureLoader, viewLoader, layoutLoader, inlineViewloader, coalaLayoutLoader, coalaFeatureLoader) ->
 
     # override marionette's template loader
