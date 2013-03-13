@@ -1,13 +1,14 @@
 .coala-viewport-header {
     height: 50px;
     border-bottom: 1px solid #BABABA;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 0 white inset;
     background: url('../images/header-bg.jpg') repeat-x;
-    background-image: -ms-linear-gradient(top, #F5F7F8 0%, #EAEEF0 100%);
-    background-image: -moz-linear-gradient(top, #F5F7F8 0%, #EAEEF0 100%);
-    background-image: -o-linear-gradient(top, #F5F7F8 0%, #EAEEF0 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #F5F7F8), color-stop(1, #EAEEF0));
-    background-image: -webkit-linear-gradient(top, #F5F7F8 0%, #EAEEF0 100%);
-    background-image: linear-gradient(to bottom, #F5F7F8 0%, #EAEEF0 100%);
+    background-image: -ms-linear-gradient(top, #F5F7F8, #EAEEF0);
+    background-image: -moz-linear-gradient(top, #F5F7F8, #EAEEF0);
+    background-image: -o-linear-gradient(top, #F5F7F8, #EAEEF0);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #F5F7F8), color-stop(0, #EAEEF0));
+    background-image: -webkit-linear-gradient(top, #F5F7F8, #EAEEF0);
+    background-image: linear-gradient(to bottom, #F5F7F8, #EAEEF0);
 }
 
 .coala-system-logo {
@@ -35,7 +36,7 @@
 
 .coala-viewport-footer {
     height: 120px;
-    background: url('../images/footer-bg.png') repeat-y;
+    background: url('../images/low-contrast-linen.png');
 }
 
 .coala-viewport-region {
@@ -102,7 +103,8 @@
 }
 
 .coala-taskbar-app-text {
-    color: #444;
+    color: #FFF;
+    text-shadow: 1px 1px 0 #3D4146;
     line-height: 18px;
     height: 36px;
     width: 100%;
