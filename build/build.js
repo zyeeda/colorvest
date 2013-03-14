@@ -1,7 +1,6 @@
 ({
     baseUrl: '../',
     out: 'coala/coala.js',
-    optimize: 'none',
     preserveLicenseComments: false,
     paths: {
         text: 'coala/vendors/require/plugins/text',

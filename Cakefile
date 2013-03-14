@@ -34,6 +34,10 @@ task 'build', 'Build', (options) ->
         cd build &&
         mkdir -p coala/vendors &&
         cp -R ../coala/themes coala/ &&
+        cd coala/themes/default &&
+        r.js -o cssIn=main.css out=main-build.css &&
+        rm main.css && cleancss -o main.css main-build.css &&
+        rm main-build.css && cd - &&
         cp ../coala/vendors/modernizr.js coala/vendors/ &&
         cp ../coala/vendors/html5shiv.js coala/vendors/ &&
         cp ../coala/require-config.js coala/ &&
