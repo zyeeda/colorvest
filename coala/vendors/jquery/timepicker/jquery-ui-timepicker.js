@@ -3,12 +3,12 @@
 * By: Trent Richardson [http://trentrichardson.com]
 * Version 0.9.7
 * Last Modified: 10/02/2011
-* 
+*
 * Copyright 2011 Trent Richardson
 * Dual licensed under the MIT and GPL licenses.
 * http://trentrichardson.com/Impromptu/GPL-LICENSE.txt
 * http://trentrichardson.com/Impromptu/MIT-LICENSE.txt
-* 
+*
 * HERES THE CSS:
 * .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
 * .ui-timepicker-div dl { text-align: left; }
@@ -133,7 +133,7 @@
             _newInst: function($input, o) {
                 var tp_inst = new Timepicker(),
                     inlineSettings = {};
-                    
+
                 for (var attrName in this._defaults) {
                     var attrValue = $input.attr('time:' + attrName);
                     if (attrValue) {
@@ -188,7 +188,7 @@
                     tp_inst.$altInput = $(o.altField)
                         .css({ cursor: 'pointer' })
                         .focus(function(){ $input.trigger("focus"); });
-                
+
                 if(tp_inst._defaults.minDate==0 || tp_inst._defaults.minDateTime==0)
                 {
                     tp_inst._defaults.minDate=new Date();
@@ -197,7 +197,7 @@
                 {
                     tp_inst._defaults.maxDate=new Date();
                 }
-                
+
                 // datepicker needs minDate/maxDate, timepicker needs minDateTime/maxDateTime..
                 if(tp_inst._defaults.minDate !== undefined && tp_inst._defaults.minDate instanceof Date)
                     tp_inst._defaults.minDateTime = new Date(tp_inst._defaults.minDate.getTime());
@@ -215,7 +215,7 @@
             //########################################################################
             _addTimePicker: function(dp_inst) {
                 var currDT = (this.$altInput && this._defaults.altFieldTimeOnly) ?
-                        this.$input.val() + ' ' + this.$altInput.val() : 
+                        this.$input.val() + ' ' + this.$altInput.val() :
                         this.$input.val();
 
                 this.timeDefined = this._parseTime(currDT);
@@ -249,7 +249,7 @@
                     var specials = new RegExp("[.*+?|()\\[\\]{}\\\\]", "g");
                     regstr = '.{' + dp_dateFormat.length + ',}' + this._defaults.separator.replace(specials, "\\$&") + regstr;
                 }
-                
+
                 treg = timeString.match(new RegExp(regstr, 'i'));
 
                 if (treg) {
@@ -297,7 +297,7 @@
                         }
                         this.timezone = tz;
                     }
-                    
+
                     return true;
 
                 }
@@ -751,7 +751,7 @@
 
             },
 
-            
+
             //########################################################################
             // when a slider moves, set the internal time...
             // on time change is also called when the time is updated in the text field
@@ -784,7 +784,7 @@
                         || (this.ampm.length > 0
                             && (hour < 12) != ($.inArray(this.ampm.toUpperCase(), this.amNames) !== -1))
                         || timezone != this.timezone);
-                
+
                 if (hasChanged) {
 
                     if (hour !== false)this.hour = hour;
@@ -792,21 +792,21 @@
                     if (second !== false) this.second = second;
                     if (millisec !== false) this.millisec = millisec;
                     if (timezone !== false) this.timezone = timezone;
-                    
+
                     if (!this.inst) this.inst = $.datepicker._getInst(this.$input[0]);
-                    
+
                     this._limitMinMaxDateTime(this.inst, true);
                 }
                 if (o.ampm) this.ampm = ampm;
-                
+
                 this._formatTime();
                 if (this.$timeObj) this.$timeObj.text(this.formattedTime + o.timeSuffix);
                 this.timeDefined = true;
                 if (hasChanged) this._updateDateTime();
             },
-            
+
             //########################################################################
-            // call custom onSelect. 
+            // call custom onSelect.
             // bind to sliders slidestop, and grid click.
             //########################################################################
             _onSelectHandler: function() {
@@ -890,7 +890,7 @@
                 } else {
                     this.$input.val(formattedDateTime);
                 }
-                
+
                 this.$input.trigger("change");
             }
 
@@ -920,9 +920,9 @@
                 tmp_args = arguments;
 
                 if (typeof(o) == 'string'){
-                    if(o == 'getDate') 
+                    if(o == 'getDate')
                         return $.fn.datepicker.apply($(this[0]), tmp_args);
-                    else 
+                    else
                         return this.each(function() {
                             var $t = $(this);
                             $t.datepicker.apply($t, tmp_args);
@@ -940,6 +940,7 @@
         // the bad hack :/ override datepicker so it doesnt close on select
         // inspired: http://stackoverflow.com/questions/1252512/jquery-datepicker-prevent-closing-picker-when-clicking-a-date/1762378#1762378
         //########################################################################
+        console.log('ooooooo', $.datapicker);
         $.datepicker._base_selectDate = $.datepicker._selectDate;
         $.datepicker._selectDate = function (id, dateStr) {
             var inst = this._getInst($(id)[0]),
@@ -974,9 +975,9 @@
             }
 
             if (typeof(inst.stay_open) !== 'boolean' || inst.stay_open === false) {
-                        
+
                 this._base_updateDatepicker(inst);
-                
+
                 // Reload the time control when changing something in the input text field.
                 var tp_inst = this._get(inst, 'timepicker');
                 if(tp_inst) tp_inst._addTimePicker(inst);
@@ -1014,7 +1015,7 @@
                     return event.ctrlKey || (chr < ' ' || !dateChars || datetimeChars.indexOf(chr) > -1);
                 }
             }
-            
+
             return $.datepicker._base_doKeyPress(event);
         };
 
@@ -1061,7 +1062,7 @@
                 tp_inst.timezone_select.val(tzoffset);
             }
             this._setTime(inst, now);
-            $( '.ui-datepicker-today', $dp).click(); 
+            $( '.ui-datepicker-today', $dp).click();
         };
 
         //#######################################################################################
@@ -1206,7 +1207,7 @@
             {
                 if(day)
                     var b = this._base_formatDate(inst, day, month, year);
-                tp_inst._updateDateTime();	
+                tp_inst._updateDateTime();
                 return tp_inst.$input.val();
             }
             return this._base_formatDate(inst);
@@ -1243,7 +1244,7 @@
                         min=new Date();
                     else
                         min= new Date(min);
-                    
+p
                     tp_inst._defaults.minDate = min;
                     tp_inst._defaults.minDateTime = min;
                 } else if (max){ //if max was set
@@ -1277,4 +1278,3 @@
     });
 
 })(jQuery);
-

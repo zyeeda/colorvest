@@ -1,4 +1,7 @@
-define
+define [
+    'coala/features/home/__handlers__/viewport'
+    'text!coala/features/home/templates.html'
+    ], ->
     layout:
         regions:
             viewport: 'viewportRegion'
