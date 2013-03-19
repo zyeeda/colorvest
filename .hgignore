@@ -18,5 +18,6 @@ core/**.js
 features/**.js
 layouts/**.js
 scaffold/**.js
+build/coala/*
 
 syntax: regexp

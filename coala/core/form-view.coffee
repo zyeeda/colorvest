@@ -141,13 +141,13 @@ define [
                 rules: @options.validation.rules
                 messages: @options.validation.messages
                 errorPlacement: (error, element) ->
-                    elPos = $(element).position()
-                    #$(error).addClass 'label label-important'
+                    $el = $ element
+                    elPos = $el.position()
                     $(error).css
                         color: '#CC0000'
                         position: 'absolute'
-                        top: elPos.top + $(element).outerHeight()
-                        left: elPos.left
+                        top: elPos.top + $el.outerHeight()
+                        right: $el.parents('.modal-body').outerWidth() - elPos.left - $el.outerWidth()
                     $(error).insertAfter element
                 highlight: (label) ->
                     $(label).closest('.control-group').addClass('error')
