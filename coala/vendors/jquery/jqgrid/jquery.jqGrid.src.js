@@ -1878,7 +1878,7 @@ $.fn.jqGrid = function( pin ) {
                     endReq();
                 break;
                 case "collection":
-                    var filters, _filters, i, f, collection, data;
+                    var filters, _filters = [], i, f, collection, data;
 
                     beginReq();
 
@@ -1903,8 +1903,11 @@ $.fn.jqGrid = function( pin ) {
                                 value: f.data
                             });
                         }
-                        op.data['_filters'] = JSON.stringify(_filters);
                     }
+                    if(op.data.defaultFilters) {
+                        _filters = _filters.concat(op.data.defaultFilters);
+                    }
+                    op.data['_filters'] = JSON.stringify(_filters);
 
                     delete op.data.page;
                     delete op.data.rows;
@@ -1943,7 +1946,7 @@ $.fn.jqGrid = function( pin ) {
                     });
                 break;
                 case "tree-table-collection":
-                    var filters, _filters, i, f, collection, data, rs,
+                    var filters, _filters = [], i, f, collection, data, rs,
                     processRecords = function(records, parent, level, results) {
                         var r, record, rs, _i, _j, _k, _len, _len1, _len2, _ref, _results;
                         rs = [];
@@ -2005,8 +2008,11 @@ $.fn.jqGrid = function( pin ) {
                                 value: f.data
                             });
                         }
-                        op.data['_filters'] = JSON.stringify(_filters);
                     }
+                    if(op.data.defaultFilters) {
+                        _filters = _filters.concat(op.data.defaultFilters);
+                    }
+                    op.data['_filters'] = JSON.stringify(_filters);
 
                     delete op.data.page;
                     delete op.data.rows;
