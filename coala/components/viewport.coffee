@@ -14,8 +14,8 @@ define [
             @homepageFeaturePath = options.homepageFeaturePath
 
             footerEl = options.el
-            @pinWrapper = footerEl.children '.coala-taskbar-pin'
-            carouselWrapper = footerEl.children '.coala-taskbar-carousel'
+            @pinWrapper = footerEl.children '.c-taskbar-pin'
+            carouselWrapper = footerEl.children '.c-taskbar-carousel'
             carouselContainer = carouselWrapper.children 'ul'
 
             carouselContainer.carouFredSel
@@ -24,9 +24,9 @@ define [
                 auto: false
                 align: 'left'
                 prev:
-                    button: carouselWrapper.children('.coala-taskbar-prev')
+                    button: carouselWrapper.children('.c-taskbar-prev')
                 next:
-                    button: carouselWrapper.children('.coala-taskbar-next')
+                    button: carouselWrapper.children('.c-taskbar-next')
                 height: footerEl.height()
                 onCreate: ->
                     $(window).on 'resize', ->
@@ -38,15 +38,15 @@ define [
 
         add: (feature) ->
             if feature.path() is @homepageFeaturePath
-                homepageEntry = @pinWrapper.find '.coala-taskbar-show-homepage'
+                homepageEntry = @pinWrapper.find '.c-taskbar-show-homepage'
                 homepageEntry.attr 'data-feature-id', feature.cid
             else
                 _.extend feature.startupOptions, @defaultStartupOptionMap[feature.path()]
                 item = $ """
                 <li data-feature-id="#{feature.cid}">
-                    <div class="coala-taskbar-app-icon #{feature.startupOptions.iconClass}"></div>
-                    <div class="coala-taskbar-app-text">#{feature.startupOptions.name}</div>
-                    <div class="coala-taskbar-app-remove coala-icon-close"></div>
+                    <div class="c-taskbar-app-icon #{feature.startupOptions.iconClass}"></div>
+                    <div class="c-taskbar-app-text">#{feature.startupOptions.name}</div>
+                    <div class="c-taskbar-app-remove c-icon-close"></div>
                 </li>
                 """
                 @carouselContainer.trigger 'insertItem', [item]
@@ -128,8 +128,8 @@ define [
         defaultOptions = {}
         options = _.extend defaultOptions, options
 
-        mainEl = el.children '.coala-viewport-content'
-        footerEl = el.children '.coala-viewport-footer'
+        mainEl = el.children '.c-viewport-content'
+        footerEl = el.children '.c-viewport-footer'
 
         featureBar = new FeatureBar
             el: footerEl
@@ -167,7 +167,7 @@ define [
             createFeatureContainer: (feature) ->
                 # hide current feature first to prevent scrollbar to display
                 featureWindow.hideCurrent()
-                container = $ "<div data-feature-id='#{feature.cid}' class='coala-viewport-feature'></div>"
+                container = $ "<div data-feature-id='#{feature.cid}' class='c-viewport-feature'></div>"
                 featureWindow.add container
                 container
 
@@ -175,7 +175,7 @@ define [
             $this = $ @
             $target = $ event.target
 
-            if $target.hasClass 'coala-taskbar-app-remove'
+            if $target.hasClass 'c-taskbar-app-remove'
                 featureId = $this.attr 'data-feature-id'
                 feature = featureRegistry.get featureId
                 view.feature.trigger 'viewport:close-feature', view, feature

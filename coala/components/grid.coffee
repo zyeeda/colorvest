@@ -43,7 +43,7 @@ define [
         obj.component = el
 
         if options.fit
-            el.addClass 'coala-jqgrid-fit'
+            el.addClass 'c-jqgrid-fit'
             cbGrid.resizeToFit el
 
         el

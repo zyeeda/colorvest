@@ -26,7 +26,7 @@ define [
             @cols
 
         getTemplateString: -> '''
-            <fieldset id="<%= containerId %>">
+            <fieldset id="<%= containerId %>" class="c-form-group-cols-<%= columns %>">
                 <% if (label) { %>
                 <legend><%= label %></legend>
                 <% } %>
@@ -78,7 +78,11 @@ define [
                         row = []
                     if (i + 1) is @fields.length and row.length is 1
                         contents.push @getRowTemplate(2) field1: row[0], field2: '<div class="control-group"></div>'
-            _.template(@getTemplateString()) label: @options.label, groupContent: contents.join(''), containerId: @containerId
+            _.template(@getTemplateString())
+                label: @options.label,
+                groupContent: contents.join(''),
+                containerId: @containerId
+                columns: @getColumns()
 
         getHiddenFieldsTemplate: ->
             (field.getTemplate() for field in @hiddenFields).join ''

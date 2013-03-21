@@ -148,6 +148,9 @@ define [
                             @deferredStart.resolve @ if _.all(vs, (r) -> !!rd[r])
                         , @, region, views, rendered)
                         @layout[region].show view
+
+            @deferredStart.done _.bind @onStart, @ if @onStart
+
             @deferredStart.promise()
 
         genEventName: (eventName) ->

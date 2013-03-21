@@ -1,21 +1,21 @@
 {{#layout}}
-<div id="viewportRegion" class="coala-viewport-region"></div>
+<div id="viewportRegion" class="c-viewport-region"></div>
 {{/layout}}
 
 {{#view "viewport"}}
-<div id="viewport" class="coala-viewport">
-    <div class="navbar navbar-fixed-top coala-viewport-header">
+<div id="viewport" class="c-viewport">
+    <div class="navbar navbar-fixed-top c-viewport-header">
         {{#if settings.application-logo}}
-        <img class="coala-system-logo" src="{{settings.application-logo}}" alt="Application Logo" />
+        <img class="c-system-logo" src="{{settings.application-logo}}" alt="Application Logo" />
         {{else}}
-        <img class="coala-system-logo" src="scripts/coala/themes/default/assets/images/zyeeda-logo.png" alt="Application Logo" />
+        <img class="c-system-logo" src="scripts/coala/themes/default/assets/images/zyeeda-logo.png" alt="Application Logo" />
         {{/if}}
         {{#if settings.application-name}}
-        <div class="coala-system-name">{{settings.application-name}}</div>
+        <div class="c-system-name">{{settings.application-name}}</div>
         {{else}}
-        <div class="coala-system-name">Zyeeda Coala Drivebox</div>
+        <div class="c-system-name">Zyeeda Coala Drivebox</div>
         {{/if}}
-        <div class="coala-global-feature">
+        <div class="c-global-feature">
             <div class="btn-group">
                 <button class="btn"><i class="icon-user" />&nbsp;tangrui</button>
                 <button class="btn"><i class="icon-th" /></button>
@@ -24,26 +24,26 @@
         </div>
     </div>
 
-    <div class="coala-viewport-content">
+    <div class="c-viewport-content">
     </div>
 
-    <div class="navbar navbar-fixed-bottom coala-viewport-footer">
-        <div class="coala-taskbar-pin">
+    <div class="navbar navbar-fixed-bottom c-viewport-footer">
+        <div class="c-taskbar-pin">
             <ul>
-                <li id="launcherEntry" class="coala-taskbar-show-launcher">
-                    <div class="coala-taskbar-app-icon coala-icon-cydia" />
-                    <div class="coala-taskbar-app-text">所有应用</div>
+                <li id="launcherEntry" class="c-taskbar-show-launcher">
+                    <div class="c-taskbar-app-icon c-icon-cydia" />
+                    <div class="c-taskbar-app-text">所有应用</div>
                 </li>
-                <li id="homepageEntry" class="coala-taskbar-show-homepage">
-                    <div class="coala-taskbar-app-icon coala-icon-compass" />
-                    <div class="coala-taskbar-app-text">首页</div>
+                <li id="homepageEntry" class="c-taskbar-show-homepage">
+                    <div class="c-taskbar-app-icon c-icon-compass" />
+                    <div class="c-taskbar-app-text">首页</div>
                 </li>
             </ul>
         </div>
-        <div class="coala-taskbar-carousel">
+        <div class="c-taskbar-carousel">
             <ul></ul>
-            <a href="javascript:void(0);" class="coala-taskbar-prev"><i class="icon-chevron-left"></i></a>
-            <a href="javascript:void(0);" class="coala-taskbar-next"><i class="icon-chevron-right"></i></a>
+            <a href="javascript:void(0);" class="c-taskbar-prev"><i class="icon-chevron-left"></i></a>
+            <a href="javascript:void(0);" class="c-taskbar-next"><i class="icon-chevron-right"></i></a>
         </div>
     </div>
 </div>

@@ -1,0 +1,14 @@
+/* for build */
+
+@import url('css/jquery/ui/jquery-ui-custom.css');
+@import url('css/jquery/layout/layout-default.css');
+@import url('css/jquery/layout/fix.css');
+@import url('css/jquery/jqgrid/ui.jqgrid.css');
+@import url('css/jquery/jqgrid/jqGrid.bootstrap.css');
+@import url('css/jquery/ztree/zTreeStyle.css');
+@import url('css/jquery/ztree/fix.css');
+@import url('css/jquery/select2/select2.css');
+@import url('css/jquery/pnotify/jquery.pnotify.default.css');
+@import url('css/jquery/daterangepicker/daterangepicker.css');
+@import url('css/bootstrap.css');
+@import url('css/bootstrap-responsive.css');

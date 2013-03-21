@@ -31,12 +31,12 @@ define [
         o.container.click ->
             o.hide()
 
-        $('.coala-launcher-box', o.bottom).click (e) ->
+        $('.c-launcher-box', o.bottom).click (e) ->
             e.stopPropagation()
             p = $(@).parent()
             o.showTop p
 
-        $('.coala-launcher-top-row-item', o.top).click ->
+        $('.c-launcher-top-row-item', o.top).click ->
             return if block.length isnt 0
 
             id = $(@).attr 'id'
@@ -103,7 +103,7 @@ define [
 
         if o.activeFolder
             deactive o.activeFolder
-            deactive $('.coala-launcher-arrow', o.activeFolder)
+            deactive $('.c-launcher-arrow', o.activeFolder)
             delete o.activeFolder
         if o.activeContent
             deactive o.activeContent
@@ -114,16 +114,16 @@ define [
 
         if o.activeFolder
             deactive o.activeFolder
-            deactive $('.coala-launcher-arrow', o.activeFolder)
+            deactive $('.c-launcher-arrow', o.activeFolder)
             active o.arrowHelper
             transition ->
-                o.arrowHelper.css 'left', $('.coala-launcher-arrow', p).position().left
+                o.arrowHelper.css 'left', $('.c-launcher-arrow', p).position().left
             , ->
-                active $('.coala-launcher-arrow', p)
+                active $('.c-launcher-arrow', p)
                 deactive o.arrowHelper
         else
-            o.arrowHelper.css 'left', $('.coala-launcher-arrow', p).position().left
-            active $('.coala-launcher-arrow', p)
+            o.arrowHelper.css 'left', $('.c-launcher-arrow', p).position().left
+            active $('.c-launcher-arrow', p)
 
         o.activeFolder = active p
 
@@ -153,37 +153,37 @@ define [
         o.activeContent = content
 
     template = Handlebars.compile '''
-        <div class="coala-launcher-container" id="{{id}}">
-          <div class="coala-launcher-top">
-            <div class="coala-launcher-top-shadow"></div>
-            <div class="coala-launcher-top-helper"/>
+        <div class="c-launcher-container" id="{{id}}">
+          <div class="c-launcher-top">
+            <div class="c-launcher-top-shadow"></div>
+            <div class="c-launcher-top-helper"/>
             {{#each folders}}
-            <div class="coala-launcher-top-content" id="c-{{id}}">
+            <div class="c-launcher-top-content" id="c-{{id}}">
                 {{#each rows}}
-                <div class="coala-launcher-top-row">
-                    <div class="coala-launcher-top-row-title">{{name}}</div>
-                    <div class="coala-launcher-top-row-items">
+                <div class="c-launcher-top-row">
+                    <div class="c-launcher-top-row-title">{{name}}</div>
+                    <div class="c-launcher-top-row-items">
                     {{#each items}}
-                        <div class="coala-launcher-top-row-item" id="{{id}}">
-                            <div class="coala-launcher-top-row-item-icon {{iconClass}}-small">{{icon}}</div>
-                            <div class="coala-launcher-top-row-item-label">{{name}}</div>
+                        <div class="c-launcher-top-row-item" id="{{id}}">
+                            <div class="c-launcher-top-row-item-icon {{iconClass}}-small">{{icon}}</div>
+                            <div class="c-launcher-top-row-item-label">{{name}}</div>
                         </div>
                     {{/each}}
                     </div>
-                    <div class="coala-launcher-clear"></div>
+                    <div class="c-launcher-clear"></div>
                 </div>
                 {{/each}}
             </div>
             {{/each}}
           </div>
-          <div class="coala-launcher-bottom">
-            <div class="coala-launcher-arrow-helper"/>
+          <div class="c-launcher-bottom">
+            <div class="c-launcher-arrow-helper"/>
             {{#each folders}}
-            <div class="coala-launcher-folder" id="{{id}}">
-              <div class="coala-launcher-arrow"/>
-              <div class="coala-launcher-box">
-                <div class="coala-launcher-icon {{iconClass}}">{{icon}}</div>
-                <div class="coala-launcher-label">{{name}}</div>
+            <div class="c-launcher-folder" id="{{id}}">
+              <div class="c-launcher-arrow"/>
+              <div class="c-launcher-box">
+                <div class="c-launcher-icon {{iconClass}}">{{icon}}</div>
+                <div class="c-launcher-label">{{name}}</div>
               </div>
             </div>
             {{/each}}
@@ -197,27 +197,27 @@ define [
         t = template options
 
         $(t).appendTo($(document.body))
-        $('<div id="' + id + '-helper" class="coala-launcher-helper"/>').appendTo($(document.body))
+        $('<div id="' + id + '-helper" class="c-launcher-helper"/>').appendTo($(document.body))
 
         container = $('#' + id)
-        top = $('.coala-launcher-top', container)
-        bottom = $('.coala-launcher-bottom', container)
+        top = $('.c-launcher-top', container)
+        bottom = $('.c-launcher-bottom', container)
         helper = $('#' + id + '-helper')
         result =
             container: container
             top: top
             bottom: bottom
             helper: helper
-            topHelper: $('.coala-launcher-top-helper', top)
-            arrowHelper: $('.coala-launcher-arrow-helper', bottom)
+            topHelper: $('.c-launcher-top-helper', top)
+            arrowHelper: $('.c-launcher-arrow-helper', bottom)
             contentHeights: {}
-        $('.coala-launcher-top-content', result.top).appendTo result.helper
-        $('.coala-launcher-top-content', result.helper).each ->
+        $('.c-launcher-top-content', result.top).appendTo result.helper
+        $('.c-launcher-top-content', result.helper).each ->
             me = $ @
             active me
             result.contentHeights[me.attr('id')] = me.height() + 40
             deactive me
 
-        $('.coala-launcher-top-content', result.helper).appendTo result.top
+        $('.c-launcher-top-content', result.helper).appendTo result.top
 
         result;
