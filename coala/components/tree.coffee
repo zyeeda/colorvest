@@ -59,8 +59,9 @@ define [
                 tree = $.fn.zTree.getZTreeObj treeId
                 idName = simpleData.idKey or 'id'
                 id = if d is null then (if options.parentValueOfRoot then options.parentValueOfRoot else false) else d[idName]
-
-                $.when(view.collection.fetch data: {parent: id}).done ->
+                filters = if id then [{name: 'parent.id', operator: 'eq', value: id}] else [{name: 'parent', operator: 'isNull'}]
+                $.when(view.collection.fetch data: {_filters: JSON.stringify(filters)}).done (data) ->
+                # $.when(view.collection.fetch data: {parent: id}).done ->
                     addTreeData tree, options, view.collection.toJSON(), d, isParent: true
             callback.beforeExpand = beforeExpand
 
