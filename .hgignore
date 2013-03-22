@@ -21,6 +21,6 @@ scaffold/**.js
 build/coala/*
 build/spacelab/*
 node_modules/
-coala/themes/spacelab/css/*.css
+coala/themes/spacelab/css/bootstrap*.css
 
 syntax: regexp
