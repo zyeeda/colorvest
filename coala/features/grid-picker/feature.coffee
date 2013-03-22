@@ -3,14 +3,19 @@ define [
     'text!coala/features/grid-picker/templates.html'
 ], ->
 
-    layout: "coala:one-region"
+    layout:
+        regions:
+            main: 'pickerFieldRegion'
+
     views: [
         name: "inline:grid-picker-field"
-        events:
-            "click show-picker": "showPicker"
         region: "main"
+        events:
+            "click showPickerBtn": "showPicker"
     ]
-    avoidLoadingModel: true
+
     extend:
         initRenderTarget: ->
             @container = @startupOptions.el
+
+    avoidLoadingModel: true
