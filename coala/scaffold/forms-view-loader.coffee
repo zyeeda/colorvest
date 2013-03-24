@@ -72,9 +72,6 @@ define [
     fn: (module, feature, viewName, args) ->
         deferred = $.Deferred()
         feature.request url:'configuration/forms/' + viewName, success: (data) ->
-            ###
-            dialogClass: if columns is 2 then 'two-column-dialog' else 'one-column-dialog'
-            ###
             def = _.extend
                 baseName: viewName
                 module: module
@@ -88,8 +85,8 @@ define [
                 tabs: data.tabs
 
             view = new FormView def
-            #view.options.dialogClass = "c-form-size-#{view.options.size}" if view.options.size?
-            #view.options.dialogClass = if view.getMaxColumns() is 2 then 'c-double-column-modal' else 'c-single-column-modal'
+            view.options.size or= 'large'
+            view.options.dialogClass = "c-form-size-#{view.options.size}"
             view.eventHandlers.formStatusChanged = (e) ->
                 scaffold = @feature.options.scaffold or {}
                 fsc = scaffold.handlers?.formStatusChanged
