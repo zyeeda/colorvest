@@ -1,14 +1,31 @@
-.c-taskbar-app-text {
-    color: #FFF;
-    text-shadow: 1px 1px 0 #3D4146;
-    line-height: 18px;
-    height: 36px;
-    width: 100%;
-    overflow: hidden;
+.c-viewport-region {
+    height: 100%;
+    min-height: 100%;
 }
 
-.c-taskbar-pin {
-    margin: 5px 20px 0 20px;
+.c-viewport {
+    height: 100%;
+}
+
+.c-viewport-header {
+    height: 50px;
+    background: url('../img/header-bg.png') repeat-x;
+}
+
+.c-system-logo {
+    display: block;
+    float: left;
+    height: 50px;
+    width: 150px;
+    margin-left: 15px;
+}
+
+.c-system-name {
+    float: left;
+    margin-left: 10px;
+    margin-top: 20px;
+    font-size: 23px;
+    color: #FFF;
 }
 
 .c-global-feature {
@@ -17,114 +34,52 @@
     margin-top: 5px;
 }
 
-.c-system-name {
-    float: left;
-    margin-left: 15px;
-    margin-top: 20px;
-    font-size: 23px;
-    color: #605956;
-}
-
-.c-taskbar-app-icon {
-    height: 60px;
-    width: 60px;
-    position: relative;
-    left: 50%;
-    margin: 10px 0 5px -29px;
-    background: url('../img/default-app-icon.png') no-repeat;
-}
-
-.c-taskbar-carousel-icon {
-    width: 70px;
-    position: relative;
-    left: 50%;
-    margin-left: -35px;
+.c-viewport-content {
+    position: absolute;
+    width: 100%;
+    top: 50px;
+    bottom: 90px;
+    overflow: auto;
 }
 
 .c-viewport-feature {
     height: 100%;
 }
 
-.c-system-logo {
-    display: block;
-    float: left;
-    height: 38px;
-    width: 128px;
-    margin-top: 6px;
-    margin-left: 15px;
+.c-viewport-footer {
+    height: 90px;
+    background: url('../img/footer-bg.png') repeat-x;
 }
 
-.c-taskbar-pin li,
-.c-taskbar-carousel li {
-    display: block;
-    float: left;
-    list-style: none outside none;
-    text-align: center;
-    font-size: 13px;
-    width: 80px;
-    cursor: pointer;
-}
-
-.c-taskbar-pin ul,
-.c-taskbar-carousel ul {
+.c-taskbar ul {
     margin: 0;
     padding: 0;
 }
 
-.c-viewport-region {
-    height: 100%;
-    min-height: 100%;
-}
-
-.c-taskbar-app-remove {
-    height: 24px;
-    width: 24px;
-    position: relative;
-    top: -107px;
-    display: none;
-}
-
-.c-taskbar-prev,
-.c-taskbar-next {
+.c-taskbar li {
     display: block;
-    width: 15px;
-    height: 21px;
-    margin-top: -10px;
-    position: absolute;
-    top: 50%;
+    padding-top: 15px;
+    float: left;
+    list-style: none outside none;
+    text-align: center;
+    font-size: 13px;
+    width: 89px;
+    height: 90px;
+    margin-right: 1px; /* This is very important to force the carousel container to fit the li's width with shadow. */
+    border-right: 1px solid #414141;
+    box-shadow: 1px 0 0 0 #303030;
+    cursor: pointer;
+    color: #FFF;
+    &:hover {
+        background: url('../img/footer-hover.png') repeat-x;
+    }
+    &.c-taskbar-app-selected {
+        background: url('../img/footer-selected.png') repeat-x;
+    }
 }
 
-.c-taskbar-prev {
-    left: 10px;
-}
-
-.c-viewport-content {
-    position: absolute;
-    width: 100%;
-    top: 50px;
-    bottom: 120px;
-    overflow: auto;
-}
-
-.c-viewport {
-    height: 100%;
-}
-
-.c-taskbar-next {
-    right: 10px;
-}
-
-.c-viewport-header {
-    height: 50px;
-    border-bottom: 1px solid #BABABA;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 0 white inset;
-    background: url('../img/header-bg.jpg') repeat-x;
-    background-image: -ms-linear-gradient(top, #F5F7F8, #EAEEF0);
-    background-image: -moz-linear-gradient(top, #F5F7F8, #EAEEF0);
-    background-image: -o-linear-gradient(top, #F5F7F8, #EAEEF0);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #F5F7F8), color-stop(0, #EAEEF0));
-    background-image: -webkit-linear-gradient(top, #F5F7F8, #EAEEF0);
-    background-image: linear-gradient(to bottom, #F5F7F8, #EAEEF0);
+.c-taskbar-pin {
+    margin: 0px 20px 0 0;
 }
 
 .c-taskbar-carousel {
@@ -142,7 +97,47 @@
     }
 }
 
-.c-viewport-footer {
-    height: 120px;
-    background: url('../img/low-contrast-linen.png');
+.c-taskbar-prev,
+.c-taskbar-next {
+    display: block;
+    width: 15px;
+    height: 21px;
+    margin-top: -10px;
+    position: absolute;
+    top: 50%;
 }
+
+.c-taskbar-prev {
+    left: 10px;
+}
+
+.c-taskbar-next {
+    right: 10px;
+}
+
+.c-taskbar .c-icon-image {
+    width: 36px;
+    height: 36px;
+    background-size: 36px 36px;
+}
+
+.c-taskbar-app-icon {
+    position: relative;
+    margin-bottom: 6px;
+    font-size: 36px;
+}
+
+.c-taskbar-app-text {
+    width: 100%;
+    height: 18px;
+    line-height: 18px;
+    overflow: hidden;
+}
+
+.c-taskbar-app-remove {
+    height: 24px;
+    width: 24px;
+    position: relative;
+    top: -75px;
+}
+

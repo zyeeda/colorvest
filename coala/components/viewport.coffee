@@ -4,7 +4,7 @@ define [
     'coala/vendors/jquery/jquery.carouFredSel'
 ], (_, coala) ->
 
-    class FeatureBar
+    class TaskBar
 
         constructor: (options) ->
             @defaultStartupOptionMap = {}
@@ -13,9 +13,28 @@ define [
 
             @homepageFeaturePath = options.homepageFeaturePath
 
-            footerEl = options.el
-            @pinWrapper = footerEl.children '.c-taskbar-pin'
-            carouselWrapper = footerEl.children '.c-taskbar-carousel'
+            @footerEl = options.el
+            @footerEl.html '''
+                <div class="c-taskbar c-taskbar-pin">
+                    <ul>
+                        <li id="launcherEntry" class="c-taskbar-show-launcher">
+                            <i class="c-taskbar-app-icon icon-globe"></i>
+                            <div class="c-taskbar-app-text">所有应用</div>
+                        </li>
+                        <li id="homepageEntry" class="c-taskbar-show-homepage c-taskbar-app-selected">
+                            <i class="c-taskbar-app-icon icon-cloud"></i>
+                            <div class="c-taskbar-app-text">首页</div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="c-taskbar c-taskbar-carousel">
+                    <ul></ul>
+                    <a href="javascript:void 0;" class="c-taskbar-prev"><i class="icon-chevron-left"></i></a>
+                    <a href="javascript:void 0;" class="c-taskbar-next"><i class="icon-chevron-right"></i></a>
+                </div>
+            '''
+            @pinWrapper = @footerEl.children '.c-taskbar-pin'
+            carouselWrapper = @footerEl.children '.c-taskbar-carousel'
             carouselContainer = carouselWrapper.children 'ul'
 
             carouselContainer.carouFredSel
@@ -27,7 +46,6 @@ define [
                     button: carouselWrapper.children('.c-taskbar-prev')
                 next:
                     button: carouselWrapper.children('.c-taskbar-next')
-                height: footerEl.height()
                 onCreate: ->
                     $(window).on 'resize', ->
                         carouselContainer.trigger 'updateSizes'
@@ -36,23 +54,32 @@ define [
 
             @carouselContainer = carouselContainer
 
+        _clearSelected: ->
+            @footerEl.find('.c-taskbar-app-selected').removeClass 'c-taskbar-app-selected'
+
         add: (feature) ->
             if feature.path() is @homepageFeaturePath
                 homepageEntry = @pinWrapper.find '.c-taskbar-show-homepage'
                 homepageEntry.attr 'data-feature-id', feature.cid
             else
+                @_clearSelected()
+
                 _.extend feature.startupOptions, @defaultStartupOptionMap[feature.path()]
                 item = $ """
-                <li data-feature-id="#{feature.cid}">
-                    <div class="c-taskbar-app-icon #{feature.startupOptions.iconClass}"></div>
+                <li data-feature-id="#{feature.cid}" class="c-taskbar-app-selected">
+                    <i class="c-taskbar-app-icon #{feature.startupOptions.iconClass}"></i>
                     <div class="c-taskbar-app-text">#{feature.startupOptions.name}</div>
-                    <div class="c-taskbar-app-remove c-icon-close"></div>
+                    <button class="close c-taskbar-app-remove">×</button>
                 </li>
                 """
                 @carouselContainer.trigger 'insertItem', [item]
 
         scrollTo: (featureId) ->
-            item = @carouselContainer.children "[data-feature-id=#{featureId}]"
+            @_clearSelected()
+
+            item = @pinWrapper.find "[data-feature-id=#{featureId}]"
+            item = @carouselContainer.children "[data-feature-id=#{featureId}]" if item.length is 0
+            item.addClass 'c-taskbar-app-selected'
             @carouselContainer.trigger 'slideTo', item
 
         remove: (featureId) ->
@@ -131,7 +158,7 @@ define [
         mainEl = el.children '.c-viewport-content'
         footerEl = el.children '.c-viewport-footer'
 
-        featureBar = new FeatureBar
+        featureBar = new TaskBar
             el: footerEl
             defaultFeatureStartupOptions: options.defaultFeatureStartupOptions
             homepageFeaturePath: options.homepageFeaturePath
@@ -184,5 +211,7 @@ define [
             featureId = $this.attr 'data-feature-id'
             if featureId?
                 viewport._showFeature featureId
+            else
+                view.feature.trigger 'viewport:show-launcher', view
 
         viewport

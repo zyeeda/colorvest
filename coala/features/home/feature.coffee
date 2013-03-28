@@ -1,7 +1,7 @@
 define [
     'coala/features/home/__handlers__/viewport'
     'text!coala/features/home/templates.html'
-    ], ->
+], ->
     layout:
         regions:
             viewport: 'viewportRegion'
@@ -11,7 +11,8 @@ define [
         region: 'viewport'
         events:
             'this#launcher:launch': 'launchApp'
-            'this#viewport:close-feature': 'closeFeature'
+            'this#viewport:close-feature': 'closeApp'
+            'this#viewport:show-launcher': 'showLauncher'
         components: [ ->
             type: 'launcher'
             selector: 'launcherEntry'
