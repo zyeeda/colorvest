@@ -85,13 +85,19 @@ define [
         remove: (featureId) ->
             me = @
             item = me.carouselContainer.children "[data-feature-id=#{featureId}]"
+            d = $.Deferred()
+
             if $.support.transition
                 item.one $.support.transition.end, ->
                     me.carouselContainer.trigger 'removeItem', item
+                    d.resolve()
+
                 item.css 'opacity', 0
-                item.css 'width', 0
             else
                 me.carouselContainer.trigger 'removeItem', item
+                d.resolve()
+
+            d.promise()
 
     class FeatureWindow
 
@@ -183,13 +189,14 @@ define [
                 featureWindow.showNext featureId
 
             closeFeature: (feature) ->
+                me = @
                 featureId = feature.cid
                 if featureRegistry.contains featureId
                     featureRegistry.remove featureId
-                    featureBar.remove featureId
-                    nextFeature = featureRegistry.pick()
-                    this._showFeature nextFeature.cid if nextFeature?
-                    featureWindow.remove featureId
+                    featureBar.remove(featureId).done ->
+                        nextFeature = featureRegistry.pick()
+                        me._showFeature nextFeature.cid if nextFeature?
+                        featureWindow.remove featureId
 
             createFeatureContainer: (feature) ->
                 # hide current feature first to prevent scrollbar to display

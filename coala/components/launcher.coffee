@@ -155,7 +155,7 @@ define [
     template = Handlebars.compile '''
         <div class="c-launcher-container" id="{{id}}">
           <div class="c-launcher-top">
-            <div class="c-launcher-top-shadow"></div>
+            <!--<div class="c-launcher-top-shadow"></div>-->
             <div class="c-launcher-top-helper"/>
             {{#each folders}}
             <div class="c-launcher-top-content" id="c-{{id}}">
@@ -165,7 +165,7 @@ define [
                     <div class="c-launcher-top-row-items">
                     {{#each items}}
                         <div class="c-launcher-top-row-item" id="{{id}}">
-                            <div class="c-launcher-top-row-item-icon {{iconClass}}-small">{{icon}}</div>
+                            <i class="c-launcher-top-row-item-icon {{iconClass}}">{{icon}}</i>
                             <div class="c-launcher-top-row-item-label">{{name}}</div>
                         </div>
                     {{/each}}
@@ -182,7 +182,7 @@ define [
             <div class="c-launcher-folder" id="{{id}}">
               <div class="c-launcher-arrow"/>
               <div class="c-launcher-box">
-                <div class="c-launcher-icon {{iconClass}}">{{icon}}</div>
+                <i class="c-launcher-icon {{iconClass}}">{{icon}}</i>
                 <div class="c-launcher-label">{{name}}</div>
               </div>
             </div>
@@ -220,4 +220,4 @@ define [
 
         $('.c-launcher-top-content', result.helper).appendTo result.top
 
-        result;
+        result

@@ -35,6 +35,7 @@
 }
 
 .c-viewport-content {
+    background: url('../img/bgnoise.png');
     position: absolute;
     width: 100%;
     top: 50px;
@@ -85,13 +86,15 @@
 .c-taskbar-carousel {
     margin-top: 0;
     li {
-        -webkit-transition: width .5s, opacity .5s;
-        -moz-transition: width .5s, opacity .5s;
-        -o-transition: width .5s, opacity .5s;
-        transition: width .5s, opacity .5s;
+        -webkit-transition: opacity .3s;
+        -moz-transition: opacity .3s;
+        -o-transition: opacity .3s;
+        transition: opacity .3s;
         &:hover {
             .c-taskbar-app-remove {
                 display: block;
+                color: white;
+                opacity: 1;
             }
         }
     }
