@@ -7,6 +7,7 @@ define ['coala/core/view', 'underscore'], (View, _) ->
             gridOptions = _.extend(options.grid or {},
                 type: 'grid'
                 selector: 'grid'
+                fit: true
             ,
                 if options.multiple is true
                     multiselect: true
