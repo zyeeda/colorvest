@@ -208,6 +208,7 @@ define [
         getTabLiTemplate: -> _.template '''
             <li <% if (i == 0) {%>class="active" <%}%>><a data-target="<%= id %>" data-toggle="tab"><%= title %></a></li>
         '''
+
         getTabContentTemplate: -> _.template '''
             <div class="tab-pane <%if (i == 0) {%>active<%}%>" id="<%= id %>">
                 <%= content %>

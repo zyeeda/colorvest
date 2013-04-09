@@ -6,9 +6,10 @@ define [
         constructor: ->
             super
             @type = 'feature'
+            @height = @options.height
 
         getTemplateString: ->
-            '<div id="<%= id %>"></div>'
+            '<div id="<%= id %>" <% if (height) { %>style="height: <%= height %>;"<% } %>></div>'
 
         afterRender: ->
             app = @form.feature.module.getApplication()

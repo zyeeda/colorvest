@@ -15,6 +15,6 @@ define
     onLayoutResize: (x, ui) ->
         me = this
         $ui = if ui.jquery then ui else $ ui.panel
-        $ui.filter(':visible').find('.coala-jqgrid-fit:visible').each ->
+        $ui.filter(':visible').find('.c-jqgrid-fit:visible').each ->
             $grid = $ @
             me.resizeToFit $grid, $ui
