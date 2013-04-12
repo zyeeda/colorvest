@@ -35,16 +35,16 @@ define [
             @deferredCollection = @initCollection()
             @deferredView = @initViews()
 
-        initTemplate: ->
-            return null if @options.avoidLoadingTemplate is true
-            M.TemplateCache.get(@module.resolveResoucePath(@baseName + '/templates' + config.templateSuffix)).done (template) =>
-                @template = template
-
         initRenderTarget: ->
             target = @container or @options.container or @startupOptions.container or config.featureContainer
             target = target @ if _.isFunction target
             # in this case, target must be a selector or dom element or $element
             @container = target
+
+        initTemplate: ->
+            return null if @options.avoidLoadingTemplate is true
+            M.TemplateCache.get(@module.resolveResoucePath(@baseName + '/templates' + config.templateSuffix)).done (template) =>
+                @template = template
 
         initLayout: ->
             layout = @options.layout
@@ -58,27 +58,27 @@ define [
             deferred = $.Deferred()
 
             if @options.avoidLoadingModel is true
-                @modelDefinition = Model.extend feature: @
-                @model = new @modelDefinition()
+                @ModelDefinition = Model.extend feature: @
+                @model = new @ModelDefinition()
                 deferred.resolve()
                 return deferred.promise()
 
             @module.loadResource(getPath @, 'model', @baseName).done (def) =>
                 if not def
-                    @modelDefinition = Model.extend feature: @
-                    @model = new @modelDefinition()
+                    @ModelDefinition = Model.extend feature: @
+                    @model = new @ModelDefinition()
                     deferred.resolve()
                 else
                     def.feature = @
-                    @modelDefinition = Model.extend def
-                    @model = new @modelDefinition()
+                    @ModelDefinition = Model.extend def
+                    @model = new @ModelDefinition()
                     deferred.resolve()
             deferred.promise()
 
         initCollection: ->
             return if @collection
             @deferredModel.done =>
-                @collection = new (Collection.extend feature: @)(null, model: @modelDefinition)
+                @collection = new (Collection.extend feature: @)(null, model: @ModelDefinition)
 
         initViews: () ->
             @inRegionViews = {}
@@ -87,11 +87,11 @@ define [
             views = []
             promises = [@deferredTemplate, @deferredLayout, @deferredModel]
             for view in @options.views or []
-                view = if _.isString(view) then name: view else view
+                view = if _.isString view then name: view else view
                 views.push view
-                promises.push loaderPluginManager.invoke('view', @module, @, view)
+                promises.push loaderPluginManager.invoke 'view', @module, @, view
 
-            defered = $.when.apply($, promises).then _.bind (vs, u1,u2,u3, args...) =>
+            defered = $.when.apply($, promises).then _.bind (vs, u1, u2, u3, args...) =>
                 for v, i in args
                     @views[i] = @views[vs[i].name] = v
                     @inRegionViews[vs[i].region] = @views[i] if vs[i].region

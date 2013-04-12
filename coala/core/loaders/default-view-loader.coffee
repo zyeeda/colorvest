@@ -19,14 +19,13 @@ define [
                 avoidLoadingHandlers: if options.avoidLoadingHandlers is false then false else true
 
             deferred.resolve View.build def
-            return deferred
+            return deferred.promise()
 
-        module.loadResource(getPath(feature, 'view', viewName)).done (def = {}) ->
-
+        module.loadResource(getPath feature, 'view', viewName).done (def = {}) ->
             def.baseName = viewName
             def.module = module
             def.feature = feature
 
             view = View.build def
             deferred.resolve view
-        deferred
+        deferred.promise()

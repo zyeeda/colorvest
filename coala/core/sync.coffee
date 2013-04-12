@@ -18,6 +18,7 @@ define [
                 beforeRequest params, model, method
 
             $.ajax _.extend params, options
+
         offline: (method, model, options = {}) ->
 
         storeForOffline: (model) ->
@@ -27,6 +28,7 @@ define [
             'update': 'PUT'
             'delete': 'DELETE'
             'read': 'GET'
+
         fn: (method, model, options = {}) ->
             o = _.extend {}, options
             if window.navigator.onLine

@@ -4,7 +4,6 @@ define [
     'marionette'
     'handlebars'
     'backbone'
-    'coala/core/application'
     'coala/core/component-handler'
     'coala/core/resource-loader'
     'coala/core/config'
@@ -20,7 +19,7 @@ define [
     'bootstrap'
     'coala/features/dialog/feature'
     'coala/features/routers'
-], ($, _, Marionette, Handlebars, Backbone, Application, ComponentHandler, loadResource, config, LoaderPluginManager, featureLoader, viewLoader, layoutLoader, inlineViewloader, coalaLayoutLoader, coalaFeatureLoader) ->
+], ($, _, Marionette, Handlebars, Backbone, ComponentHandler, loadResource, config, LoaderPluginManager, featureLoader, viewLoader, layoutLoader, inlineViewloader, coalaLayoutLoader, coalaFeatureLoader) ->
 
     # override marionette's template loader
     Marionette.TemplateCache.loadTemplate = (templateId, callback) ->
@@ -41,7 +40,7 @@ define [
 
     attachDefaultApplicationMethods = (app) ->
 
-        # load view
+        # This is a shortcut for default view loader.
         app.loadView = (feature, name, args...) ->
             throw new Error('a view must be within a feature') if not feature
             args = ['view', feature.module, feature, name].concat args
@@ -57,14 +56,14 @@ define [
             else
                 app._modalDialog.show(options).done (feature) ->
                     deferred.resolve feature
-            deferred
+            deferred.promise()
 
         if not app.confirm then app.confirm = (content, fn) ->
-            fn() if window.confirm content
+            fn() if confirm content
 
         if not app.prompt then app.prompt = (content, fn) ->
-            s = window.prompt(content)
-            fn(s) if s
+            s = prompt content
+            fn s if s
 
         fn = (content, title = '') -> alert title + ': ' + content
         app[name] = fn for name in ['success', 'info', 'error', 'message'] when not app[name]

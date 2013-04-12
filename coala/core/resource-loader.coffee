@@ -1,4 +1,3 @@
-
 define [
     'jquery'
     'underscore'
@@ -14,7 +13,7 @@ define [
         filePromise.resolve()
         require.s.contexts._.config.urlArgs = if config.development then '_c=' + (new Date()).getTime() else ''
     else
-        $.get(helperPath + '/development', (data) ->
+        $.get helperPath + '/development', (data) ->
             config.development = if data is 'false' then false else true
             if config.development is true and files is null
                 files = {}
@@ -24,12 +23,13 @@ define [
                 , 'json')
             else
                 filePromise.resolve()
-            require.s.contexts._.config.urlArgs = if config.development then '_c=' + (new Date()).getTime() else ''
-        )
 
-    resourceLoader = (resource, plugin) ->
+            require.s.contexts._.config.urlArgs = if config.development then '_c=' + (new Date()).getTime() else ''
+
+    (resource, plugin) ->
         deferred = $.Deferred()
         path = if plugin then plugin + '!' + resource else resource
+
         load = (path) =>
             require [path], (result) ->
                 deferred.resolve result
@@ -47,7 +47,7 @@ define [
             if resource.substring(0, config.appRoot.length) is config.appRoot
                 idx = resource.lastIndexOf '/'
                 folder = config.scriptRoot + '/' + (resource.substring 0, idx + 1)
-                filename = resource.substring (idx + 1)
+                filename = resource.substring idx + 1
                 if not files[folder] or not files[folder][filename]
                     deferred.resolve null
                 else
@@ -55,9 +55,8 @@ define [
             else
                 load path
 
-        log baseName: 'resource loader', 'load path:', path
+        log baseName: 'resource-loader', 'load resource: ', path
         $.when(filePromise).then ->
             loadIt()
 
         deferred.promise()
-    resourceLoader

@@ -1,6 +1,6 @@
 
 util =
-    getBaseName : (base) ->
+    getBaseName: (base) ->
         str = []
         str.push "[#{base.baseName}]"
         if base.path
@@ -11,12 +11,12 @@ util =
             str.push "[#{base.module.path()}]"
         str.join ' under '
 
-    log : (base, messages...) ->
+    log: (base, messages...) ->
         return if not window.console
         messages.unshift util.getBaseName base
         console.log.apply console, messages
 
-    error : (base, messages...) ->
+    error: (base, messages...) ->
         messages.unshift util.getBaseName base
         throw new Error(messages.join ' ')
 

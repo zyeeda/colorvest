@@ -22,7 +22,7 @@ define [
 
             login = $ '#LOGIN-DIALOG'
             if login.length is 0
-                $('''
+                login = $('''
                     <div class="modal hide fade" id="LOGIN-DIALOG">
                       <div class="modal-header">
                         <h3>Login</h3>
@@ -31,12 +31,13 @@ define [
                         <iframe src="" class="context-login-iframe"></iframe>
                       </div>
                     </div>
-                ''').appendTo(document.body)
-                login = $ '#LOGIN-DIALOG'
+                ''').appendTo document.body
+                #login = $ '#LOGIN-DIALOG'
                 login.on 'hidden', ->
                     onContextLogin = false
 
-            $('iframe', login).attr('src', config.ssoProviderUrl)
+            $('iframe', login).attr 'src', config.ssoProviderUrl
+
             login.modal
                 backdrop: 'static'
                 keyboard: false
@@ -124,6 +125,5 @@ define [
             application.prompt = (content, fn) ->
                 s = window.prompt(content)
                 fn(s) if s
-
 
         application

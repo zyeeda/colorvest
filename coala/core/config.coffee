@@ -1,4 +1,5 @@
 define ['config', 'underscore'], (projectConfig, _) ->
+
     config =
         applicationName: 'app'
         templateSuffix: '.html'

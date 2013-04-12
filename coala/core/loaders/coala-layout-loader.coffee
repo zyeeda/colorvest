@@ -13,7 +13,8 @@ define [
         deferred = $.Deferred()
 
         loadResource('coala/layouts/' + layoutName).done (def) ->
-            error @, 'no layout defined with name: coala/layouts/', layoutName if not def
+            error @, "No layout defined with name coala/layouts/#{layoutName}." if not def
+            #error @, 'no layout defined with name: coala/layouts/', layoutName if not def
             options = _.extend {}, def,
                 el: feature.container
                 baseName: layoutName
@@ -26,7 +27,7 @@ define [
                     renderHtml: (su, data) ->
                         t = @feature.template
                         delete @feature.template
-                        d = su.call(@, data)
+                        d = su.call @, data
                         @feature.template = t
                         d
 

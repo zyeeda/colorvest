@@ -14,7 +14,7 @@ define [
             return deferred
 
         module.loadResource(featureName + '/' + config.featureFileName).done (def) ->
-            return deferred.resolve(null) if def is null
+            return deferred.resolve null if def is null
 
             def.baseName = featureName
             def.module = module
@@ -22,4 +22,5 @@ define [
             feature = new Feature def, options
 
             deferred.resolve feature
-        deferred
+
+        deferred.promise()

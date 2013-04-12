@@ -55,7 +55,7 @@ define [
                 @router = new Router()
 
                 $.when.apply($, ps).done -> deferred.resolve()
-            deferred
+            deferred.promise()
 
         path: (append, withoutRoot) ->
             paths = if withoutRoot is true then @paths.slice 1 else @paths
@@ -109,7 +109,6 @@ define [
             return @getApplication().path resourcePath.substring 1 if resourcePath.charAt(0) is '/'
             @path resourcePath
 
-
         # load a resource
         # resourcePath is a dot-seprated string, and it relative to current module
         # ex. :
@@ -138,12 +137,12 @@ define [
 
             $.when(loaderPluginManager.invoke('feature', module, null, featureName, options)).then (feature) ->
                 if feature is null
-                    error module, "feature not found with path: #{featurePath}"
+                    error module, "Feature not found at path: #{featurePath}."
 
                 module.features[feature.cid] = feature
                 feature.start().done ->
                     deferred.resolve feature
-            deferred
+            deferred.promise()
 
         stopFeature: (feature) ->
             feature.stop()

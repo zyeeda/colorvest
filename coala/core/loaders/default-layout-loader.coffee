@@ -22,7 +22,8 @@ define [
             deferred.resolve new Layout def
         else
             module.loadResource(getPath feature, 'layout', layoutName).done (def) ->
-                error @, 'no layout defined with name:', getPath @, 'layout', layoutName if not def
+                error @, "No layout defined with name #{getPath @, 'layout', layoutName}." if not def
+                #error @, 'no layout defined with name:', getPath @, 'layout', layoutName if not def
                 def.el = feature.container
                 def.baseName = if layoutName.charAt(0) is '/' then layoutName.substring(1) else layoutName
                 def.feature = feature
