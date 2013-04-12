@@ -26,9 +26,10 @@ define [
             if name.indexOf(':') is -1
                 pluginName = 'DEFAULT'
             else
-                [pluginName, name] = name.split ':'
-                #pluginName = name.split(':')[0]
-                #name = name.substring(name.indexOf(':') + 1)
+                # Variable name may contain other ':' seperator.
+                #[pluginName, name] = name.split ':'
+                pluginName = name.split(':')[0]
+                name = name.substring(name.indexOf(':') + 1)
 
             fn = @pluginHandlers[@key type, pluginName]
             throw new Error("No plugin with key #{type}##{pluginName}.") if not fn
