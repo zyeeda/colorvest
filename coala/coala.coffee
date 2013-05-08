@@ -17,7 +17,7 @@ define [
     'coala/core/handlebar-helpers'
     'coala/core/sync'
     'bootstrap'
-    'coala/features/dialog/feature'
+    'coala/features/dialog.feature/feature'
     'coala/features/routers'
 ], ($, _, Marionette, Handlebars, Backbone, ComponentHandler, loadResource, config, LoaderPluginManager, featureLoader, viewLoader, layoutLoader, inlineViewloader, coalaLayoutLoader, coalaFeatureLoader) ->
 

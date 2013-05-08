@@ -13,7 +13,7 @@ define [
             deferred.resolve null
             return deferred
 
-        module.loadResource(featureName + '/' + config.featureFileName).done (def) ->
+        module.loadResource(featureName + '.feature/' + config.featureFileName).done (def) ->
             return deferred.resolve null if def is null
 
             def.baseName = featureName

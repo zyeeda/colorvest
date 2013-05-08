@@ -16,7 +16,7 @@ define [
             coala.paths = ['coala/features']
             coala.initRouters()
 
-        coala.loadResource(featureName + '/' + config.featureFileName).done (def) ->
+        coala.loadResource(featureName + '.feature/' + config.featureFileName).done (def) ->
             return deferred.resolve(null) if def is null
 
             def.baseName = featureName

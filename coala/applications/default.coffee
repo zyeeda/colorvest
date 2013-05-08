@@ -9,7 +9,7 @@ define [
     'coala/core/form-view'
     'coala/vendors/jquery/pnotify/jquery.pnotify'
     'coala/scaffold/scaffold'
-    'coala/features/home/feature'
+    'coala/features/home.feature/feature'
     'coala/components/viewport'
     'coala/components/launcher'
 ], ($, _, coala, Application, detectBrowser, ComponentHandler, config) ->

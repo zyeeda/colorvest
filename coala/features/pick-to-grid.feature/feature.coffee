@@ -1,7 +1,7 @@
 define [
-    'coala/features/pick-to-grid/__handlers__/picker-field'
-    'coala/features/pick-to-grid/__views__/picker-field'
-    'text!coala/features/pick-to-grid/templates.html'
+    'coala/features/pick-to-grid.feature/handlers/picker-field'
+    'coala/features/pick-to-grid.feature/views/picker-field'
+    'text!coala/features/pick-to-grid.feature/templates.html'
 ], ->
     layout: "coala:one-region"
     views: [
