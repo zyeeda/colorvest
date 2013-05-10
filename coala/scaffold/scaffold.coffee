@@ -4,7 +4,7 @@ define [
 
     # scaffolds
     'coala/scaffold/forms-view-loader'
-    'coala/scaffold/notfound-feature-loader'
+    'coala/scaffold/scaffold-feature-loader'
     'coala/scaffold/views-view-loader'
     'coala/scaffold/tree-views-view-loader'
     'coala/scaffold/treetable-views-view-loader'
