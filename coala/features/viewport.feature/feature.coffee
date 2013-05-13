@@ -1,6 +1,6 @@
 define [
-    'coala/features/home.feature/handlers/viewport'
-    'text!coala/features/home.feature/templates.html'
+    'coala/features/viewport.feature/handlers/viewport'
+    'text!coala/features/viewport.feature/templates.html'
 ], ->
     layout:
         regions:
