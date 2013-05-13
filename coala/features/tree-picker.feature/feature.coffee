@@ -1,6 +1,6 @@
 define [
-    'coala/features/tree-picker/__handlers__/tree-picker-field'
-    'text!coala/features/tree-picker/templates.html'
+    'coala/features/tree-picker.feature/handlers/tree-picker-field'
+    'text!coala/features/tree-picker.feature/templates.html'
 ], ->
     layout:
         regions:

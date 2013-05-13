@@ -4,7 +4,7 @@ define [
 
     # scaffolds
     'coala/scaffold/forms-view-loader'
-    'coala/scaffold/notfound-feature-loader'
+    'coala/scaffold/scaffold-feature-loader'
     'coala/scaffold/views-view-loader'
     'coala/scaffold/tree-views-view-loader'
     'coala/scaffold/treetable-views-view-loader'
@@ -20,10 +20,10 @@ define [
     'coala/components/datetimepicker'
 
     # features
-    'coala/features/grid-picker/feature'
-    'coala/features/tree-picker/feature'
-    'coala/features/pick-to-grid/feature'
-    'coala/features/tasks/feature'
+    'coala/features/grid-picker.feature/feature'
+    'coala/features/tree-picker.feature/feature'
+    'coala/features/pick-to-grid.feature/feature'
+    'coala/features/tasks.feature/feature'
 
     # layouts
     'coala/layouts/grid'

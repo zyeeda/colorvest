@@ -9,7 +9,7 @@ define [
     'coala/core/form-view'
     'coala/vendors/jquery/pnotify/jquery.pnotify'
     'coala/scaffold/scaffold'
-    'coala/features/viewport/feature'
+    'coala/features/home.feature/feature'
     'coala/components/viewport'
     'coala/components/launcher'
 ], ($, _, coala, Application, detectBrowser, ComponentHandler, config) ->
@@ -64,9 +64,9 @@ define [
             modifyFeatureContainerDeferred = $.Deferred()
 
             application.done ->
-                application.startFeature('coala:viewport').done (viewportFeature) ->
+                application.startFeature('coala:home').done (homeFeature) ->
                     config.featureContainer = (feature) ->
-                        viewport = viewportFeature.views['inline:viewport'].components[1]
+                        viewport = homeFeature.views['inline:viewport'].components[1]
 
                         feature.activate = ->
                             viewport.showFeature feature

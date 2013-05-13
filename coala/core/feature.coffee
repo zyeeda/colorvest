@@ -43,7 +43,7 @@ define [
 
         initTemplate: ->
             return null if @options.avoidLoadingTemplate is true
-            M.TemplateCache.get(@module.resolveResoucePath(@baseName + '/templates' + config.templateSuffix)).done (template) =>
+            M.TemplateCache.get(@module.resolveResoucePath(@baseName + '.feature/templates' + config.templateSuffix)).done (template) =>
                 @template = template
 
         initLayout: ->

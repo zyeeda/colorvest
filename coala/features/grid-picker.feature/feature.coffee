@@ -1,6 +1,6 @@
 define [
-    'coala/features/grid-picker/__handlers__/grid-picker-field'
-    'text!coala/features/grid-picker/templates.html'
+    'coala/features/grid-picker.feature/handlers/grid-picker-field'
+    'text!coala/features/grid-picker.feature/templates.html'
 ], ->
 
     layout:

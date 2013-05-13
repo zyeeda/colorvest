@@ -2,9 +2,9 @@ define [
     'underscore'
     'jquery'
     'bootstrap'
-    'coala/features/dialog/__views__/dialog-title'
-    'coala/features/dialog/__views__/dialog-buttons'
-    'text!coala/features/dialog/templates.html'
+    'coala/features/dialog.feature/views/dialog-title'
+    'coala/features/dialog.feature/views/dialog-buttons'
+    'text!coala/features/dialog.feature/templates.html'
 ], (_, $) ->
     layout:
         regions:

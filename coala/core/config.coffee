@@ -15,17 +15,17 @@ define ['config', 'underscore'], (projectConfig, _) ->
         featureFileName: 'feature'
 
         folders:
-            layout: '__layouts__'
-            view: '__views__'
-            model: '__models__'
-            collection: '__collections__'
-            handler: '__handlers__'
-            template: '__templates__'
+            layout: 'layouts'
+            view: 'views'
+            model: 'models'
+            collection: 'collections'
+            handler: 'handlers'
+            template: 'templates'
 
         getPath: (feature, type, path) ->
             root = true if path.charAt(0) is '/'
             path = path.substring 1 if root is true
 
-            (if root then '/' else feature.baseName + '/') + config.folders[type] + '/' + path
+            (if root then '/' else feature.baseName + '.feature/') + config.folders[type] + '/' + path
 
     _.extend config, projectConfig
