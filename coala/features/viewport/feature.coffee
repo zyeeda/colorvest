@@ -1,6 +1,6 @@
 define [
-    'coala/features/home/__handlers__/viewport'
-    'text!coala/features/home/templates.html'
+    'coala/features/viewport/__handlers__/viewport'
+    'text!coala/features/viewport/templates.html'
 ], ->
     layout:
         regions:
@@ -24,11 +24,11 @@ define [
             homepageFeaturePath: 'main/home-page'
         ]
 
-        model: 'system/menuitems'
-        extend:
-            serializeData: (su) ->
-                deferred = $.Deferred()
-                @collection.fetch().done =>
-                    deferred.resolve su.apply @
-                deferred.promise()
+        #model: 'system/menuitems'
+        #extend:
+        #    serializeData: (su) ->
+        #        deferred = $.Deferred()
+        #        @collection.fetch().done =>
+        #            deferred.resolve su.apply @
+        #        deferred.promise()
     ]
