@@ -91,18 +91,18 @@ define [
                 views.push view
                 promises.push loaderPluginManager.invoke 'view', @module, @, view
 
-            defered = $.when.apply($, promises).then _.bind (vs, u1, u2, u3, args...) =>
+            deferred = $.when.apply($, promises).then _.bind (vs, u1, u2, u3, args...) =>
                 for v, i in args
                     @views[i] = @views[vs[i].name] = v
                     @inRegionViews[vs[i].region] = @views[i] if vs[i].region
                 return
             , @, views
-            defered.promise()
+            deferred.promise()
 
         showView: (region, view) ->
             deferred = $.Deferred()
             view = @inRegionViews[region] if not view
-            view = @views[index] if _.isNumber view
+            view = @views[view] if _.isNumber view
             return if not view
 
             promise = if @deferredStart then @deferredStart.promise() else @start()
@@ -124,18 +124,18 @@ define [
             @module.path(@baseName, true)
 
         # delegate $.ajax, do nothing but add url prefix
-        request:  (options) ->
+        request: (options) ->
             options.url = @url() + '/' + options.url
             $.ajax options
 
+        # Specific feature should override this method to implement other activation behavior.
         activate: (options) ->
             @startupOptions = options
             @start()
-            #override this
 
         stop: ->
 
-        start:  ->
+        start: ->
             @deferredStart = $.Deferred()
             views = []
             rendered = {}
@@ -143,10 +143,10 @@ define [
                 @layout.render =>
                     views.push region for region, view of @inRegionViews
                     for region, view of @inRegionViews
-                        view.on 'show', _.once _.bind( (rr, vs, rd) ->
+                        view.on 'show', _.once _.bind (rr, vs, rd) ->
                             rd[rr] = true
                             @deferredStart.resolve @ if _.all(vs, (r) -> !!rd[r])
-                        , @, region, views, rendered)
+                        , @, region, views, rendered
                         @layout[region].show view
 
             @deferredStart.done _.bind @onStart, @ if @onStart
@@ -164,7 +164,7 @@ define [
                 name = @genEventName eventName
             else
                 name = if eventName.indexOf('this#') isnt -1 then @genEventName(eventName.split('#')[1]) else eventName
-            @module.getApplication().vent.on name, callback,context
+            @module.getApplication().vent.on name, callback, context
 
         trigger: (eventName, args...) ->
             event = @genEventName eventName

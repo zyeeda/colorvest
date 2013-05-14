@@ -4,7 +4,6 @@ define ['config', 'underscore'], (projectConfig, _) ->
         applicationName: 'app'
         templateSuffix: '.html'
         featureContainer: 'body'
-        urlPrefix: 'invoke'
         modelDefinitionPath: 'definition'
         routerFileName: 'routers'
         scriptRoot: '/scripts'

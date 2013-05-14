@@ -1,24 +1,24 @@
 clean:
 	rm -rf build/coala
 	find coala ! -path "coala/vendors/*" -name "*.js" | xargs rm -f
-	find coala/themes/spacelab/css/ -name "bootstrap*.css" | xargs rm -f
+	find coala/themes/ace/css/ -name "bootstrap*.css" | xargs rm -f
 
 compile:
 	coffee -c .
 	coffee -b -c coala/require-config.coffee
 	make bootstrap-coala
 
-THEME_PATH = coala/themes/spacelab
+THEME_PATH = coala/themes/ace
 bootstrap-coala:
-	recess --compile ${THEME_PATH}/less/swatchmaker.less > ${THEME_PATH}/css/bootstrap.css
-	recess --compile ${THEME_PATH}/less/swatchmaker-responsive.less > ${THEME_PATH}/css/bootstrap-responsive.css
+	recess --compile ${THEME_PATH}/less/theme.less > ${THEME_PATH}/css/bootstrap.css
+	recess --compile ${THEME_PATH}/less/theme-responsive.less > ${THEME_PATH}/css/bootstrap-responsive.css
 
 package:
 	make clean
 	make compile
 	mkdir -p build/coala/vendors/
 	cp -R coala/themes build/coala/
-	cd build/coala/themes/spacelab/css && \
+	cd build/coala/themes/ace/css && \
 		r.js -o cssIn=main.css out=main-build.css && \
 		rm main.css && \
 		cleancss -o main.css main-build.css && \
@@ -28,9 +28,9 @@ package:
 	cp coala/require-config.js build/coala/
 	cp -R coala/vendors/require build/coala/vendors/
 	cd build && r.js -o build.js name=coala/applications/default
-	rm -rf build/coala/themes/spacelab/less
+	rm -rf build/coala/themes/ace/less
 	find build -name ".DS_Store" | xargs rm -f
-	find build/coala/themes/spacelab/css ! -name "main.css" -name "*.css" | xargs rm -f
+	find build/coala/themes/ace/css ! -name "main.css" -name "*.css" | xargs rm -f
 	find build -type d -empty | xargs rm -rf
 
 #spacelab:
