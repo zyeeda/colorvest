@@ -141,6 +141,42 @@ define [
             o = c for c in @components when c['__options__']?.selector is selector
             o
 
+        renderComponents: (delay) ->
+            @components or= []
+
+            d = delay or ''
+            return if _.indexOf(@renderredComponents, d) isnt -1
+            @renderredComponents.push d
+
+            components = []
+            originalOptions = []
+            for component, i in @options.components or []
+                component = component.call @ if _.isFunction component
+                continue if not component
+
+                if (not delay and not component.delay) or (delay is component.delay)
+                    originalOptions[i] = component
+                    options = _.extend {}, component
+                    {type, selector} = options
+                    delete options.type
+                    delete options.selector
+
+                    el = if selector then @$ selector else @$el
+                    components[i] = ComponentHandler.handle(type, el, options, @)
+                else
+                    originalOptions[i] = component
+                    components[i] = @components[i] or false
+
+            componentDeferred = $.Deferred()
+            $.when.apply($, components).done (args...) =>
+                @components = args
+                for arg, i in args
+                    continue if not arg
+                    arg['__options__'] = originalOptions[i]
+                componentDeferred.resolve(args)
+
+            componentDeferred.promise()
+
         onRender: ->
             used = {}
             @$el.find('[id]').each (i, el) =>
@@ -169,38 +205,11 @@ define [
                 f = $el.attr 'for'
                 $el.attr 'for', @genId(f)
 
-            components = []
-            originalOptions = []
-            evalComponent = (view, $el, options) ->
-                {type, selector} = options
-                originalOptions.push _.extend {}, options
+            @renderredComponents = []
+            delays = @defaultComponentDelay
+            delays = if _.isArray delays then delays else [delays]
+            promises = (@renderComponents(delay) for delay in delays)
+            promises.push @afterRender.call @
 
-                delete options.type
-                delete options.selector
-
-                el = if selector then view.$ selector else $el
-                components.push ComponentHandler.handle(type, el, options, @)
-            evalAction = (view, $el, options) ->
-                {action, selector} = options
-
-                delete options.action
-                delete options.selector
-
-                el = if selector then view.$ selector else $el
-                el[action]?.call el, options
-            for component in @options.components or []
-                component = component.call @ if _.isFunction component
-                continue if not component
-                (if component.type then evalComponent else evalAction).call @, @, @$el, _.extend({}, component)
-
-            componentDeferred = $.Deferred()
-            $.when.apply($, components).done (args...) =>
-                @components = args
-                for arg, i in args
-                    continue if not arg
-                    arg['__options__'] = originalOptions[i]
-                componentDeferred.resolve(args)
-
-            afterRenderDeferred = @afterRender.call @
-            $.when(componentDeferred, afterRenderDeferred).promise()
+            $.when.apply($, promises).promise()
     BaseView
