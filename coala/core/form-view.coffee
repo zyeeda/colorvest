@@ -42,9 +42,34 @@ define [
 
             events = {}
             components = []
-            @eachField (field) ->
-                _.extend events, es if (es = field.getEvents())
-                components = components.concat cs if (cs = field.getComponents())
+            if form.tabs
+                unused = @groups.slice 0
+                for tab in form.tabs
+                    groups = tab.groups
+                    groups = if _.isArray groups then groups else [groups]
+                    tab.id = _.uniqueId 'tab'
+                    events['shown a-' + tab.id] = 'form-change-tab'
+                    for group in groups
+                        unused = _.without unused, @findGroup(group)
+                        @eachField group, (field) ->
+                            _.extend events, es if (es = field.getEvents())
+                            cs = field.getComponents()
+                            c.delay = tab.id for c in cs or []
+                            components = components.concat cs if cs
+                for group in unused
+                    @eachField group.options.name, (field) ->
+                        _.extend events, es if (es = field.getEvents())
+                        components = components.concat cs if (cs = field.getComponents())
+
+                @defaultComponentDelay = form.tabs[0].id
+                (@eventHandlers or = {})['form-change-tab'] = (e) =>
+                    id = $(e.target).attr('id')
+                    id = id.match(/a\-(\w+)/)[1]
+                    @renderComponents id
+            else
+                @eachField (field) ->
+                    _.extend events, es if (es = field.getEvents())
+                    components = components.concat cs if (cs = field.getComponents())
 
             options.events = _.extend options.events or {}, events
             options.components = (options.components or []).concat components
@@ -167,7 +192,7 @@ define [
                 lis = []
                 contents = []
                 for tab, i in @options.form.tabs
-                    id = _.uniqueId 'tab'
+                    id = tab.id
                     lis.push @getTabLiTemplate() i: i, title: tab.title, id: id
                     groups = tab.groups
                     groups = if _.isArray groups then groups else [groups]
@@ -206,7 +231,7 @@ define [
             </div>
         '''
         getTabLiTemplate: -> _.template '''
-            <li <% if (i == 0) {%>class="active" <%}%>><a data-target="<%= id %>" data-toggle="tab"><%= title %></a></li>
+            <li <% if (i == 0) {%>class="active" <%}%>><a data-target="<%= id %>" id="a-<%= id %>" data-toggle="tab"><%= title %></a></li>
         '''
 
         getTabContentTemplate: -> _.template '''
