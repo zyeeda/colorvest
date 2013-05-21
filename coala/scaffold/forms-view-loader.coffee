@@ -48,7 +48,7 @@ define [
     class ManyPickerField extends GridPickerField
         constructor: ->
             super
-            @type = 'many-picker'
+            @type = 'multi-picker'
 
         getComponent: ->
             o = super()
@@ -60,10 +60,15 @@ define [
         getFormData: ->
             @form.findComponent('a-' + @id).getFormData()
 
+    class MultiTreePickerField extends ManyPickerField
+        constructor: ->
+            super
+            @type = 'multi-tree-picker'
 
     FormField.add 'grid-picker', GridPickerField
     FormField.add 'tree-picker', TreePickerField
-    FormField.add 'many-picker', ManyPickerField
+    FormField.add 'multi-picker', ManyPickerField
+    FormField.add 'multi-tree-picker', MultiTreePickerField
 
     type: 'view'
     name: 'forms'
