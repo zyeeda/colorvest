@@ -2,90 +2,80 @@ define [
     'underscore'
     'jquery'
     'coala/coala'
-], (_, $, coala) ->
+    'coala/components/picker-base'
+], (_, $, coala, Picker) ->
 
-    coala.registerComponentHandler 'grid-picker', (->), (el, opt = {}, view) ->
-        if opt.readOnly is true
-            return loadData: (data) ->
-                el.html data[opt.fieldName]?['name']
+    class TreePickerChooser extends Picker.Chooser
+        getViewTemplate: ->
+            '<ul id="tree" class="ztree"></ul>'
+        getViewComponents: ->
+            tree = _.extend @picker.options.tree or {},
+                type: 'tree'
+                selector: 'tree'
+                data:
+                    simpleData:
+                        enable: true
+            ,
+                if @picker.options.multiple is true
+                    check:
+                        enable: true
+                else
+                    check:
+                        enable: true
+                        chkStyle: 'radio'
+                        radioType: 'all'
+            [tree]
+        getSelectedItems: ->
+            tree = @view.components[0]
+            selected = tree.getCheckedNodes()
+            return false if selected.length is 0
+            selected
 
-        app = view.feature.module.getApplication()
-        options = _.extend el: el, ignoreExists: true, opt
-        options.valueField = view.$ options.valueField
-        result = deferred: $.Deferred()
-        if options.remoteDefined
-            $.get view.feature.module.getApplication().url(options.url + '/configuration/picker'), (data) ->
-                _.extend options, data
-                app.startFeature('coala:grid-picker', options).done (feature) ->
-                    result.feature = feature
-                    result.deferred.resolve feature
-        else
-            app.startFeature('coala:grid-picker', options).done (feature) ->
-                result.feature = feature
-                result.deferred.resolve feature
+    class ManyPicker extends Picker.Picker
+        getTemplate: -> _.template '''
+            <div class="input-append">
+              <a href="javascript:void 0" class="btn" id="trigger-<%= id %>"><i class="icon-search"/></a>
+              <a href="javascript:void 0" class="btn" id="remove-<%= id %>"><i class="icon-remove"/></a>
+              <table id="grid-<%= id %>"></table>
+            </div>
+        '''
+        render: ->
+            super
+            @grid = @container.find('#grid-' + @id).jqGrid @options.pickerGrid
 
-        result.loadData = (data) ->
-            value = data[options.fieldName]
+            @container.find('#remove-' + @id).click =>
+                selected = @grid.getGridParam("selrow")
+                return if not selected
+                @grid.delRowData selected
+        setValue: (value) ->
             return if not value
-            result.deferred.done (feature) ->
-                feature.views['inline:grid-picker-field'].$('text').val(value.name)
-                options.valueField.val(value.id)
+            value = [value] if not _.isArray value
+            for v in value
+                continue if _.include(@grid.getDataIDs(), v.id)
+                @grid.addRowData v.id, v
+        getFormData: ->
+            @grid.getDataIDs()
 
-        result
-
-    coala.registerComponentHandler 'tree-picker', (->), (el, opt = {}, view) ->
-        if opt.readOnly is true
-            return loadData: (data) ->
-                el.html data[opt.fieldName]?['name']
-
+    fn = (pickerType, chooserType, el, opt = {}, view) ->
         app = view.feature.module.getApplication()
-        options = _.extend el: el, ignoreExists: true, opt
-        options.valueField = view.$ options.valueField
-        app.startFeature 'coala:tree-picker', options
-        result = deferred: $.Deferred()
+        options = _.extend opt,
+            view: view
+            container: el
+            chooserType: chooserType
         if options.remoteDefined
+            deferred = $.Deferred()
             $.get view.feature.module.getApplication().url(options.url + '/configuration/picker'), (data) ->
-                _.extend options, data
-                app.startFeature('coala:tree-picker', options).done (feature) ->
-                    result.feature = feature
-                    result.deferred.resolve feature
+                options = _.extend options, data
+                picker = new pickerType options
+                picker.render()
+                deferred.resolve picker
+            deferred
         else
-            app.startFeature('coala:tree-picker', options).done (feature) ->
-                result.feature = feature
-                result.deferred.resolve feature
+            picker = new pickerType options
+            picker.render()
+            picker
 
-        result.loadData = (data) ->
-            value = data[options.fieldName]
-            return if not value
-            result.deferred.done (feature) ->
-                feature.views['inline:tree-picker-field'].$('text').val(value.name)
-                options.valueField.val(value.id)
 
-        result
-
-    coala.registerComponentHandler 'many-picker', (->), (el, opt = {}, view) ->
-        app = view.feature.module.getApplication()
-        options = _.extend el: el, ignoreExists: true, opt
-        options.valueField = view.$ options.valueField
-        result = deferred: $.Deferred()
-        extendFeature = (feature) ->
-            feature.getFormData = ->
-                result.feature.views['picker-field'].components[0].getDataIDs()
-            feature.loadData = (data) ->
-                values = data[options.fieldName]
-                @views['picker-field'].components[0][0].addJSONData rows: values
-
-        if options.remoteDefined
-            $.get view.feature.module.getApplication().url(options.url + '/configuration/picker'), (data) ->
-                options.pickerGrid = data?.grid
-                app.startFeature('coala:pick-to-grid', options).done (feature) ->
-                    result.feature = feature
-                    extendFeature feature
-                    result.deferred.resolve feature
-        else
-            app.startFeature('coala:pick-to-grid', options).done (feature) ->
-                result.feature = feature
-                extendFeature feature
-                result.deferred.resolve feature
-
-        result.deferred
+    coala.registerComponentHandler 'grid-picker', (->), _.bind(fn, @, Picker.Picker, Picker.Chooser)
+    coala.registerComponentHandler 'tree-picker', (->), _.bind(fn, @, Picker.Picker, TreePickerChooser)
+    coala.registerComponentHandler 'many-picker', (->), _.bind(fn, @, ManyPicker, Picker.Chooser)

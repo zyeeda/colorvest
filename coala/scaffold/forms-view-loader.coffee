@@ -13,12 +13,12 @@ define [
 
         getComponent: ->
             selector: 'a-' + @id
+            id: 'a-' + @id
             type: @type
             url: @options.source
             title: '选择' + @options.label
-            fieldName: @name
+            name: @name
             readOnly: @readOnly
-            valueField: @id
             remoteDefined: true
             statusChanger: @options.statusChanger
 
@@ -29,14 +29,12 @@ define [
             @form.findComponent('a-' + @id).loadData data
 
         getFormData: ->
-            data = super()
-            if data and data.indexOf(',') isnt -1 then data.split(',') else data
+            @form.findComponent('a-' + @id).getFormData()
 
         getTemplateString: -> '''
             <div class="control-group">
               <label class="control-label" for="<%= id %>"><%= label %></label>
               <div class="controls">
-                <input type="hidden" id="<%= id %>" name="<%= name %>" value="{{appearFalse <%= value %>}}"/>
                 <div id="a-<%= id %>"></div>
               </div>
             </div>
@@ -54,7 +52,7 @@ define [
 
         getComponent: ->
             o = super()
-            o.grid =
+            o.pickerGrid =
                 datatype: 'local'
                 colModel: @options.colModel
             o
