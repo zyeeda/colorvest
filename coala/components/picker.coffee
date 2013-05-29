@@ -33,7 +33,7 @@ define [
 
     class ManyPicker extends Picker.Picker
         getTemplate: -> _.template '''
-            <div class="input-append">
+            <div>
               <a href="javascript:void 0" class="btn" id="trigger-<%= id %>"><i class="icon-search"/></a>
               <a href="javascript:void 0" class="btn" id="remove-<%= id %>"><i class="icon-remove"/></a>
               <table id="grid-<%= id %>"></table>

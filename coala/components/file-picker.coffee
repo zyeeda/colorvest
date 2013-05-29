@@ -1,0 +1,284 @@
+define [
+    'underscore'
+    'jquery'
+    'coala/coala'
+    'coala/components/picker-base'
+    'handlebars'
+    'coala/vendors/jquery/fileupload/jquery.iframe-transport'
+    'coala/vendors/jquery/fileupload/jquery.fileupload'
+    'coala/vendors/jquery/fileupload/jquery.fileupload-process'
+    'coala/vendors/jquery/fileupload/jquery.fileupload-validate'
+], (_, $, coala, Picker, H) ->
+
+    units = ['B', 'Kb', 'Mb', 'Gb', 'Tb']
+    calcSize = (size) ->
+        i = 0
+        while size > 1024
+            size = size / 1024
+            i++
+        size.toFixed(2) + ' ' + units[i]
+    rowTemplate = H.compile '''<tr>
+        <td><div class="progress" style="margin-bottom: 0px">
+            <div class="bar" id="{{viewId}}-bar-{{id}}" style="width:1%; color: black;text-align:left;">&nbsp;&nbsp;{{name}}</div>
+        </div></td>
+        <td>{{size}}</td>
+        {{#if resolved}}
+            <td><a id="{{viewId}}-remove-{{id}}" class="btn" href="javascript: void 0">remove</a></td>
+        {{else}}
+            <td><a id="{{viewId}}-upload-{{id}}" class="btn" href="javascript: void 0">start</a>&nbsp;
+            <a id="{{viewId}}-remove-{{id}}" class="btn" href="javascript: void 0">remove</a></td>
+        {{/if}}
+    </tr>'''
+
+    row = H.compile '''<tr>
+        <td><div class="progress" style="margin-bottom: 0px">
+            <div class="bar" id="bar-{{id}}" style="width:1%; color: black;text-align:left;">&nbsp;&nbsp;{{name}}</div>
+        </div></td>
+        <td>{{size}}</td>
+        <td><a id="remove-{{id}}" href="javascript: void 0">remove</a></td>
+    </tr>'''
+
+    class FileChooser extends Picker.Chooser
+        getViewTemplate: -> '''
+            <form method="post" id="upload" enctype="multipart/form-data">
+                <div class="container-fluid">
+                    <div class="row-fluid">
+                        <input type="file" id="hidden-file" name="files" style="display:none" multiple/>
+                        <a id="add" class="btn">add</a>
+                        <a id="start" class="btn">start</a>
+                        <a id="clear" class="btn">clear</a>
+                    </div>
+                    <div class="row-fluid">
+                        <table class="table table-striped">
+                            <thead><tr><th>Name</th><th width="70">Size</th><th width="140"></th></tr></thead>
+                            <tbody id="files-container">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        '''
+        getViewEvents: ->
+            o =
+                'click add': 'showFileChooser'
+                'change hidden-file': 'addFileToUploader'
+                'click remove-*': 'removeFile'
+                'click upload-*': 'uploadFile'
+                'click start': 'startAll'
+                'click clear': 'clearAll'
+            o['this#fileupload:' + @picker.id + ':add'] = 'addFile'
+            o['this#fileupload:' + @picker.id + ':progress'] = 'progressFile'
+
+            o
+        getViewHandlers: ->
+            showFileChooser: ->
+                @$('hidden-file').click()
+            addFileToUploader: (e) ->
+                uploader = @components[0]
+                uploader.fileupload 'add', files: e.target.files
+            addFile: (feature, view, comp, e, data) ->
+                d = _.extend {}, data,
+                    id: _.uniqueId('u-data-')
+                f = d.files[0]
+
+                ctn = @$('files-container')
+                @datas or= {}
+                @datas[d.id] = d
+                display =
+                    viewId: @cid
+                    id: d.id
+                    name: f.name
+                    type: f.type
+                    resovled: false
+                    size: calcSize f.size
+                $(rowTemplate display).appendTo ctn
+
+            removeFile: (e) ->
+                t = $ e.target
+                id = t.attr('id').match(/remove-(.*)$/)[1]
+                t.closest('tr').remove()
+
+                delete @datas[id]
+            uploadFile: (e) ->
+                t = $ e.target
+                id = t.attr('id').match(/upload-(.*)$/)[1]
+                bar = @$ 'bar-' + id
+
+                data = @datas[id]
+                if data and data.submit and not data.jqXHR
+                    t.attr('disabled', true);
+                    data.processing = true
+                    bar.removeClass 'bar-danger'
+                    bar.removeClass 'bar-success'
+                    data.submit().done (e) ->
+                        data.resolved = true
+                        bar.addClass 'bar-success'
+                        data.result = e
+                    .fail (e) ->
+                        data.resolved = false
+                        bar.addClass 'bar-danger'
+                        bar.css 'width', '50%'
+                    .always ->
+                        data.processing = false
+            progressFile: (feature, view, comp, e, data) ->
+                bar = @$ 'bar-' + data.id
+                return if bar.hasClass 'bar-danger'
+                bar.css('width', (data.loaded / data.total).toFixed(2) * 100 + '%')
+            startAll: ->
+                @$('upload-' + key).click() for key, value of @datas
+            clearAll: ->
+                delete @datas
+                @$('files-container').empty()
+
+        getViewComponents: ->
+            options = _.extend {}, @picker.options,
+                type: 'fileupload'
+
+                selector: 'upload'
+                fileInput: null
+                autoUpload: false
+
+            for name in ['add', 'progress', 'done', 'fail']
+                options[name] = @feature.delegateComponentEvent @picker.view, {}, 'fileupload:' + @picker.id + ':' + name, options[name]
+
+            [options]
+        getSelectedItems: ->
+            items = (value.result for key, value of @view.datas when value.resolved is true)
+            false if items.length is 0
+            items
+
+    class FilePicker extends Picker.Picker
+        getTemplate: ->
+            if @options.multiple is true
+                _.template ''' <div>
+                    <a id="trigger-<%= id %>" class="btn <%= triggerClass %>"><i class="icon-search"/></a>
+                    <input type="file" style="display:none" multiple="true" id="hidden-input-<%= id %>"/>
+                    <table class="table table-bordered">
+                        <thead><tr><th>Name</th><th width="70">Size</th><th width="70"></th></tr></thead>
+                        <tbody id="files-container-<%= id %>">
+                        </tbody>
+                    </table>
+                </div>'''
+            else
+                _.template '''
+                    <div class="input-append c-picker">
+                        <span class="uneditable-input">
+                            <span id="percent-<%= id %>" class="label label-info"></span>
+                            <span id="text-<%= id %>"><%= text %></span>
+                        </span>
+                        <a id="trigger-<%= id %>" class="btn <%= triggerClass %>"><i class="icon-search"/></a>
+                        <input type="file" style="display:none" id="hidden-input-<%= id %>"/>
+                    </div>
+                '''
+        renderSingle: (input) ->
+            percent = @container.find '#percent-' + @id
+            options = _.extend {}, @options,
+                fileInput: null
+                add: (e, data) =>
+                    @value = null
+                    percent.removeClass('label-success').removeClass('label-important').addClass 'label-info'
+                    name = data.files[0].name
+                    @setText name
+                    data.process ->
+                        return input.fileupload 'process', data
+                    .done (data) ->
+                        data.submit()
+                    .fail (data) =>
+                        if data.files.error
+                            percent.removeClass('label-success').removeClass('label-info').addClass 'label-important'
+                            percent.html '<i class="icon-remove"/>'
+                            @setText data.files[0].error
+
+                progress: (e, data) ->
+                    percent.html (data.loaded / data.total).toFixed(2) * 100 + '%'
+                done: (e, data) =>
+                    percent.removeClass('label-info').removeClass('label-important').addClass 'label-success'
+                    percent.html '<i class="icon-ok"/>'
+                    @setValue data.result
+                fail: (e, data) ->
+                    percent.removeClass('label-info').removeClass('label-success').addClass 'label-important'
+                    percent.html '<i class="icon-remove"/>'
+
+            input.fileupload options
+            input.change (e) ->
+                input.fileupload 'add', files: e.target.files
+
+        renderMultiple: (input) ->
+            options = _.extend {}, @options,
+                fileInput: null
+                add: (e, data) =>
+                    d = _.extend {}, data,
+                        id: _.uniqueId 'u-data-'
+                    f = d.files[0]
+                    @datas or= {}
+                    @datas[d.id] = d
+                    d.process ->
+                        return input.fileupload 'process', data
+                    .done =>
+                        tpl = row
+                            id: d.id
+                            name: f.name
+                            type: f.type
+                            size: calcSize f.size
+                        $(tpl).appendTo @container.find('#files-container-' + @id)
+                        d.submit()
+                    .fail (dd) =>
+                        tpl = row
+                            id: d.id
+                            name: dd.files[0].error
+                            type: f.type
+                            size: calcSize f.size
+                        $(tpl).appendTo @container.find('#files-container-' + @id)
+                        bar = @container.find '#bar-' + d.id
+                        bar.css 'width', '100%'
+                        bar.removeClass('bar-success').addClass 'bar-danger'
+
+                progress: (e, data) =>
+                    bar = @container.find '#bar-' + data.id
+                    return if bar.hasClass 'bar-danger'
+                    bar.css('width', (data.loaded / data.total).toFixed(2) * 100 + '%')
+                done: (e, data) =>
+                    bar = @container.find '#bar-' + data.id
+                    data.uploaded = true
+                    bar.removeClass('bar-danger').addClass 'bar-success'
+                    @datas[data.id] = data
+                fail: (e, data) ->
+                    bar = @container.find '#bar-' + data.id
+                    bar.removeClass('bar-success').addClass 'bar-danger'
+
+            @container.delegate 'a[id^="remove"]', 'click', (e) =>
+                id = $(e.target).attr('id').match(/remove-(.*)$/)[1]
+                delete @datas[id]
+                $(e.target).closest('tr').remove()
+
+            input.fileupload options
+            input.change (e) ->
+                input.fileupload 'add', files: e.target.files
+
+            @getFormData = =>
+                (v.result['id'] for k, v of @datas when v.uploaded is true)
+
+
+        render: ->
+            return if @renderred
+            @renderred = true
+
+            @container.html @getTemplate() @
+            input = @container.find '#hidden-input-' + @id
+            if @options.multiple is true
+                @renderMultiple input
+            else
+                @renderSingle input
+
+            @container.find('#trigger-' + @id).click =>
+                input.click()
+
+    coala.registerComponentHandler 'file-picker', (->), (el, options = {}, view) ->
+        opt = _.extend {}, options,
+            view: view
+            container: el
+            chooserType: (->)
+
+        picker = new FilePicker opt
+        picker.render()
+        picker

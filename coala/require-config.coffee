@@ -11,6 +11,7 @@ require =
         bootstrap: 'coala/vendors/bootstrap/bootstrap'
 
         jqgrid: 'coala/vendors/jquery/jqgrid/jquery.jqGrid.src'
+        'jquery.ui.widget': 'coala/vendors/jquery/ui/widget'
 
     shim:
         'coala/coala': ['jquery']

@@ -12,6 +12,7 @@ define [
             @module = @feature.module
             @app = @module.getApplication()
             @view = @generateView()
+            @view.eventHandlers = @getViewHandlers()
 
         generateView: ->
             tpl = H.compile @getViewTemplate()
@@ -45,6 +46,7 @@ define [
             [grid]
 
         getViewEvents: -> {}
+        getViewHandlers: -> {}
 
         verifyViewOptions: (options) ->
 

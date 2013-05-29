@@ -12,6 +12,7 @@ define [
     'coala/features/viewport.feature/feature'
     'coala/components/viewport'
     'coala/components/launcher'
+    'coala/components/file-picker'
 ], ($, _, coala, Application, detectBrowser, ComponentHandler, config) ->
 
     onContextLogin = false

@@ -11,6 +11,7 @@ define [
     'coala/core/form/dropdown-field'
     'coala/core/form/feature-field'
     'coala/core/form/hidden-field'
+    'coala/core/form/file-picker-field'
     'coala/vendors/jquery/validation/messages_zh'
     #'coala/vendors/jquery/validation/jquery.validate' # check it later
 ], ($, _, View, Handlebars, FormField, FormGroup) ->
