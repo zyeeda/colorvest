@@ -17,18 +17,6 @@ define [
             size = size / 1024
             i++
         size.toFixed(2) + ' ' + units[i]
-    rowTemplate = H.compile '''<tr>
-        <td><div class="progress" style="margin-bottom: 0px">
-            <div class="bar" id="{{viewId}}-bar-{{id}}" style="width:1%; color: black;text-align:left;">&nbsp;&nbsp;{{name}}</div>
-        </div></td>
-        <td>{{size}}</td>
-        {{#if resolved}}
-            <td><a id="{{viewId}}-remove-{{id}}" class="btn" href="javascript: void 0">remove</a></td>
-        {{else}}
-            <td><a id="{{viewId}}-upload-{{id}}" class="btn" href="javascript: void 0">start</a>&nbsp;
-            <a id="{{viewId}}-remove-{{id}}" class="btn" href="javascript: void 0">remove</a></td>
-        {{/if}}
-    </tr>'''
 
     row = H.compile '''<tr>
         <td><div class="progress" style="margin-bottom: 0px">
@@ -37,115 +25,6 @@ define [
         <td>{{size}}</td>
         <td><a id="remove-{{id}}" href="javascript: void 0">remove</a></td>
     </tr>'''
-
-    class FileChooser extends Picker.Chooser
-        getViewTemplate: -> '''
-            <form method="post" id="upload" enctype="multipart/form-data">
-                <div class="container-fluid">
-                    <div class="row-fluid">
-                        <input type="file" id="hidden-file" name="files" style="display:none" multiple/>
-                        <a id="add" class="btn">add</a>
-                        <a id="start" class="btn">start</a>
-                        <a id="clear" class="btn">clear</a>
-                    </div>
-                    <div class="row-fluid">
-                        <table class="table table-striped">
-                            <thead><tr><th>Name</th><th width="70">Size</th><th width="140"></th></tr></thead>
-                            <tbody id="files-container">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </form>
-        '''
-        getViewEvents: ->
-            o =
-                'click add': 'showFileChooser'
-                'change hidden-file': 'addFileToUploader'
-                'click remove-*': 'removeFile'
-                'click upload-*': 'uploadFile'
-                'click start': 'startAll'
-                'click clear': 'clearAll'
-            o['this#fileupload:' + @picker.id + ':add'] = 'addFile'
-            o['this#fileupload:' + @picker.id + ':progress'] = 'progressFile'
-
-            o
-        getViewHandlers: ->
-            showFileChooser: ->
-                @$('hidden-file').click()
-            addFileToUploader: (e) ->
-                uploader = @components[0]
-                uploader.fileupload 'add', files: e.target.files
-            addFile: (feature, view, comp, e, data) ->
-                d = _.extend {}, data,
-                    id: _.uniqueId('u-data-')
-                f = d.files[0]
-
-                ctn = @$('files-container')
-                @datas or= {}
-                @datas[d.id] = d
-                display =
-                    viewId: @cid
-                    id: d.id
-                    name: f.name
-                    type: f.type
-                    resovled: false
-                    size: calcSize f.size
-                $(rowTemplate display).appendTo ctn
-
-            removeFile: (e) ->
-                t = $ e.target
-                id = t.attr('id').match(/remove-(.*)$/)[1]
-                t.closest('tr').remove()
-
-                delete @datas[id]
-            uploadFile: (e) ->
-                t = $ e.target
-                id = t.attr('id').match(/upload-(.*)$/)[1]
-                bar = @$ 'bar-' + id
-
-                data = @datas[id]
-                if data and data.submit and not data.jqXHR
-                    t.attr('disabled', true);
-                    data.processing = true
-                    bar.removeClass 'bar-danger'
-                    bar.removeClass 'bar-success'
-                    data.submit().done (e) ->
-                        data.resolved = true
-                        bar.addClass 'bar-success'
-                        data.result = e
-                    .fail (e) ->
-                        data.resolved = false
-                        bar.addClass 'bar-danger'
-                        bar.css 'width', '50%'
-                    .always ->
-                        data.processing = false
-            progressFile: (feature, view, comp, e, data) ->
-                bar = @$ 'bar-' + data.id
-                return if bar.hasClass 'bar-danger'
-                bar.css('width', (data.loaded / data.total).toFixed(2) * 100 + '%')
-            startAll: ->
-                @$('upload-' + key).click() for key, value of @datas
-            clearAll: ->
-                delete @datas
-                @$('files-container').empty()
-
-        getViewComponents: ->
-            options = _.extend {}, @picker.options,
-                type: 'fileupload'
-
-                selector: 'upload'
-                fileInput: null
-                autoUpload: false
-
-            for name in ['add', 'progress', 'done', 'fail']
-                options[name] = @feature.delegateComponentEvent @picker.view, {}, 'fileupload:' + @picker.id + ':' + name, options[name]
-
-            [options]
-        getSelectedItems: ->
-            items = (value.result for key, value of @view.datas when value.resolved is true)
-            false if items.length is 0
-            items
 
     class FilePicker extends Picker.Picker
         getTemplate: ->
