@@ -78,10 +78,25 @@ define [
     coala.registerComponentHandler = (name, init, fn) ->
         ComponentHandler.register name, init, fn
 
+    if config.loadSettings isnt false and config.noBackend isnt true
+        path = 'system/settings/all/settings'
+        prefix = config.urlPrefix
+        path = if _.isFunction prefix
+            prefix application, path
+        else
+            prefix + path
+
+        settingsPromise = $.get(path, (data) ->
+            config.settings = _.extend {}, data
+        )
+
     coala.startApplication = (path, options = {}) ->
         if _.isObject path
             options = path
             path = null
+
+        options = _.extend {}, options,
+            settingsPromise: settingsPromise
 
         app = if not path
             require('coala/applications/default')(options)

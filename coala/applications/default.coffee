@@ -48,18 +48,9 @@ define [
 
         application = new Application()
         application.addPromise ComponentHandler.initialize()
-
-        if options.loadSettings isnt false and config.noBackend isnt true
-            path = 'system/settings/all/settings'
-            prefix = config.urlPrefix
-            path = if _.isFunction prefix
-                prefix application, path
-            else
-                prefix + path
-
-            application.addPromise $.get(path, (data) ->
-                application.settings = _.extend {}, data
-            )
+        if options.settingsPromise
+            application.addPromise options.settingsPromise.done ->
+                application.settings = config.settings
 
         if options.useDefaultHome isnt false
             modifyFeatureContainerDeferred = $.Deferred()
