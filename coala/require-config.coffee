@@ -23,3 +23,8 @@ require =
         'coala/vendors/jquery/timepicker/jquery-ui-timepicker-zh-CN': ['coala/vendors/jquery/timepicker/jquery-ui-timepicker']
         'coala/vendors/jquery/validation/messages_zh': ['coala/vendors/jquery/validation/jquery.validate']
         'jqueryui/datepicker-zh-CN': ['jqueryui/datepicker']
+        'coala/vendors/jquery/flot/jquery.flot.pie.min': ['jquery', 'coala/vendors/jquery/flot/jquery.flot.min']
+        'coala/vendors/jquery/flot/jquery.flot.resize.min': ['jquery', 'coala/vendors/jquery/flot/jquery.flot.min']
+
+
+        'coala/vendors/jquery/flot/jquery.flot.pie.min': ['jquery']

@@ -7401,32 +7401,6 @@ body {
   border-radius: 0 4px 4px 4px;
 }
 
-.nav-tabs > li > a,
-.nav-tabs > li > a:hover {
-  cursor: pointer;
-  background-color: #F0F0F0;
-  border-top: 1px solid #C2C2C2;
-  border-right: 1px solid #C2C2C2;
-  border-bottom: 0 none;
-  border-left: 1px solid #C2C2C2;
-}
-
-.nav-tabs > li > a,
-.nav-pills > li > a {
-  margin-right: 5px;
-  background-color: #FCFCFC;
-}
-
-.nav-tabs > .active > a,
-.nav-tabs > .active > a:hover {
-  color: #FFFFFF;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  background-color: #0AAAF1;
-  background-image: linear-gradient(to bottom, #11b6ff, #0099dd);
-  background-repeat: repeat-x;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-}
-
 .modal-header {
   background-color: #99D168;
   border-radius: 6px 6px 0 0;

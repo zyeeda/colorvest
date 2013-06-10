@@ -2,6 +2,7 @@ define [
     'coala/components/callbacks/grid'
     'text!coala/layouts/templates/grid.html'
 ], (cbGrid) ->
+    ###
     components: [
         type: 'layout'
         selector: 'gridLayout'
@@ -15,6 +16,7 @@ define [
             onresize: (paneName, paneElement) ->
                 cbGrid.onLayoutResize(paneName, paneElement)
     ],
+    ###
     regions:
         operators: 'operators-area'
         grid: 'grid-area'
