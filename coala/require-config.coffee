@@ -11,7 +11,6 @@ require =
         bootstrap: 'coala/vendors/bootstrap/bootstrap'
 
         jqgrid: 'coala/vendors/jquery/jqgrid/jquery.jqGrid.src'
-        'jquery.ui.widget': 'coala/vendors/jquery/ui/widget'
 
     shim:
         'coala/coala': ['jquery']
@@ -26,5 +25,9 @@ require =
         'coala/vendors/jquery/flot/jquery.flot.pie.min': ['jquery', 'coala/vendors/jquery/flot/jquery.flot.min']
         'coala/vendors/jquery/flot/jquery.flot.resize.min': ['jquery', 'coala/vendors/jquery/flot/jquery.flot.min']
 
-
+        'coala/vendors/jquery/jquery.slimscroll.min': ['jquery']
         'coala/vendors/jquery/flot/jquery.flot.pie.min': ['jquery']
+        'coala/vendors/jquery/jquery.easy-pie-chart.min': ['jquery']
+        'coala/vendors/ace': ['jquery', 'coala/vendors/ace-elements']
+        'coala/vendors/ace-elements': ['jquery']
+        'coala/vendors/jquery/jquery.colorbox': ['jquery']

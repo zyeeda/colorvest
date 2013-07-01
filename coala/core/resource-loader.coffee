@@ -6,6 +6,7 @@ define [
 ], ($, _, util, config) ->
     {log, error} = util
 
+    console.log config
     helperPath = config.helperPath or ''
     if config.noBackend is true
         require.s.contexts._.config.urlArgs = if config.development then '_c=' + (new Date()).getTime() else ''

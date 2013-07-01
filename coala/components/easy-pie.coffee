@@ -19,5 +19,6 @@ define [
             animate: if oldie then false else 1000
             size: size
         , options
+        el.css 'color', barColor
 
         el.easyPieChart opt

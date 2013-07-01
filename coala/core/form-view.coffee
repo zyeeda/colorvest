@@ -12,6 +12,7 @@ define [
     'coala/core/form/feature-field'
     'coala/core/form/hidden-field'
     'coala/core/form/file-picker-field'
+    'coala/core/form/mask-field'
     'coala/vendors/jquery/validation/messages_zh'
     #'coala/vendors/jquery/validation/jquery.validate' # check it later
 ], ($, _, View, Handlebars, FormField, FormGroup) ->
@@ -58,6 +59,7 @@ define [
                             c.delay = tab.id for c in cs or []
                             components = components.concat cs if cs
                 for group in unused
+                    @needExtraComponentRender = true
                     @eachField group.options.name, (field) ->
                         _.extend events, es if (es = field.getEvents())
                         components = components.concat cs if (cs = field.getComponents())
@@ -153,6 +155,7 @@ define [
         afterRender: ->
             deferred = $.Deferred()
             promises = []
+            promises.push @renderComponents() if @needExtraComponentRender is true
             @eachField (field) ->
                 promises.push field.afterRender()
 
@@ -163,9 +166,12 @@ define [
 
         bindValidation: ->
             # check it later
-            if @options.validation then @$$('form').validate
+            return if not @options.validation
+            validator = @$$('form').validate
                 rules: @options.validation.rules
                 messages: @options.validation.messages
+                onfocusout: (el) ->
+                    validator.element el
                 errorPlacement: (error, element) ->
                     $el = $ element
                     elPos = $el.position()
@@ -173,7 +179,7 @@ define [
                         color: '#CC0000'
                         position: 'absolute'
                         top: elPos.top + $el.outerHeight()
-                        right: $el.parents('.modal-body').outerWidth() - elPos.left - $el.outerWidth()
+                        #right: $el.parents('.modal-body').outerWidth() - elPos.left - $el.outerWidth()
                     $(error).insertAfter element
                 highlight: (label) ->
                     $(label).closest('.control-group').addClass('error')

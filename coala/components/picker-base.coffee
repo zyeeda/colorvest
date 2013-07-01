@@ -124,9 +124,10 @@ define [
             @setValue if @name then data[name] else data
 
         getTemplate: -> _.template '''
-            <div class="input-append c-picker">
-                <span id="text-<%= id %>" class="uneditable-input"><%= text %></span>
-                <a id="trigger-<%= id %>" class="btn <%= triggerClass %>"><i class="icon-search"/></a>
+            <div class="c-picker">
+                <span class="uneditable-input"><span class="text" id="text-<%= id %>"><%= text %></span>
+                    <a id="trigger-<%= id %>" class="btn pull-right <%= triggerClass %>"><i class="icon-search"/></a>
+                </span>
             </div>
             '''
         render: ->
