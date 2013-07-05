@@ -82,7 +82,7 @@ define [
         path = 'system/settings/all'
         prefix = config.urlPrefix
         path = if _.isFunction prefix
-            prefix application, path
+            prefix undefined, path
         else
             prefix + path
 
