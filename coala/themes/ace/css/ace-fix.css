@@ -1,0 +1,28 @@
+.ace-fill {
+    height: 100%;
+}
+
+.navbar-inner {
+    z-index: 20;
+}
+
+.ace-main-container {
+    margin-top: -45px;
+    padding-top: 45px;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+         -o-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+.ace-page-content {
+    position: relative;
+    margin-top: -41px;
+    padding: 41px 0 0 0;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+         -o-box-sizing: border-box;
+            box-sizing: border-box;
+}

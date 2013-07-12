@@ -3067,7 +3067,7 @@ button.btn:active {
   margin-right: 6px;
   font-size: 120%;
 }
-#user_info {
+.user-info {
   max-width: 100px;
   display: inline-block;
   overflow: hidden;
@@ -3078,7 +3078,7 @@ button.btn:active {
   position: relative;
   top: 6px;
 }
-#user_info small {
+.user-info small {
   display: block;
 }
 /** form elements */
@@ -6402,13 +6402,13 @@ td.td-actions a.td-action {
   border-top: 2px solid #976559;
   padding: 9px 18px;
 }
-#signup-box .toolbar {
+.signup-box .toolbar {
   background: #76B774;
   border-top: 2px solid #759759;
   padding: 9px 18px;
 }
 .ace-forgot-box .back-to-login-link,
-#signup-box .back-to-login-link {
+.signup-box .back-to-login-link {
   color: #FE9;
   font-size: 14px;
   font-weight: bold;

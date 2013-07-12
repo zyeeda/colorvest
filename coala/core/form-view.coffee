@@ -188,7 +188,8 @@ define [
                     $(label).remove()
 
         getTemplate: ->
-            style = 'container-fluid'
+            #style = 'container-fluid'
+            style = ''
             style += ' form-horizontal' if @options.labelOnTop is false
             style += ' c-action-form c-action-form-' + @options.formName if @options.formName?
 
