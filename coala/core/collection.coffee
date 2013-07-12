@@ -8,7 +8,6 @@ define [
             @_url
         parse: (data) ->
             @recordCount = data.recordCount
-            @pageCount = data.pageCount
-            @page = data.page
+            @firstRecord = data.firstRecord
             data.results
     Collection

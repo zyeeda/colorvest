@@ -10,29 +10,27 @@ define [
         add: ->
             @feature.views['forms:add'].model.clear()
             grid = @feature.views['treeTableViews:grid'].components[0]
-            selected = grid.getGridParam('selrow')
+            selected = grid.getSelected()
             if selected
-                rowData = grid.getRowData selected
-                rowData.id = selected
+                rowData = selected.toJSON()
                 @feature.views['forms:add'].model.set 'parent', rowData
 
             viewLoader.submitHandler.call @,
                 submitSuccess: (type) =>
                     #data = @feature.views['forms:add'].model.toJSON()
                     #grid.addChildNode data.id, selected, data
-                    grid.trigger 'reloadGrid'
+                    grid.refresh()
             , 'forms:add', viewLoader.getDialogTitle(@feature.views['forms:add'], 'add', '新增')
         edit: ->
             grid = @feature.views['treeTableViews:grid'].components[0]
             view = @feature.views['forms:edit']
             app = @feature.module.getApplication()
-            selected = grid.getGridParam('selrow')
+            selected = grid.getSelected()
             return app.info '请选择要操作的记录' if not selected
 
-            view.model.set 'id', selected
+            view.model.set 'id', selected.id
             if selected
-                rowData = grid.getRowData selected
-                rowData.id = selected
+                rowData = selected.toJSON()
                 @feature.views['forms:edit'].model.set 'parent', rowData
 
             $.when(view.model.fetch()).then =>

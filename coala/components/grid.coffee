@@ -1,120 +1,120 @@
-
 define [
+    'jquery'
     'underscore'
     'coala/coala'
-    'coala/components/callbacks/grid'
-    'coala/vendors/jquery/jqgrid/i18n/grid.locale-cn'
-    'coala/vendors/jquery/jqgrid/jquery.jqGrid.src'
-], (_, coala, cbGrid) ->
+    'coala/vendors/jquery/dataTables/jquery.dataTables'
+    'coala/vendors/jquery/dataTables/jquery.dataTables.bootstrap'
+], ($, _, coala) ->
 
-    delegateGridEvents = (view, obj, options, prefix) ->
-        events = [
-            'onSelectRow', 'gridComplete', 'beforeRequest', 'onCellSelect'
-            'loadBeforeSend', 'loadComplete', 'ondblClickRow', 'onHeaderClick', 'onPaging'
-            'onRightClickRow', 'onSelectAll', 'onSortCol', 'serializeGridData'
-        ]
-        for event in events
-            do (event) ->
-                options[event] = view.feature.delegateComponentEvent view, obj, prefix + ':' + event, options[event]
+    $.fn.dataTable.defaults.fnServerData = (url, data, fn, settings) ->
+        view = settings.oInit.view
+        d = {}
+        d[item.name] = item.value for item in data
+        cname = d['sColumns'].split(',')[d['iSortCol_0']]
+        order = d['sSortDir_0']
+        params =
+            _first: d['iDisplayStart']
+            _pageSize: d['iDisplayLength']
+            _order: cname + '-' + order
+
+        _.extend params, view.collection.extra
+
+        settings.jqXHR = view.collection.fetch(data: params).done ->
+            json =
+                aaData: view.collection.toJSON()
+                iTotalRecords: view.collection.recordCount
+                iTotalDisplayRecords: view.collection.recordCount
+
+            $(settings.oInstance).trigger('xhr', [settings, json]);
+            fn json
+
+    adaptColumn = (col) ->
+        o =
+            bSearchable: !!col.searchable
+            bSortable: col.sortable isnt false
+            bVisible: col.visible isnt false
+        o.aDataSort = col.dataSort if col.dataSort
+        o.asSorting = col.sorting if col.sorting
+        o.fnCreatedCell = col.cellCreated if col.cellCreated
+        o.mRender = col.render if col.render
+        o.iDataSort = col.dataSort if col.dataSort
+        o.mData = col.name if col.name
+        o.sCellType = col.cellType if col.cellType
+        o.sClass = col.style if col.style
+        o.sDefaultContent = col.defaultContent if col.defaultContent
+        o.sName = col.name if col.name
+        o.sTitle = col.header if col.header
+        o.sType = col.type if col.type
+        o.sWidth = col.width if col.width
+
+        o
+
+    extendApi = (table, view, options) ->
+        collection = view.collection
+        _.extend table,
+            clear: ->
+                table.fnClearTable()
+            addRow: (data) ->
+                table.fnAddData(data)
+            getSelected: ->
+                selected = []
+                table.find('input[type="checkbox"]:checked').each (i, item) ->
+                    val = $(item).val()
+                    selected.push collection.get(val) or val
+                if options.multiple then selected else selected[0]
+            addParam: (key, value) ->
+                view.collection.extra[key] = value
+            removeParam: (key) ->
+                delete view.collection.extra?[key]
+            refresh: (includeParams = true) ->
+                table.fnDraw()
 
     coala.registerComponentHandler 'grid', (->), (el, options, view) ->
 
-        defaultOptions =
-            autowidth: options.fit
-            forceFit: options.fit
-            cellLayout: 17 # padding: 0 8px; border-left: 1px;
-            viewrecords: true
-            rownumbers: true
+        opt = _.extend
+            bServerSide: !options.data
+            view: view
+        , options.options
 
-            datatype: 'collection'
-            collection: view.collection
+        el.addClass 'table'
+        el.addClass options.style or 'table-striped table-bordered table-hover'
 
-        options = _.extend defaultOptions, options
+        if not opt.aoColumnDefs and not opt.aoColumns and options.columns
+            columns = [].concat options.columns
+            if options.checkBoxColumn isnt false
+                columns.unshift
+                    sortable: false, searchable: false, name: 'id', header: '', width: '25px'
+                    render: (data) -> """ <input type="checkbox" id="chk-#{data}" value="#{data}" class="select-row"/> <label class="lbl"></lable> """
+            if options.numberColumn is true
+                columns.unshift
+                    sortable: false, searchable: false, name: 'i', header: '#', width: '25px'
+            opt.aoColumns = (adaptColumn col for col in columns)
 
-        reader = _.extend {repeatitems: false}, options.jsonReader or {}
-        options.jsonReader = reader
-        if options.pager and _.isString options.pager
-            options.pager = view.$ options.pager
+        opt.aaData = options.data if options.data
 
-        obj = {}
-        delegateGridEvents view, obj, options, 'grid'
+        table = el.dataTable opt
+        table.delegate 'tr', 'click', (e) ->
+            return if $(e.target).is('input')
 
-        buildGrid el, options, view
-        obj.component = el
+            t = $(e.currentTarget)
+            chk = t.find 'input[type="checkbox"][id*="chk-"]:eq(0)'
+            checked = chk.is(':checked')
+            chk.prop('checked', !checked).trigger('change')
 
-        if options.fit
-            el.addClass 'c-jqgrid-fit'
-            cbGrid.resizeToFit el
+        table.delegate 'input[type="checkbox"][id*="chk-"]', 'change', (e) ->
+            input = $(e.currentTarget)
+            checked = input.is(':checked')
+            tr = input.closest('tr')
 
-        el
+            if checked and options.multiple isnt true
+                table.find('input[id*="chk-"]:checked').prop('checked', false)
+                table.find('tr.selected').removeClass('selected')
+                input.prop('checked', true)
+            tr[if checked then 'addClass' else 'removeClass']('selected')
+            table.trigger 'selectionChanged', table.getSelected()
 
-    coala.registerComponentHandler 'tree-table', (->), (el, options, view) ->
-        collection = view.collection
+        settings = table.fnSettings()
+        view.collection.extra = _.extend {}, options.params or {}
+        extendApi table, view, options
 
-        options = _.extend {ExpandColumn : 'name'}, options,
-            treeGrid: true
-            treeGridModel: 'adjacency'
-            datatype: 'tree-table-collection'
-            collection: collection
-
-        reader = _.extend {repeatitems: false}, options.jsonReader or {}
-        options.jsonReader = reader
-        reader = _.extend {parent_id_field: 'parentId'}, options.treeReader or {}
-        options.treeReader = reader
-
-        if options.pager and _.isString options.pager
-            options.pager = view.$ options.pager
-
-        obj = {}
-        delegateGridEvents view, obj, options, 'treeTable'
-
-        if options.fit
-            el.addClass 'ui-jqgrid-fit'
-            cbGrid.resizeToFit el
-
-        # el.jqGrid options
-        grid = buildGrid el, options, view
-        obj.component = grid
-        grid
-
-    buildGrid = (el, options, view)->
-        fields = options.colModel
-        colModel = []
-        for f in fields
-            if f.type == 'enum'
-                data = f.editoptions.value.split ';'
-                f.searchoptions = sopt: ['in'],
-                dataInit: (el) ->
-                    _select = $('<select>')
-                    _select.append "<option value=#{d.split(':')[0]}>#{d.split(':')[1]}</option>" for d in data
-                    $(el).after(_select)
-                    $(el).hide()
-                    _select.css 'width', '100%'
-                    _select.attr 'multiple', 'multiple'
-                    _select.select2()
-                    _select.on 'change', ->
-                        $(el).val _select.val()
-                        $(el).trigger 'keydown'
-            else if f.type == 'date'
-                f.searchoptions = sopt: ['between'],
-                dataInit: (el) ->
-                    $(el).daterangepicker()
-            else if f.type == 'number'
-                f.searchoptions = sopt: ['between']
-            else if f.type == 'boolean'
-                f.stype = 'select'
-                f.editoptions = {value:':全部;1:是;0:否'}
-            else
-                f.searchoptions = sopt: ['like'] if(f.stype != 'select')
-            if f.name.indexOf('.') isnt -1
-                f.sortable = false
-                f.search = false
-            if _.isString f.renderer
-                f.formatter = view.bindEventHandler f.renderer, 'renderers'
-            if _.isString f.peeler
-                f.unformat = view.bindEventHandler f.peeler, 'renderers'
-            colModel.push f
-        options.colModel = colModel
-        grid = el.jqGrid options
-        el.jqGrid('filterToolbar', stringResult: true, searchOnEnter: false) if options.filterToolbar is true
-        grid
+        table

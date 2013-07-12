@@ -31,3 +31,4 @@ require =
         'coala/vendors/ace': ['jquery', 'coala/vendors/ace-elements']
         'coala/vendors/ace-elements': ['jquery']
         'coala/vendors/jquery/jquery.colorbox': ['jquery']
+        'coala/vendors/jquery/dataTables/jquery.dataTables.bootstrap': ['jquery', 'coala/vendors/jquery/dataTables/jquery.dataTables']

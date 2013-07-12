@@ -10,29 +10,29 @@ define [
         add: ->
             viewLoader.submitHandler.call @,
                 submitSuccess: (type) =>
-                    @feature.views['views:grid'].components[0].trigger('reloadGrid')
+                    @feature.views['views:grid'].components[0].refresh()
             , 'forms:add', viewLoader.getDialogTitle(@feature.views['forms:add'], 'add', '新增')
         edit: ->
             grid = @feature.views['views:grid'].components[0]
             view = @feature.views['forms:edit']
             app = @feature.module.getApplication()
-            selected = grid.getGridParam('selrow')
+            selected = grid.getSelected()
             return app.info '请选择要操作的记录' if not selected
 
-            view.model.set 'id', selected
+            view.model.set selected
             $.when(view.model.fetch()).then =>
                 viewLoader.submitHandler.call @,
                     submitSuccess: (type) =>
-                        @feature.views['views:grid'].components[0].trigger('reloadGrid')
+                        @feature.views['views:grid'].components[0].refresh()
                 , 'forms:edit', viewLoader.getDialogTitle(@feature.views['forms:edit'], 'edit', '编辑')
         del: ->
             grid = @feature.views['views:grid'].components[0]
-            selected = grid.getGridParam('selrow')
+            selected = grid.getSelected()
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
 
             app.confirm '确定要删除选中的记录吗?', =>
-                @feature.model.set 'id', selected
+                @feature.model.set selected
                 $.when(@feature.model.destroy()).then (data) =>
                     if data.violations
                         msg = ''; summary = ''
@@ -42,15 +42,15 @@ define [
                         msg += summary
                         app.error msg, '验证提示'
                         return
-                    grid.trigger 'reloadGrid'
+                    grid.refresh()
         show: ->
             grid = @feature.views['views:grid'].components[0]
             view = @feature.views['forms:show']
-            selected = grid.getGridParam('selrow')
+            selected = grid.getSelected()
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
 
-            view.model.set 'id', selected
+            view.model.set selected
             $.when(view.model.fetch()).then =>
                 app.showDialog(
                     view: view
@@ -60,7 +60,7 @@ define [
                     view.setFormData view.model.toJSON()
         refresh: ->
             grid = @feature.views['views:grid'].components[0]
-            grid.trigger('reloadGrid')
+            grid.refresh()
 
     type: 'view'
     name: 'views'
@@ -76,14 +76,14 @@ define [
             initVisibility = scaffold.initOperatorsVisibility or viewLoader.initOperatorsVisibility
             viewLoader.generateGridView
                 createView: (options) ->
-                    options.components[0].onSelectRow = 'selectionChanged'
-                    options.components[0].beforeRequest = 'refresh'
+                    options.events or= {}
+                    options.events['selectionChanged grid'] = 'selectionChanged'
+                    options.events['draw grid'] = 'refresh'
                     new View options
                 handlers:
-                    selectionChanged: (id, status) ->
-                        return if not status
+                    selectionChanged: (e, models) ->
                         v = @feature.views['views:operators']
-                        visibility.call v, v.options.operators, id
+                        visibility.call v, v.options.operators, models
                     refresh: () ->
                         v = @feature.views['views:operators']
                         initVisibility.call v, v.options.operators

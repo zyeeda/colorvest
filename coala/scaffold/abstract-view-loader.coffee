@@ -116,19 +116,12 @@ define [
             data.type = 'grid'
             data.selector = 'grid'
             data.pager = 'pager'
-            data.fit = true unless data.fit?
-            data.alwaysShowVerticalScroll = true
-            data.resizePager = true
-            data.altRows = true
-            data.altclass = 'ui-jqgrid-altrow'
-            events = data.events or {}
 
             viewOptions =
                 baseName: 'grid'
                 module: module
                 feature: feature
                 components: [data]
-                events: events
                 avoidLoadingHandlers: true
                 extend:
                     renderHtml: (su, data) ->
