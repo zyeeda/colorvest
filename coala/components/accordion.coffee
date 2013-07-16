@@ -1,8 +1,7 @@
-
 define [
     'underscore'
     'coala/coala'
-    'jqueryui/accordion'
+    'coala/vendors/jquery/ui/accordion'
 ], (_, coala) ->
 
     coala.registerComponentHandler 'accordion', (->), (el, options, view) ->

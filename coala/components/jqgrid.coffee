@@ -16,6 +16,7 @@ define [
             do (event) ->
                 options[event] = view.feature.delegateComponentEvent view, obj, prefix + ':' + event, options[event]
 
+    ###
     coala.registerComponentHandler 'grid', (->), (el, options, view) ->
 
         defaultOptions =
@@ -46,6 +47,7 @@ define [
             cbGrid.resizeToFit el
 
         el
+    ###
 
     coala.registerComponentHandler 'tree-table', (->), (el, options, view) ->
         collection = view.collection

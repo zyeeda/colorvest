@@ -5,9 +5,9 @@ define [
     # scaffolds
     'coala/scaffold/forms-view-loader'
     'coala/scaffold/scaffold-feature-loader'
-    'coala/scaffold/views-view-loader'
-    'coala/scaffold/tree-views-view-loader'
-    'coala/scaffold/treetable-views-view-loader'
+    'coala/scaffold/view-loader'
+    'coala/scaffold/tree-view-loader'
+    'coala/scaffold/treetable-view-loader'
 
     # all components
     'coala/components/layout'

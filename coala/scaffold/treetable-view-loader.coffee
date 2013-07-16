@@ -36,6 +36,8 @@ define [
             $.when(view.model.fetch()).then =>
                 viewLoader.submitHandler.call @,
                     submitSuccess: (type) =>
+                        ###
+                        ###
                         grid.setTreeRow selected, view.model.toJSON()
                 , 'forms:edit', viewLoader.getDialogTitle(@feature.views['forms:edit'], 'edit', '编辑')
         del: ->
@@ -94,9 +96,41 @@ define [
             viewLoader.generateGridView
                 url: 'configuration/tree-table'
                 createView: (options) ->
-                    options.components[0].onSelectRow = 'selectionChanged'
-                    options.components[0].beforeRequest = 'refresh'
-                    options.components[0].type = 'tree-table'
+                    options.events or= {}
+                    options.events['selectionChanged grid'] = 'selectionChanged'
+                    options.events['draw grid'] = 'refresh'
+                    options.components[0].checkBoxColumn = false
+                    options.components[0].options =
+                        afterRequest: (data) ->
+                            idMap = {}
+                            idMap[i.id] = i for i in data
+                            for i in data
+                                if i.parent
+                                    item = idMap[i.parent.id]
+                                    item.children or = []
+                                    item.children.push i
+                            idMap = {}
+                            d = []
+                            visit = (node) ->
+                                if not idMap[node.id]
+                                    d.push node
+                                    idMap[node.id] = true
+                                    visit n for n in node.children or []
+
+                            visit n for n in (i for i in data when not i.parent).concat data
+                            console.log d
+                            d
+
+                        sDom: 'Ttfr'
+                        oTreeTable:
+                            fnPreInit: (nRow, aData, iDisplayIndex, iDisplayIndexFull) ->
+                                r = $(nRow)
+                                r.addClass('parent') if not aData.parent
+                                r.data 'tt-id', aData.id
+                                r.data 'tt-parent-id', aData.parent.id if aData.parent
+                                nRow
+                            showExpander: true
+
                     new View options
                 handlers:
                     selectionChanged: (id, status) ->
