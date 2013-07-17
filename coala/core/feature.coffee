@@ -142,6 +142,9 @@ define [
             @deferredView.done =>
                 @layout.render =>
                     views.push region for region, view of @inRegionViews
+                    if views.length is 0
+                        @deferredStart.resolve @
+                        return
                     for region, view of @inRegionViews
                         view.on 'show', _.once _.bind (rr, vs, rd) ->
                             rd[rr] = true
