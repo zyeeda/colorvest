@@ -25,7 +25,7 @@ define [
                 iTotalRecords: view.collection.recordCount
                 iTotalDisplayRecords: view.collection.recordCount
 
-            $(settings.oInstance).trigger('xhr', [settings, json]);
+            $(settings.oInstance).trigger('xhr', [settings, json])
             fn json
 
     adaptColumn = (col) ->
@@ -33,21 +33,19 @@ define [
             bSearchable: !!col.searchable
             bSortable: col.sortable isnt false
             bVisible: col.visible isnt false
-        o.aDataSort = col.dataSort if col.dataSort
-        o.asSorting = col.sorting if col.sorting
-        o.fnCreatedCell = col.cellCreated if col.cellCreated
-        o.mRender = col.render if col.render
-        o.iDataSort = col.dataSort if col.dataSort
-        o.mData = col.name if col.name
-        o.sCellType = col.cellType if col.cellType
-        o.sClass = col.style if col.style
-        o.sDefaultContent = col.defaultContent if col.defaultContent
-        o.sName = col.name if col.name
-        o.sTitle = col.header if col.header
-        o.sType = col.type if col.type
-        o.sWidth = col.width if col.width
-
-        o
+            aDataSort: col.dataSort if col.dataSort
+            asSorting: col.sorting if col.sorting
+            fnCreatedCell: col.cellCreated if col.cellCreated
+            mRender: col.render if col.render
+            iDataSort: col.dataSort if col.dataSort
+            mData: col.name if col.name
+            sCellType: col.cellType if col.cellType
+            sClass: col.style if col.style
+            sDefaultContent: col.defaultContent if col.defaultContent isnt null
+            sName: col.name if col.name
+            sTitle: col.header if col.header
+            sType: col.type if col.type
+            sWidth: col.width if col.width
 
     extendApi = (table, view, options) ->
         collection = view.collection
