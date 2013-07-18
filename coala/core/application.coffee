@@ -102,6 +102,9 @@ define [
             module
 
         findFeature: (name) ->
+            index = name.indexOf ':'
+            name = name.substring index + 1, name.length if index > 0
+
             for cid, feature of @features
                 return feature if feature.baseName is name
 
