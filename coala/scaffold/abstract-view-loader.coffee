@@ -14,17 +14,24 @@ define [
                 <%= buttons %>
             </div>
         '''
+
         operator: _.template '''
             <button id="<%= id %>" class="btn <% if (style) { %> <%=style%> <% } %>" onclick="return false;">
-            <% if (icon) { %>
-                <i class="<%= icon %>"/>&nbsp;
-            <% } %>
-            <%= label %></button>
+                <% if (icon) { %>
+                <i class="<%= icon %> <% if (!label) { %>icon-only<% } %>" />
+                <% } %>
+
+                <% if (label) { %>
+                <%= label %>
+                <% } %>
+            </button>
         '''
+
         grid: '''
             <table style="width:100%;" id="grid"/>
             <div id="pager"/>
         '''
+
         tree: '''
             <ul id="tree" class="ztree"/>
         '''
