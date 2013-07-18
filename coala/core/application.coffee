@@ -139,11 +139,11 @@ define [
                 if feature is null
                     error module, "Feature not found at path: #{featurePath}."
 
-                module.features[feature.cid] = feature
                 feature.start().done ->
                     deferred.resolve feature
+                .fail ->
+                    deferred.reject feature
             deferred.promise()
 
         stopFeature: (feature) ->
             feature.stop()
-            delete feature.module.features[feature.cid]

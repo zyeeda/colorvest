@@ -39,7 +39,6 @@ define [
             grid = _.extend {}, @picker.options.grid,
                 type: 'grid'
                 selector: 'grid'
-                fit: true
             ,
                 if @picker.options.multiple is true then multiselect: true else {}
 
@@ -54,17 +53,14 @@ define [
             grid = @view.components[0]
 
             if @picker.options.multiple is true
-                selected = grid.getGridParam('selarrrow')
+                selected = grid.getSelected()
             else
-                selected = grid.getGridParam('selrow')
-                selected = [selected] if selected
+                selected = [grid.getSelected()]
 
             if selected
                 items = []
-                for id in selected
-                    item = grid.getRowData(id)
-                    item.id = id
-                    items.push item
+                for model in selected
+                    items.push model.toJSON()
                 items
             else
                 false

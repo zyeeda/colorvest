@@ -20,6 +20,7 @@ define [
             @module = options.module
             @model = options.model if options.model
             @collection = options.collection if options.collection
+            @module.features[@cid] = @
 
             if @options.extend
                 for key, value of @options.extend
@@ -133,28 +134,60 @@ define [
             @startupOptions = options
             @start()
 
+        onStop: ->
+
         stop: ->
+            @deferredStop = $.Deferred()
+            result = @onStop()
+            resolve = (r) =>
+                if r isnt false
+                    delete @module.features[@cid]
+                    @deferredStop.resolve @
+                else
+                    @deferredStop.reject @
+
+            if result and _.isFunction result.done
+                result.done (arg) ->
+                    resolve arg
+            else
+                resolve result
+
+            @deferredStop.promise()
 
         start: ->
             @deferredStart = $.Deferred()
-            views = []
-            rendered = {}
-            @deferredView.done =>
-                @layout.render =>
-                    views.push region for region, view of @inRegionViews
-                    if views.length is 0
-                        @deferredStart.resolve @
-                        return
-                    for region, view of @inRegionViews
-                        view.on 'show', _.once _.bind (rr, vs, rd) ->
-                            rd[rr] = true
-                            @deferredStart.resolve @ if _.all(vs, (r) -> !!rd[r])
-                        , @, region, views, rendered
-                        @layout[region].show view
+            fn = =>
+                views = []
+                rendered = {}
+                @deferredView.done =>
+                    @layout.render =>
+                        views.push region for region, view of @inRegionViews
+                        if views.length is 0
+                            @deferredStart.resolve @
+                            return
+                        for region, view of @inRegionViews
+                            view.on 'show', _.once _.bind (rr, vs, rd) ->
+                                rd[rr] = true
+                                @deferredStart.resolve @ if _.all(vs, (r) -> !!rd[r])
+                            , @, region, views, rendered
+                            @layout[region].show view
 
-            @deferredStart.done _.bind @onStart, @ if @onStart
+                @deferredStart.done _.bind @onStart, @ if @onStart
+
+            c = $ @container
+            old = c.data 'feature'
+            if old and old.cid isnt @cid
+                old.stop().done =>
+                    c.data 'feature', @
+                    fn()
+                .fail =>
+                    @deferredStart.reject @
+            else
+                c.data 'feature', @
+                fn()
 
             @deferredStart.promise()
+
 
         genEventName: (eventName) ->
             @path() + '#' + eventName
