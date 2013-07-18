@@ -16,6 +16,7 @@ define [
                 submitSuccess: =>
                     tree.addNodes selected, @feature.views['forms:add'].model.toJSON()
             , 'forms:add', viewLoader.getDialogTitle(@feature.views['forms:add'], 'add', '新增'), 'add'
+
         edit: ->
             tree = @feature.views['treeViews:tree'].components[0]
             view = @feature.views['forms:edit']
