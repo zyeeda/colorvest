@@ -88,8 +88,6 @@ define [
                 tabs: data.tabs
 
             view = new FormView def
-            view.options.size or= 'large'
-            view.options.dialogClass = "c-form-size-#{view.options.size}"
             view.eventHandlers.formStatusChanged = (e) ->
                 scaffold = @feature.options.scaffold or {}
                 fsc = scaffold.handlers?.formStatusChanged
