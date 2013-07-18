@@ -1,9 +1,9 @@
 define [
     'underscore'
     'coala/coala'
-    'jqueryui/slider'
-    'jqueryui/datepicker'
-    'jqueryui/datepicker-zh-CN'
+    'coala/vendors/jquery/ui/slider'
+    'coala/vendors/jquery/ui/datepicker'
+    'coala/vendors/jquery/ui/datepicker-zh-CN'
     'coala/vendors/jquery/daterangepicker/date'
     'coala/vendors/jquery/daterangepicker/daterangepicker'
 ], (_, coala) ->

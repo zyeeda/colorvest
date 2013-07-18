@@ -20,8 +20,11 @@ define [
         _.extend params, view.collection.extra
 
         settings.jqXHR = view.collection.fetch(data: params).done ->
+            data = view.collection.toJSON()
+            data = settings.oInit.afterRequest.call view, data if settings.oInit.afterRequest
+
             json =
-                aaData: view.collection.toJSON()
+                aaData: data
                 iTotalRecords: view.collection.recordCount
                 iTotalDisplayRecords: view.collection.recordCount
 
@@ -29,6 +32,7 @@ define [
             fn json
 
     adaptColumn = (col) ->
+        col = name: col, header: col if _.isString col
         o =
             bSearchable: !!col.searchable
             bSortable: col.sortable isnt false
@@ -89,6 +93,8 @@ define [
             opt.aoColumns = (adaptColumn col for col in columns)
 
         opt.aaData = options.data if options.data
+
+        console.log opt, options
 
         table = el.dataTable opt
         table.delegate 'tr', 'click', (e) ->

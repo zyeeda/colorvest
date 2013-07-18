@@ -1,4 +1,4 @@
-define(['jquery','jqueryui/datepicker'], function (jQuery) {
+define(['jquery','coala/vendors/jquery/ui/datepicker'], function (jQuery) {
 /* Chinese initialisation for the jQuery UI date picker plugin. */
 /* Written by Cloudream (cloudream@gmail.com). */
 jQuery(function($){

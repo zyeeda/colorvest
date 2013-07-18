@@ -2,6 +2,5 @@ define [
     'jquery'
     'underscore'
     'coala/coala'
-    'jqueryui/tabs'
+    'coala/vendors/jquery/ui/tabs'
 ], ($, _, coala) ->
-
