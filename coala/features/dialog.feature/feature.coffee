@@ -32,7 +32,7 @@ define [
                 event.preventDefault()  if me.startedOptions.length > 1
                 me.close()
 
-            c.addClass @startupOptions.view.options.dialogClass  if @startupOptions.view.options.dialogClass
+            c.addClass @startupOptions.view.options.dialogClass if @startupOptions.view.options.dialogClass
             @container = $('#' + @startupOptions.view.cid)
 
         stop: (su) ->

@@ -108,7 +108,8 @@ define [
                 @container.find('#text-' + @id).html text
 
         setValue: (value) ->
-            text = @options.toText or (data) -> data.name
+            text = @options.toText or (data) -> if data then data.name else ''
+            #text = @options.toText or (data) -> data.name
             if _.isArray value
                 t = (text item for item in value).join ','
             else
