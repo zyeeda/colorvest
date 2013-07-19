@@ -32,3 +32,37 @@ html, body {
     margin-right: 10px;
 }
 
+.c-picker {
+  width: 100%;
+  position: relative;
+}
+
+.c-picker .uneditable-input {
+  width: 100%;
+  display: inline-block;
+  height: 32px;
+  border-radius: 0;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.c-picker a.btn {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 22px;
+  line-height: 22px;
+  padding: 0px 12px 0 12px;
+}
+
+.c-picker .text {
+  position: absolute;
+  overflow: hidden;
+  width: 90%;
+  top: 7px;
+}
+
+.c-action-form .tab-content {
+    border: 1px solid #C5D0DC;
+}
