@@ -118,7 +118,7 @@ define [
             @value = value
 
         loadData: (data) ->
-            @setValue if @name then data[name] else data
+            @setValue if @name then data[@name] else data
 
         getTemplate: -> _.template '''
             <div class="c-picker">
