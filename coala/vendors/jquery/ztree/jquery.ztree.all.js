@@ -1,6 +1,6 @@
 
 /*
- * JQuery zTree core 3.3
+ * JQuery zTree core 3.5.14
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -9,12 +9,18 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2012-07-16
+ * Date: 2013-06-28
  */
 (function($){
-	var settings = {}, roots = {}, caches = {}, zId = 0,
+	var settings = {}, roots = {}, caches = {},
 	//default consts of core
 	_consts = {
+		className: {
+			BUTTON: "button",
+			LEVEL: "level",
+			ICO_LOADING: "ico_loading",
+			SWITCH: "switch"
+		},
 		event: {
 			NODECREATED: "ztree_nodeCreated",
 			CLICK: "ztree_click",
@@ -94,6 +100,7 @@
 		callback: {
 			beforeAsync:null,
 			beforeClick:null,
+			beforeDblClick:null,
 			beforeRightClick:null,
 			beforeMouseDown:null,
 			beforeMouseUp:null,
@@ -105,6 +112,7 @@
 			onAsyncSuccess:null,
 			onNodeCreated:null,
 			onClick:null,
+			onDblClick:null,
 			onRightClick:null,
 			onMouseDown:null,
 			onMouseUp:null,
@@ -126,6 +134,8 @@
 		r.curSelectedList = [];
 		r.noSelection = true;
 		r.createdNodes = [];
+		r.zId = 0;
+		r._ver = (new Date()).getTime();
 	},
 	//default cache of core
 	_initCache = function(setting) {
@@ -141,40 +151,44 @@
 	_bindEvent = function(setting) {
 		var o = setting.treeObj,
 		c = consts.event;
-		o.unbind(c.NODECREATED);
 		o.bind(c.NODECREATED, function (event, treeId, node) {
 			tools.apply(setting.callback.onNodeCreated, [event, treeId, node]);
 		});
 
-		o.unbind(c.CLICK);
 		o.bind(c.CLICK, function (event, srcEvent, treeId, node, clickFlag) {
 			tools.apply(setting.callback.onClick, [srcEvent, treeId, node, clickFlag]);
 		});
 
-		o.unbind(c.EXPAND);
 		o.bind(c.EXPAND, function (event, treeId, node) {
 			tools.apply(setting.callback.onExpand, [event, treeId, node]);
 		});
 
-		o.unbind(c.COLLAPSE);
 		o.bind(c.COLLAPSE, function (event, treeId, node) {
 			tools.apply(setting.callback.onCollapse, [event, treeId, node]);
 		});
 
-		o.unbind(c.ASYNC_SUCCESS);
 		o.bind(c.ASYNC_SUCCESS, function (event, treeId, node, msg) {
 			tools.apply(setting.callback.onAsyncSuccess, [event, treeId, node, msg]);
 		});
 
-		o.unbind(c.ASYNC_ERROR);
 		o.bind(c.ASYNC_ERROR, function (event, treeId, node, XMLHttpRequest, textStatus, errorThrown) {
 			tools.apply(setting.callback.onAsyncError, [event, treeId, node, XMLHttpRequest, textStatus, errorThrown]);
 		});
 	},
+	_unbindEvent = function(setting) {
+		var o = setting.treeObj,
+		c = consts.event;
+		o.unbind(c.NODECREATED)
+		.unbind(c.CLICK)
+		.unbind(c.EXPAND)
+		.unbind(c.COLLAPSE)
+		.unbind(c.ASYNC_SUCCESS)
+		.unbind(c.ASYNC_ERROR);
+	},
 	//default event proxy of core
 	_eventProxy = function(event) {
 		var target = event.target,
-		setting = settings[event.data.treeId],
+		setting = data.getSetting(event.data.treeId),
 		tId = "", node = null,
 		nodeEventType = "", treeEventType = "",
 		nodeEventCallback = null, treeEventCallback = null,
@@ -188,12 +202,12 @@
 			treeEventType = "contextmenu";
 		} else if (tools.eqs(event.type, "click")) {
 			if (tools.eqs(target.tagName, "span") && target.getAttribute("treeNode"+ consts.id.SWITCH) !== null) {
-				tId = target.parentNode.id;
+				tId = tools.getNodeMainDom(target).id;
 				nodeEventType = "switchNode";
 			} else {
 				tmp = tools.getMDom(setting, target, [{tagName:"a", attrName:"treeNode"+consts.id.A}]);
 				if (tmp) {
-					tId = tmp.parentNode.id;
+					tId = tools.getNodeMainDom(tmp).id;
 					nodeEventType = "clickNode";
 				}
 			}
@@ -201,13 +215,13 @@
 			treeEventType = "dblclick";
 			tmp = tools.getMDom(setting, target, [{tagName:"a", attrName:"treeNode"+consts.id.A}]);
 			if (tmp) {
-				tId = tmp.parentNode.id;
+				tId = tools.getNodeMainDom(tmp).id;
 				nodeEventType = "switchNode";
 			}
 		}
 		if (treeEventType.length > 0 && tId.length == 0) {
 			tmp = tools.getMDom(setting, target, [{tagName:"a", attrName:"treeNode"+consts.id.A}]);
-			if (tmp) {tId = tmp.parentNode.id;}
+			if (tmp) {tId = tools.getNodeMainDom(tmp).id;}
 		}
 		// event to node
 		if (tId.length>0) {
@@ -216,7 +230,7 @@
 				case "switchNode" :
 					if (!node.isParent) {
 						nodeEventType = "";
-					} else if (tools.eqs(event.type, "click") 
+					} else if (tools.eqs(event.type, "click")
 						|| (tools.eqs(event.type, "dblclick") && tools.apply(setting.view.dblClickExpand, [setting.treeId, node], setting.view.dblClickExpand))) {
 						nodeEventCallback = handler.onSwitchNode;
 					} else {
@@ -256,9 +270,10 @@
 	//default init node of core
 	_initNode = function(setting, level, n, parentNode, isFirstNode, isLastNode, openFlag) {
 		if (!n) return;
-		var childKey = setting.data.key.children;
+		var r = data.getRoot(setting),
+		childKey = setting.data.key.children;
 		n.level = level;
-		n.tId = setting.treeId + "_" + (++zId);
+		n.tId = setting.treeId + "_" + (++r.zId);
 		n.parentTId = parentNode ? parentNode.tId : null;
 		if (n[childKey] && n[childKey].length > 0) {
 			if (typeof n.open == "string") n.open = tools.eqs(n.open, "true");
@@ -281,6 +296,7 @@
 	},
 	_init = {
 		bind: [_bindEvent],
+		unbind: [_unbindEvent],
 		caches: [_initCache],
 		nodes: [_initNode],
 		proxys: [_eventProxy],
@@ -294,7 +310,10 @@
 	//method of operate data
 	data = {
 		addNodeCache: function(setting, node) {
-			data.getCache(setting).nodes[node.tId] = node;
+			data.getCache(setting).nodes[data.getNodeCacheId(node.tId)] = node;
+		},
+		getNodeCacheId: function(tId) {
+			return tId.substring(tId.lastIndexOf("_")+1);
 		},
 		addAfterA: function(afterA) {
 			_init.afterA.push(afterA);
@@ -311,14 +330,21 @@
 		addInitBind: function(bindEvent) {
 			_init.bind.push(bindEvent);
 		},
+		addInitUnBind: function(unbindEvent) {
+			_init.unbind.push(unbindEvent);
+		},
 		addInitCache: function(initCache) {
 			_init.caches.push(initCache);
 		},
 		addInitNode: function(initNode) {
 			_init.nodes.push(initNode);
 		},
-		addInitProxy: function(initProxy) {
-			_init.proxys.push(initProxy);
+		addInitProxy: function(initProxy, isFirst) {
+			if (!!isFirst) {
+				_init.proxys.splice(0,0,initProxy);
+			} else {
+				_init.proxys.push(initProxy);
+			}
 		},
 		addInitRoot: function(initRoot) {
 			_init.roots.push(initRoot);
@@ -404,8 +430,16 @@
 		},
 		getNodeCache: function(setting, tId) {
 			if (!tId) return null;
-			var n = caches[setting.treeId].nodes[tId];
+			var n = caches[setting.treeId].nodes[data.getNodeCacheId(tId)];
 			return n ? n : null;
+		},
+		getNodeName: function(setting, node) {
+			var nameKey = setting.data.key.name;
+			return "" + node[nameKey];
+		},
+		getNodeTitle: function(setting, node) {
+			var t = setting.data.key.title === "" ? setting.data.key.name : setting.data.key.title;
+			return "" + node[t];
 		},
 		getNodes: function(setting) {
 			return data.getRoot(setting)[setting.data.key.children];
@@ -426,8 +460,9 @@
 			if (!nodes || !key) return [];
 			var childKey = setting.data.key.children,
 			result = [];
+			value = value.toLowerCase();
 			for (var i = 0, l = nodes.length; i < l; i++) {
-				if (typeof nodes[i][key] == "string" && nodes[i][key].indexOf(value)>-1) {
+				if (typeof nodes[i][key] == "string" && nodes[i][key].toLowerCase().indexOf(value)>-1) {
 					result.push(nodes[i]);
 				}
 				result = result.concat(data.getNodesByParamFuzzy(setting, nodes[i][childKey], key, value));
@@ -463,14 +498,14 @@
 		getRoot: function(setting) {
 			return setting ? roots[setting.treeId] : null;
 		},
+		getRoots: function() {
+			return roots;
+		},
 		getSetting: function(treeId) {
 			return settings[treeId];
 		},
 		getSettings: function() {
 			return settings;
-		},
-		getTitleKey: function(setting) {
-			return setting.data.key.title === "" ? setting.data.key.name : setting.data.key.title;
 		},
 		getZTreeTools: function(treeId) {
 			var r = this.getRoot(this.getSetting(treeId));
@@ -505,7 +540,7 @@
 					arguments.callee(setting, node[childKey][i]);
 				}
 			}
-			delete data.getCache(setting).nodes[node.tId];
+			data.getCache(setting).nodes[data.getNodeCacheId(node.tId)] = null;
 		},
 		removeSelectedNode: function(setting, node) {
 			var root = data.getRoot(setting);
@@ -579,25 +614,40 @@
 				_init.bind[i].apply(this, arguments);
 			}
 		},
+		unbindEvent: function(setting) {
+			for (var i=0, j=_init.unbind.length; i<j; i++) {
+				_init.unbind[i].apply(this, arguments);
+			}
+		},
 		bindTree: function(setting) {
 			var eventParam = {
 				treeId: setting.treeId
 			},
 			o = setting.treeObj;
-			o.unbind('click', event.proxy);
+			// for can't select text
+			o.bind('selectstart', function(e){
+					var n = e.originalEvent.srcElement.nodeName.toLowerCase();
+					return (n === "input" || n === "textarea" );
+			}).css({
+				"-moz-user-select":"-moz-none"
+			});
 			o.bind('click', eventParam, event.proxy);
-			o.unbind('dblclick', event.proxy);
 			o.bind('dblclick', eventParam, event.proxy);
-			o.unbind('mouseover', event.proxy);
 			o.bind('mouseover', eventParam, event.proxy);
-			o.unbind('mouseout', event.proxy);
 			o.bind('mouseout', eventParam, event.proxy);
-			o.unbind('mousedown', event.proxy);
 			o.bind('mousedown', eventParam, event.proxy);
-			o.unbind('mouseup', event.proxy);
 			o.bind('mouseup', eventParam, event.proxy);
-			o.unbind('contextmenu', event.proxy);
 			o.bind('contextmenu', eventParam, event.proxy);
+		},
+		unbindTree: function(setting) {
+			var o = setting.treeObj;
+			o.unbind('click', event.proxy)
+			.unbind('dblclick', event.proxy)
+			.unbind('mouseover', event.proxy)
+			.unbind('mouseout', event.proxy)
+			.unbind('mousedown', event.proxy)
+			.unbind('mouseup', event.proxy)
+			.unbind('contextmenu', event.proxy);
 		},
 		doProxy: function(e) {
 			var results = [];
@@ -626,18 +676,13 @@
 					r = proxyResult.treeEventCallback.apply(proxyResult, [e, proxyResult.node]) && r;
 				}
 			}
-			try{
-				if (x && $("input:focus").length == 0) {
-					tools.noSel(setting);
-				}
-			} catch(e) {}
 			return r;
 		}
 	},
 	//method of event handler
 	handler = {
 		onSwitchNode: function (event, node) {
-			var setting = settings[event.data.treeId];
+			var setting = data.getSetting(event.data.treeId);
 			if (node.open) {
 				if (tools.apply(setting.callback.beforeCollapse, [setting.treeId, node], true) == false) return true;
 				data.getRoot(setting).expandTriggerFlag = true;
@@ -650,7 +695,7 @@
 			return true;
 		},
 		onClickNode: function (event, node) {
-			var setting = settings[event.data.treeId],
+			var setting = data.getSetting(event.data.treeId),
 			clickFlag = ( (setting.view.autoCancelSelected && event.ctrlKey) && data.isSelectedNode(setting, node)) ? 0 : (setting.view.autoCancelSelected && event.ctrlKey && setting.view.selectedMulti) ? 2 : 1;
 			if (tools.apply(setting.callback.beforeClick, [setting.treeId, node, clickFlag], true) == false) return true;
 			if (clickFlag === 0) {
@@ -662,28 +707,28 @@
 			return true;
 		},
 		onZTreeMousedown: function(event, node) {
-			var setting = settings[event.data.treeId];
+			var setting = data.getSetting(event.data.treeId);
 			if (tools.apply(setting.callback.beforeMouseDown, [setting.treeId, node], true)) {
 				tools.apply(setting.callback.onMouseDown, [event, setting.treeId, node]);
 			}
 			return true;
 		},
 		onZTreeMouseup: function(event, node) {
-			var setting = settings[event.data.treeId];
+			var setting = data.getSetting(event.data.treeId);
 			if (tools.apply(setting.callback.beforeMouseUp, [setting.treeId, node], true)) {
 				tools.apply(setting.callback.onMouseUp, [event, setting.treeId, node]);
 			}
 			return true;
 		},
 		onZTreeDblclick: function(event, node) {
-			var setting = settings[event.data.treeId];
+			var setting = data.getSetting(event.data.treeId);
 			if (tools.apply(setting.callback.beforeDblClick, [setting.treeId, node], true)) {
 				tools.apply(setting.callback.onDblClick, [event, setting.treeId, node]);
 			}
 			return true;
 		},
 		onZTreeContextmenu: function(event, node) {
-			var setting = settings[event.data.treeId];
+			var setting = data.getSetting(event.data.treeId);
 			if (tools.apply(setting.callback.beforeRightClick, [setting.treeId, node], true)) {
 				tools.apply(setting.callback.onRightClick, [event, setting.treeId, node]);
 			}
@@ -702,32 +747,30 @@
 			var childKey = setting.data.key.children;
 			return (setting.async.enable && node && node.isParent && !(node.zAsync || (node[childKey] && node[childKey].length > 0)));
 		},
-		clone: function (jsonObj) {
-			var buf;
-			if (jsonObj instanceof Array) {
-				buf = [];
-				var i = jsonObj.length;
-				while (i--) {
-					buf[i] = arguments.callee(jsonObj[i]);
-				}
-				return buf;
-			}else if (typeof jsonObj == "function"){
-				return jsonObj;
-			}else if (jsonObj instanceof Object){
-				buf = {};
-				for (var k in jsonObj) {
-					buf[k] = arguments.callee(jsonObj[k]);
-				}
-				return buf;
-			}else{
-				return jsonObj;
+		clone: function (obj){
+			if (obj === null) return null;
+			var o = tools.isArray(obj) ? [] : {};
+			for(var i in obj){
+				o[i] = (obj[i] instanceof Date) ? new Date(obj[i].getTime()) : (typeof obj[i] === "object" ? arguments.callee(obj[i]) : obj[i]);
 			}
+			return o;
 		},
 		eqs: function(str1, str2) {
 			return str1.toLowerCase() === str2.toLowerCase();
 		},
 		isArray: function(arr) {
 			return Object.prototype.toString.apply(arr) === "[object Array]";
+		},
+		$: function(node, exp, setting) {
+			if (!!exp && typeof exp != "string") {
+				setting = exp;
+				exp = "";
+			}
+			if (typeof node == "string") {
+				return $(node, setting ? setting.treeObj.get(0).ownerDocument : null);
+			} else {
+				return $("#" + node.tId + exp, setting ? setting.treeObj : null);
+			}
 		},
 		getMDom: function (setting, curDom, targetExpr) {
 			if (!curDom) return null;
@@ -741,13 +784,8 @@
 			}
 			return null;
 		},
-		noSel: function(setting) {
-			var r = data.getRoot(setting);
-			if (r.noSelection) {
-				try {
-					window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();
-				} catch(e){}
-			}
+		getNodeMainDom:function(target) {
+			return ($(target).parent("li").get(0) || $(target).parentsUntil("li").parent().get(0));
 		},
 		uCanDo: function(setting, e) {
 			return true;
@@ -766,9 +804,9 @@
 				newNodes = data.transformTozTreeFormat(setting, newNodes);
 			}
 			if (parentNode) {
-				var target_switchObj = $("#" + parentNode.tId + consts.id.SWITCH),
-				target_icoObj = $("#" + parentNode.tId + consts.id.ICON),
-				target_ulObj = $("#" + parentNode.tId + consts.id.UL);
+				var target_switchObj = $$(parentNode, consts.id.SWITCH, setting),
+				target_icoObj = $$(parentNode, consts.id.ICON, setting),
+				target_ulObj = $$(parentNode, consts.id.UL, setting);
 
 				if (!parentNode.open) {
 					view.replaceSwitchClass(parentNode, target_switchObj, consts.folder.CLOSE);
@@ -810,7 +848,7 @@
 					childHtml = view.appendNodes(setting, level + 1, node[childKey], node, initFlag, openFlag && node.open);
 				}
 				if (openFlag) {
-					
+
 					view.makeDOMNodeMainBefore(html, setting, node);
 					view.makeDOMNodeLine(html, setting, node);
 					data.getBeforeA(setting, node, html);
@@ -831,18 +869,18 @@
 		},
 		appendParentULDom: function(setting, node) {
 			var html = [],
-			nObj = $("#" + node.tId),
-			ulObj = $("#" + node.tId + consts.id.UL),
-			childKey = setting.data.key.children,
-			childHtml = view.appendNodes(setting, node.level+1, node[childKey], node, false, true);
-			view.makeUlHtml(setting, node, html, childHtml.join(''));
+			nObj = $$(node, setting);
 			if (!nObj.get(0) && !!node.parentTId) {
 				view.appendParentULDom(setting, node.getParentNode());
-				nObj = $("#" + node.tId);
+				nObj = $$(node, setting);
 			}
+			var ulObj = $$(node, consts.id.UL, setting);
 			if (ulObj.get(0)) {
 				ulObj.remove();
 			}
+			var childKey = setting.data.key.children,
+			childHtml = view.appendNodes(setting, node.level+1, node[childKey], node, false, true);
+			view.makeUlHtml(setting, node, html, childHtml.join(''));
 			nObj.append(html.join(''));
 		},
 		asyncNode: function(setting, node, isSilent, callback) {
@@ -858,46 +896,30 @@
 			}
 			if (node) {
 				node.isAjaxing = true;
-				var icoObj = $("#" + node.tId + consts.id.ICON);
-				icoObj.attr({"style":"", "class":"button ico_loading"});
+				var icoObj = $$(node, consts.id.ICON, setting);
+				icoObj.attr({"style":"", "class":consts.className.BUTTON + " " + consts.className.ICO_LOADING});
 			}
 
-			var isJson = (setting.async.contentType == "application/json"), tmpParam = isJson ? "{" : "", jTemp="";
+			var tmpParam = {};
 			for (i = 0, l = setting.async.autoParam.length; node && i < l; i++) {
 				var pKey = setting.async.autoParam[i].split("="), spKey = pKey;
 				if (pKey.length>1) {
 					spKey = pKey[1];
 					pKey = pKey[0];
 				}
-				if (isJson) {
-					jTemp = (typeof node[pKey] == "string") ? '"' : '';
-					tmpParam += '"' + spKey + ('":' + jTemp + node[pKey]).replace(/'/g,'\\\'') + jTemp + ',';
-				} else {
-					tmpParam += spKey + ("=" + node[pKey]).replace(/&/g,'%26') + "&";
-				}
+				tmpParam[spKey] = node[pKey];
 			}
 			if (tools.isArray(setting.async.otherParam)) {
 				for (i = 0, l = setting.async.otherParam.length; i < l; i += 2) {
-					if (isJson) {
-						jTemp = (typeof setting.async.otherParam[i + 1] == "string") ? '"' : '';
-						tmpParam += '"' + setting.async.otherParam[i] + ('":' + jTemp + setting.async.otherParam[i + 1]).replace(/'/g,'\\\'') + jTemp + ",";
-					} else {
-						tmpParam += setting.async.otherParam[i] + ("=" + setting.async.otherParam[i + 1]).replace(/&/g,'%26') + "&";
-					}
+					tmpParam[setting.async.otherParam[i]] = setting.async.otherParam[i + 1];
 				}
 			} else {
 				for (var p in setting.async.otherParam) {
-					if (isJson) {
-						jTemp = (typeof setting.async.otherParam[p] == "string") ? '"' : '';
-						tmpParam += '"' + p + ('":' + jTemp + setting.async.otherParam[p]).replace(/'/g,'\\\'') + jTemp + ",";
-					} else {
-						tmpParam += p + ("=" + setting.async.otherParam[p]).replace(/&/g,'%26') + "&";
-					}
+					tmpParam[p] = setting.async.otherParam[p];
 				}
 			}
-			if (tmpParam.length > 1) tmpParam = tmpParam.substring(0, tmpParam.length-1);
-			if (isJson) tmpParam += "}";
 
+			var _tmpV = data.getRoot(setting)._ver;
 			$.ajax({
 				contentType: setting.async.contentType,
 				type: setting.async.type,
@@ -905,6 +927,9 @@
 				data: tmpParam,
 				dataType: setting.async.dataType,
 				success: function(msg) {
+					if (_tmpV != data.getRoot(setting)._ver) {
+						return;
+					}
 					var newNodes = [];
 					try {
 						if (!msg || msg.length == 0) {
@@ -914,7 +939,9 @@
 						} else {
 							newNodes = msg;
 						}
-					} catch(err) {}
+					} catch(err) {
+						newNodes = msg;
+					}
 
 					if (node) {
 						node.isAjaxing = null;
@@ -931,6 +958,9 @@
 					tools.apply(callback);
 				},
 				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					if (_tmpV != data.getRoot(setting)._ver) {
+						return;
+					}
 					if (node) node.isAjaxing = null;
 					view.setNodeLineIcos(setting, node);
 					setting.treeObj.trigger(consts.event.ASYNC_ERROR, [setting.treeId, node, XMLHttpRequest, textStatus, errorThrown]);
@@ -942,8 +972,7 @@
 			var list = data.getRoot(setting).curSelectedList;
 			for (var i=0, j=list.length-1; j>=i; j--) {
 				if (!node || node === list[j]) {
-					$("#" + list[j].tId + consts.id.A).removeClass(consts.node.CURSELECTED);
-					view.setNodeName(setting, list[j]);
+					$$(list[j], consts.id.A, setting).removeClass(consts.node.CURSELECTED);
 					if (node) {
 						data.removeSelectedNode(setting, node);
 						break;
@@ -968,18 +997,26 @@
 			if (!nodes || nodes.length == 0) return;
 			var root = data.getRoot(setting),
 			childKey = setting.data.key.children,
-			openFlag = !parentNode || parentNode.open || !!$("#" + parentNode[childKey][0].tId).get(0);
+			openFlag = !parentNode || parentNode.open || !!$$(parentNode[childKey][0], setting).get(0);
 			root.createdNodes = [];
 			var zTreeHtml = view.appendNodes(setting, level, nodes, parentNode, true, openFlag);
 			if (!parentNode) {
 				setting.treeObj.append(zTreeHtml.join(''));
 			} else {
-				var ulObj = $("#" + parentNode.tId + consts.id.UL);
+				var ulObj = $$(parentNode, consts.id.UL, setting);
 				if (ulObj.get(0)) {
 					ulObj.append(zTreeHtml.join(''));
 				}
 			}
 			view.createNodeCallback(setting);
+		},
+		destroy: function(setting) {
+			if (!setting) return;
+			data.initCache(setting);
+			data.initRoot(setting);
+			event.unbindTree(setting);
+			event.unbindEvent(setting);
+			setting.treeObj.empty();
 		},
 		expandCollapseNode: function(setting, node, expandFlag, animateFlag, callback) {
 			var root = data.getRoot(setting),
@@ -1000,17 +1037,17 @@
 				};
 				root.expandTriggerFlag = false;
 			}
+			if (!node.open && node.isParent && ((!$$(node, consts.id.UL, setting).get(0)) || (node[childKey] && node[childKey].length>0 && !$$(node[childKey][0], setting).get(0)))) {
+				view.appendParentULDom(setting, node);
+				view.createNodeCallback(setting);
+			}
 			if (node.open == expandFlag) {
 				tools.apply(callback, []);
 				return;
 			}
-			if (!node.open && node.isParent && ((!$("#" + node.tId + consts.id.UL).get(0)) || (node[childKey] && node[childKey].length>0 && !$("#" + node[childKey][0].tId).get(0)))) {
-				view.appendParentULDom(setting, node);
-				view.createNodeCallback(setting);
-			}
-			var ulObj = $("#" + node.tId + consts.id.UL),
-			switchObj = $("#" + node.tId + consts.id.SWITCH),
-			icoObj = $("#" + node.tId + consts.id.ICON);
+			var ulObj = $$(node, consts.id.UL, setting),
+			switchObj = $$(node, consts.id.SWITCH, setting),
+			icoObj = $$(node, consts.id.ICON, setting);
 
 			if (node.isParent) {
 				node.open = !node.open;
@@ -1074,8 +1111,8 @@
 			view.expandCollapseNode(setting, node, expandFlag, animateFlag, callback );
 		},
 		makeDOMNodeIcon: function(html, setting, node) {
-			var nameKey = setting.data.key.name,	
-			name = setting.view.nameIsHTML ? node[nameKey] : node[nameKey].replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+			var nameStr = data.getNodeName(setting, node),
+			name = setting.view.nameIsHTML ? nameStr : nameStr.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 			html.push("<span id='", node.tId, consts.id.ICON,
 				"' title='' treeNode", consts.id.ICON," class='", view.makeNodeIcoClass(setting, node),
 				"' style='", view.makeNodeIcoStyle(setting, node), "'></span><span id='", node.tId, consts.id.SPAN,
@@ -1088,23 +1125,23 @@
 			html.push("</li>");
 		},
 		makeDOMNodeMainBefore: function(html, setting, node) {
-			html.push("<li id='", node.tId, "' class='level", node.level,"' tabindex='0' hidefocus='true' treenode>");
+			html.push("<li id='", node.tId, "' class='", consts.className.LEVEL, node.level,"' tabindex='0' hidefocus='true' treenode>");
 		},
 		makeDOMNodeNameAfter: function(html, setting, node) {
 			html.push("</a>");
 		},
 		makeDOMNodeNameBefore: function(html, setting, node) {
-			var titleKey = data.getTitleKey(setting),
+			var title = data.getNodeTitle(setting, node),
 			url = view.makeNodeUrl(setting, node),
 			fontcss = view.makeNodeFontCss(setting, node),
 			fontStyle = [];
 			for (var f in fontcss) {
 				fontStyle.push(f, ":", fontcss[f], ";");
 			}
-			html.push("<a id='", node.tId, consts.id.A, "' class='level", node.level,"' treeNode", consts.id.A," onclick=\"", (node.click || ''),
+			html.push("<a id='", node.tId, consts.id.A, "' class='", consts.className.LEVEL, node.level,"' treeNode", consts.id.A," onclick=\"", (node.click || ''),
 				"\" ", ((url != null && url.length > 0) ? "href='" + url + "'" : ""), " target='",view.makeNodeTarget(node),"' style='", fontStyle.join(''),
 				"'");
-			if (tools.apply(setting.view.showTitle, [setting.treeId, node], setting.view.showTitle) && node[titleKey]) {html.push("title='", node[titleKey].replace(/'/g,"&#39;").replace(/</g,'&lt;').replace(/>/g,'&gt;'),"'");}
+			if (tools.apply(setting.view.showTitle, [setting.treeId, node], setting.view.showTitle) && title) {html.push("title='", title.replace(/'/g,"&#39;").replace(/</g,'&lt;').replace(/>/g,'&gt;'),"'");}
 			html.push(">");
 		},
 		makeNodeFontCss: function(setting, node) {
@@ -1121,7 +1158,7 @@
 					icoCss.push(consts.folder.DOCU);
 				}
 			}
-			return "button " + icoCss.join('_');
+			return consts.className.BUTTON + " " + icoCss.join('_');
 		},
 		makeNodeIcoStyle: function(setting, node) {
 			var icoStyle = [];
@@ -1157,7 +1194,7 @@
 			return view.makeNodeLineClassEx(node) + lineClass.join('_');
 		},
 		makeNodeLineClassEx: function(node) {
-			return "button level" + node.level + " switch ";
+			return consts.className.BUTTON + " " + consts.className.LEVEL + node.level + " " + consts.className.SWITCH + " ";
 		},
 		makeNodeTarget: function(node) {
 			return (node.target || "_blank");
@@ -1167,7 +1204,7 @@
 			return node[urlKey] ? node[urlKey] : null;
 		},
 		makeUlHtml: function(setting, node, html, content) {
-			html.push("<ul id='", node.tId, consts.id.UL, "' class='level", node.level, " ", view.makeUlLineClass(setting, node), "' style='display:", (node.open ? "block": "none"),"'>");
+			html.push("<ul id='", node.tId, consts.id.UL, "' class='", consts.className.LEVEL, node.level, " ", view.makeUlLineClass(setting, node), "' style='display:", (node.open ? "block": "none"),"'>");
 			html.push(content);
 			html.push("</ul>");
 		},
@@ -1189,27 +1226,27 @@
 			if (!setting.data.keep.parent) {
 				node.isParent = false;
 				node.open = false;
-				var tmp_switchObj = $("#" + node.tId + consts.id.SWITCH),
-				tmp_icoObj = $("#" + node.tId + consts.id.ICON);
+				var tmp_switchObj = $$(node, consts.id.SWITCH, setting),
+				tmp_icoObj = $$(node, consts.id.ICON, setting);
 				view.replaceSwitchClass(node, tmp_switchObj, consts.folder.DOCU);
 				view.replaceIcoClass(node, tmp_icoObj, consts.folder.DOCU);
-				$("#" + node.tId + consts.id.UL).remove();
+				$$(node, consts.id.UL, setting).remove();
 			} else {
-				$("#" + node.tId + consts.id.UL).empty();
+				$$(node, consts.id.UL, setting).empty();
 			}
 		},
-                setFirstNode: function(setting, parentNode) {
-                    var childKey = setting.data.key.children, childLength = parentNode[childKey].length;
-                    if ( childLength > 0) {
-                        parentNode[childKey][0].isFirstNode = true;
-                    }
-                },
-                setLastNode: function(setting, parentNode) {
-                    var childKey = setting.data.key.children, childLength = parentNode[childKey].length;
-                    if ( childLength > 0) {
-                        parentNode[childKey][childLength - 1].isLastNode = true;
-                    }
-                },
+		setFirstNode: function(setting, parentNode) {
+			var childKey = setting.data.key.children, childLength = parentNode[childKey].length;
+			if ( childLength > 0) {
+				parentNode[childKey][0].isFirstNode = true;
+			}
+		},
+		setLastNode: function(setting, parentNode) {
+			var childKey = setting.data.key.children, childLength = parentNode[childKey].length;
+			if ( childLength > 0) {
+				parentNode[childKey][childLength - 1].isLastNode = true;
+			}
+		},
 		removeNode: function(setting, node) {
 			var root = data.getRoot(setting),
 			childKey = setting.data.key.children,
@@ -1219,8 +1256,12 @@
 			node.isLastNode = false;
 			node.getPreNode = function() {return null;};
 			node.getNextNode = function() {return null;};
-                        
-			$("#" + node.tId).remove();
+
+			if (!data.getNodeCache(setting, node.tId)) {
+				return;
+			}
+
+			$$(node, setting).remove();
 			data.removeNodeCache(setting, node);
 			data.removeSelectedNode(setting, node);
 
@@ -1230,20 +1271,20 @@
 					break;
 				}
 			}
-                        view.setFirstNode(setting, parentNode);
-                        view.setLastNode(setting, parentNode);
-                                                
-                        var tmp_ulObj,tmp_switchObj,tmp_icoObj, 
-                        childLength = parentNode[childKey].length;
+			view.setFirstNode(setting, parentNode);
+			view.setLastNode(setting, parentNode);
+
+			var tmp_ulObj,tmp_switchObj,tmp_icoObj,
+			childLength = parentNode[childKey].length;
 
 			//repair nodes old parent
 			if (!setting.data.keep.parent && childLength == 0) {
 				//old parentNode has no child nodes
 				parentNode.isParent = false;
 				parentNode.open = false;
-				tmp_ulObj = $("#" + parentNode.tId + consts.id.UL);
-				tmp_switchObj = $("#" + parentNode.tId + consts.id.SWITCH);
-				tmp_icoObj = $("#" + parentNode.tId + consts.id.ICON);
+				tmp_ulObj = $$(parentNode, consts.id.UL, setting);
+				tmp_switchObj = $$(parentNode, consts.id.SWITCH, setting);
+				tmp_icoObj = $$(parentNode, consts.id.ICON, setting);
 				view.replaceSwitchClass(parentNode, tmp_switchObj, consts.folder.DOCU);
 				view.replaceIcoClass(parentNode, tmp_icoObj, consts.folder.DOCU);
 				tmp_ulObj.css("display", "none");
@@ -1251,15 +1292,15 @@
 			} else if (setting.view.showLine && childLength > 0) {
 				//old parentNode has child nodes
 				var newLast = parentNode[childKey][childLength - 1];
-				tmp_ulObj = $("#" + newLast.tId + consts.id.UL);
-				tmp_switchObj = $("#" + newLast.tId + consts.id.SWITCH);
-				tmp_icoObj = $("#" + newLast.tId + consts.id.ICON);
+				tmp_ulObj = $$(newLast, consts.id.UL, setting);
+				tmp_switchObj = $$(newLast, consts.id.SWITCH, setting);
+				tmp_icoObj = $$(newLast, consts.id.ICON, setting);
 				if (parentNode == root) {
 					if (parentNode[childKey].length == 1) {
 						//node was root, and ztree has only one root after move node
 						view.replaceSwitchClass(newLast, tmp_switchObj, consts.line.ROOT);
 					} else {
-						var tmp_first_switchObj = $("#" + parentNode[childKey][0].tId + consts.id.SWITCH);
+						var tmp_first_switchObj = $$(parentNode[childKey][0], consts.id.SWITCH, setting);
 						view.replaceSwitchClass(parentNode[childKey][0], tmp_first_switchObj, consts.line.ROOTS);
 						view.replaceSwitchClass(newLast, tmp_switchObj, consts.line.BOTTOM);
 					}
@@ -1313,11 +1354,11 @@
 			if (!addFlag) {
 				view.cancelPreSelectedNode(setting);
 			}
-			$("#" + node.tId + consts.id.A).addClass(consts.node.CURSELECTED);
+			$$(node, consts.id.A, setting).addClass(consts.node.CURSELECTED);
 			data.addSelectedNode(setting, node);
 		},
 		setNodeFontCss: function(setting, treeNode) {
-			var aObj = $("#" + treeNode.tId + consts.id.A),
+			var aObj = $$(treeNode, consts.id.A, setting),
 			fontCss = view.makeNodeFontCss(setting, treeNode);
 			if (fontCss) {
 				aObj.css(fontCss);
@@ -1325,9 +1366,9 @@
 		},
 		setNodeLineIcos: function(setting, node) {
 			if (!node) return;
-			var switchObj = $("#" + node.tId + consts.id.SWITCH),
-			ulObj = $("#" + node.tId + consts.id.UL),
-			icoObj = $("#" + node.tId + consts.id.ICON),
+			var switchObj = $$(node, consts.id.SWITCH, setting),
+			ulObj = $$(node, consts.id.UL, setting),
+			icoObj = $$(node, consts.id.ICON, setting),
 			ulLine = view.makeUlLineClass(setting, node);
 			if (ulLine.length==0) {
 				ulObj.removeClass(consts.line.LINE);
@@ -1345,26 +1386,25 @@
 			icoObj.attr("class", view.makeNodeIcoClass(setting, node));
 		},
 		setNodeName: function(setting, node) {
-			var nameKey = setting.data.key.name,
-			titleKey = data.getTitleKey(setting),
-			nObj = $("#" + node.tId + consts.id.SPAN);
+			var title = data.getNodeTitle(setting, node),
+			nObj = $$(node, consts.id.SPAN, setting);
 			nObj.empty();
 			if (setting.view.nameIsHTML) {
-				nObj.html(node[nameKey]);
+				nObj.html(data.getNodeName(setting, node));
 			} else {
-				nObj.text(node[nameKey]);
+				nObj.text(data.getNodeName(setting, node));
 			}
 			if (tools.apply(setting.view.showTitle, [setting.treeId, node], setting.view.showTitle)) {
-				var aObj = $("#" + node.tId + consts.id.A);
-				aObj.attr("title", !node[titleKey] ? "" : node[titleKey]);
+				var aObj = $$(node, consts.id.A, setting);
+				aObj.attr("title", !title ? "" : title);
 			}
 		},
-		setNodeTarget: function(node) {
-			var aObj = $("#" + node.tId + consts.id.A);
+		setNodeTarget: function(setting, node) {
+			var aObj = $$(node, consts.id.A, setting);
 			aObj.attr("target", view.makeNodeTarget(node));
 		},
 		setNodeUrl: function(setting, node) {
-			var aObj = $("#" + node.tId + consts.id.A),
+			var aObj = $$(node, consts.id.A, setting),
 			url = view.makeNodeUrl(setting, node);
 			if (url == null || url.length == 0) {
 				aObj.removeAttr("href");
@@ -1398,6 +1438,15 @@
 			var o = data.getZTreeTools(treeId);
 			return o ? o : null;
 		},
+		destroy: function(treeId) {
+			if (!!treeId && treeId.length > 0) {
+				view.destroy(data.getSetting(treeId));
+			} else {
+				for(var s in settings) {
+					view.destroy(settings[s]);
+				}
+			}
+		},
 		init: function(obj, zSetting, zNodes) {
 			var setting = tools.clone(_setting);
 			$.extend(true, setting, zSetting);
@@ -1405,10 +1454,10 @@
 			setting.treeObj = obj;
 			setting.treeObj.empty();
 			settings[setting.treeId] = setting;
-			if ($.browser.msie && parseInt($.browser.version)<7) {
+			//For some older browser,(e.g., ie6)
+			if(typeof document.body.style.maxHeight === "undefined") {
 				setting.view.expandSpeed = "";
 			}
-
 			data.initRoot(setting);
 			var root = data.getRoot(setting),
 			childKey = setting.data.key.children;
@@ -1420,9 +1469,11 @@
 			}
 
 			data.initCache(setting);
+			event.unbindTree(setting);
 			event.bindTree(setting);
+			event.unbindEvent(setting);
 			event.bindEvent(setting);
-			
+
 			var zTreeTools = {
 				setting : setting,
 				addNodes : function(parentNode, newNodes, isSilent) {
@@ -1442,11 +1493,14 @@
 					return xNewNodes;
 				},
 				cancelSelectedNode : function(node) {
-					view.cancelPreSelectedNode(this.setting, node);
+					view.cancelPreSelectedNode(setting, node);
+				},
+				destroy : function() {
+					view.destroy(setting);
 				},
 				expandAll : function(expandFlag) {
 					expandFlag = !!expandFlag;
-					view.expandCollapseSonNode(this.setting, null, expandFlag, true);
+					view.expandCollapseSonNode(setting, null, expandFlag, true);
 					return expandFlag;
 				},
 				expandNode : function(node, expandFlag, sonSign, focus, callbackFlag) {
@@ -1462,78 +1516,83 @@
 						return null;
 					}
 					if (expandFlag && node.parentTId) {
-						view.expandCollapseParentNode(this.setting, node.getParentNode(), expandFlag, false);
+						view.expandCollapseParentNode(setting, node.getParentNode(), expandFlag, false);
 					}
 					if (expandFlag === node.open && !sonSign) {
 						return null;
 					}
-					
+
 					data.getRoot(setting).expandTriggerFlag = callbackFlag;
-					if (sonSign) {
-						view.expandCollapseSonNode(this.setting, node, expandFlag, true, function() {
-							if (focus !== false) {$("#" + node.tId).focus().blur();}
+					if (!tools.canAsync(setting, node) && sonSign) {
+						view.expandCollapseSonNode(setting, node, expandFlag, true, function() {
+							if (focus !== false) {try{$$(node, setting).focus().blur();}catch(e){}}
 						});
 					} else {
 						node.open = !expandFlag;
 						view.switchNode(this.setting, node);
-						if (focus !== false) {$("#" + node.tId).focus().blur();}
+						if (focus !== false) {try{$$(node, setting).focus().blur();}catch(e){}}
 					}
 					return expandFlag;
 				},
 				getNodes : function() {
-					return data.getNodes(this.setting);
+					return data.getNodes(setting);
 				},
 				getNodeByParam : function(key, value, parentNode) {
 					if (!key) return null;
-					return data.getNodeByParam(this.setting, parentNode?parentNode[this.setting.data.key.children]:data.getNodes(this.setting), key, value);
+					return data.getNodeByParam(setting, parentNode?parentNode[setting.data.key.children]:data.getNodes(setting), key, value);
 				},
 				getNodeByTId : function(tId) {
-					return data.getNodeCache(this.setting, tId);
+					return data.getNodeCache(setting, tId);
 				},
 				getNodesByParam : function(key, value, parentNode) {
 					if (!key) return null;
-					return data.getNodesByParam(this.setting, parentNode?parentNode[this.setting.data.key.children]:data.getNodes(this.setting), key, value);
+					return data.getNodesByParam(setting, parentNode?parentNode[setting.data.key.children]:data.getNodes(setting), key, value);
 				},
 				getNodesByParamFuzzy : function(key, value, parentNode) {
 					if (!key) return null;
-					return data.getNodesByParamFuzzy(this.setting, parentNode?parentNode[this.setting.data.key.children]:data.getNodes(this.setting), key, value);
+					return data.getNodesByParamFuzzy(setting, parentNode?parentNode[setting.data.key.children]:data.getNodes(setting), key, value);
 				},
 				getNodesByFilter: function(filter, isSingle, parentNode, invokeParam) {
 					isSingle = !!isSingle;
 					if (!filter || (typeof filter != "function")) return (isSingle ? null : []);
-					return data.getNodesByFilter(this.setting, parentNode?parentNode[this.setting.data.key.children]:data.getNodes(this.setting), filter, isSingle, invokeParam);
+					return data.getNodesByFilter(setting, parentNode?parentNode[setting.data.key.children]:data.getNodes(setting), filter, isSingle, invokeParam);
 				},
 				getNodeIndex : function(node) {
 					if (!node) return null;
 					var childKey = setting.data.key.children,
-					parentNode = (node.parentTId) ? node.getParentNode() : data.getRoot(this.setting);
+					parentNode = (node.parentTId) ? node.getParentNode() : data.getRoot(setting);
 					for (var i=0, l = parentNode[childKey].length; i < l; i++) {
 						if (parentNode[childKey][i] == node) return i;
 					}
 					return -1;
 				},
 				getSelectedNodes : function() {
-					var r = [], list = data.getRoot(this.setting).curSelectedList;
+					var r = [], list = data.getRoot(setting).curSelectedList;
 					for (var i=0, l=list.length; i<l; i++) {
 						r.push(list[i]);
 					}
 					return r;
 				},
 				isSelectedNode : function(node) {
-					return data.isSelectedNode(this.setting, node);
+					return data.isSelectedNode(setting, node);
 				},
 				reAsyncChildNodes : function(parentNode, reloadType, isSilent) {
 					if (!this.setting.async.enable) return;
 					var isRoot = !parentNode;
 					if (isRoot) {
-						parentNode = data.getRoot(this.setting);
+						parentNode = data.getRoot(setting);
 					}
 					if (reloadType=="refresh") {
-						parentNode[this.setting.data.key.children] = [];
+						var childKey = this.setting.data.key.children;
+						for (var i = 0, l = parentNode[childKey] ? parentNode[childKey].length : 0; i < l; i++) {
+							data.removeNodeCache(setting, parentNode[childKey][i]);
+						}
+						data.removeSelectedNode(setting);
+						parentNode[childKey] = [];
 						if (isRoot) {
 							this.setting.treeObj.empty();
 						} else {
-							var ulObj = $("#" + parentNode.tId + consts.id.UL);
+							var ulObj = $$(parentNode, consts.id.UL, setting);
 							ulObj.empty();
 						}
 					}
@@ -1541,12 +1600,12 @@
 				},
 				refresh : function() {
 					this.setting.treeObj.empty();
-					var root = data.getRoot(this.setting),
-					nodes = root[this.setting.data.key.children]
-					data.initRoot(this.setting);
-					root[this.setting.data.key.children] = nodes
-					data.initCache(this.setting);
-					view.createNodes(this.setting, 0, root[this.setting.data.key.children]);
+					var root = data.getRoot(setting),
+					nodes = root[setting.data.key.children]
+					data.initRoot(setting);
+					root[setting.data.key.children] = nodes
+					data.initCache(setting);
+					view.createNodes(setting, 0, root[setting.data.key.children]);
 				},
 				removeChildNodes : function(node) {
 					if (!node) return null;
@@ -1566,33 +1625,33 @@
 				},
 				selectNode : function(node, addFlag) {
 					if (!node) return;
-					if (tools.uCanDo(this.setting)) {
+					if (tools.uCanDo(setting)) {
 						addFlag = setting.view.selectedMulti && addFlag;
 						if (node.parentTId) {
-							view.expandCollapseParentNode(this.setting, node.getParentNode(), true, false, function() {
-								$("#" + node.tId).focus().blur();
+							view.expandCollapseParentNode(setting, node.getParentNode(), true, false, function() {
+								try{$$(node, setting).focus().blur();}catch(e){}
 							});
 						} else {
-							$("#" + node.tId).focus().blur();
+							try{$$(node, setting).focus().blur();}catch(e){}
 						}
-						view.selectNode(this.setting, node, addFlag);
+						view.selectNode(setting, node, addFlag);
 					}
 				},
 				transformTozTreeNodes : function(simpleNodes) {
-					return data.transformTozTreeFormat(this.setting, simpleNodes);
+					return data.transformTozTreeFormat(setting, simpleNodes);
 				},
 				transformToArray : function(nodes) {
-					return data.transformToArrayFormat(this.setting, nodes);
+					return data.transformToArrayFormat(setting, nodes);
 				},
 				updateNode : function(node, checkTypeFlag) {
 					if (!node) return;
-					var nObj = $("#" + node.tId);
-					if (nObj.get(0) && tools.uCanDo(this.setting)) {
-						view.setNodeName(this.setting, node);
-						view.setNodeTarget(node);
-						view.setNodeUrl(this.setting, node);
-						view.setNodeLineIcos(this.setting, node);
-						view.setNodeFontCss(this.setting, node);
+					var nObj = $$(node, setting);
+					if (nObj.get(0) && tools.uCanDo(setting)) {
+						view.setNodeName(setting, node);
+						view.setNodeTarget(setting, node);
+						view.setNodeUrl(setting, node);
+						view.setNodeLineIcos(setting, node);
+						view.setNodeFontCss(setting, node);
 					}
 				}
 			}
@@ -1609,10 +1668,11 @@
 	};
 
 	var zt = $.fn.zTree,
+	$$ = tools.$,
 	consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck 3.3
+ * JQuery zTree excheck 3.5.14
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -1621,7 +1681,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2012-07-16
+ * Date: 2013-06-28
  */
 (function($){
 	//default consts of excheck
@@ -1655,6 +1715,7 @@
 			autoCheckTrigger: false,
 			chkStyle: _consts.checkbox.STYLE,
 			nocheckInherit: false,
+			chkDisabledInherit: false,
 			radioType: _consts.radio.TYPE_LEVEL,
 			chkboxType: {
 				"Y": "ps",
@@ -1682,10 +1743,14 @@
 	_bindEvent = function(setting) {
 		var o = setting.treeObj,
 		c = consts.event;
-		o.unbind(c.CHECK);
-		o.bind(c.CHECK, function (event, treeId, node) {
-			tools.apply(setting.callback.onCheck, [event, treeId, node]);
+		o.bind(c.CHECK, function (event, srcEvent, treeId, node) {
+			tools.apply(setting.callback.onCheck, [!!srcEvent?srcEvent : event, treeId, node]);
 		});
+	},
+	_unbindEvent = function(setting) {
+		var o = setting.treeObj,
+		c = consts.event;
+		o.unbind(c.CHECK);
 	},
 	//default event proxy of excheck
 	_eventProxy = function(e) {
@@ -1697,17 +1762,17 @@
 
 		if (tools.eqs(e.type, "mouseover")) {
 			if (setting.check.enable && tools.eqs(target.tagName, "span") && target.getAttribute("treeNode"+ consts.id.CHECK) !== null) {
-				tId = target.parentNode.id;
+				tId = tools.getNodeMainDom(target).id;
 				nodeEventType = "mouseoverCheck";
 			}
 		} else if (tools.eqs(e.type, "mouseout")) {
 			if (setting.check.enable && tools.eqs(target.tagName, "span") && target.getAttribute("treeNode"+ consts.id.CHECK) !== null) {
-				tId = target.parentNode.id;
+				tId = tools.getNodeMainDom(target).id;
 				nodeEventType = "mouseoutCheck";
 			}
 		} else if (tools.eqs(e.type, "click")) {
 			if (setting.check.enable && tools.eqs(target.tagName, "span") && target.getAttribute("treeNode"+ consts.id.CHECK) !== null) {
-				tId = target.parentNode.id;
+				tId = tools.getNodeMainDom(target).id;
 				nodeEventType = "checkNode";
 			}
 		}
@@ -1726,7 +1791,7 @@
 			}
 		}
 		var proxyResult = {
-			stop: false,
+			stop: nodeEventType === "checkNode",
 			node: node,
 			nodeEventType: nodeEventType,
 			nodeEventCallback: nodeEventCallback,
@@ -1742,15 +1807,19 @@
 		if (typeof n[checkedKey] == "string") n[checkedKey] = tools.eqs(n[checkedKey], "true");
 		n[checkedKey] = !!n[checkedKey];
 		n.checkedOld = n[checkedKey];
+		if (typeof n.nocheck == "string") n.nocheck = tools.eqs(n.nocheck, "true");
 		n.nocheck = !!n.nocheck || (setting.check.nocheckInherit && parentNode && !!parentNode.nocheck);
-		n.chkDisabled = !!n.chkDisabled || (parentNode && !!parentNode.chkDisabled);
+		if (typeof n.chkDisabled == "string") n.chkDisabled = tools.eqs(n.chkDisabled, "true");
+		n.chkDisabled = !!n.chkDisabled || (setting.check.chkDisabledInherit && parentNode && !!parentNode.chkDisabled);
 		if (typeof n.halfCheck == "string") n.halfCheck = tools.eqs(n.halfCheck, "true");
 		n.halfCheck = !!n.halfCheck;
 		n.check_Child_State = -1;
 		n.check_Focus = false;
 		n.getCheckStatus = function() {return data.getCheckStatus(setting, n);};
-		if (isLastNode) {
-			data.makeChkFlag(setting, parentNode);
+
+		if (setting.check.chkStyle == consts.radio.STYLE && setting.check.radioType == consts.radio.TYPE_ALL && n[checkedKey] ) {
+			var r = data.getRoot(setting);
+			r.radioCheckedList.push(n);
 		}
 	},
 	//add dom for check
@@ -1758,71 +1827,69 @@
 		var checkedKey = setting.data.key.checked;
 		if (setting.check.enable) {
 			data.makeChkFlag(setting, node);
-			if (setting.check.chkStyle == consts.radio.STYLE && setting.check.radioType == consts.radio.TYPE_ALL && node[checkedKey] ) {
-				var r = data.getRoot(setting);
-				r.radioCheckedList.push(node);
-			}
 			html.push("<span ID='", node.tId, consts.id.CHECK, "' class='", view.makeChkClass(setting, node), "' treeNode", consts.id.CHECK, (node.nocheck === true?" style='display:none;'":""),"></span>");
 		}
 	},
 	//update zTreeObj, add method of check
 	_zTreeTools = function(setting, zTreeTools) {
 		zTreeTools.checkNode = function(node, checked, checkTypeFlag, callbackFlag) {
-			var checkedKey = this.setting.data.key.checked;
+			var checkedKey = setting.data.key.checked;
 			if (node.chkDisabled === true) return;
 			if (checked !== true && checked !== false) {
 				checked = !node[checkedKey];
 			}
 			callbackFlag = !!callbackFlag;
-			
+
 			if (node[checkedKey] === checked && !checkTypeFlag) {
 				return;
-			} else if (callbackFlag && tools.apply(this.setting.callback.beforeCheck, [this.setting.treeId, node], true) == false) {
+			} else if (callbackFlag && tools.apply(this.setting.callback.beforeCheck, [setting.treeId, node], true) == false) {
 				return;
 			}
-			if (tools.uCanDo(this.setting) && this.setting.check.enable && node.nocheck !== true) {
+			if (tools.uCanDo(this.setting) && setting.check.enable && node.nocheck !== true) {
 				node[checkedKey] = checked;
-				var checkObj = $("#" + node.tId + consts.id.CHECK);
-				if (checkTypeFlag || this.setting.check.chkStyle === consts.radio.STYLE) view.checkNodeRelation(this.setting, node);
-				view.setChkClass(this.setting, checkObj, node);
-				view.repairParentChkClassWithSelf(this.setting, node);
+				var checkObj = $$(node, consts.id.CHECK, setting);
+				if (checkTypeFlag || setting.check.chkStyle === consts.radio.STYLE) view.checkNodeRelation(setting, node);
+				view.setChkClass(setting, checkObj, node);
+				view.repairParentChkClassWithSelf(setting, node);
 				if (callbackFlag) {
-					setting.treeObj.trigger(consts.event.CHECK, [setting.treeId, node]);
+					setting.treeObj.trigger(consts.event.CHECK, [null, setting.treeId, node]);
 				}
 			}
 		}
 
 		zTreeTools.checkAllNodes = function(checked) {
-			view.repairAllChk(this.setting, !!checked);
+			view.repairAllChk(setting, !!checked);
 		}
 
 		zTreeTools.getCheckedNodes = function(checked) {
-			var childKey = this.setting.data.key.children;
+			var childKey = setting.data.key.children;
 			checked = (checked !== false);
-			return data.getTreeCheckedNodes(this.setting, data.getRoot(setting)[childKey], checked);
+			return data.getTreeCheckedNodes(setting, data.getRoot(setting)[childKey], checked);
 		}
 
 		zTreeTools.getChangeCheckedNodes = function() {
-			var childKey = this.setting.data.key.children;
-			return data.getTreeChangeCheckedNodes(this.setting, data.getRoot(setting)[childKey]);
+			var childKey = setting.data.key.children;
+			return data.getTreeChangeCheckedNodes(setting, data.getRoot(setting)[childKey]);
 		}
 
-		zTreeTools.setChkDisabled = function(node, disabled) {
+		zTreeTools.setChkDisabled = function(node, disabled, inheritParent, inheritChildren) {
 			disabled = !!disabled;
-			view.repairSonChkDisabled(this.setting, node, disabled);
-			if (!disabled) view.repairParentChkDisabled(this.setting, node, disabled);
+			inheritParent = !!inheritParent;
+			inheritChildren = !!inheritChildren;
+			view.repairSonChkDisabled(setting, node, disabled, inheritChildren);
+			view.repairParentChkDisabled(setting, node.getParentNode(), disabled, inheritParent);
 		}
 
 		var _updateNode = zTreeTools.updateNode;
 		zTreeTools.updateNode = function(node, checkTypeFlag) {
 			if (_updateNode) _updateNode.apply(zTreeTools, arguments);
-			if (!node || !this.setting.check.enable) return;
-			var nObj = $("#" + node.tId);
-			if (nObj.get(0) && tools.uCanDo(this.setting)) {
-				var checkObj = $("#" + node.tId + consts.id.CHECK);
-				if (checkTypeFlag == true || this.setting.check.chkStyle === consts.radio.STYLE) view.checkNodeRelation(this.setting, node);
-				view.setChkClass(this.setting, checkObj, node);
-				view.repairParentChkClassWithSelf(this.setting, node);
+			if (!node || !setting.check.enable) return;
+			var nObj = $$(node, setting);
+			if (nObj.get(0) && tools.uCanDo(setting)) {
+				var checkObj = $$(node, consts.id.CHECK, setting);
+				if (checkTypeFlag == true || setting.check.chkStyle === consts.radio.STYLE) view.checkNodeRelation(setting, node);
+				view.setChkClass(setting, checkObj, node);
+				view.repairParentChkClassWithSelf(setting, node);
 			}
 		}
 	},
@@ -1839,7 +1906,7 @@
 			return checkedList;
 		},
 		getCheckStatus: function(setting, node) {
-			if (!setting.check.enable || node.nocheck) return null;
+			if (!setting.check.enable || node.nocheck || node.chkDisabled) return null;
 			var checkedKey = setting.data.key.checked,
 			r = {
 				checked: node[checkedKey],
@@ -1854,7 +1921,7 @@
 			onlyOne = (checked && setting.check.chkStyle == consts.radio.STYLE && setting.check.radioType == consts.radio.TYPE_ALL);
 			results = !results ? [] : results;
 			for (var i = 0, l = nodes.length; i < l; i++) {
-				if (nodes[i].nocheck !== true && nodes[i][checkedKey] == checked) {
+				if (nodes[i].nocheck !== true && nodes[i].chkDisabled !== true && nodes[i][checkedKey] == checked) {
 					results.push(nodes[i]);
 					if(onlyOne) {
 						break;
@@ -1873,7 +1940,7 @@
 			checkedKey = setting.data.key.checked;
 			results = !results ? [] : results;
 			for (var i = 0, l = nodes.length; i < l; i++) {
-				if (nodes[i].nocheck !== true && nodes[i][checkedKey] != nodes[i].checkedOld) {
+				if (nodes[i].nocheck !== true && nodes[i].chkDisabled !== true && nodes[i][checkedKey] != nodes[i].checkedOld) {
 					results.push(nodes[i]);
 				}
 				data.getTreeChangeCheckedNodes(setting, nodes[i][childKey], results);
@@ -1886,16 +1953,15 @@
 			checkedKey = setting.data.key.checked,
 			chkFlag = -1;
 			if (node[childKey]) {
-				var start = false;
 				for (var i = 0, l = node[childKey].length; i < l; i++) {
 					var cNode = node[childKey][i];
 					var tmp = -1;
 					if (setting.check.chkStyle == consts.radio.STYLE) {
-						if (cNode.nocheck === true) {
+						if (cNode.nocheck === true || cNode.chkDisabled === true) {
 							tmp = cNode.check_Child_State;
 						} else if (cNode.halfCheck === true) {
 							tmp = 2;
-						} else if (cNode.nocheck !== true && cNode[checkedKey]) {
+						} else if (cNode[checkedKey]) {
 							tmp = 2;
 						} else {
 							tmp = cNode.check_Child_State > 0 ? 2:0;
@@ -1906,25 +1972,24 @@
 							chkFlag = 0;
 						}
 					} else if (setting.check.chkStyle == consts.checkbox.STYLE) {
-						if (cNode.nocheck === true) {
+						if (cNode.nocheck === true || cNode.chkDisabled === true) {
 							tmp = cNode.check_Child_State;
 						} else if (cNode.halfCheck === true) {
 							tmp = 1;
-						} else if (cNode.nocheck !== true && cNode[checkedKey] ) {
+						} else if (cNode[checkedKey] ) {
 							tmp = (cNode.check_Child_State === -1 || cNode.check_Child_State === 2) ? 2 : 1;
 						} else {
 							tmp = (cNode.check_Child_State > 0) ? 1 : 0;
 						}
 						if (tmp === 1) {
 							chkFlag = 1; break;
-						} else if (tmp === 2 && start && tmp !== chkFlag) {
+						} else if (tmp === 2 && chkFlag > -1 && i > 0 && tmp !== chkFlag) {
 							chkFlag = 1; break;
 						} else if (chkFlag === 2 && tmp > -1 && tmp < 2) {
 							chkFlag = 1; break;
 						} else if (tmp > -1) {
 							chkFlag = tmp;
 						}
-						if (!start) start = (cNode.nocheck !== true);
 					}
 				}
 			}
@@ -1944,16 +2009,16 @@
 			if (tools.apply(setting.callback.beforeCheck, [setting.treeId, node], true) == false) return true;
 			node[checkedKey] = !node[checkedKey];
 			view.checkNodeRelation(setting, node);
-			var checkObj = $("#" + node.tId + consts.id.CHECK);
+			var checkObj = $$(node, consts.id.CHECK, setting);
 			view.setChkClass(setting, checkObj, node);
 			view.repairParentChkClassWithSelf(setting, node);
-			setting.treeObj.trigger(consts.event.CHECK, [setting.treeId, node]);
+			setting.treeObj.trigger(consts.event.CHECK, [event, setting.treeId, node]);
 			return true;
 		},
 		onMouseoverCheck: function(event, node) {
 			if (node.chkDisabled === true) return false;
 			var setting = data.getSetting(event.data.treeId),
-			checkObj = $("#" + node.tId + consts.id.CHECK);
+			checkObj = $$(node, consts.id.CHECK, setting);
 			node.check_Focus = true;
 			view.setChkClass(setting, checkObj, node);
 			return true;
@@ -1961,7 +2026,7 @@
 		onMouseoutCheck: function(event, node) {
 			if (node.chkDisabled === true) return false;
 			var setting = data.getSetting(event.data.treeId),
-			checkObj = $("#" + node.tId + consts.id.CHECK);
+			checkObj = $$(node, consts.id.CHECK, setting);
 			node.check_Focus = false;
 			view.setChkClass(setting, checkObj, node);
 			return true;
@@ -1987,7 +2052,7 @@
 							pNode[checkedKey] = false;
 							checkedList.splice(i, 1);
 
-							view.setChkClass(setting, $("#" + pNode.tId + consts.id.CHECK), pNode);
+							view.setChkClass(setting, $$(pNode, consts.id.CHECK, setting), pNode);
 							if (pNode.parentTId != node.parentTId) {
 								view.repairParentChkClassWithSelf(setting, pNode);
 							}
@@ -1999,7 +2064,7 @@
 							pNode = parentNode[childKey][i];
 							if (pNode[checkedKey] && pNode != node) {
 								pNode[checkedKey] = false;
-								view.setChkClass(setting, $("#" + pNode.tId + consts.id.CHECK), pNode);
+								view.setChkClass(setting, $$(pNode, consts.id.CHECK, setting), pNode);
 							}
 						}
 					}
@@ -2042,7 +2107,7 @@
 			}
 			var chkName = setting.check.chkStyle + "_" + (node[checkedKey] ? c.TRUE : c.FALSE) + "_" + fullStyle;
 			chkName = (node.check_Focus && node.chkDisabled !== true) ? chkName + "_" + c.FOCUS : chkName;
-			return "button " + c.DEFAULT + " " + chkName;
+			return consts.className.BUTTON + " " + c.DEFAULT + " " + chkName;
 		},
 		repairAllChk: function(setting, checked) {
 			if (setting.check.enable && setting.check.chkStyle === consts.checkbox.STYLE) {
@@ -2051,7 +2116,7 @@
 				root = data.getRoot(setting);
 				for (var i = 0, l = root[childKey].length; i<l ; i++) {
 					var node = root[childKey][i];
-					if (node.nocheck !== true) {
+					if (node.nocheck !== true && node.chkDisabled !== true) {
 						node[checkedKey] = checked;
 					}
 					view.setSonNodeCheckBox(setting, node, checked);
@@ -2061,8 +2126,10 @@
 		repairChkClass: function(setting, node) {
 			if (!node) return;
 			data.makeChkFlag(setting, node);
-			var checkObj = $("#" + node.tId + consts.id.CHECK);
-			view.setChkClass(setting, checkObj, node);
+			if (node.nocheck !== true) {
+				var checkObj = $$(node, consts.id.CHECK, setting);
+				view.setChkClass(setting, checkObj, node);
+			}
 		},
 		repairParentChkClass: function(setting, node) {
 			if (!node || !node.parentTId) return;
@@ -2079,27 +2146,27 @@
 				view.repairParentChkClass(setting, node);
 			}
 		},
-		repairSonChkDisabled: function(setting, node, chkDisabled) {
+		repairSonChkDisabled: function(setting, node, chkDisabled, inherit) {
 			if (!node) return;
 			var childKey = setting.data.key.children;
 			if (node.chkDisabled != chkDisabled) {
 				node.chkDisabled = chkDisabled;
-				if (node.nocheck !== true) view.repairChkClass(setting, node);
 			}
-			if (node[childKey]) {
+			view.repairChkClass(setting, node);
+			if (node[childKey] && inherit) {
 				for (var i = 0, l = node[childKey].length; i < l; i++) {
 					var sNode = node[childKey][i];
-					view.repairSonChkDisabled(setting, sNode, chkDisabled);
+					view.repairSonChkDisabled(setting, sNode, chkDisabled, inherit);
 				}
 			}
 		},
-		repairParentChkDisabled: function(setting, node, chkDisabled) {
+		repairParentChkDisabled: function(setting, node, chkDisabled, inherit) {
 			if (!node) return;
-			if (node.chkDisabled != chkDisabled) {
+			if (node.chkDisabled != chkDisabled && inherit) {
 				node.chkDisabled = chkDisabled;
-				if (node.nocheck !== true) view.repairChkClass(setting, node);
 			}
-			view.repairParentChkDisabled(setting, node.getParentNode(), chkDisabled);
+			view.repairChkClass(setting, node);
+			view.repairParentChkDisabled(setting, node.getParentNode(), chkDisabled, inherit);
 		},
 		setChkClass: function(setting, obj, node) {
 			if (!obj) return;
@@ -2114,14 +2181,14 @@
 		setParentNodeCheckBox: function(setting, node, value, srcNode) {
 			var childKey = setting.data.key.children,
 			checkedKey = setting.data.key.checked,
-			checkObj = $("#" + node.tId + consts.id.CHECK);
+			checkObj = $$(node, consts.id.CHECK, setting);
 			if (!srcNode) srcNode = node;
 			data.makeChkFlag(setting, node);
 			if (node.nocheck !== true && node.chkDisabled !== true) {
 				node[checkedKey] = value;
 				view.setChkClass(setting, checkObj, node);
-				if (setting.check.autoCheckTrigger && node != srcNode && node.nocheck !== true) {
-					setting.treeObj.trigger(consts.event.CHECK, [setting.treeId, node]);
+				if (setting.check.autoCheckTrigger && node != srcNode) {
+					setting.treeObj.trigger(consts.event.CHECK, [null, setting.treeId, node]);
 				}
 			}
 			if (node.parentTId) {
@@ -2129,8 +2196,8 @@
 				if (!value) {
 					var pNodes = node.getParentNode()[childKey];
 					for (var i = 0, l = pNodes.length; i < l; i++) {
-						if ((pNodes[i].nocheck !== true && pNodes[i][checkedKey])
-						|| (pNodes[i].nocheck === true && pNodes[i].check_Child_State > 0)) {
+						if ((pNodes[i].nocheck !== true && pNodes[i].chkDisabled !== true && pNodes[i][checkedKey])
+						|| ((pNodes[i].nocheck === true || pNodes[i].chkDisabled === true) && pNodes[i].check_Child_State > 0)) {
 							pSign = false;
 							break;
 						}
@@ -2145,7 +2212,7 @@
 			if (!node) return;
 			var childKey = setting.data.key.children,
 			checkedKey = setting.data.key.checked,
-			checkObj = $("#" + node.tId + consts.id.CHECK);
+			checkObj = $$(node, consts.id.CHECK, setting);
 			if (!srcNode) srcNode = node;
 
 			var hasDisable = false;
@@ -2156,20 +2223,20 @@
 					if (sNode.chkDisabled === true) hasDisable = true;
 				}
 			}
-			
+
 			if (node != data.getRoot(setting) && node.chkDisabled !== true) {
 				if (hasDisable && node.nocheck !== true) {
 					data.makeChkFlag(setting, node);
 				}
-				if (node.nocheck !== true) {
+				if (node.nocheck !== true && node.chkDisabled !== true) {
 					node[checkedKey] = value;
 					if (!hasDisable) node.check_Child_State = (node[childKey] && node[childKey].length > 0) ? (value ? 2 : 0) : -1;
 				} else {
 					node.check_Child_State = -1;
 				}
 				view.setChkClass(setting, checkObj, node);
-				if (setting.check.autoCheckTrigger && node != srcNode && node.nocheck !== true) {
-					setting.treeObj.trigger(consts.event.CHECK, [setting.treeId, node]);
+				if (setting.check.autoCheckTrigger && node != srcNode && node.nocheck !== true && node.chkDisabled !== true) {
+					setting.treeObj.trigger(consts.event.CHECK, [null, setting.treeId, node]);
 				}
 			}
 
@@ -2190,13 +2257,15 @@
 	consts = zt.consts,
 	view = zt._z.view,
 	data = zt._z.data,
-	event = zt._z.event;
+	event = zt._z.event,
+	$$ = tools.$;
 
 	data.exSetting(_setting);
 	data.addInitBind(_bindEvent);
+	data.addInitUnBind(_unbindEvent);
 	data.addInitCache(_initCache);
 	data.addInitNode(_initNode);
-	data.addInitProxy(_eventProxy);
+	data.addInitProxy(_eventProxy, true);
 	data.addInitRoot(_initRoot);
 	data.addBeforeA(_beforeA);
 	data.addZTreeTools(_zTreeTools);
@@ -2215,9 +2284,21 @@
 		view.repairChkClass(setting, parentNode);
 		view.repairParentChkClass(setting, parentNode);
 	}
+
+	var _appendNodes = view.appendNodes;
+	view.appendNodes = function(setting, level, nodes, parentNode, initFlag, openFlag) {
+		var html = "";
+		if (_appendNodes) {
+			html = _appendNodes.apply(view, arguments);
+		}
+		if (parentNode) {
+			data.makeChkFlag(setting, parentNode);
+		}
+		return html;
+	}
 })(jQuery);
 /*
- * JQuery zTree exedit 3.3
+ * JQuery zTree exedit 3.5.14
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2226,7 +2307,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2012-07-16
+ * Date: 2013-06-28
  */
 (function($){
 	//default consts of exedit
@@ -2293,14 +2374,14 @@
 	},
 	//default root of exedit
 	_initRoot = function (setting) {
-		var r = data.getRoot(setting);
+		var r = data.getRoot(setting), rs = data.getRoots();
 		r.curEditNode = null;
 		r.curEditInput = null;
 		r.curHoverNode = null;
 		r.dragFlag = 0;
 		r.dragNodeShowBefore = [];
 		r.dragMaskList = new Array();
-		r.showHoverDom = true;
+		rs.showHoverDom = true;
 	},
 	//default cache of exedit
 	_initCache = function(treeId) {},
@@ -2308,25 +2389,29 @@
 	_bindEvent = function(setting) {
 		var o = setting.treeObj;
 		var c = consts.event;
-		o.unbind(c.RENAME);
-		o.bind(c.RENAME, function (event, treeId, treeNode) {
-			tools.apply(setting.callback.onRename, [event, treeId, treeNode]);
+		o.bind(c.RENAME, function (event, treeId, treeNode, isCancel) {
+			tools.apply(setting.callback.onRename, [event, treeId, treeNode, isCancel]);
 		});
 
-		o.unbind(c.REMOVE);
 		o.bind(c.REMOVE, function (event, treeId, treeNode) {
 			tools.apply(setting.callback.onRemove, [event, treeId, treeNode]);
 		});
 
-		o.unbind(c.DRAG);
 		o.bind(c.DRAG, function (event, srcEvent, treeId, treeNodes) {
 			tools.apply(setting.callback.onDrag, [srcEvent, treeId, treeNodes]);
 		});
 
-		o.unbind(c.DROP);
 		o.bind(c.DROP, function (event, srcEvent, treeId, treeNodes, targetNode, moveType, isCopy) {
 			tools.apply(setting.callback.onDrop, [srcEvent, treeId, treeNodes, targetNode, moveType, isCopy]);
 		});
+	},
+	_unbindEvent = function(setting) {
+		var o = setting.treeObj;
+		var c = consts.event;
+		o.unbind(c.RENAME);
+		o.unbind(c.REMOVE);
+		o.unbind(c.DRAG);
+		o.unbind(c.DROP);
 	},
 	//default event proxy of exedit
 	_eventProxy = function(e) {
@@ -2341,7 +2426,7 @@
 		if (tools.eqs(e.type, "mouseover")) {
 			tmp = tools.getMDom(setting, target, [{tagName:"a", attrName:"treeNode"+consts.id.A}]);
 			if (tmp) {
-				tId = tmp.parentNode.id;
+				tId = tools.getNodeMainDom(tmp).id;
 				nodeEventType = "hoverOverNode";
 			}
 		} else if (tools.eqs(e.type, "mouseout")) {
@@ -2353,7 +2438,7 @@
 		} else if (tools.eqs(e.type, "mousedown")) {
 			tmp = tools.getMDom(setting, target, [{tagName:"a", attrName:"treeNode"+consts.id.A}]);
 			if (tmp) {
-				tId = tmp.parentNode.id;
+				tId = tools.getNodeMainDom(tmp).id;
 				nodeEventType = "mousedownNode";
 			}
 		}
@@ -2429,7 +2514,7 @@
 			if (!node) return node;
 			if (targetNode && !targetNode.isParent && setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) {
 				return null;
-			} else if (targetNode && ((node.parentTId == targetNode.tId && moveType == consts.move.TYPE_INNER) || $("#" + node.tId).find("#" + targetNode.tId).length > 0)) {
+			} else if (targetNode && ((node.parentTId == targetNode.tId && moveType == consts.move.TYPE_INNER) || $$(node, setting).find("#" + targetNode.tId).length > 0)) {
 				return null;
 			} else if (!targetNode) {
 				targetNode = null;
@@ -2437,7 +2522,7 @@
 			function moveCallback() {
 				view.moveNode(setting, targetNode, node, moveType, false, isSilent);
 			}
-			if (tools.canAsync(setting, targetNode)) {
+			if (tools.canAsync(setting, targetNode) && moveType === consts.move.TYPE_INNER) {
 				view.asyncNode(setting, targetNode, isSilent, moveCallback);
 			} else {
 				moveCallback();
@@ -2487,7 +2572,7 @@
 		onMousedownNode: function(eventMouseDown, _node) {
 			var i,l,
 			setting = data.getSetting(eventMouseDown.data.treeId),
-			root = data.getRoot(setting);
+			root = data.getRoot(setting), roots = data.getRoots();
 			//right click can't drag & drop
 			if (eventMouseDown.button == 2 || !setting.edit.enable || (!setting.edit.drag.isCopy && !setting.edit.drag.isMove)) return true;
 
@@ -2511,12 +2596,13 @@
 			}
 
 			view.editNodeBlur = true;
-			view.cancelCurEditNode(setting, null, true);
-			
+			view.cancelCurEditNode(setting);
 
-			var doc = $(document), curNode, tmpArrow, tmpTarget,
+			var doc = $(setting.treeObj.get(0).ownerDocument),
+			body = $(setting.treeObj.get(0).ownerDocument.body), curNode, tmpArrow, tmpTarget,
 			isOtherTree = false,
 			targetSetting = setting,
+			sourceSetting = setting,
 			preNode, nextNode,
 			preTmpTargetNodeId = null,
 			preTmpMoveType = null,
@@ -2537,8 +2623,7 @@
 				}
 				var i, l, tmpNode, tmpDom, tmpNodes,
 				childKey = setting.data.key.children;
-				tools.noSel(setting);
-				$("body").css("cursor", "pointer");
+				body.css("cursor", "pointer");
 
 				if (root.dragFlag == 0) {
 					if (tools.apply(setting.callback.beforeDrag, [setting.treeId, nodes], true) == false) {
@@ -2560,7 +2645,7 @@
 					}
 
 					root.dragFlag = 1;
-					root.showHoverDom = false;
+					roots.showHoverDom = false;
 					tools.showIfameMask(setting, true);
 
 					//sort
@@ -2588,31 +2673,31 @@
 					}
 
 					//set node in selected
-					curNode = $("<ul class='zTreeDragUL'></ul>");
+					curNode = $$("<ul class='zTreeDragUL'></ul>", setting);
 					for (i=0, l=nodes.length; i<l; i++) {
 						tmpNode = nodes[i];
 						tmpNode.editNameFlag = false;
 						view.selectNode(setting, tmpNode, i>0);
 						view.removeTreeDom(setting, tmpNode);
 
-						tmpDom = $("<li id='"+ tmpNode.tId +"_tmp'></li>");
-						tmpDom.append($("#" + tmpNode.tId + consts.id.A).clone());
+						tmpDom = $$("<li id='"+ tmpNode.tId +"_tmp'></li>", setting);
+						tmpDom.append($$(tmpNode, consts.id.A, setting).clone());
 						tmpDom.css("padding", "0");
 						tmpDom.children("#" + tmpNode.tId + consts.id.A).removeClass(consts.node.CURSELECTED);
 						curNode.append(tmpDom);
 						if (i == setting.edit.drag.maxShowNodeNum-1) {
-							tmpDom = $("<li id='"+ tmpNode.tId +"_moretmp'><a>  ...  </a></li>");
+							tmpDom = $$("<li id='"+ tmpNode.tId +"_moretmp'><a>  ...  </a></li>", setting);
 							curNode.append(tmpDom);
 							break;
 						}
 					}
 					curNode.attr("id", nodes[0].tId + consts.id.UL + "_tmp");
 					curNode.addClass(setting.treeObj.attr("class"));
-					curNode.appendTo("body");
+					curNode.appendTo(body);
 
-					tmpArrow = $("<span class='tmpzTreeMove_arrow'></span>");
+					tmpArrow = $$("<span class='tmpzTreeMove_arrow'></span>", setting);
 					tmpArrow.attr("id", "zTreeMove_arrow_tmp");
-					tmpArrow.appendTo("body");
+					tmpArrow.appendTo(body);
 
 					setting.treeObj.trigger(consts.event.DRAG, [event, setting.treeId, nodes]);
 				}
@@ -2674,7 +2759,7 @@
 							if (targetObj.id === tmpNode.tId) {
 								canMove = false;
 								break;
-							} else if ($("#" + tmpNode.tId).find("#" + targetObj.id).length > 0) {
+							} else if ($$(tmpNode, setting).find("#" + targetObj.id).length > 0) {
 								canMove = false;
 								break;
 							}
@@ -2775,7 +2860,7 @@
 								if (window.zTreeMoveTimer && window.zTreeMoveTargetNodeTId !== tmpTargetNode.tId) {
 									clearTimeout(window.zTreeMoveTimer);
 									window.zTreeMoveTargetNodeTId = null;
-								} else if (window.zTreeMoveTimer && window.zTreeMoveTargetNodeTId === tmpTargetNode.tId) {
+								}else if (window.zTreeMoveTimer && window.zTreeMoveTargetNodeTId === tmpTargetNode.tId) {
 									startTimer = false;
 								}
 								if (startTimer) {
@@ -2825,7 +2910,7 @@
 				doc.unbind("mousemove", _docMouseMove);
 				doc.unbind("mouseup", _docMouseUp);
 				doc.unbind("selectstart", _docSelect);
-				$("body").css("cursor", "auto");
+				body.css("cursor", "auto");
 				if (tmpTarget) {
 					tmpTarget.removeClass(consts.node.TMPTARGET_TREE);
 					if (tmpTargetNodeId) $("#" + tmpTargetNodeId + consts.id.A, tmpTarget).removeClass(consts.node.TMPTARGET_NODE + "_" + consts.move.TYPE_PREV)
@@ -2833,7 +2918,7 @@
 				}
 				tools.showIfameMask(setting, false);
 
-				root.showHoverDom = true;
+				roots.showHoverDom = true;
 				if (root.dragFlag == 0) return;
 				root.dragFlag = 0;
 
@@ -2855,11 +2940,14 @@
 				}
 				if (tmpTarget) {
 					var dragTargetNode = tmpTargetNodeId == null ? null: data.getNodeCache(targetSetting, tmpTargetNodeId);
-					if (tools.apply(setting.callback.beforeDrop, [targetSetting.treeId, nodes, dragTargetNode, moveType, isCopy], true) == false) return;
+					if (tools.apply(setting.callback.beforeDrop, [targetSetting.treeId, nodes, dragTargetNode, moveType, isCopy], true) == false) {
+						view.selectNodes(sourceSetting, nodes);
+						return;
+					}
 					var newNodes = isCopy ? tools.clone(nodes) : nodes;
-					
+
 					function dropCallback() {
-						if (isOtherTree) {							
+						if (isOtherTree) {
 							if (!isCopy) {
 								for(var i=0, l=nodes.length; i<l; i++) {
 									view.removeNode(setting, nodes[i]);
@@ -2886,7 +2974,7 @@
 								if (isCopy) {
 									view.addNodes(targetSetting, dragTargetNode.getParentNode(), newNodes);
 								}
-								if (moveType == consts.move.TYPE_PREV) {
+								if (moveType != consts.move.TYPE_NEXT) {
 									for (i=0, l=newNodes.length; i<l; i++) {
 										view.moveNode(targetSetting, dragTargetNode, newNodes[i], moveType, false);
 									}
@@ -2897,11 +2985,10 @@
 								}
 							}
 						}
-						for (i=0, l=newNodes.length; i<l; i++) {
-							view.selectNode(targetSetting, newNodes[i], i>0);
-						}
-						$("#" + newNodes[0].tId).focus().blur();
+						view.selectNodes(targetSetting, newNodes);
+						$$(newNodes[0], setting).focus().blur();
 
+						setting.treeObj.trigger(consts.event.DROP, [event, targetSetting.treeId, newNodes, dragTargetNode, moveType, isCopy]);
 					}
 
 					if (moveType == consts.move.TYPE_INNER && tools.canAsync(targetSetting, dragTargetNode)) {
@@ -2910,11 +2997,8 @@
 						dropCallback();
 					}
 
-					setting.treeObj.trigger(consts.event.DROP, [event, targetSetting.treeId, newNodes, dragTargetNode, moveType, isCopy]);
 				} else {
-					for (i=0, l=nodes.length; i<l; i++) {
-						view.selectNode(targetSetting, nodes[i], i>0);
-					}
+					view.selectNodes(sourceSetting, nodes);
 					setting.treeObj.trigger(consts.event.DROP, [event, setting.treeId, nodes, null, null, null]);
 				}
 			}
@@ -2935,8 +3019,10 @@
 	//method of tools for zTree
 	_tools = {
 		getAbs: function (obj) {
-			var oRect = obj.getBoundingClientRect();
-			return [oRect.left,oRect.top]
+			var oRect = obj.getBoundingClientRect(),
+			scrollTop = document.body.scrollTop+document.documentElement.scrollTop,
+			scrollLeft = document.body.scrollLeft+document.documentElement.scrollLeft;
+			return [oRect.left+scrollLeft,oRect.top+scrollTop];
 		},
 		inputFocus: function(inputObj) {
 			if (inputObj.get(0)) {
@@ -2971,12 +3057,12 @@
 			}
 			if (showSign) {
 				//show mask
-				var iframeList = $("iframe");
+				var iframeList = $$("iframe", setting);
 				for (var i = 0, l = iframeList.length; i < l; i++) {
 					var obj = iframeList.get(i),
 					r = tools.getAbs(obj),
-					dragMask = $("<div id='zTreeMask_" + i + "' class='zTreeMask' style='top:" + r[1] + "px; left:" + r[0] + "px; width:" + obj.offsetWidth + "px; height:" + obj.offsetHeight + "px;'></div>");
-					dragMask.appendTo("body");
+					dragMask = $$("<div id='zTreeMask_" + i + "' class='zTreeMask' style='top:" + r[1] + "px; left:" + r[0] + "px; width:" + obj.offsetWidth + "px; height:" + obj.offsetHeight + "px;'></div>", setting);
+					dragMask.appendTo($$("body", setting));
 					root.dragMaskList.push(dragMask);
 				}
 			}
@@ -2985,17 +3071,17 @@
 	//method of operate ztree dom
 	_view = {
 		addEditBtn: function(setting, node) {
-			if (node.editNameFlag || $("#" + node.tId + consts.id.EDIT).length > 0) {
+			if (node.editNameFlag || $$(node, consts.id.EDIT, setting).length > 0) {
 				return;
 			}
 			if (!tools.apply(setting.edit.showRenameBtn, [setting.treeId, node], setting.edit.showRenameBtn)) {
 				return;
 			}
-			var aObj = $("#" + node.tId + consts.id.A),
-			editStr = "<span class='button edit' id='" + node.tId + consts.id.EDIT + "' title='"+tools.apply(setting.edit.renameTitle, [setting.treeId, node], setting.edit.renameTitle)+"' treeNode"+consts.id.EDIT+" style='display:none;'></span>";
+			var aObj = $$(node, consts.id.A, setting),
+			editStr = "<span class='" + consts.className.BUTTON + " edit' id='" + node.tId + consts.id.EDIT + "' title='"+tools.apply(setting.edit.renameTitle, [setting.treeId, node], setting.edit.renameTitle)+"' treeNode"+consts.id.EDIT+" style='display:none;'></span>";
 			aObj.append(editStr);
 
-			$("#" + node.tId + consts.id.EDIT).bind('click',
+			$$(node, consts.id.EDIT, setting).bind('click',
 				function() {
 					if (!tools.uCanDo(setting) || tools.apply(setting.callback.beforeEditName, [setting.treeId, node], true) == false) return false;
 					view.editNode(setting, node);
@@ -3004,17 +3090,17 @@
 				).show();
 		},
 		addRemoveBtn: function(setting, node) {
-			if (node.editNameFlag || $("#" + node.tId + consts.id.REMOVE).length > 0) {
+			if (node.editNameFlag || $$(node, consts.id.REMOVE, setting).length > 0) {
 				return;
 			}
 			if (!tools.apply(setting.edit.showRemoveBtn, [setting.treeId, node], setting.edit.showRemoveBtn)) {
 				return;
 			}
-			var aObj = $("#" + node.tId + consts.id.A),
-			removeStr = "<span class='button remove' id='" + node.tId + consts.id.REMOVE + "' title='"+tools.apply(setting.edit.removeTitle, [setting.treeId, node], setting.edit.removeTitle)+"' treeNode"+consts.id.REMOVE+" style='display:none;'></span>";
+			var aObj = $$(node, consts.id.A, setting),
+			removeStr = "<span class='" + consts.className.BUTTON + " remove' id='" + node.tId + consts.id.REMOVE + "' title='"+tools.apply(setting.edit.removeTitle, [setting.treeId, node], setting.edit.removeTitle)+"' treeNode"+consts.id.REMOVE+" style='display:none;'></span>";
 			aObj.append(removeStr);
 
-			$("#" + node.tId + consts.id.REMOVE).bind('click',
+			$$(node, consts.id.REMOVE, setting).bind('click',
 				function() {
 					if (!tools.uCanDo(setting) || tools.apply(setting.callback.beforeRemove, [setting.treeId, node], true) == false) return false;
 					view.removeNode(setting, node);
@@ -3028,7 +3114,7 @@
 				).show();
 		},
 		addHoverDom: function(setting, node) {
-			if (data.getRoot(setting).showHoverDom) {
+			if (data.getRoots().showHoverDom) {
 				node.isHover = true;
 				if (setting.edit.enable) {
 					view.addEditBtn(setting, node);
@@ -3041,20 +3127,18 @@
 			var root = data.getRoot(setting),
 			nameKey = setting.data.key.name,
 			node = root.curEditNode;
-			
+
 			if (node) {
-				var inputObj = root.curEditInput;
-				var newName = forceName ? forceName:inputObj.val();
-				if (!forceName && tools.apply(setting.callback.beforeRename, [setting.treeId, node, newName], true) === false) {
-					node.editNameFlag = true;
+				var inputObj = root.curEditInput,
+				newName = forceName ? forceName:inputObj.val(),
+				isCancel = !!forceName;
+				if (tools.apply(setting.callback.beforeRename, [setting.treeId, node, newName, isCancel], true) === false) {
 					return false;
 				} else {
 					node[nameKey] = newName ? newName:inputObj.val();
-					if (!forceName) {
-						setting.treeObj.trigger(consts.event.RENAME, [setting.treeId, node]);
-					}
+					setting.treeObj.trigger(consts.event.RENAME, [setting.treeId, node, isCancel]);
 				}
-				var aObj = $("#" + node.tId + consts.id.A);
+				var aObj = $$(node, consts.id.A, setting);
 				aObj.removeClass(consts.node.CURSELECTED_EDIT);
 				inputObj.unbind();
 				view.setNodeName(setting, node);
@@ -3078,8 +3162,8 @@
 			view.removeTreeDom(setting, node);
 			view.cancelCurEditNode(setting);
 			view.selectNode(setting, node, false);
-			$("#" + node.tId + consts.id.SPAN).html("<input type=text class='rename' id='" + node.tId + consts.id.INPUT + "' treeNode" + consts.id.INPUT + " >");
-			var inputObj = $("#" + node.tId + consts.id.INPUT);
+			$$(node, consts.id.SPAN, setting).html("<input type=text class='rename' id='" + node.tId + consts.id.INPUT + "' treeNode" + consts.id.INPUT + " >");
+			var inputObj = $$(node, consts.id.INPUT, setting);
 			inputObj.attr("value", node[nameKey]);
 			if (setting.edit.editNameSelectAll) {
 				tools.inputSelect(inputObj);
@@ -3094,7 +3178,7 @@
 			}).bind('keydown', function(event) {
 				if (event.keyCode=="13") {
 					view.editNodeBlur = true;
-					view.cancelCurEditNode(setting, null, true);
+					view.cancelCurEditNode(setting);
 				} else if (event.keyCode=="27") {
 					view.cancelCurEditNode(setting, node[nameKey]);
 				}
@@ -3104,7 +3188,7 @@
 				return false;
 			});
 
-			$("#" + node.tId + consts.id.A).addClass(consts.node.CURSELECTED_EDIT);
+			$$(node, consts.id.A, setting).addClass(consts.node.CURSELECTED_EDIT);
 			root.curEditInput = inputObj;
 			root.noSelection = false;
 			root.curEditNode = node;
@@ -3123,7 +3207,7 @@
 			if (moveType != consts.move.TYPE_PREV && moveType != consts.move.TYPE_NEXT) {
 				moveType = consts.move.TYPE_INNER;
 			}
-			
+
 			if (moveType == consts.move.TYPE_INNER) {
 				if (targetNodeIsRoot) {
 					//parentTId of root node is null
@@ -3149,16 +3233,16 @@
 				} else if (!isSilent) {
 					view.expandCollapseNode(setting, targetNode.getParentNode(), true, false);
 				}
-				targetObj = $("#" + targetNode.tId);
-				target_ulObj = $("#" + targetNode.tId + consts.id.UL);
+				targetObj = $$(targetNode, setting);
+				target_ulObj = $$(targetNode, consts.id.UL, setting);
 				if (!!targetObj.get(0) && !target_ulObj.get(0)) {
 					var ulstr = [];
 					view.makeUlHtml(setting, targetNode, ulstr, '');
 					targetObj.append(ulstr.join(''));
 				}
-				target_ulObj = $("#" + targetNode.tId + consts.id.UL);
+				target_ulObj = $$(targetNode, consts.id.UL, setting);
 			}
-			var nodeDom = $("#" + node.tId);
+			var nodeDom = $$(node, setting);
 			if (!nodeDom.get(0)) {
 				nodeDom = view.appendNodes(setting, node.level, [node], null, false, true).join('');
 			} else if (!targetObj.get(0)) {
@@ -3252,9 +3336,9 @@
 				//old parentNode has no child nodes
 				oldParentNode.isParent = false;
 				oldParentNode.open = false;
-				var tmp_ulObj = $("#" + oldParentNode.tId + consts.id.UL),
-				tmp_switchObj = $("#" + oldParentNode.tId + consts.id.SWITCH),
-				tmp_icoObj = $("#" + oldParentNode.tId + consts.id.ICON);
+				var tmp_ulObj = $$(oldParentNode, consts.id.UL, setting),
+				tmp_switchObj = $$(oldParentNode, consts.id.SWITCH, setting),
+				tmp_icoObj = $$(oldParentNode, consts.id.ICON, setting);
 				view.replaceSwitchClass(oldParentNode, tmp_switchObj, consts.folder.DOCU);
 				view.replaceIcoClass(oldParentNode, tmp_icoObj, consts.folder.DOCU);
 				tmp_ulObj.css("display", "none");
@@ -3282,31 +3366,36 @@
 				view.expandCollapseParentNode(setting, node.getParentNode(), true, animateFlag);
 			}
 		},
-		removeEditBtn: function(node) {
-			$("#" + node.tId + consts.id.EDIT).unbind().remove();
+		removeEditBtn: function(setting, node) {
+			$$(node, consts.id.EDIT, setting).unbind().remove();
 		},
-		removeRemoveBtn: function(node) {
-			$("#" + node.tId + consts.id.REMOVE).unbind().remove();
+		removeRemoveBtn: function(setting, node) {
+			$$(node, consts.id.REMOVE, setting).unbind().remove();
 		},
 		removeTreeDom: function(setting, node) {
 			node.isHover = false;
-			view.removeEditBtn(node);
-			view.removeRemoveBtn(node);
+			view.removeEditBtn(setting, node);
+			view.removeRemoveBtn(setting, node);
 			tools.apply(setting.view.removeHoverDom, [setting.treeId, node]);
 		},
 		repairNodeLevelClass: function(setting, node, oldLevel) {
 			if (oldLevel === node.level) return;
-			var liObj = $("#" + node.tId),
-			aObj = $("#" + node.tId + consts.id.A),
-			ulObj = $("#" + node.tId + consts.id.UL),
-			oldClass = "level" + oldLevel,
-			newClass = "level" + node.level;
+			var liObj = $$(node, setting),
+			aObj = $$(node, consts.id.A, setting),
+			ulObj = $$(node, consts.id.UL, setting),
+			oldClass = consts.className.LEVEL + oldLevel,
+			newClass = consts.className.LEVEL + node.level;
 			liObj.removeClass(oldClass);
 			liObj.addClass(newClass);
 			aObj.removeClass(oldClass);
 			aObj.addClass(newClass);
 			ulObj.removeClass(oldClass);
 			ulObj.addClass(newClass);
+		},
+		selectNodes : function(setting, nodes) {
+			for (var i=0, l=nodes.length; i<l; i++) {
+				view.selectNode(setting, nodes[i], i>0);
+			}
 		}
 	},
 
@@ -3324,10 +3413,12 @@
 	consts = zt.consts,
 	view = zt._z.view,
 	data = zt._z.data,
-	event = zt._z.event;
+	event = zt._z.event,
+	$$ = tools.$;
 
 	data.exSetting(_setting);
 	data.addInitBind(_bindEvent);
+	data.addInitUnBind(_unbindEvent);
 	data.addInitCache(_initCache);
 	data.addInitNode(_initNode);
 	data.addInitProxy(_eventProxy);
@@ -3357,8 +3448,9 @@
 		}
 	}
 
+	var _makeNodeUrl = view.makeNodeUrl;
 	view.makeNodeUrl = function(setting, node) {
-		return (node.url && !setting.edit.enable) ? node.url : null;
+		return setting.edit.enable ? null : (_makeNodeUrl.apply(view, arguments));
 	}
 
 	var _removeNode = view.removeNode;
