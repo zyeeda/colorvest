@@ -14,6 +14,7 @@ define [
             @feature.views['forms:add'].model.set 'parent', selected if selected
             viewLoader.submitHandler.call @,
                 submitSuccess: =>
+                    @feature.views['forms:add'].model.set isParent: true
                     tree.addNodes selected, @feature.views['forms:add'].model.toJSON()
             , 'forms:add', viewLoader.getDialogTitle(@feature.views['forms:add'], 'add', '新增'), 'add'
 
@@ -31,6 +32,7 @@ define [
                         _.extend selected, view.model.toJSON()
                         tree.refresh()
                 , 'forms:edit', viewLoader.getDialogTitle(@feature.views['forms:edit'], 'edit', '编辑'), 'edit'
+
         del: ->
             tree = @feature.views['treeViews:tree'].components[0]
             selected = tree.getSelectedNodes()[0]
@@ -49,6 +51,7 @@ define [
                         app.error msg, '验证提示'
                         return
                     tree.removeNode selected
+
         show: ->
             app = @feature.module.getApplication()
             tree = @feature.views['treeViews:tree'].components[0]
