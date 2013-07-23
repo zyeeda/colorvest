@@ -67,9 +67,7 @@ define [
 
         refresh: ->
             tree = @feature.views['treeViews:tree'].components[0]
-            tree.refresh()
-
-
+            tree.reload()
 
     type: 'view'
     name: 'treeViews'
