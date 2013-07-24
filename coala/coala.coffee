@@ -112,8 +112,6 @@ define [
                 app.startFeature name, featureOptions[i] for name, i in features
 
         app.done ->
-            console.log 'd'
-            console.log app.getPromises().length
             coala.startBackboneHistory app
 
         app
