@@ -154,40 +154,72 @@ define [
 
             @deferredStop.promise()
 
+        onStart: ->
+
         start: ->
             @deferredStart = $.Deferred()
+
+            callOnStart = =>
+                console.log 'call on start'
+                result = @onStart()
+
+                if result and _.isFunction result.done
+                    result.done => @deferredStart.resolve @
+                else
+                    if result is false
+                        @deferredStart.reject @
+                    else
+                        @deferredStart.resolve @
+
             fn = =>
                 views = []
                 rendered = {}
                 @deferredView.done =>
+                    console.log 'deferred view done'
                     @layout.render =>
+                        console.log 'aaa'
                         views.push region for region, view of @inRegionViews
+                        console.log 'bbb'
                         if views.length is 0
-                            @deferredStart.resolve @
+                            console.log 'ccc'
+                            callOnStart()
                             return
+
                         for region, view of @inRegionViews
+                            console.log 'ddd'
                             view.on 'show', _.once _.bind (rr, vs, rd) ->
+                                console.log 'eee'
                                 rd[rr] = true
-                                @deferredStart.resolve @ if _.all(vs, (r) -> !!rd[r])
+                                callOnStart() if _.all vs, (r) -> !!rd[r]
                             , @, region, views, rendered
+                            console.log 'fff'
                             @layout[region].show view
+                            console.log 'ggg'
 
-                @deferredStart.done _.bind @onStart, @ if @onStart
-
+            console.log '111'
             c = $ @container
+            console.log '222'
             old = c.data 'feature'
+            console.log '333'
             if old and old.cid isnt @cid
+                console.log '444'
                 old.stop().done =>
+                    console.log '555'
                     c.data 'feature', @
+                    console.log '666'
                     fn()
+                    console.log '777'
                 .fail =>
+                    console.log '888'
                     @deferredStart.reject @
             else
+                console.log '999'
                 c.data 'feature', @
+                console.log '000'
                 fn()
+                console.log '1111'
 
             @deferredStart.promise()
-
 
         genEventName: (eventName) ->
             @path() + '#' + eventName
