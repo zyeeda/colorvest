@@ -94,8 +94,6 @@ define [
 
         opt.aaData = options.data if options.data
 
-        console.log opt, options
-
         table = el.dataTable opt
         table.delegate 'tr', 'click', (e) ->
             return if $(e.target).is('input')

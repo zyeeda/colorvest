@@ -129,23 +129,38 @@ define [
             loadResource path, plugin
 
         startFeature: (featurePath, options) ->
+            console.log '***1'
             [names..., featureName] = featurePath.split '/'
+            console.log '***2'
             module = @findModule(names) or @module(names)
+            console.log '***3'
             f = module.findFeature featureName
+            console.log '***4'
             ignoreExists = f?.ignoreExists or options?.ignoreExists
+            console.log '***5'
             return f.activate(options) if f and ignoreExists isnt true
+            console.log '***6'
 
             deferred = $.Deferred()
+            console.log '***7'
             module.addPromise deferred
+            console.log '***8'
 
             $.when(loaderPluginManager.invoke('feature', module, null, featureName, options)).then (feature) ->
+                console.log '***9'
                 if feature is null
+                    console.log '***10'
                     error module, "Feature not found at path: #{featurePath}."
 
+                console.log '***11'
                 feature.start().done ->
+                    console.log '***12'
                     deferred.resolve feature
                 .fail ->
+                    console.log '***13'
                     deferred.reject feature
+
+            console.log '***14'
             deferred.promise()
 
         stopFeature: (feature) ->
