@@ -61,22 +61,21 @@ define [
                 tree = $.fn.zTree.init el, options, []
                 loadAllData view, tree
             else
-                options.callback.beforeExpand = (treeId, d) ->
-                    return if d?['__inited'] is true
-                    d and d['__inited'] = true
+                options.callback.onExpand = (e, treeId, treeNode) ->
+                    return if treeNode?['__inited'] is true
+                    treeNode and treeNode['__inited'] = true
 
                     tree = $.fn.zTree.getZTreeObj treeId
                     simpleData = tree.setting.data.simpleData
 
                     idName = simpleData.idKey or 'id'
-                    #id = if d is null then (if tree.parentValueOfRoot then tree.parentValueOfRoot else false) else d[idName]
-                    id = if d is null then (if simpleData.rootPId then simpleData.rootPId else false) else d[idName]
+                    id = if treeNode is null then (if simpleData.rootPId then simpleData.rootPId else false) else treeNode[idName]
                     filters = if id then [{ name: 'parent.id', operator: 'eq', value: id }] else [{ name: 'parent', operator: 'isNull' }]
                     $.when(view.collection.fetch data: { _filters: JSON.stringify(filters) }).done (data) ->
-                        addTreeData tree, view.collection.toJSON(), d, isParent: true
+                        addTreeData tree, view.collection.toJSON(), treeNode, isParent: true
 
                 tree = $.fn.zTree.init el, options, null
-                options.callback.beforeExpand tree.setting.treeId, null
+                options.callback.onExpand null, tree.setting.treeId, null
 
         tree.reload = ->
             return if options.treeData
@@ -89,7 +88,7 @@ define [
             if options.treeDataAsync is true
                 loadAllData @
             else
-                tree.setting.callback.beforeExpand @setting.treeId, null
+                tree.setting.callback.onExpand null, @setting.treeId, null
 
         eventHost.component = tree
         tree
