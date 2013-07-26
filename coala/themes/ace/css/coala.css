@@ -17,10 +17,22 @@ html, body {
 
 .c-layout-grid-container {
     height: 100%;
+    overflow: hidden;
+}
+
+.c-layout-grid-container .ui-layout-center {
+    height: 100%;
+    overflow: auto;
 }
 
 .c-layout-grid-main {
     height: 100%;
+    overflow: auto;
+    margin-top: -60px;
+    border-top: 60px solid;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
 }
 
 .c-layout-toolbar-main {

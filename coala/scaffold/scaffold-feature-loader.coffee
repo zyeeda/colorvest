@@ -15,14 +15,14 @@ define [
                 views = data.views
             else
                 if data.style is 'grid'
-                    views.push name: 'views:operators', region: 'operators'
-                    views.push name: 'views:grid', region: 'grid'
+                    views.push name: 'grid:operators', region: 'operators'
+                    views.push name: 'grid:grid', region: 'grid'
                 else if data.style is 'tree'
-                    views.push name: 'treeViews:operators', region: 'operators'
-                    views.push name: 'treeViews:tree', region: 'grid'
+                    views.push name: 'tree:operators', region: 'operators'
+                    views.push name: 'tree:tree', region: 'grid'
                 else if data.style is 'treeTable'
-                    views.push name: 'treeTableViews:operators', region: 'operators'
-                    views.push name: 'treeTableViews:grid', region: 'grid'
+                    views.push name: 'treetable:operators', region: 'operators'
+                    views.push name: 'treetable:grid', region: 'grid'
 
                 views.push 'forms:add'
                 views.push 'forms:edit'

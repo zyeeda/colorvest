@@ -2,10 +2,10 @@
 define [
     'coala/core/loader-plugin-manager'
 
-    # scaffolds
-    'coala/scaffold/forms-view-loader'
+    # scaffold
     'coala/scaffold/scaffold-feature-loader'
-    'coala/scaffold/view-loader'
+    'coala/scaffold/forms-view-loader'
+    'coala/scaffold/grid-view-loader'
     'coala/scaffold/tree-view-loader'
     'coala/scaffold/treetable-view-loader'
 
@@ -26,10 +26,10 @@ define [
     'coala/layouts/grid'
     'coala/layouts/one-region'
 
-], (LoaderPluginManager, formsLoader, notFoundFeatureLoader, viewsLoader, treeViewsLoader, treeTableViewsLoader) ->
+], (LoaderPluginManager, scaffoldFeatureLoader, formsLoader, gridViewLoader, treeViewLoader, treeTableViewLoader) ->
 
     LoaderPluginManager.register formsLoader
-    LoaderPluginManager.register notFoundFeatureLoader
-    LoaderPluginManager.register viewsLoader
-    LoaderPluginManager.register treeViewsLoader
-    LoaderPluginManager.register treeTableViewsLoader
+    LoaderPluginManager.register scaffoldFeatureLoader
+    LoaderPluginManager.register gridViewLoader
+    LoaderPluginManager.register treeViewLoader
+    LoaderPluginManager.register treeTableViewLoader
