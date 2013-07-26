@@ -70,8 +70,8 @@ define [
 
                     idName = simpleData.idKey or 'id'
                     id = if treeNode is null then (if simpleData.rootPId then simpleData.rootPId else false) else treeNode[idName]
-                    filters = if id then [{ name: 'parent.id', operator: 'eq', value: id }] else [{ name: 'parent', operator: 'isNull' }]
-                    $.when(view.collection.fetch data: { _filters: JSON.stringify(filters) }).done (data) ->
+                    filters = if id then [['eq', 'parent.id', id]] else [['null', 'parent']]
+                    $.when(view.collection.fetch data: { _filters: filters }).done (data) ->
                         addTreeData tree, view.collection.toJSON(), treeNode, isParent: true
 
                 tree = $.fn.zTree.init el, options, null
