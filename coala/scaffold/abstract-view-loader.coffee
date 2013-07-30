@@ -28,8 +28,7 @@ define [
         '''
 
         grid: '''
-            <table style="width:100%;" id="grid"/>
-            <div id="pager"/>
+            <table style="width:100%;" id="grid" />
         '''
 
         tree: '''
@@ -159,6 +158,5 @@ define [
             view = if options.createView then options.createView(viewOptions) else new View(viewOptions)
             result.extendEventHandlers view, options.handlers
             deferred.resolve view
-
 
     result

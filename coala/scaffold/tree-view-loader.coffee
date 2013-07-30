@@ -9,7 +9,7 @@ define [
     handlers =
         add: ->
             @feature.views['forms:add'].model.clear()
-            tree = @feature.views['tree:tree'].components[0]
+            tree = @feature.views['tree:body'].components[0]
             selected = tree.getSelectedNodes()[0]
             @feature.views['forms:add'].model.set 'parent', selected if selected
             viewLoader.submitHandler.call @,
@@ -19,7 +19,7 @@ define [
             , 'forms:add', viewLoader.getDialogTitle(@feature.views['forms:add'], 'add', '新增'), 'add'
 
         edit: ->
-            tree = @feature.views['tree:tree'].components[0]
+            tree = @feature.views['tree:body'].components[0]
             view = @feature.views['forms:edit']
             app = @feature.module.getApplication()
             selected = tree.getSelectedNodes()[0]
@@ -34,7 +34,7 @@ define [
                 , 'forms:edit', viewLoader.getDialogTitle(@feature.views['forms:edit'], 'edit', '编辑'), 'edit'
 
         del: ->
-            tree = @feature.views['tree:tree'].components[0]
+            tree = @feature.views['tree:body'].components[0]
             selected = tree.getSelectedNodes()[0]
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
@@ -54,7 +54,7 @@ define [
 
         show: ->
             app = @feature.module.getApplication()
-            tree = @feature.views['tree:tree'].components[0]
+            tree = @feature.views['tree:body'].components[0]
             selected = tree.getSelectedNodes()[0]
             view = @feature.views['forms:show']
             return app.info '请选择要操作的记录' if not selected
@@ -69,7 +69,7 @@ define [
                     view.setFormData view.model.toJSON()
 
         refresh: ->
-            tree = @feature.views['tree:tree'].components[0]
+            tree = @feature.views['tree:body'].components[0]
             tree.reload()
 
     type: 'view'
@@ -79,11 +79,11 @@ define [
         visibility = scaffold.ensureOperatorsVisibility or viewLoader.ensureOperatorsVisibility
         initVisibility = scaffold.initOperatorsVisibility or viewLoader.initOperatorsVisibility
         deferred = $.Deferred()
-        if viewName is 'operators'
+        if viewName is 'toolbar'
             viewLoader.generateOperatorsView
                 handlers: handlers
             , module, feature, deferred
-        else if viewName is 'tree'
+        else if viewName is 'body'
             viewLoader.generateTreeView
                 createView: (options) ->
                     options.events.click = 'clearSelection'
@@ -96,17 +96,17 @@ define [
                         name = e.target.tagName
                         if name is 'LI' or name is 'UL'
                             @components[0].cancelSelectedNode()
-                            v = @feature.views['tree:operators']
+                            v = @feature.views['tree:toolbar']
                             initVisibility.call v, v.options.operators
                     selectionChanged: (e, treeId, node, status) ->
                         return if not status
-                        v = @feature.views['tree:operators']
+                        v = @feature.views['tree:toolbar']
                         visibility.call v, v.options.operators, node.id
             , module, feature, deferred
 
             deferred.done (v) ->
                 v.collection.on 'reset', ->
-                    v = @feature.views['tree:operators']
+                    v = @feature.views['tree:toolbar']
                     initVisibility.call v, v.options.operators
 
         deferred

@@ -9,7 +9,7 @@ define [
     handlers =
         add: ->
             @feature.views['forms:add'].model.clear()
-            grid = @feature.views['treetable:grid'].components[0]
+            grid = @feature.views['treetable:body'].components[0]
             selected = grid.getSelected()
             if selected
                 rowData = selected.toJSON()
@@ -22,7 +22,7 @@ define [
                     grid.refresh()
             , 'forms:add', viewLoader.getDialogTitle(@feature.views['forms:add'], 'add', '新增')
         edit: ->
-            grid = @feature.views['treetable:grid'].components[0]
+            grid = @feature.views['treetable:body'].components[0]
             view = @feature.views['forms:edit']
             app = @feature.module.getApplication()
             selected = grid.getSelected()
@@ -41,7 +41,7 @@ define [
                         grid.setTreeRow selected, view.model.toJSON()
                 , 'forms:edit', viewLoader.getDialogTitle(@feature.views['forms:edit'], 'edit', '编辑')
         del: ->
-            grid = @feature.views['treetable:grid'].components[0]
+            grid = @feature.views['treetable:body'].components[0]
             selected = grid.getGridParam('selrow')
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
@@ -61,7 +61,7 @@ define [
                     grid.trigger 'reloadGrid'
         show: ->
             app = @feature.module.getApplication()
-            grid = @feature.views['treetable:grid'].components[0]
+            grid = @feature.views['treetable:body'].components[0]
             view = @feature.views['forms:show']
             selected = grid.getGridParam('selrow')
             app = @feature.module.getApplication()
@@ -77,7 +77,7 @@ define [
                     view.setFormData view.model.toJSON()
 
         refresh: ->
-            grid = @feature.views['treetable:grid'].components[0]
+            grid = @feature.views['treetable:body'].components[0]
             grid.trigger('reloadGrid')
 
 
@@ -85,11 +85,11 @@ define [
     name: 'treetable'
     fn: (module, feature, viewName, args) ->
         deferred = $.Deferred()
-        if viewName is 'operators'
+        if viewName is 'toolbar'
             viewLoader.generateOperatorsView
                 handlers: handlers
             , module, feature, deferred
-        else if viewName is 'grid'
+        else if viewName is 'body'
             scaffold = feature.options.scaffold or {}
             visibility = scaffold.ensureOperatorsVisibility or viewLoader.ensureOperatorsVisibility
             initVisibility = scaffold.initOperatorsVisibility or viewLoader.initOperatorsVisibility
@@ -135,10 +135,10 @@ define [
                 handlers:
                     selectionChanged: (id, status) ->
                         return if not status
-                        v = @feature.views['treetable:operators']
+                        v = @feature.views['treetable:toolbar']
                         visibility.call v, v.options.operators, id
                     refresh: () ->
-                        v = @feature.views['treetable:operators']
+                        v = @feature.views['treetable:toolbar']
                         initVisibility.call v, v.options.operators
             , module, feature, deferred
 

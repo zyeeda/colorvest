@@ -10,10 +10,10 @@ define [
         add: ->
             viewLoader.submitHandler.call @,
                 submitSuccess: (type) =>
-                    @feature.views['grid:grid'].components[0].refresh()
+                    @feature.views['grid:body'].components[0].refresh()
             , 'forms:add', viewLoader.getDialogTitle(@feature.views['forms:add'], 'add', '新增')
         edit: ->
-            grid = @feature.views['grid:grid'].components[0]
+            grid = @feature.views['grid:body'].components[0]
             view = @feature.views['forms:edit']
             app = @feature.module.getApplication()
             selected = grid.getSelected()
@@ -23,10 +23,10 @@ define [
             $.when(view.model.fetch()).then =>
                 viewLoader.submitHandler.call @,
                     submitSuccess: (type) =>
-                        @feature.views['grid:grid'].components[0].refresh()
+                        @feature.views['grid:body'].components[0].refresh()
                 , 'forms:edit', viewLoader.getDialogTitle(@feature.views['forms:edit'], 'edit', '编辑')
         del: ->
-            grid = @feature.views['grid:grid'].components[0]
+            grid = @feature.views['grid:body'].components[0]
             selected = grid.getSelected()
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
@@ -44,7 +44,7 @@ define [
                         return
                     grid.refresh()
         show: ->
-            grid = @feature.views['grid:grid'].components[0]
+            grid = @feature.views['grid:body'].components[0]
             view = @feature.views['forms:show']
             selected = grid.getSelected()
             app = @feature.module.getApplication()
@@ -59,18 +59,18 @@ define [
                 ).done ->
                     view.setFormData view.model.toJSON()
         refresh: ->
-            grid = @feature.views['grid:grid'].components[0]
+            grid = @feature.views['grid:body'].components[0]
             grid.refresh()
 
     type: 'view'
     name: 'grid'
     fn: (module, feature, viewName, args) ->
         deferred = $.Deferred()
-        if viewName is 'operators'
+        if viewName is 'toolbar'
             viewLoader.generateOperatorsView
                 handlers: handlers
             , module, feature, deferred
-        else if viewName is 'grid'
+        else if viewName is 'body'
             scaffold = feature.options.scaffold or {}
             visibility = scaffold.ensureOperatorsVisibility or viewLoader.ensureOperatorsVisibility
             initVisibility = scaffold.initOperatorsVisibility or viewLoader.initOperatorsVisibility
@@ -82,10 +82,10 @@ define [
                     new View options
                 handlers:
                     selectionChanged: (e, models) ->
-                        v = @feature.views['grid:operators']
+                        v = @feature.views['grid:toolbar']
                         visibility.call v, v.options.operators, models
                     refresh: () ->
-                        v = @feature.views['grid:operators']
+                        v = @feature.views['grid:toolbar']
                         initVisibility.call v, v.options.operators
             , module, feature, deferred
 

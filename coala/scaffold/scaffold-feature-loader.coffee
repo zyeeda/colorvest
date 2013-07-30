@@ -10,33 +10,36 @@ define [
         deferred = $.Deferred()
 
         $.get(module.url(featureName) + '/configuration/feature').done (data) ->
-            views = []
-            if data.views
-                views = data.views
-            else
-                if data.style is 'grid'
-                    views.push name: 'grid:operators', region: 'operators'
-                    views.push name: 'grid:grid', region: 'grid'
-                else if data.style is 'tree'
-                    views.push name: 'tree:operators', region: 'operators'
-                    views.push name: 'tree:tree', region: 'grid'
-                else if data.style is 'treeTable'
-                    views.push name: 'treetable:operators', region: 'operators'
-                    views.push name: 'treetable:grid', region: 'grid'
-
-                views.push 'forms:add'
-                views.push 'forms:edit'
-                views.push 'forms:show'
-
             opts =
                 baseName: featureName
                 module: module
                 avoidLoadingModel: true
                 avoidLoadingTemplate: true
 
-                layout: 'coala:grid'
+            views = []
+            if data.views
+                views = data.views
+            else
+                if data.style is 'grid'
+                    opts.layout = 'coala:grid'
+                    views.push name: 'grid:toolbar', region: 'toolbar'
+                    views.push name: 'grid:body', region: 'body'
 
-                views: views
+                else if data.style is 'tree'
+                    opts.layout = 'coala:tree'
+                    views.push name: 'tree:toolbar', region: 'toolbar'
+                    views.push name: 'tree:body', region: 'body'
+
+                else if data.style is 'treeTable'
+                    opts.layout = 'coala:grid'
+                    views.push name: 'treetable:toolbar', region: 'toolbar'
+                    views.push name: 'treetable:body', region: 'body'
+
+                views.push 'forms:add'
+                views.push 'forms:edit'
+                views.push 'forms:show'
+
+            opts.views = views
 
             if data.enableFrontendExtension is true
                 module.loadResource('__scaffold__/' + featureName).done (scaffold) ->
