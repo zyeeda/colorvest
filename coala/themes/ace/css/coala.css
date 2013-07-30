@@ -15,17 +15,35 @@ html, body {
     margin-top: 5px;
 }
 
-.c-layout-grid-container {
+.c-layout-container {
     height: 100%;
     overflow: hidden;
 }
 
-.c-layout-grid-container .ui-layout-center {
+/*
+.c-layout-grid-container {
     height: 100%;
+    overflow: hidden;
+}
+*/
+
+.c-layout-container .c-layout-center {
+    height: 100%;
+}
+
+.c-layout-tree .c-layout-center {
     overflow: auto;
 }
 
-.c-layout-grid-main {
+.c-layout-grid .c-layout-center {
+    overflow: hidden;
+}
+
+.c-layout-grid .c-layout-body {
+    overflow: hidden;
+}
+
+.c-layout-body {
     height: 100%;
     overflow: auto;
     margin-top: -60px;
@@ -35,13 +53,33 @@ html, body {
             box-sizing: border-box;
 }
 
-.c-layout-toolbar-main {
+.c-layout-toolbar {
     border-bottom: 1px solid #D3D3D3;
 }
 
-.c-layout-toolbar-main .btn-toolbar {
+.c-layout-toolbar .btn-toolbar {
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.c-layout-body .dataTables_wrapper {
+    height: 100%;
+    overflow: hidden;
+}
+
+.c-grid-top {
+    position: relative;
+    z-index: 200;
+}
+
+.c-grid-body {
+    height: 100%;
+    overflow: auto;
+    margin-top: -58px;
+    border-top: solid 58px;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
 }
 
 .c-picker {

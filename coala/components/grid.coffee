@@ -4,6 +4,7 @@ define [
     'coala/coala'
     'coala/vendors/jquery/dataTables/jquery.dataTables'
     'coala/vendors/jquery/dataTables/jquery.dataTables.bootstrap'
+    'coala/vendors/jquery/dataTables/FixedHeader'
 ], ($, _, coala) ->
 
     $.fn.dataTable.defaults.fnServerData = (url, data, fn, settings) ->
@@ -74,6 +75,7 @@ define [
     coala.registerComponentHandler 'grid', (->), (el, options, view) ->
 
         opt = _.extend
+            sDom: "<'row-fluid c-grid-top'<'span6'i><'span6'p>><'c-grid-body't>",
             bServerSide: !options.data
             view: view
         , options.options
@@ -95,6 +97,8 @@ define [
         opt.aaData = options.data if options.data
 
         table = el.dataTable opt
+        new FixedHeader table if options.fixedHeader
+
         table.delegate 'tr', 'click', (e) ->
             return if $(e.target).is('input')
 
