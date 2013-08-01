@@ -31,4 +31,6 @@ require =
         'coala/vendors/ace-elements': ['jquery']
         'coala/vendors/jquery/jquery.colorbox': ['jquery']
         'coala/vendors/jquery/dataTables/jquery.dataTables.bootstrap': ['jquery', 'coala/vendors/jquery/dataTables/jquery.dataTables']
+        'coala/vendors/jquery/dataTables/ColReorderWithResize': ['jquery', 'coala/vendors/jquery/dataTables/jquery.dataTables.bootstrap']
+        'coala/vendors/jquery/dataTables/FixedHeader': ['jquery', 'coala/vendors/jquery/dataTables/jquery.dataTables.bootstrap']
         'coala/vendors/jquery/dataTables/dataTables.treeTable': ['jquery', 'coala/vendors/jquery/dataTables/jquery.dataTables']

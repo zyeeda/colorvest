@@ -1,10 +1,10 @@
-define [
-    'jquery'
+define [ 'jquery'
     'underscore'
     'coala/coala'
     'coala/vendors/jquery/dataTables/jquery.dataTables'
     'coala/vendors/jquery/dataTables/jquery.dataTables.bootstrap'
     'coala/vendors/jquery/dataTables/FixedHeader'
+    'coala/vendors/jquery/dataTables/ColReorderWithResize'
 ], ($, _, coala) ->
 
     $.fn.dataTable.defaults.fnServerData = (url, data, fn, settings) ->
@@ -75,7 +75,7 @@ define [
     coala.registerComponentHandler 'grid', (->), (el, options, view) ->
 
         opt = _.extend
-            sDom: "<'row-fluid c-grid-top'<'span6'i><'span6'p>><'c-grid-body't>",
+            sDom: "R<'row-fluid c-grid-top'<'span6'i><'span6'p>><'c-grid-body't>",
             bServerSide: !options.data
             view: view
         , options.options
@@ -95,6 +95,9 @@ define [
             opt.aoColumns = (adaptColumn col for col in columns)
 
         opt.aaData = options.data if options.data
+        opt.oColReorder =
+            allowReorder: false
+            allowResize: true
 
         table = el.dataTable opt
         new FixedHeader table if options.fixedHeader
