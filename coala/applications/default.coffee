@@ -18,7 +18,9 @@ define [
     onContextLogin = false
 
     $(document).on 'ajaxComplete', (e, response, options) ->
-        if response.status is 401 and not onContextLogin
+        if response.status is 422 and app
+            app.error '请求失败, 请正确填写表单'
+        else if response.status is 401 and not onContextLogin
             onContextLogin = true
 
             login = $ '#LOGIN-DIALOG'

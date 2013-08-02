@@ -169,7 +169,6 @@ define [
             return if not @options.validation
             validator = @$$('form').validate
                 rules: @options.validation.rules
-                messages: @options.validation.messages
                 onfocusout: (el) ->
                     validator.element el
                 errorPlacement: (error, element) ->

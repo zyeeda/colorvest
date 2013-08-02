@@ -34,14 +34,6 @@ define [
             app.confirm '确定要删除选中的记录吗?', =>
                 @feature.model.set selected
                 $.when(@feature.model.destroy()).then (data) =>
-                    if data.violations
-                        msg = ''; summary = ''
-                        for err in data.violations
-                            unless err.properties
-                                summary += err.message + '\n'
-                        msg += summary
-                        app.error msg, '验证提示'
-                        return
                     grid.refresh()
         show: ->
             grid = @feature.views['grid:body'].components[0]
