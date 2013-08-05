@@ -8,7 +8,7 @@ define ["jquery", "coala/core/loader-plugin-manager"], ($, LoaderManager) ->
         return app.info("请选择要操作的记录")  unless selected
         gridView.model.set "id", selected
         $.when(gridView.model.fetch()).done ->
-            LoaderManager.invoke("view", me.feature.module, me.feature, "forms:p" + selected).done (view) ->
+            LoaderManager.invoke("view", me.feature.module, me.feature, "form:p" + selected).done (view) ->
                 view.model = gridView.model
                 app.showDialog
                     view: view
@@ -19,11 +19,7 @@ define ["jquery", "coala/core/loader-plugin-manager"], ($, LoaderManager) ->
                         fn: (btn) ->
                             me.feature.request(url: "revoke/" + btn.taskId).done ->
                                 grid.trigger "reloadGrid"
-
                     ]
-
-
-
         true
 
     selectAll: ->

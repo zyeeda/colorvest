@@ -50,7 +50,7 @@ define [
                     groups = tab.groups
                     groups = if _.isArray groups then groups else [groups]
                     tab.id = _.uniqueId 'tab'
-                    events['shown a-' + tab.id] = 'form-change-tab'
+                    events['shown a-' + tab.id] = 'form-change-tab' # What is form-change-tab?
                     for group in groups
                         unused = _.without unused, @findGroup(group)
                         @eachField group, (field) ->

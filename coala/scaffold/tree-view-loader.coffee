@@ -8,19 +8,19 @@ define [
 
     handlers =
         add: ->
-            @feature.views['forms:add'].model.clear()
+            @feature.views['form:add'].model.clear()
             tree = @feature.views['tree:body'].components[0]
             selected = tree.getSelectedNodes()[0]
-            @feature.views['forms:add'].model.set 'parent', selected if selected
+            @feature.views['form:add'].model.set 'parent', selected if selected
             viewLoader.submitHandler.call @,
                 submitSuccess: =>
-                    @feature.views['forms:add'].model.set isParent: true
-                    tree.addNodes selected, @feature.views['forms:add'].model.toJSON()
-            , 'forms:add', viewLoader.getDialogTitle(@feature.views['forms:add'], 'add', '新增'), 'add'
+                    @feature.views['form:add'].model.set isParent: true
+                    tree.addNodes selected, @feature.views['form:add'].model.toJSON()
+            , 'form:add', viewLoader.getDialogTitle(@feature.views['form:add'], 'add', '新增'), 'add'
 
         edit: ->
             tree = @feature.views['tree:body'].components[0]
-            view = @feature.views['forms:edit']
+            view = @feature.views['form:edit']
             app = @feature.module.getApplication()
             selected = tree.getSelectedNodes()[0]
             return app.info '请选择要操作的记录' if not selected
@@ -31,7 +31,7 @@ define [
                     submitSuccess: ->
                         _.extend selected, view.model.toJSON()
                         tree.refresh()
-                , 'forms:edit', viewLoader.getDialogTitle(@feature.views['forms:edit'], 'edit', '编辑'), 'edit'
+                , 'form:edit', viewLoader.getDialogTitle(@feature.views['form:edit'], 'edit', '编辑'), 'edit'
 
         del: ->
             tree = @feature.views['tree:body'].components[0]
@@ -39,7 +39,9 @@ define [
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
 
-            app.confirm '确定要删除选中的记录吗?', =>
+            app.confirm '确定要删除选中的记录吗?', (confirmed) =>
+                return if not confirmed
+
                 @feature.model.set 'id', selected.id
                 $.when(@feature.model.destroy()).then (data) =>
                     if data.violations
@@ -56,14 +58,14 @@ define [
             app = @feature.module.getApplication()
             tree = @feature.views['tree:body'].components[0]
             selected = tree.getSelectedNodes()[0]
-            view = @feature.views['forms:show']
+            view = @feature.views['form:show']
             return app.info '请选择要操作的记录' if not selected
 
             view.model.set 'id', selected.id
             $.when(view.model.fetch()).then =>
                 app.showDialog(
                     view: view
-                    title: viewLoader.getDialogTitle(@feature.views['forms:show'], 'show', '查看')
+                    title: viewLoader.getDialogTitle(@feature.views['form:show'], 'show', '查看')
                     buttons: []
                 ).done ->
                     view.setFormData view.model.toJSON()

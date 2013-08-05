@@ -78,5 +78,5 @@ define [
 
     coala.registerComponentHandler 'grid-picker', (->), _.bind(fn, @, Picker.Picker, Picker.Chooser)
     coala.registerComponentHandler 'tree-picker', (->), _.bind(fn, @, Picker.Picker, TreePickerChooser)
-    coala.registerComponentHandler 'multi-picker', (->), _.bind(fn, @, ManyPicker, Picker.Chooser)
+    coala.registerComponentHandler 'multi-grid-picker', (->), _.bind(fn, @, ManyPicker, Picker.Chooser)
     coala.registerComponentHandler 'multi-tree-picker', (->), _.bind(fn, @, ManyPicker, TreePickerChooser)

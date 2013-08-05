@@ -35,9 +35,9 @@ define [
                     views.push name: 'treetable:toolbar', region: 'toolbar'
                     views.push name: 'treetable:body', region: 'body'
 
-                views.push 'forms:add'
-                views.push 'forms:edit'
-                views.push 'forms:show'
+                views.push 'form:add'
+                views.push 'form:edit'
+                views.push 'form:show'
 
             opts.views = views
 

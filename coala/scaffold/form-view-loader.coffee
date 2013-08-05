@@ -6,6 +6,7 @@ define [
     'coala/core/form-view'
     'coala/core/form/form-field'
 ], (View, Handlebars, _, $, FormView, FormField) ->
+
     class GridPickerField extends FormField
         constructor: ->
             super
@@ -45,10 +46,10 @@ define [
             super
             @type = 'tree-picker'
 
-    class ManyPickerField extends GridPickerField
+    class MultiGridPickerField extends GridPickerField
         constructor: ->
             super
-            @type = 'multi-picker'
+            @type = 'multi-grid-picker'
 
         getComponent: ->
             o = super()
@@ -60,18 +61,18 @@ define [
         getFormData: ->
             @form.findComponent('a-' + @id).getFormData()
 
-    class MultiTreePickerField extends ManyPickerField
+    class MultiTreePickerField extends MultiGridPickerField
         constructor: ->
             super
             @type = 'multi-tree-picker'
 
     FormField.add 'grid-picker', GridPickerField
     FormField.add 'tree-picker', TreePickerField
-    FormField.add 'multi-picker', ManyPickerField
+    FormField.add 'multi-grid-picker', MultiGridPickerField
     FormField.add 'multi-tree-picker', MultiTreePickerField
 
     type: 'view'
-    name: 'forms'
+    name: 'form'
     fn: (module, feature, viewName, args) ->
         deferred = $.Deferred()
         feature.request url:'configuration/forms/' + viewName, success: (data) ->
@@ -95,4 +96,5 @@ define [
                     fsc.call @, @getFormData(), $(e.target)
 
             deferred.resolve view
-        deferred
+
+        deferred.promise()

@@ -4,7 +4,7 @@ define [
 
     # scaffold
     'coala/scaffold/scaffold-feature-loader'
-    'coala/scaffold/forms-view-loader'
+    'coala/scaffold/form-view-loader'
     'coala/scaffold/grid-view-loader'
     'coala/scaffold/tree-view-loader'
     'coala/scaffold/treetable-view-loader'
@@ -26,10 +26,10 @@ define [
     'coala/layouts/grid'
     'coala/layouts/one-region'
 
-], (LoaderPluginManager, scaffoldFeatureLoader, formsLoader, gridViewLoader, treeViewLoader, treeTableViewLoader) ->
+], (LoaderPluginManager, scaffoldFeatureLoader, formViewLoader, gridViewLoader, treeViewLoader, treeTableViewLoader) ->
 
-    LoaderPluginManager.register formsLoader
     LoaderPluginManager.register scaffoldFeatureLoader
+    LoaderPluginManager.register formViewLoader
     LoaderPluginManager.register gridViewLoader
     LoaderPluginManager.register treeViewLoader
     LoaderPluginManager.register treeTableViewLoader

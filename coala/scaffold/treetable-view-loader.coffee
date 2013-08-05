@@ -8,22 +8,23 @@ define [
 
     handlers =
         add: ->
-            @feature.views['forms:add'].model.clear()
+            @feature.views['form:add'].model.clear()
             grid = @feature.views['treetable:body'].components[0]
             selected = grid.getSelected()
             if selected
                 rowData = selected.toJSON()
-                @feature.views['forms:add'].model.set 'parent', rowData
+                @feature.views['form:add'].model.set 'parent', rowData
 
             viewLoader.submitHandler.call @,
                 submitSuccess: (type) =>
-                    #data = @feature.views['forms:add'].model.toJSON()
+                    #data = @feature.views['form:add'].model.toJSON()
                     #grid.addChildNode data.id, selected, data
                     grid.refresh()
-            , 'forms:add', viewLoader.getDialogTitle(@feature.views['forms:add'], 'add', '新增')
+            , 'form:add', viewLoader.getDialogTitle(@feature.views['form:add'], 'add', '新增')
+
         edit: ->
             grid = @feature.views['treetable:body'].components[0]
-            view = @feature.views['forms:edit']
+            view = @feature.views['form:edit']
             app = @feature.module.getApplication()
             selected = grid.getSelected()
             return app.info '请选择要操作的记录' if not selected
@@ -31,7 +32,7 @@ define [
             view.model.set 'id', selected.id
             if selected
                 rowData = selected.toJSON()
-                @feature.views['forms:edit'].model.set 'parent', rowData
+                @feature.views['form:edit'].model.set 'parent', rowData
 
             $.when(view.model.fetch()).then =>
                 viewLoader.submitHandler.call @,
@@ -39,14 +40,17 @@ define [
                         ###
                         ###
                         grid.setTreeRow selected, view.model.toJSON()
-                , 'forms:edit', viewLoader.getDialogTitle(@feature.views['forms:edit'], 'edit', '编辑')
+                , 'form:edit', viewLoader.getDialogTitle(@feature.views['form:edit'], 'edit', '编辑')
+
         del: ->
             grid = @feature.views['treetable:body'].components[0]
             selected = grid.getGridParam('selrow')
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
 
-            app.confirm '确定要删除选中的记录吗?', =>
+            app.confirm '确定要删除选中的记录吗?', (confirmed) =>
+                return if not confirmed
+
                 @feature.model.set 'id', selected
                 $.when(@feature.model.destroy()).then (data) =>
                     if data.violations
@@ -59,10 +63,11 @@ define [
                         return
                     grid.delTreeNode selected
                     grid.trigger 'reloadGrid'
+
         show: ->
             app = @feature.module.getApplication()
             grid = @feature.views['treetable:body'].components[0]
-            view = @feature.views['forms:show']
+            view = @feature.views['form:show']
             selected = grid.getGridParam('selrow')
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
@@ -71,7 +76,7 @@ define [
             $.when(view.model.fetch()).then =>
                 app.showDialog(
                     view: view
-                    title: viewLoader.getDialogTitle(@feature.views['forms:show'], 'show', '查看')
+                    title: viewLoader.getDialogTitle(@feature.views['form:show'], 'show', '查看')
                     buttons: []
                 ).done ->
                     view.setFormData view.model.toJSON()

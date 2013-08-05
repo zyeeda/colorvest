@@ -46,7 +46,7 @@ define ["jquery", 'underscore'], ($, _) ->
         return app.info("请选择要操作的记录")  unless selected
         @feature.model.set "id", selected
         $.when(@feature.model.fetch()).done =>
-            app.loadView(@feature, "forms:" + selected).done (view) =>
+            app.loadView(@feature, "form:" + selected).done (view) =>
                 buttons = [
                     label: "Finish"
                     fn: =>

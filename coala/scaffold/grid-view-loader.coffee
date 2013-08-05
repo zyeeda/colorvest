@@ -11,10 +11,11 @@ define [
             viewLoader.submitHandler.call @,
                 submitSuccess: (type) =>
                     @feature.views['grid:body'].components[0].refresh()
-            , 'forms:add', viewLoader.getDialogTitle(@feature.views['forms:add'], 'add', '新增')
+            , 'form:add', viewLoader.getDialogTitle(@feature.views['form:add'], 'add', '新增')
+
         edit: ->
             grid = @feature.views['grid:body'].components[0]
-            view = @feature.views['forms:edit']
+            view = @feature.views['form:edit']
             app = @feature.module.getApplication()
             selected = grid.getSelected()
             return app.info '请选择要操作的记录' if not selected
@@ -24,14 +25,17 @@ define [
                 viewLoader.submitHandler.call @,
                     submitSuccess: (type) =>
                         @feature.views['grid:body'].components[0].refresh()
-                , 'forms:edit', viewLoader.getDialogTitle(@feature.views['forms:edit'], 'edit', '编辑')
+                , 'form:edit', viewLoader.getDialogTitle(@feature.views['form:edit'], 'edit', '编辑')
+
         del: ->
             grid = @feature.views['grid:body'].components[0]
             selected = grid.getSelected()
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
 
-            app.confirm '确定要删除选中的记录吗?', =>
+            app.confirm '确定要删除选中的记录吗?', (confirmed) =>
+                return if not confirmed
+
                 @feature.model.set selected
                 $.when(@feature.model.destroy()).then (data) =>
                     if data.violations
@@ -43,9 +47,10 @@ define [
                         app.error msg, '验证提示'
                         return
                     grid.refresh()
+
         show: ->
             grid = @feature.views['grid:body'].components[0]
-            view = @feature.views['forms:show']
+            view = @feature.views['form:show']
             selected = grid.getSelected()
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
@@ -54,10 +59,11 @@ define [
             $.when(view.model.fetch()).then =>
                 app.showDialog(
                     view: view
-                    title: viewLoader.getDialogTitle(@feature.views['forms:show'], 'show', '查看')
+                    title: viewLoader.getDialogTitle(@feature.views['form:show'], 'show', '查看')
                     buttons: []
                 ).done ->
                     view.setFormData view.model.toJSON()
+
         refresh: ->
             grid = @feature.views['grid:body'].components[0]
             grid.refresh()
