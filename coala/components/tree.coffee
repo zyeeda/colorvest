@@ -55,7 +55,7 @@ define [
         options.callback = cb
 
         if options.treeData
-            $.fn.zTree.init el, options, options.treeData
+            tree = $.fn.zTree.init el, options, options.treeData
         else
             if options.treeDataAsync is true
                 tree = $.fn.zTree.init el, options, []

@@ -3,9 +3,33 @@ define [ 'jquery'
     'coala/coala'
     'coala/vendors/jquery/dataTables/jquery.dataTables'
     'coala/vendors/jquery/dataTables/jquery.dataTables.bootstrap'
+    'coala/vendors/jquery/dataTables/jquery.dataTables.columnFilter'
     'coala/vendors/jquery/dataTables/FixedHeader'
     'coala/vendors/jquery/dataTables/ColReorderWithResize'
 ], ($, _, coala) ->
+
+    searchExp = /^sSearch_(\d+)$/
+    typeMap =
+        select: 'eq', text: 'like', number: 'eq'
+        'number-range': 'between', 'date-range': 'between'
+
+    extractFilters = (data, settings) ->
+        filters = []
+        columns = data['sColumns'].split(',')
+        separator = data['sRangeSeparator']
+        for key, value of data
+            m = key.match searchExp
+            continue if not m or not value
+            type = settings.oInit.filters?[m[1]]?.type
+            continue if not type
+            op = typeMap[type]
+            if op is 'between'
+                value = value.split separator
+                continue if not value[0] and not value[1]
+                filters.push [op, columns[m[1]], value[0], value[1]]
+            else
+                filters.push [op, columns[m[1]], value]
+        if filters.length is 0 then null else filters
 
     $.fn.dataTable.defaults.fnServerData = (url, data, fn, settings) ->
         view = settings.oInit.view
@@ -17,6 +41,8 @@ define [ 'jquery'
             _first: d['iDisplayStart']
             _pageSize: d['iDisplayLength']
             _order: cname + '-' + order
+        filters = extractFilters d, settings
+        params['_filters'] = filters if filters
 
         _.extend params, view.collection.extra
 
@@ -92,12 +118,26 @@ define [ 'jquery'
             if options.numberColumn is true
                 columns.unshift
                     sortable: false, searchable: false, name: 'i', header: '#', width: '25px'
-            opt.aoColumns = (adaptColumn col for col in columns)
+            filterEnabled = false
+            filters = []
+            footers = []
+            opt.aoColumns = for col in columns
+                if col.filter
+                    filterEnabled = true
+                    filters.push type: col.filter, values: col.source
+                else
+                    filters.push null
+                footers.push "<th>#{col.header}</th>"
+                adaptColumn col
 
         opt.aaData = options.data if options.data
         opt.oColReorder =
             allowReorder: false
             allowResize: true
+
+        if filterEnabled
+            el.append("<tfoot><tr>#{footers.join('')}</tr></tfoot>")
+            opt.filters = filters
 
         table = el.dataTable opt
         new FixedHeader table if options.fixedHeader
@@ -125,5 +165,7 @@ define [ 'jquery'
         settings = table.fnSettings()
         view.collection.extra = _.extend {}, options.params or {}
         extendApi table, view, options
+
+        table.columnFilter aoColumns: filters if filterEnabled
 
         table
