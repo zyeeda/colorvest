@@ -8,6 +8,8 @@ define [
     'coala/core/config'
     'coala/core/form-view'
     'coala/vendors/jquery/pnotify/jquery.pnotify'
+    'coala/vendors/jquery/jquery.gritter'
+    'coala/vendors/bootbox'
     'coala/scaffold/scaffold'
     'coala/features/viewport.feature/feature'
     'coala/components/viewport'
@@ -80,7 +82,24 @@ define [
             application.addPromise modifyFeatureContainerDeferred
 
         if options.useDefaultNotifier isnt false
-            # pnotify
+
+            for action in ['message', 'info', 'success', 'warn', 'error']
+                application[action] = (message) ->
+                    message = text: message if _.isString message
+                    message.title = '系统消息'
+                    message.class_name = (if action is 'message' then '' else 'gritter-' + action)
+                    $.gritter.add message
+
+            application.alert = (message) ->
+                bootbox.alert message
+
+            application.confirm = (message, fn) ->
+                bootbox.confirm message, '取消', '确定', fn
+
+            application.prompt = (message, fn) ->
+                bootbox.prompt message, '取消', '确定', fn
+
+            ###
             $.pnotify.defaults.history = false
             stack_bar_top = "dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0
             application.message = (content, title = false) ->
@@ -117,5 +136,6 @@ define [
             application.prompt = (content, fn) ->
                 s = window.prompt(content)
                 fn(s) if s
+            ###
 
         application
