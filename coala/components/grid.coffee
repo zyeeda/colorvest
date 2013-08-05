@@ -75,7 +75,7 @@ define [ 'jquery'
     coala.registerComponentHandler 'grid', (->), (el, options, view) ->
 
         opt = _.extend
-            sDom: "R<'row-fluid c-grid-top'<'span6'i><'span6'p>><'c-grid-body't>",
+            sDom: "Rs<'row-fluid c-grid-top'<'span6'i><'span6'p>><'c-grid-body't>",
             bServerSide: !options.data
             view: view
         , options.options
