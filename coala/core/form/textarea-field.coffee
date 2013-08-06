@@ -7,18 +7,19 @@ define [
             super
             @type = 'textarea'
 
-        getTemplateString: ->
-            '''
+        getTemplateString: -> '''
+            <% if (readOnly) { %>
+                <div class="view-form-field">
+                    <div class="field-label"><%= label %></div><div id="<%= id %>" class="field-value">{{<%= value %>}}</div>
+                </div>
+            <% } else { %>
                 <div class="control-group">
                   <label class="control-label" for="<%= id %>"><%= label %></label>
                   <div class="controls">
-                    <% if (readOnly) { %>
-                        <span id="<%= id %>">{{<%= value %>}}</span>
-                    <% } else { %>
                         <textarea class="input span12" id="<%= id %>" name="<%= name %>" rows="<%= rowspan %>">{{<%= value %>}}</textarea>
-                    <%  } %>
                   </div>
                 </div>
+            <%  } %>
             '''
 
     FormField.add 'textarea', TextareaField
