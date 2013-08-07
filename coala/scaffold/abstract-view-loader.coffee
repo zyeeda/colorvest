@@ -129,6 +129,7 @@ define [
                 feature: feature
                 components: [data]
                 avoidLoadingHandlers: true
+                events: data.events or {}
                 extend:
                     renderHtml: (su, data) ->
                         result.templates.grid
@@ -142,14 +143,13 @@ define [
             data = {} if data is 'undefined'
             data.type = 'tree'
             data.selector = 'tree'
-            events = data.events or {}
 
             viewOptions =
                 baseName: 'tree'
                 module: module
                 feature: feature
                 components: [data]
-                events: events
+                events: data.events or {}
                 avoidLoadingHandlers: true
                 extend:
                     renderHtml: (su, data) ->
