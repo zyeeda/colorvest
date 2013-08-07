@@ -29,7 +29,7 @@ define [
             if _.isArray value
                 idx = _.indexOf @form.findField(@name), @
                 return @loadFormData value[idx]
-            @form.$(@id).val(value)
+            if @readOnly then @form.$(@id).text(value) else @form.$(@id).val(value)
 
         isReadOnly: ->
             @readOnly
@@ -50,16 +50,18 @@ define [
             @visible and not @readOnly
 
         getTemplateString: -> '''
-            <div class="control-group">
-              <label class="control-label" for="<%= id %>"><%= label %></label>
-              <div class="controls">
-                <% if (readOnly) { %>
-                    <span id="<%= id %>">{{<%= value %>}}</span>
-                <% } else { %>
+            <% if (readOnly) { %>
+                <div class="view-form-field">
+                    <div class="field-label"><%= label %></div><div id="<%= id %>" class="field-value">{{<%= value %>}}</div>
+                </div>
+            <% } else { %>
+                <div class="control-group">
+                  <label class="control-label" for="<%= id %>"><%= label %></label>
+                  <div class="controls">
                     <input type="<%= type %>" class="input span12" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}" />
-                <% } %>
-              </div>
-            </div>
+                  </div>
+                </div>
+            <% } %>
         '''
 
         getTemplate: ->

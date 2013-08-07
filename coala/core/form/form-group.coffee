@@ -15,7 +15,7 @@ define [
             @fields = []
             for field in fieldOptions
                 if @options.readOnly is true
-                    filed = name: field if _.isString field
+                    field = name: field, type: 'text' if _.isString field
                     field.readOnly = true
                 (if field.type is 'hidden' then @hiddenFields else @fields).push FormField.build field, @, form
 

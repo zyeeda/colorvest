@@ -24,20 +24,25 @@ define [
             ]
 
         loadFormData: (value, data) ->
-            if @readOnly then @form.findComponent(@id).loadData(data) else super
+            if @readOnly
+                @value = value
+                @form.$(@id).text(value?.text)
+            else
+                @form.findComponent(@id).loadData(data)
 
-        getTemplateString: ->
-            '''
-                <div class="control-group">
-                  <label class="control-label" for="<%= id %>"><%= label %></label>
-                  <div class="controls">
-                    <% if (readOnly) {%>
-                        <span id="<%= id %>">{{<%= value %>}}</span>
-                    <% } else { %>
-                        <input type="hidden" id="<%= id %>" name="<%= name %>" value="{{appearFalse <%= value %>}}"/>
-                    <% } %>
-                  </div>
+        getTemplateString: -> '''
+            <% if (readOnly) {%>
+                <div class="view-form-field">
+                    <div class="field-label"><%= label %></div><div id="<%= id %>" class="field-value">{{<%= value %>}}</div>
                 </div>
+            <% } else { %>
+                <div class="control-group">
+                    <label class="control-label" for="<%= id %>"><%= label %></label>
+                    <div class="controls">
+                        <input type="hidden" id="<%= id %>" name="<%= name %>" value="{{appearFalse <%= value %>}}"/>
+                      </div>
+                </div>
+            <% } %>
             '''
 
     FormField.add 'dropdown', DropDownField
