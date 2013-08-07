@@ -41,10 +41,15 @@ define [ 'jquery'
             _first: d['iDisplayStart']
             _pageSize: d['iDisplayLength']
             _order: cname + '-' + order
-        filters = extractFilters d, settings
-        params['_filters'] = filters if filters
-
         _.extend params, view.collection.extra
+
+        filters = extractFilters d, settings
+        if filters and params['_filters']
+            params._filters = (v for k, v of params._filters).concat filters
+        else if filters
+            params['_filters'] = filters
+        else if params._filters
+            params._filters = (v for k, v of params._filters)
 
         settings.jqXHR = view.collection.fetch(data: params).done ->
             data = view.collection.toJSON()
@@ -93,6 +98,9 @@ define [ 'jquery'
                 if options.multiple then selected else selected[0]
             addParam: (key, value) ->
                 view.collection.extra[key] = value
+            addFilter: (filter) ->
+                view.collection.extra._filters or= {}
+                view.collection.extra._filters[filter[1]] = filter
             removeParam: (key) ->
                 delete view.collection.extra?[key]
             refresh: (includeParams = true) ->
