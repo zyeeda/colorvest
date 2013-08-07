@@ -24,21 +24,31 @@ define [
             statusChanger: @options.statusChanger
 
         getComponents: ->
-            [@getComponent()]
+            if @readOnly then [] else [@getComponent()]
 
         loadFormData: (value, data) ->
-            @form.findComponent('a-' + @id).loadData data
+            if @readOnly
+                @form.$(@id).text(value?.name)
+                @value = value
+            else
+                @form.findComponent('a-' + @id).loadData data
 
         getFormData: ->
-            @form.findComponent('a-' + @id).getFormData()
+            if @readOnly then @value?.id else @form.findComponent('a-' + @id).getFormData()
 
         getTemplateString: -> '''
-            <div class="control-group">
-              <label class="control-label" for="<%= id %>"><%= label %></label>
-              <div class="controls">
-                <div id="a-<%= id %>"></div>
-              </div>
-            </div>
+            <% if (readOnly) { %>
+                <div class="view-form-field">
+                    <div class="field-label"><%= label %></div><div id="<%= id %>" class="field-value">{{<%= value %>}}</div>
+                </div>
+            <% } else { %>
+                <div class="control-group">
+                  <label class="control-label" for="<%= id %>"><%= label %></label>
+                  <div class="controls">
+                    <div id="a-<%= id %>"></div>
+                  </div>
+                </div>
+            <% } %>
         '''
 
     class TreePickerField extends GridPickerField
@@ -57,9 +67,6 @@ define [
                 datatype: 'local'
                 colModel: @options.colModel
             o
-
-        getFormData: ->
-            @form.findComponent('a-' + @id).getFormData()
 
     class MultiTreePickerField extends MultiGridPickerField
         constructor: ->

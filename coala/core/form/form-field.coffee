@@ -29,7 +29,7 @@ define [
             if _.isArray value
                 idx = _.indexOf @form.findField(@name), @
                 return @loadFormData value[idx]
-            @form.$(@id).val(value)
+            if @readOnly then @form.$(@id).text(value) else @form.$(@id).val(value)
 
         isReadOnly: ->
             @readOnly

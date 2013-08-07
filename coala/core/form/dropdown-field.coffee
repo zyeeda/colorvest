@@ -24,7 +24,11 @@ define [
             ]
 
         loadFormData: (value, data) ->
-            if @readOnly then @form.findComponent(@id).loadData(data) else super
+            if @readOnly
+                @value = value
+                @form.$(@id).text(value?.text)
+            else
+                @form.findComponent(@id).loadData(data)
 
         getTemplateString: -> '''
             <% if (readOnly) {%>
