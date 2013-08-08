@@ -86,12 +86,12 @@ define [
         if options.useDefaultNotifier isnt false
 
             for action in ['message', 'info', 'success', 'warn', 'error']
-                ((_action) ->
-                    application[_action] = (message) ->
+                do (action) ->
+                    application[action] = (message) ->
                         message = text: message if _.isString message
                         message.title = '系统消息'
-                        message.class_name = (if _action is 'message' then '' else 'gritter-' + _action)
-                        $.gritter.add message) action
+                        message.class_name = (if action is 'message' then '' else 'gritter-' + action)
+                        $.gritter.add message
 
             application.alert = (message) ->
                 bootbox.alert message
