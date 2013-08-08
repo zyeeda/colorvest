@@ -116,3 +116,46 @@ html, body {
 .c-action-form .tab-content {
     border: 1px solid #C5D0DC;
 }
+
+.c-action-form-show fieldset:first-child .row-fluid:first-child {
+    border-top: 1px solid #BCE8F1;
+}
+
+.c-action-form-show .row-fluid {
+    border: 1px solid #BCE8F1;
+    border-top: 0;
+    overflow: hidden;
+}
+
+.c-action-form-show .field-label {
+    display: inline-block;
+    padding: 11px 5px 0 5px;
+    background-color: #D9EDF7;
+    font-weight: bold;
+    text-align: right;
+    border-right: 1px solid #BCE8F1;
+    float: left;
+    margin-bottom: -9999px;
+    padding-bottom: 9999px;
+}
+
+.c-action-form-show .field-value {
+    display: inline-block;
+    padding: 10px 5px;
+}
+
+.c-form-group-cols-1 .field-label {
+    width: 25%;
+}
+
+.c-form-group-cols-1 .field-value {
+    width: 55%
+}
+
+.c-form-group-cols-2 .field-label {
+    width: 35%;
+}
+
+.c-form-group-cols-2 .field-value {
+    width: 55%;
+}
