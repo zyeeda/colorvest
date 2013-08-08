@@ -34,7 +34,7 @@ define [
 
         getTemplateString: -> '''
             <% if (readOnly) { %>
-                <div class="view-form-field">
+                <div class="c-view-form-field">
                     <div class="field-label"><%= label %></div><div id="<%= id %>" class="field-value">{{<%= value %>}}</div>
                 </div>
             <% } else { %>
