@@ -54,6 +54,7 @@ html, body {
 }
 
 .c-layout-toolbar {
+    height: 59px;
     border-bottom: 1px solid #D3D3D3;
 }
 
