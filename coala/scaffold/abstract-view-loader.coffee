@@ -16,7 +16,7 @@ define [
         '''
 
         operator: _.template '''
-            <button id="<%= id %>" class="btn <% if (style) { %> <%=style%> <% } %>" onclick="return false;" style="display:none">
+            <button id="<%= id %>" class="btn <% if (style) { %> <%=style%> <% } %>" onclick="return false;" style="display:none;">
                 <% if (icon) { %>
                 <i class="<%= icon %> <% if (!label) { %>icon-only<% } %>" />
                 <% } %>

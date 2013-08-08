@@ -118,6 +118,10 @@ html, body {
     border: 1px solid #C5D0DC;
 }
 
+.c-action-form-show {
+    font-size: 14px;
+}
+
 .c-action-form-show fieldset:first-child .row-fluid:first-child {
     border-top: 1px solid #BCE8F1;
 }
@@ -138,6 +142,7 @@ html, body {
     float: left;
     margin-bottom: -9999px;
     padding-bottom: 9999px;
+    cursor: pointer;
 }
 
 .c-action-form-show .row-fluid .span6:nth-child(2) .field-label {
@@ -163,4 +168,24 @@ html, body {
 
 .c-form-group-cols-2 .field-value {
     width: 55%;
+}
+
+.c-modal-size-mini {
+    width: 360px;
+    margin-left: -180px;
+}
+
+.c-modal-size-small {
+    width: 560px;
+    margin-left: -280px;
+}
+
+.c-modal-size-medium {
+    width: 760px;
+    margin-left: -380px;
+}
+
+.c-modal-size-large {
+    width: 960px;
+    margin-left: -480px;
 }

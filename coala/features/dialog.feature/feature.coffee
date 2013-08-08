@@ -19,18 +19,20 @@ define [
         name: 'dialog-buttons'
         region: 'buttons'
     ]
+
     avoidLoadingModel: true
+
     extend:
         initRenderTarget: (su) ->
             root = @module.getApplication()
             id = _.uniqueId('dialog')
-            me = this
-            $('<div class=\"modal hide\" id=\"' + id + '\"><div id=\"' + @startupOptions.view.cid + '\"></div>').appendTo document.body
+            viewSize = @startupOptions.view.options.size or 'medium'
+            $('<div class="modal hide c-modal-size-' + viewSize + '" id="' + id + '"><div id="' + @startupOptions.view.cid + '"></div>').appendTo document.body
             @containerId = id
             @dialogContainer = c = $('#' + id)
-            c.on 'hide', (event) ->
-                event.preventDefault()  if me.startedOptions.length > 1
-                me.close()
+            c.on 'hide', (event) =>
+                event.preventDefault()  if @startedOptions.length > 1
+                @close()
 
             c.addClass @startupOptions.view.options.dialogClass if @startupOptions.view.options.dialogClass
             @container = $('#' + @startupOptions.view.cid)
