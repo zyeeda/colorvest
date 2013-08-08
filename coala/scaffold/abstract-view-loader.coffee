@@ -16,7 +16,7 @@ define [
         '''
 
         operator: _.template '''
-            <button id="<%= id %>" class="btn <% if (style) { %> <%=style%> <% } %>" onclick="return false;">
+            <button id="<%= id %>" class="btn <% if (style) { %> <%=style%> <% } %>" onclick="return false;" style="display:none">
                 <% if (icon) { %>
                 <i class="<%= icon %> <% if (!label) { %>icon-only<% } %>" />
                 <% } %>
@@ -46,7 +46,7 @@ define [
         prefix
 
     result.initOperatorsVisibility = (operators) ->
-        @$(o.id).hide() for o in operators when ['edit', 'del', 'show'].indexOf(o.id) isnt -1
+        @$(o.id).show() for o in operators when ['add', 'refresh'].indexOf(o.id) isnt -1
 
     result.ensureOperatorsVisibility = (operators, id) ->
         (if id then @$(o.id).show() else @$(o.id).hide()) for o in operators when ['edit', 'del', 'show'].indexOf(o.id) isnt -1

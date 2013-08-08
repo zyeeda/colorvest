@@ -139,6 +139,10 @@ html, body {
     padding-bottom: 9999px;
 }
 
+.c-action-form-show .row-fluid .span6:nth-child(2) .field-label {
+    border-left: 1px solid #BCE8F1;
+}
+
 .c-action-form-show .field-value {
     display: inline-block;
     padding: 10px 5px;
