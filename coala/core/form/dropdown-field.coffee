@@ -33,7 +33,9 @@ define [
                 </div>
             <% } else { %>
                 <div class="control-group">
-                    <label class="control-label" for="<%= id %>"><%= label %></label>
+                    <label class="control-label" for="<%= id %>"><%= label %><% if (required) { %>
+                        <span class="required-mark">*</span>
+                    <% } %></label>
                     <div class="controls">
                         <input type="hidden" id="<%= id %>" name="<%= name %>" value="{{appearFalse <%= value %>}}"/>
                       </div>

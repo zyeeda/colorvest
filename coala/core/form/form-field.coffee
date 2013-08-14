@@ -12,6 +12,7 @@ define [
             @value = options.value or options.name
             @label = options.label or @name
             @readOnly = !!options.readOnly
+            @required = !!options.required
             @visible = true
             @type = options.type
             @colspan = options.colspan or 1
@@ -56,7 +57,9 @@ define [
                 </div>
             <% } else { %>
                 <div class="control-group">
-                  <label class="control-label" for="<%= id %>"><%= label %></label>
+                    <label class="control-label" for="<%= id %>"><%= label %><% if (required) { %>
+                        <span class="required-mark">*</span>
+                    <% } %></label>
                   <div class="controls">
                     <input type="<%= type %>" class="input span12" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}" />
                   </div>
