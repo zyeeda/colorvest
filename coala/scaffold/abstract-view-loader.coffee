@@ -7,6 +7,9 @@ define [
     {getPath} = config
 
     result = {}
+    permMap = refresh: 'show'
+    getPermissionId = (id) ->
+        if permMap[id] then permMap[id] else id
 
     result.templates =
         buttonGroup: _.template '''
@@ -46,10 +49,10 @@ define [
         prefix
 
     result.initOperatorsVisibility = (operators) ->
-        @$(o.id).show() for o in operators when ['add', 'refresh'].indexOf(o.id) isnt -1
+        (if @feature.isPermitted(getPermissionId(o.id)) then @$(o.id).show()) for o in operators when ['add', 'refresh'].indexOf(o.id) isnt -1
 
     result.ensureOperatorsVisibility = (operators, id) ->
-        (if id then @$(o.id).show() else @$(o.id).hide()) for o in operators when ['edit', 'del', 'show'].indexOf(o.id) isnt -1
+        (if id and @feature.isPermitted(getPermissionId(o.id)) then @$(o.id).show() else @$(o.id).hide()) for o in operators when ['edit', 'del', 'show'].indexOf(o.id) isnt -1
 
     result.extendEventHandlers = (view, handlers) ->
         scaffold = view.feature.options.scaffold or {}

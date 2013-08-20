@@ -111,6 +111,7 @@ define [
         serializeData: ->
             data = super()
             data['__viewName__'] = @baseName
+            data['__view__'] = @
             data
 
         mixinTemplateHelpers: (target) ->

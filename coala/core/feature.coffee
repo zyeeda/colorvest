@@ -228,4 +228,8 @@ define [
                 view.feature.trigger [eventName, view, obj.component].concat(args)...
                 view.bindEventHandler(exists).apply view, args if _.isString exists
 
+        isPermitted: (operator) ->
+            app = @module.getApplication()
+            return !!app.settings?.session?.permissions?[@path() + ':' + operator]
+
     Feature
