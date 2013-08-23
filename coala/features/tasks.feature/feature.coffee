@@ -1,7 +1,4 @@
 define [
-    'coala/features/tasks/grid.feature/feature'
-    'coala/features/tasks/grid.feature/handlers/grid-view'
-    'coala/features/tasks/grid.feature/views/grid-view'
     'coala/features/tasks.feature/views/completed-operators'
     'coala/features/tasks.feature/views/grid'
     'coala/features/tasks.feature/views/operators'

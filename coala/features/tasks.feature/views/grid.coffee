@@ -9,26 +9,21 @@ define ->
         o =
             type: "grid"
             selector: "grid"
-            pager: "pager"
-            multiselect: true
-            colModel: [
-                name: "id"
-                label: "ID"
+            multiple: true
+            columns: [
+                name: "id", header: "ID"
             ,
-                name: "name"
-                label: "Name"
+                name: "name", header: "Name"
             ,
-                name: "createTime"
-                label: "Create Time"
+                name: "createTime", header: "Create Time"
             ,
-                name: "assignee"
-                label: "Assignee"
+                name: "assignee", header: "Assignee"
             ]
 
-        if @feature.startupOptions.option?.toDoColModel
-            o.colModel = @feature.startupOptions.option.toDoColModel
+        if @feature.startupOptions.option?.toDoColumns
+            o.columns = @feature.startupOptions.option.toDoColumns
 
-        for c in o.colModel
+        for c in o.columns
             c.sortable = !!sortable[c.name]
         o
     ]

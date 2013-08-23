@@ -42,7 +42,7 @@ define [
             opts.views = views
 
             if data.enableFrontendExtension is true
-                module.loadResource('__scaffold__/' + featureName).done (scaffold) ->
+                module.loadResource(featureName + '.feature/scaffold').done (scaffold) ->
                     opts.scaffold = scaffold
                     deferred.resolve(new Feature opts, options)
             else

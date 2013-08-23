@@ -41,9 +41,11 @@ define ["jquery", 'underscore'], ($, _) ->
     audit: ->
         grid = @feature.views["grid"].components[0]
         ogrid = @feature.views["completed-grid"].components[0]
-        selected = grid.getGridParam("selrow")
+        selected = grid.getSelected()
         app = @feature.module.getApplication()
-        return app.info("请选择要操作的记录")  unless selected
+        return app.info("请选择要操作的记录")  if selected.length is 0
+        selected = selected[0].id
+
         @feature.model.set "id", selected
         $.when(@feature.model.fetch()).done =>
             app.loadView(@feature, "form:" + selected).done (view) =>
@@ -55,8 +57,8 @@ define ["jquery", 'underscore'], ($, _) ->
                         return false  unless valid
                         view.model.set "id", selected
                         view.model.save().done ->
-                            grid.trigger "reloadGrid"
-                            ogrid.trigger "reloadGrid"
+                            grid.reload()
+                            ogrid.reload()
 
                         true
                 ]
@@ -66,8 +68,8 @@ define ["jquery", 'underscore'], ($, _) ->
                         label: "Reject"
                         fn: =>
                             @feature.request(url: "reject/" + selected, type: 'put', data: comment: '').done ->
-                                grid.trigger "reloadGrid"
-                                ogrid.trigger "reloadGrid"
+                                grid.refresh()
+                                ogrid.refresh()
 
                 app.showDialog
                     view: view
@@ -78,32 +80,46 @@ define ["jquery", 'underscore'], ($, _) ->
     batchAudit: ->
         grid = @feature.views['grid'].components[0]
         ogrid = @feature.views["completed-grid"].components[0]
-        selected = grid.getGridParam('selarrrow')
+        selected = grid.getSelected()
         app = @feature.module.getApplication()
+        return app.info("请选择要操作的记录")  if selected.length is 0
+        selected = (m.id for m in selected)
 
-        app.confirm 'are you sure to audit these tasks?', =>
+        app.confirm 'are you sure to audit these tasks?', (sure) =>
+            return if not sure
+
             @feature.request(url: 'batch/audit', type: 'post', data: ids: selected).done ->
-                grid.trigger 'reloadGrid'
-                ogrid.trigger 'reloadGrid'
+                grid.refresh()
+                ogrid.refresh()
 
     reject: ->
         grid = @feature.views["grid"].components[0]
         ogrid = @feature.views["completed-grid"].components[0]
-        selected = grid.getGridParam("selrow")
+        selected = grid.getSelected()
         app = @feature.module.getApplication()
+        return app.info("请选择要操作的记录")  if selected.length is 0
+        selected = selected[0].id
 
         app.prompt 'why this task is rejected?', (str) =>
+            return if str is null
+            return app.info '请填写意见' if not str
+
             @feature.request(url: 'reject/' + selected, type: 'put', data: comment: str).done ->
-                grid.trigger 'reloadGrid'
-                ogrid.trigger 'reloadGrid'
+                grid.refresh()
+                ogrid.refresh()
 
     batchReject: ->
         grid = @feature.views['grid'].components[0]
         ogrid = @feature.views["completed-grid"].components[0]
-        selected = grid.getGridParam('selarrrow')
+        selected = grid.getSelected()
         app = @feature.module.getApplication()
+        return app.info("请选择要操作的记录")  if selected.length is 0
+        selected = (m.id for m in selected)
 
-        app.prompt 'why this task is rejected?', (str) =>
+        app.prompt 'why these tasks are rejected?', (str) =>
+            return if str is null
+            return app.info '请填写意见' if not str
+
             @feature.request(url: 'batch/reject', type: 'post', data: {ids: selected, comment: str}).done ->
-                grid.trigger 'reloadGrid'
-                ogrid.trigger 'reloadGrid'
+                grid.refresh()
+                ogrid.refresh()

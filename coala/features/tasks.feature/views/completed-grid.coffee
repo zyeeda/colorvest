@@ -20,24 +20,20 @@ define ->
             type: "grid"
             selector: "grid"
             pager: "pager"
-            fit: true
-            colModel: [
-                name: "id"
-                label: "ID"
+            columns: [
+                name: "id", header: "ID"
             ,
-                name: "name"
-                label: "Name"
+                name: "name", header: "Name"
             ,
-                name: "createTime"
-                label: "Create Time"
+                name: "startTime", header: "Start Time"
             ,
-                name: 'durationInMillis'
+                name: 'durationInMillis', header: 'Duration In Millis'
             ]
 
-        if @feature.startupOptions.option?.finishedColModel
-            o.colModel = @feature.startupOptions.option.finishedColModel
+        if @feature.startupOptions.option?.finishedColumns
+            o.columns = @feature.startupOptions.option.finishedColumns
 
-        for c in o.colModel
+        for c in o.columns
             c.sortable = !!sortable[c.name]
 
         o

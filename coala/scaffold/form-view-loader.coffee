@@ -84,7 +84,7 @@ define [
     name: 'form'
     fn: (module, feature, viewName, args) ->
         deferred = $.Deferred()
-        feature.request url:'configuration/forms/' + viewName, success: (data) ->
+        feature.request url:'configuration/forms/' + viewName, success: (data = {groups: []}) ->
             def = _.extend
                 baseName: viewName
                 module: module
