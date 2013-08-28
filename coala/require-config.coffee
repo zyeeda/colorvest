@@ -25,7 +25,6 @@ require =
         'coala/vendors/jquery/flot/jquery.flot.resize.min': ['jquery', 'coala/vendors/jquery/flot/jquery.flot.min']
 
         'coala/vendors/jquery/jquery.slimscroll.min': ['jquery']
-        'coala/vendors/jquery/flot/jquery.flot.pie.min': ['jquery']
         'coala/vendors/jquery/jquery.easy-pie-chart.min': ['jquery']
         'coala/vendors/ace': ['jquery', 'coala/vendors/ace-elements']
         'coala/vendors/ace-elements': ['jquery']

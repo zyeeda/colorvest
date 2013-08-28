@@ -21,7 +21,12 @@ define [
 
     $(document).on 'ajaxComplete', (e, response, options) ->
         if response.status is 422 and app
-            app.error '请求失败, 请正确填写表单'
+            data = JSON.parse response.responseText
+            message = '<ul>'
+            if data.violations
+                message += "<li>#{v.message}</li>" for v in data.violations
+            message += '</ul>'
+            app.error '请求验证失败' + message
         else if response.status is 401 and not onContextLogin
             onContextLogin = true
 

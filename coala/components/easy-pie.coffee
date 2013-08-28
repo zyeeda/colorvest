@@ -8,8 +8,9 @@ define [
         $box = el.closest '.infobox'
         barColor = el.data('color') or (unless $box.hasClass('infobox-dark') then $box.css('color') else 'rgba(255,255,255,0.95)')
         trackColor = if barColor == 'rgba(255,255,255,0.95)' then 'rgba(255,255,255,0.25)' else '#E2E2E2'
-        size = parseInt(el.data 'size' ) || 50;
+        size = parseInt(el.data 'size' ) || 50
         oldie = $.browser.msie and $.browser.version < 9
+
         opt = _.extend
             barColor: barColor
             trackColor: trackColor

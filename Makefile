@@ -13,25 +13,25 @@ compile:
 #	recess --compile ${THEME_PATH}/less/theme.less > ${THEME_PATH}/css/bootstrap.css
 #	recess --compile ${THEME_PATH}/less/theme-responsive.less > ${THEME_PATH}/css/bootstrap-responsive.css
 #
-#package:
-#	make clean
-#	make compile
-#	mkdir -p build/coala/vendors/
-#	cp -R coala/themes build/coala/
-#	cd build/coala/themes/ace/css && \
-#		r.js -o cssIn=main.css out=main-build.css && \
-#		rm main.css && \
-#		cleancss -o main.css main-build.css && \
-#		rm main-build.css
-#	cp coala/vendors/modernizr.js build/coala/vendors/
-#	cp coala/vendors/html5shiv.js build/coala/vendors/
-#	cp coala/require-config.js build/coala/
-#	cp -R coala/vendors/require build/coala/vendors/
-#	cd build && r.js -o build.js name=coala/applications/default
-#	rm -rf build/coala/themes/ace/less
-#	find build -name ".DS_Store" | xargs rm -f
-#	find build/coala/themes/ace/css ! -name "main.css" -name "*.css" | xargs rm -f
-#	find build -type d -empty | xargs rm -rf
+package:
+	make clean
+	make compile
+	mkdir -p build/coala/vendors/
+	cp -R coala/themes build/coala/
+	cd build/coala/themes/ace/css && \
+		r.js -o cssIn=main.css out=main-build.css && \
+		rm main.css && \
+		cleancss -o main.css main-build.css && \
+		rm main-build.css
+	cp coala/vendors/modernizr.js build/coala/vendors/
+	cp coala/vendors/html5shiv.js build/coala/vendors/
+	cp coala/require-config.js build/coala/
+	cp -R coala/vendors/require build/coala/vendors/
+	cd build && r.js -o build.js name=coala/applications/default
+	rm -rf build/coala/themes/ace/less
+	find build -name ".DS_Store" | xargs rm -f
+	find build/coala/themes/ace/css ! -name "main.css" -name "*.css" | xargs rm -f
+	find build -type d -empty | xargs rm -rf
 
 #spacelab:
 #	mkdir -p build/spacelab
@@ -63,4 +63,3 @@ compile:
 #	cp build/spacelab/elusive-iconfont/font/Elusive-Icons.woff coala/themes/default/bootstrap/font/
 #	cp build/spacelab/elusive-iconfont/font/Elusive-Icons.svg coala/themes/default/bootstrap/font/
 #	cp build/spacelab/elusive-iconfont/font/Elusive-Icons.ttf coala/themes/default/bootstrap/font/
-

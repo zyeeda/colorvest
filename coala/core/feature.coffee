@@ -229,6 +229,7 @@ define [
                 view.bindEventHandler(exists).apply view, args if _.isString exists
 
         isPermitted: (operator) ->
+            return true if config.disableAuthc is true
             app = @module.getApplication()
             return !!app.settings?.session?.permissions?[@path() + ':' + operator]
 

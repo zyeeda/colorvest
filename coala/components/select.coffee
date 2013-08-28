@@ -38,6 +38,6 @@ define [
 
         events = ['change']
         for e in events
-          selector.on(e, view.feature.delegateComponentEvent(view, {component: selector}, "select:#{id}:#{e}"))
+            selector.on(e, view.feature.delegateComponentEvent(view, {component: selector}, "select:#{id}:#{e}"))
 
         selector

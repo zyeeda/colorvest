@@ -21,6 +21,7 @@ define [
 
     # features
     'coala/features/tasks.feature/feature'
+    'coala/features/task-grid.feature/feature'
 
     # layouts
     'coala/layouts/grid'

@@ -6,7 +6,6 @@ define [
     'coala/features/tasks.feature/handlers/completed-operators'
     'coala/features/tasks.feature/handlers/operators'
     'text!coala/features/tasks.feature/templates.html'
-    'text!coala/features/tasks.feature/grid/templates.html'
 ], ->
 
     layout:
