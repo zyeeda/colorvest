@@ -18,7 +18,6 @@ core/**.js
 features/**.js
 layouts/**.js
 scaffold/**.js
-build/coala/*
 build/spacelab/*
 node_modules/
 coala/themes/spacelab/css/bootstrap*.css
