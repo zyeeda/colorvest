@@ -39,6 +39,8 @@ define [
                 @feature.model.set selected
                 $.when(@feature.model.destroy()).then (data) =>
                     grid.refresh()
+                .always =>
+                    @feature.model.clear()
 
         show: ->
             grid = @feature.views['grid:body'].components[0]
@@ -55,6 +57,8 @@ define [
                     buttons: []
                 ).done ->
                     view.setFormData view.model.toJSON()
+            .always =>
+                view.model.clear()
 
         refresh: ->
             grid = @feature.views['grid:body'].components[0]

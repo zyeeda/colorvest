@@ -5,19 +5,26 @@ define [
     'coala/vendors/jquery/ztree/jquery.ztree.all'
 ], (_, $, coala) ->
 
-    addTreeData = (tree, data, parent = null, extraProperties) ->
+    addTreeData = (tree, data, parent = null, extraProperties, root) ->
         simpleData = tree.setting.data.simpleData
         if _.isFunction simpleData.pId
             value.pId = simpleData.pId(value) for value in data
             delete simpleData.pId # Why must delete tree.data.simpleData.pId?
 
         (_.extend(value, extraProperties) if extraProperties) for value in data
+        if root
+            resetId data, root
+            data.unshift root
         tree.addNodes parent, data, true
 
-    loadAllData = (view, tree) ->
+    loadAllData = (view, tree, root) ->
         $.when(view.collection.fetch()).done ->
             data = view.collection.toJSON()
-            addTreeData tree, data
+            addTreeData tree, data, null, null, root
+
+    resetId = (nodes, root) ->
+        for d in nodes
+            d.pId = root.id if not d.pId and root.id is '-1'
 
     normalEvents = [
         'beforeAsync', 'beforeCheck', 'beforeClick', 'beforeCollapse', 'beforeDblClick'
@@ -54,12 +61,18 @@ define [
             cb[name] = view.bindEventHandler value
         options.callback = cb
 
+        root = name: options.root, isRoot: true, open: true, isParent: true, id: options.data?.rootPid or '-1' if options.root
+
         if options.treeData
-            tree = $.fn.zTree.init el, options, options.treeData
+            if root
+                resetId options.treeData, root
+                tree = $.fn.zTree.init el, options, [root].concat options.treeData
+            else
+                tree = $.fn.zTree.init el, options, options.treeData
         else
-            if options.treeDataAsync is true
+            unless options.treeDataAsync is true
                 tree = $.fn.zTree.init el, options, []
-                loadAllData view, tree
+                loadAllData view, tree, root
             else
                 options.callback.onExpand = (e, treeId, treeNode) ->
                     return if treeNode?['__inited'] is true
@@ -70,6 +83,7 @@ define [
 
                     idName = simpleData.idKey or 'id'
                     id = if treeNode is null then (if simpleData.rootPId then simpleData.rootPId else false) else treeNode[idName]
+                    id = null if id is '-1'
                     filters = if id then [['eq', 'parent.id', id]] else [['null', 'parent']]
                     $.when(view.collection.fetch data: { _filters: filters }).done (data) ->
                         addTreeData tree, view.collection.toJSON(), treeNode, isParent: true
@@ -89,6 +103,11 @@ define [
                 loadAllData @
             else
                 tree.setting.callback.onExpand null, @setting.treeId, null
+
+        bk = tree.getSelectedNodes
+        tree.getSelectedNodes = ->
+            nodes = bk.apply tree
+            node for node in nodes when not node.isRoot
 
         eventHost.component = tree
         tree

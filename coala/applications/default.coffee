@@ -24,7 +24,7 @@ define [
             data = JSON.parse response.responseText
             message = '<ul>'
             if data.violations
-                message += "<li>#{v.message}</li>" for v in data.violations
+                message += "<li>#{v.message}</li>" for v in data.violations when v.message
             message += '</ul>'
             app.error '请求验证失败' + message
         else if response.status is 401 and not onContextLogin

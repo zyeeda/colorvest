@@ -195,3 +195,20 @@ html, body {
     width: 960px;
     margin-left: -480px;
 }
+
+.filter_column {
+    text-align: center;
+    display: block;
+}
+
+.number_range_filter {
+    width: 30%;
+}
+
+div.modal {
+    position: absolute;
+}
+
+div.modal-body {
+    max-height: inherit;
+}

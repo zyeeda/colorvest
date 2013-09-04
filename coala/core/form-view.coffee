@@ -169,6 +169,7 @@ define [
             return if not @options.validation
             validator = @$$('form').validate
                 rules: @options.validation.rules
+                ignore: @options.validation.ignore or ''
                 onfocusout: (el) ->
                     validator.element el
                 errorPlacement: (error, element) ->
@@ -177,7 +178,7 @@ define [
                     $(error).css
                         color: '#CC0000'
                         position: 'absolute'
-                        top: elPos.top + $el.outerHeight()
+                        top: (elPos.top + $el.outerHeight())
                         #right: $el.parents('.modal-body').outerWidth() - elPos.left - $el.outerWidth()
                     $(error).insertAfter element
                 highlight: (label) ->

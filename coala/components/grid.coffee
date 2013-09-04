@@ -112,6 +112,8 @@ define [ 'jquery'
             sDom: "Rs<'row-fluid c-grid-top'<'span6'i><'span6'p>><'c-grid-body't>",
             bServerSide: !options.data
             view: view
+            oLanguage: sInfo: '显示_START_-_END_条, 共_TOTAL_条'
+            bSortCellsTop: true
         , options.options
 
         el.addClass 'table'
@@ -135,7 +137,7 @@ define [ 'jquery'
                     filters.push type: col.filter, values: col.source
                 else
                     filters.push null
-                footers.push "<th>#{col.header}</th>"
+                footers.push "<th></th>"
                 adaptColumn col
 
         opt.aaData = options.data if options.data
@@ -143,11 +145,13 @@ define [ 'jquery'
             allowReorder: false
             allowResize: true
 
+
         if filterEnabled
-            el.append("<tfoot><tr>#{footers.join('')}</tr></tfoot>")
+            el.prepend "<thead><tr>#{footers.join('')}</tr><tr>#{footers.join('')}</tr></thead>"
             opt.filters = filters
 
         table = el.dataTable opt
+
         new FixedHeader table if options.fixedHeader
 
         table.delegate 'tr', 'click', (e) ->
@@ -174,6 +178,7 @@ define [ 'jquery'
         view.collection.extra = _.extend {}, options.params or {}
         extendApi table, view, options
 
-        table.columnFilter aoColumns: filters if filterEnabled
+
+        table.columnFilter sPlaceHolder: 'head:after', aoColumns: filters, sRangeFormat: '{from} - {to}' if filterEnabled
 
         table
