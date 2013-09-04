@@ -148,7 +148,7 @@ define [ 'jquery'
             opt.filters = filters
 
         table = el.dataTable opt
-        new FixedHeader table if options.fixedHeader
+        new FixedHeader table unless options.fixedHeader is false
 
         table.delegate 'tr', 'click', (e) ->
             return if $(e.target).is('input')
