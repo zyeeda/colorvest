@@ -53,12 +53,12 @@ define [
             $.when(view.model.fetch()).then =>
                 app.showDialog(
                     view: view
+                    onClose: ->
+                        view.model.clear()
                     title: viewLoader.getDialogTitle(@feature.views['form:show'], 'show', '查看')
                     buttons: []
                 ).done ->
                     view.setFormData view.model.toJSON()
-            .always =>
-                view.model.clear()
 
         refresh: ->
             grid = @feature.views['grid:body'].components[0]
