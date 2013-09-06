@@ -103,6 +103,7 @@ define [
                     strings[name].push result.templates.operator o
                     events['click ' + o.id] = o.id
                     delegates['click ' + o.id] = 'click:' + o.id if o.publish is true
+            events['click ' + 'filter'] = 'toggleFilter'
             viewOptions =
                 baseName: 'operators'
                 module: module
@@ -113,11 +114,18 @@ define [
                 avoidLoadingHandlers: true
                 extend:
                     renderHtml: (su, data) ->
-                        template = Handlebars.compile (result.templates.buttonGroup buttons: value.join('') for name, value of strings).join('')
+                        html = (result.templates.buttonGroup buttons: value.join('') for name, value of strings).join('')
+                        if @feature.options.haveFilter and @feature.isPermitted('show')
+                            html += '<div class="pull-right btn-group"><button id="filter" class="btn btn-warning c-filter-toggle"><i class="icon-chevron-down"/></button></div>'
+
+                        template = Handlebars.compile html
                         template(data)
 
             view = if options.createView then options.createView(viewOptions) else new View(viewOptions)
             result.extendEventHandlers view, options.handlers
+            view.eventHandlers.toggleFilter = ->
+                @feature.layout.$('filter-container').toggle()
+                $(window).scroll() #fix the FixedHeader issue
             deferred.resolve view
 
     result.generateGridView = (options, module, feature, deferred) ->

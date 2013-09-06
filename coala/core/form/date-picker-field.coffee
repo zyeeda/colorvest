@@ -5,6 +5,11 @@ define [
 ], (TextField, FormField) ->
 
     class DatePickerField extends TextField
+        constructor: ->
+            super
+            @filterOperator = 'eq'
+            @type = 'datepicker'
+
         getComponents: ->
             if @readOnly then [] else [type: 'datepicker', selector: @id]
 

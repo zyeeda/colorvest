@@ -26,7 +26,7 @@ define [
             @form.$(@id).val()
 
         loadFormData: (value, data) ->
-            return if value is undefined
+            value = '' if not value
             if _.isArray value
                 idx = _.indexOf @form.findField(@name), @
                 return @loadFormData value[idx]
@@ -49,6 +49,11 @@ define [
 
         submitThisField: ->
             @visible and not @readOnly
+
+        getFilter: ->
+            value = @getFormData()
+            return null unless value
+            [@filterOperator or 'like', @name, value]
 
         getTemplateString: -> '''
             <% if (readOnly) { %>

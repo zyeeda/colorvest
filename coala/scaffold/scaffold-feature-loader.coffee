@@ -38,8 +38,10 @@ define [
                 views.push 'form:add'
                 views.push 'form:edit'
                 views.push 'form:show'
+                views.push name: 'form:filter', region: 'filter' if data.haveFilter
 
             opts.views = views
+            opts.haveFilter = data.haveFilter
 
             if data.enableFrontendExtension is true
                 module.loadResource(featureName + '.feature/scaffold').done (scaffold) ->

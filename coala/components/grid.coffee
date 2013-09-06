@@ -101,6 +101,13 @@ define [ 'jquery'
             addFilter: (filter) ->
                 view.collection.extra._filters or= {}
                 view.collection.extra._filters[filter[1]] = filter
+            addFilters: (filters = []) ->
+                @addFilter filter for filter in filters
+            removeFilter: (filter) ->
+                view.collection.extra._filters or= {}
+                delete view.collection.extra._filters[filter[1]]
+            removeFilters: (filters = []) ->
+                @removeFilter filter for filter in filters
             removeParam: (key) ->
                 delete view.collection.extra?[key]
             refresh: (includeParams = true) ->

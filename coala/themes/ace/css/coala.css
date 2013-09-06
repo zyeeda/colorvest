@@ -212,3 +212,17 @@ div.modal {
 div.modal-body {
     max-height: inherit;
 }
+
+.btn-group button.btn.c-filter-toggle {
+    border-radius: 24px;
+    width: 38px;
+}
+
+.c-filter-toggle i {
+    margin-left: 4px;
+}
+
+.c-date-range {
+    position: relative;
+    z-index: 300;
+}

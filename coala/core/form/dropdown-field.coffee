@@ -6,6 +6,7 @@ define [
     class DropDownField extends FormField
         constructor: ->
             super
+            @filterOperator = 'eq'
             @type = 'dropdown'
 
         getComponents: ->
@@ -24,7 +25,14 @@ define [
             ]
 
         loadFormData: (value, data) ->
-            if @readOnly then @form.findComponent(@id).loadData(data) else super
+            select = @form.findComponent(@id)
+            if @readOnly
+                select.loadData(data)
+            else
+                if value
+                    super
+                else
+                    select.select2('val', '') if select.select2('val')
 
         getTemplateString: -> '''
             <% if (readOnly) {%>

@@ -23,6 +23,7 @@ define [
             if not @cols
                 @cols = 1
                 @cols = 2 for field in @fields when field.colspan is 2
+            throw new Error "unsupported columns:#{@cols}, only can be: 1, 2, 3, 4, 6, 12" if 12 % @cols isnt 0
             @cols
 
         getTemplateString: -> '''
@@ -39,45 +40,28 @@ define [
             @form.$(@containerId)[if @visible then 'show' else 'hide']()
             field.setVisible @visible for field in @fields
 
-        getRowTemplate: (cols) ->
-            if not @twoRowTemplate
-                @twoRowTemplate = _.template '''
-                    <div class="row-fluid">
-                        <div class="span6">
-                            <%= field1 %>
-                        </div>
-                        <div class="span6">
-                            <%= field2 %>
-                        </div>
-                    </div>
-                '''
-            if not @oneRowTemplate
-                @oneRowTemplate = _.template '''
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <%= field1 %>
-                        </div>
-                    </div>
-                '''
-            if cols is 2 then @twoRowTemplate else @oneRowTemplate
+        getRowTemplate: -> _.template '''<div class="row-fluid"><%= items %></div>'''
+        getItemTemplate: ->_.template  '''<div class="span<%= span %>"><%= field %></div>'''
 
         getTemplate: ->
             contents = []
-            if @getColumns() is 1
-                contents.push @getRowTemplate(1) field1: field.getTemplate() for field in @fields
-            else if @getColumns() is 2
+            columns = @getColumns()
+            span = 12 / columns
+            row = []
+            newRow = =>
+                contents.push @getRowTemplate() items: row.join('')
                 row = []
-                for field, i in @fields
-                    if row.length + field.colspan > 2
-                        contents.push @getRowTemplate(2) field1: row.join(''), field2: ''
-                        row = []
-                    row.push field.getTemplate()
-                    row.push true if field.colspan is 2
-                    if row.length is 2
-                        contents.push @getRowTemplate(if row[1] isnt true then 2 else 1) field1: row[0], field2: row[1] or ''
-                        row = []
-                    if (i + 1) is @fields.length and row.length is 1
-                        contents.push @getRowTemplate(2) field1: row[0], field2: '<div class="control-group"></div>'
+
+            for field, i in @fields
+                colspan = field.colspan or 1
+                colspan = columns if colspan > columns
+
+                newRow() if row.length + colspan > columns
+                row.push @getItemTemplate() span: colspan * span, field: field.getTemplate()
+                row.push '' for i in [1...colspan]
+                newRow() if row.length is columns
+            newRow() if row.length > 0
+
             _.template(@getTemplateString())
                 label: @options.label,
                 groupContent: contents.join(''),

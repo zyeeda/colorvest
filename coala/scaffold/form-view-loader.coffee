@@ -10,6 +10,7 @@ define [
     class GridPickerField extends FormField
         constructor: ->
             super
+            @filterOperator = 'eq'
             @type = 'grid-picker'
 
         getComponent: ->

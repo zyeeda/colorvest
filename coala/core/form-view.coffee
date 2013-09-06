@@ -13,6 +13,8 @@ define [
     'coala/core/form/hidden-field'
     'coala/core/form/file-picker-field'
     'coala/core/form/mask-field'
+    'coala/core/form/number-range-field'
+    'coala/core/form/date-range-field'
     'coala/vendors/jquery/validation/messages_zh'
     #'coala/vendors/jquery/validation/jquery.validate' # check it later
 ], ($, _, View, Handlebars, FormField, FormGroup) ->
@@ -125,9 +127,19 @@ define [
             @model.set data
             @model.toJSON()
 
+        getFilters: ->
+            filters = []
+            @eachField (field) =>
+                filter = field.getFilter()
+                filters.push filter if filter
+            filters
+
         setFormData: (data = {}) ->
             @eachField (field) ->
                 field.loadFormData data[field.name], data
+
+        reset: ->
+            @setFormData {}
 
         fetchData: (id) ->
             @model.clear()
