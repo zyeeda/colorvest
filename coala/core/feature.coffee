@@ -94,16 +94,17 @@ define [
 
             deferred = $.when.apply($, promises).then _.bind (vs, u1, u2, u3, args...) =>
                 for v, i in args
-                    @views[i] = @views[vs[i].name] = v
-                    @inRegionViews[vs[i].region] = @views[i] if vs[i].region
+                    @views[vs[i].name] = v
+                    @inRegionViews[vs[i].region] = @views[vs[i].name] if vs[i].region
                 return
             , @, views
+
             deferred.promise()
 
         showView: (region, view) ->
             deferred = $.Deferred()
             view = @inRegionViews[region] if not view
-            view = @views[view] if _.isNumber view
+            view = @views[view]
             return if not view
 
             promise = if @deferredStart then @deferredStart.promise() else @start()
@@ -139,8 +140,34 @@ define [
         stop: ->
             @deferredStop = $.Deferred()
             result = @onStop()
-            resolve = (r) =>
+
+            _dispose = =>
+                $c = $ @container
+                $c.hide()
+
+                @avoidLoadingTemplate?.done =>
+                    @template = null
+
+                @deferredLayout.done =>
+                    c.dispose?() for c in @layout.components
+
+                @deferredModel.done =>
+                    @model = null
+
+                @deferredCollection.done =>
+                    @collection = null
+
+                @deferredView.done =>
+                    for k, v of @views
+                        c.dispose?() for c in v.components if v.components
+
+                $c.empty()
+                $c.show()
+
+            _resolve = (r) =>
                 if r isnt false
+                    _dispose()
+
                     delete @module.features[@cid]
                     @deferredStop.resolve @
                 else
@@ -148,9 +175,9 @@ define [
 
             if result and _.isFunction result.done
                 result.done (arg) ->
-                    resolve arg
+                    _resolve arg
             else
-                resolve result
+                _resolve result
 
             @deferredStop.promise()
 
