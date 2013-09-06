@@ -187,4 +187,8 @@ define [ 'jquery'
 
         table.columnFilter sPlaceHolder: 'head:after', aoColumns: filters, sRangeFormat: '{from} - {to}' if filterEnabled
 
+        table.dispose = ->
+            table._oPluginFixedHeader?.fnDestroy()
+            table.fnDestroy(true)
+
         table
