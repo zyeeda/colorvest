@@ -176,4 +176,8 @@ define [ 'jquery'
 
         table.columnFilter aoColumns: filters if filterEnabled
 
+        table.dispose = ->
+            table._oPluginFixedHeader?.fnDestroy()
+            table.fnDestroy(true)
+
         table
