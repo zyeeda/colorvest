@@ -226,3 +226,29 @@ div.modal-body {
     position: relative;
     z-index: 300;
 }
+
+.c-filter-body {
+    padding: 10px 10px 0;
+}
+
+.c-filter-operates {
+    background-color: #eee;
+    padding: 10px 0;
+}
+
+.c-filter-body .form-horizontal .control-label {
+    width: 80px;
+}
+
+.c-filter-body .form-horizontal .controls {
+    margin-left: 100px;
+    margin-bottom: 0;
+}
+
+.c-filter-body .form-horizontal {
+    margin: 0;
+}
+
+.c-filter-body .form-horizontal .control-group {
+    margin-bottom: 0;
+}
