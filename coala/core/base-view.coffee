@@ -213,4 +213,8 @@ define [
             promises.push @afterRender.call @
 
             $.when.apply($, promises).promise()
+
+        dispose: ->
+            c.dispose?() for c in @components if @components
+
     BaseView

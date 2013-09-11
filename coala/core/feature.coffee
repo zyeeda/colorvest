@@ -149,7 +149,7 @@ define [
                     @template = null
 
                 @deferredLayout.done =>
-                    c.dispose?() for c in @layout.components
+                    @layout.dispose()
 
                 @deferredModel.done =>
                     @model = null
@@ -158,8 +158,7 @@ define [
                     @collection = null
 
                 @deferredView.done =>
-                    for k, v of @views
-                        c.dispose?() for c in v.components if v.components
+                    v.dispose() for k, v of @views
 
                 $c.empty()
                 $c.show()

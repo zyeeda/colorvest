@@ -5,4 +5,9 @@ define [
 ], (_, coala) ->
 
     coala.registerComponentHandler 'accordion', (->), (el, options, view) ->
-        el.accordion options
+        accordion = el.accordion options
+
+        accordion.dispose = ->
+            @accordion 'destroy'
+
+        accordion

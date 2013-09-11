@@ -40,4 +40,7 @@ define [
         for e in events
             selector.on(e, view.feature.delegateComponentEvent(view, {component: selector}, "select:#{id}:#{e}"))
 
+        selector.dispose = ->
+            @select2 'destroy'
+
         selector

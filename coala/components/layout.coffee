@@ -7,7 +7,7 @@ define [
     coala.registerComponentHandler 'layout', (->), (el, options, view) ->
         opts = _.extend
             view: view
-        , options.options
+        , options
 
         layout = el.layout opts
 
