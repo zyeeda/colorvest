@@ -75,9 +75,10 @@ html, body {
 
 .c-grid-body {
     height: 100%;
+    width: 100%;
     overflow: auto;
-    margin-top: -58px;
-    border-top: solid 58px;
+    /*margin-top: -58px;*/
+    /*border-top: solid 58px;*/
     -webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;
             box-sizing: border-box;
@@ -251,4 +252,8 @@ div.modal-body {
 
 .c-filter-body .form-horizontal .control-group {
     margin-bottom: 0;
+}
+
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    height: 32px;
 }
