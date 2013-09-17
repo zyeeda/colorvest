@@ -70,10 +70,7 @@ define [
             else
                 tree = $.fn.zTree.init el, options, options.treeData
         else
-            unless options.treeDataAsync is true
-                tree = $.fn.zTree.init el, options, []
-                loadAllData view, tree, root
-            else
+            if options.isAsync is true
                 options.callback.onExpand = (e, treeId, treeNode) ->
                     return if treeNode?['__inited'] is true
                     treeNode and treeNode['__inited'] = true
@@ -90,6 +87,9 @@ define [
 
                 tree = $.fn.zTree.init el, options, null
                 options.callback.onExpand null, tree.setting.treeId, null
+            else
+                tree = $.fn.zTree.init el, options, []
+                loadAllData view, tree, root
 
         tree.reload = ->
             return if options.treeData
@@ -99,10 +99,10 @@ define [
             data.initRoot @setting
             @setting.treeObj.empty()
 
-            if options.treeDataAsync is true
-                loadAllData @
-            else
+            if options.isAsync is true
                 tree.setting.callback.onExpand null, @setting.treeId, null
+            else
+                loadAllData @
 
         bk = tree.getSelectedNodes
         tree.getSelectedNodes = ->
