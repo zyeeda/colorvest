@@ -1,7 +1,6 @@
 define [
     'coala/core/form/form-field'
     'coala/coala'
-    'underscore'
 ], (FormField, coala) ->
 
     coala.registerComponentHandler 'form-feature-field', (->), (el, options, view) ->
@@ -12,6 +11,7 @@ define [
             container: el
 
         promise = app.startFeature path, ops
+        options.field.featurePromise = promise
         promise.done (feature) ->
             options.field.feature = feature
             options.field.getFormData = feature.getFormData.bind feature if feature.getFormData
@@ -21,13 +21,12 @@ define [
             feature.formField = options.field
         promise
 
-
-
     class FeatureField extends FormField
         constructor: ->
             super
             @type = 'feature'
             @height = @options.height
+            @hideLabel = @options.hideLabel isnt false
 
         getComponents: -> [
             selector: @id
@@ -38,8 +37,18 @@ define [
             field: @
         ]
 
-        getTemplateString: ->
-            '<div id="<%= id %>" <% if (height) { %>style="height: <%= height %>;"<% } %>></div>'
+        getTemplateString: -> '''
+            <div class="control-group">
+                <% if (!hideLabel) { %>
+                    <label class="control-label" for="<%= id %>"><%= label %><% if (required) { %>
+                        <span class="required-mark">*</span>
+                    <% } %></label>
+                <% } %>
+                <div class="controls">
+                    <div id="<%= id %>" class="c-feature-field" <% if (height) { %>style="height: <%= height %>;"<% } %>></div>
+                </div>
+            </div>
+        '''
 
     FormField.add 'feature', FeatureField
 

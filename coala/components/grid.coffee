@@ -43,6 +43,10 @@ define [ 'jquery'
             _order: cname + '-' + order
         _.extend params, view.collection.extra
 
+        if params['_pageSize'] is -1
+            delete params['_first']
+            delete params['_pageSize']
+
         filters = extractFilters d, settings
         if filters and params['_filters']
             params._filters = (v for k, v of params._filters).concat filters
@@ -95,6 +99,7 @@ define [ 'jquery'
                 table.find('input[type="checkbox"]:checked').each (i, item) ->
                     val = $(item).val()
                     selected.push collection.get(val) or val
+                return null if selected.length is 0
                 if options.multiple then selected else selected[0]
             addParam: (key, value) ->
                 view.collection.extra[key] = value
@@ -116,10 +121,15 @@ define [ 'jquery'
     coala.registerComponentHandler 'grid', (->), (el, options, view) ->
 
         opt = _.extend
-            sDom: "Rs<'row-fluid c-grid-top'<'span6'i><'span6'p>><'c-grid-body't>",
+            sDom: if options.paginate is false then "<'c-grid-body't>" else "Rs<'row-fluid c-grid-top'<'span6'i><'span6'p>><'c-grid-body't>",
             bServerSide: !options.data
+            bPaginate: options.paginate isnt false
             view: view
-            oLanguage: sInfo: '显示_START_-_END_条, 共_TOTAL_条'
+            oLanguage:
+                sInfo: '显示_START_-_END_条, 共_TOTAL_条'
+                sEmptyTable: '没有相关记录'
+                sInfoEmpty: '显示0-0条, 共0条'
+                sZeroRecords: '没有相关记录'
             bSortCellsTop: true
         , options.options
 
@@ -148,6 +158,8 @@ define [ 'jquery'
                 adaptColumn col
 
         opt.aaData = options.data if options.data
+        opt.iDeferLoading = options.deferLoading if _.has options, 'deferLoading'
+
         opt.oColReorder =
             allowReorder: false
             allowResize: true
@@ -158,7 +170,7 @@ define [ 'jquery'
             opt.filters = filters
 
         table = el.dataTable opt
-        new FixedHeader table unless options.fixedHeader is false
+        #new FixedHeader table unless options.fixedHeader is false
 
         table.delegate 'tr', 'click', (e) ->
             return if $(e.target).is('input')
@@ -183,7 +195,6 @@ define [ 'jquery'
         settings = table.fnSettings()
         view.collection.extra = _.extend {}, options.params or {}
         extendApi table, view, options
-
 
         table.columnFilter sPlaceHolder: 'head:after', aoColumns: filters, sRangeFormat: '{from} - {to}' if filterEnabled
 

@@ -15,6 +15,7 @@ define [
     'coala/core/form/mask-field'
     'coala/core/form/number-range-field'
     'coala/core/form/date-range-field'
+    'coala/core/form/inline-grid-field'
     'coala/vendors/jquery/validation/messages_zh'
     #'coala/vendors/jquery/validation/jquery.validate' # check it later
 ], ($, _, View, Handlebars, FormField, FormGroup) ->
@@ -134,9 +135,12 @@ define [
                 filters.push filter if filter
             filters
 
-        setFormData: (data = {}) ->
+        setFormData: (data = {}, onlyExists) ->
             @eachField (field) ->
-                field.loadFormData data[field.name], data
+                if onlyExists is true
+                    field.loadFormData data[field.name], data if _.has data, field.name
+                else
+                    field.loadFormData data[field.name], data
 
         reset: ->
             @setFormData {}
@@ -153,6 +157,7 @@ define [
                 deferred.reject()
             else
                 @getFormData()
+                @model.set @feature.extraFormData if @feature.extraFormData
                 @model.set options
                 @model.save().done (data) ->
                     deferred.resolve data

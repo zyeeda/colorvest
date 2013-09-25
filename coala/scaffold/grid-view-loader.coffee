@@ -33,6 +33,18 @@ define [
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
 
+            return @feature.removeManyToManyReference?(selected) if @feature.startupOptions.inlineGrid?.manyToMany
+
+            if @feature.startupOptions.inlineGrid?.picker
+                refKey = @feature.startupOptions.inlineGrid.refKey
+                @feature.model.set selected
+                @feature.model.set refKey, null
+                @feature.model.save().done ->
+                    grid.refresh()
+                .always =>
+                    @feature.model.clear()
+                return
+
             app.confirm '确定要删除选中的记录吗?', (confirmed) =>
                 return if not confirmed
 

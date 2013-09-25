@@ -102,7 +102,7 @@ define [
             if options.isAsync is true
                 tree.setting.callback.onExpand null, @setting.treeId, null
             else
-                loadAllData @
+                loadAllData view, tree
 
         bk = tree.getSelectedNodes
         tree.getSelectedNodes = ->

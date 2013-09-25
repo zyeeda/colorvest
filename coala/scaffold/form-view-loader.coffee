@@ -23,6 +23,9 @@ define [
             readOnly: @readOnly
             remoteDefined: true
             statusChanger: @options.statusChanger
+            allowAdd: !!@options.allowAdd
+            extraFields: @options.extraFields or []
+            form: @form
 
         getComponents: ->
             if @readOnly then [] else [@getComponent()]
@@ -56,7 +59,8 @@ define [
 
     class TreePickerField extends GridPickerField
         constructor: ->
-            super
+
+                super
             @type = 'tree-picker'
 
     class MultiGridPickerField extends GridPickerField

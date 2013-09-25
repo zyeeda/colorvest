@@ -103,9 +103,13 @@ html, body {
   position: absolute;
   top: 0px;
   right: 0px;
-  height: 22px;
+  height: 21px;
   line-height: 22px;
-  padding: 0px 12px 0 12px;
+  padding: 1px 10px 0 14px;
+}
+
+.c-picker a.btn.plus {
+    right: 52px;
 }
 
 .c-picker .text {
