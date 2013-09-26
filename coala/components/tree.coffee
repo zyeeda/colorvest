@@ -15,7 +15,7 @@ define [
         if root
             resetId data, root
             data.unshift root
-        tree.addNodes parent, data, true
+        tree.addNodes parent, data, false
 
     loadAllData = (view, tree, root) ->
         $.when(view.collection.fetch()).done ->
@@ -85,8 +85,9 @@ define [
                     $.when(view.collection.fetch data: { _filters: filters }).done (data) ->
                         addTreeData tree, view.collection.toJSON(), treeNode, isParent: true
 
-                tree = $.fn.zTree.init el, options, null
-                options.callback.onExpand null, tree.setting.treeId, null
+                defaultRoot = if root then [root] else []
+                tree = $.fn.zTree.init el, options, defaultRoot
+                options.callback.onExpand null, tree.setting.treeId, tree.getNodeByParam('id', root.id)
             else
                 tree = $.fn.zTree.init el, options, []
                 loadAllData view, tree, root
