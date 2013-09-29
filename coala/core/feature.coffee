@@ -233,12 +233,12 @@ define [
         isFeatureEvent: (eventName) ->
             eventName.indexOf('#') isnt -1
 
-        on: (eventName, callback, context) ->
+        on: (view, eventName, callback, context) ->
             if eventName.indexOf('#') is -1
                 name = @genEventName eventName
             else
                 name = if eventName.indexOf('this#') isnt -1 then @genEventName(eventName.split('#')[1]) else eventName
-            @module.getApplication().vent.on name, callback, context
+            view.bindTo @module.getApplication().vent, name, callback, context
 
         trigger: (eventName, args...) ->
             event = @genEventName eventName

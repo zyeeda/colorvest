@@ -9,7 +9,6 @@ define [
         simpleData = tree.setting.data.simpleData
         if _.isFunction simpleData.pId
             value.pId = simpleData.pId(value) for value in data
-            delete simpleData.pId # Why must delete tree.data.simpleData.pId?
 
         (_.extend(value, extraProperties) if extraProperties) for value in data
         if root
@@ -61,7 +60,7 @@ define [
             cb[name] = view.bindEventHandler value
         options.callback = cb
 
-        root = name: options.root, isRoot: true, open: true, isParent: true, id: options.data?.rootPid or '-1' if options.root
+        root = if options.root then name: options.root, isRoot: true, open: true, isParent: true, id: options.data?.rootPid or '-1' else null
 
         if options.treeData
             if root
@@ -101,9 +100,10 @@ define [
             @setting.treeObj.empty()
 
             if options.isAsync is true
-                tree.setting.callback.onExpand null, @setting.treeId, null
+                tree.addNodes null, [root], true if root
+                tree.setting.callback.onExpand null, @setting.treeId, root
             else
-                loadAllData view, tree
+                loadAllData view, tree, root
 
         bk = tree.getSelectedNodes
         tree.getSelectedNodes = ->

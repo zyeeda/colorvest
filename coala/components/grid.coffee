@@ -131,6 +131,7 @@ define [ 'jquery'
                 sInfoEmpty: '显示0-0条, 共0条'
                 sZeroRecords: '没有相关记录'
             bSortCellsTop: true
+            bScrollCollapse: true
         , options.options
 
         el.addClass 'table'
@@ -169,8 +170,12 @@ define [ 'jquery'
             el.prepend "<thead><tr>#{footers.join('')}</tr><tr>#{footers.join('')}</tr></thead>"
             opt.filters = filters
 
+        if options.fixedHeader isnt false
+            opt.sScrollY = options.scrollY or '350'
+
+        console.log options, opt
+
         table = el.dataTable opt
-        #new FixedHeader table unless options.fixedHeader is false
 
         table.delegate 'tr', 'click', (e) ->
             return if $(e.target).is('input')

@@ -35,7 +35,7 @@ define [
 
             for name, value of events
                 if @feature.isFeatureEvent name
-                    @feature.on name, @bindEventHandler value
+                    @feature.on @, name, @bindEventHandler value
                 else
                     e = @wrapEvent name, value
                     @events[e.name] = e.handler
@@ -216,5 +216,7 @@ define [
 
         dispose: ->
             c.dispose?() for c in @components if @components
+            @undelegateEvents()
+            @unbindAll()
 
     BaseView

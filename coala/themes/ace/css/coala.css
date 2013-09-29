@@ -261,3 +261,16 @@ div.modal-body {
 select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
     height: 32px;
 }
+
+
+.dataTables_scrollBody table {
+    border-top-width: 0px;
+}
+
+.dataTables_scrollBody thead tr {
+    line-height: 0;
+}
+
+.dataTables_scrollBody thead tr th[class*="sort"]:after {
+    content: "";
+}

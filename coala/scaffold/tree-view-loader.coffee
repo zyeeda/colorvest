@@ -15,6 +15,7 @@ define [
             viewLoader.submitHandler.call @,
                 submitSuccess: =>
                     @feature.views['form:add'].model.set isParent: true
+                    selected = tree.getNodeByParam('id', '-1') if not selected
                     tree.addNodes selected, @feature.views['form:add'].model.toJSON()
             , 'form:add', viewLoader.getDialogTitle(@feature.views['form:add'], 'add', '新增'), 'add'
 
