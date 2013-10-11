@@ -76,6 +76,14 @@ define [
             grid = @feature.views['grid:body'].components[0]
             grid.refresh()
 
+    resetGridHeight = (table) ->
+        el = $('.dataTables_scrollBody')
+        return if el.size() is 0
+        height = $(document.body).height() - el.offset().top - 5
+        height = if height < 0 then 0 else height
+        el.height height
+        table.fnSettings().oInit.sScrollY = height
+
     type: 'view'
     name: 'grid'
     fn: (module, feature, viewName, args) ->
@@ -101,6 +109,8 @@ define [
                     refresh: () ->
                         v = @feature.views['grid:toolbar']
                         initVisibility.call v, v.options.operators
+                    adjustGridHeight: -> resetGridHeight(@components[0])
+                    deferAdjustGridHeight: -> _.defer => resetGridHeight(@components[0])
             , module, feature, deferred
 
         deferred

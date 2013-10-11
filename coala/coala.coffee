@@ -113,6 +113,7 @@ define [
 
         app.done ->
             coala.startBackboneHistory app
+            $(window).on 'resize', -> app.vent.trigger 'window#resize'
 
         app
 

@@ -142,6 +142,10 @@ define [
             data.selector = 'grid'
             data.pager = 'pager'
             _.extend data, feature.options.gridOptions, feature.startupOptions.gridOptions
+            events = _.extend
+                'window#resize': 'adjustGridHeight'
+                'xhr': 'deferAdjustGridHeight'
+            , data.events
 
             viewOptions =
                 baseName: 'grid'
@@ -149,7 +153,7 @@ define [
                 feature: feature
                 components: [data]
                 avoidLoadingHandlers: true
-                events: data.events or {}
+                events: events
                 extend:
                     renderHtml: (su, data) ->
                         result.templates.grid
