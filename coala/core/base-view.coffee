@@ -210,9 +210,10 @@ define [
             delays = @defaultComponentDelay
             delays = if _.isArray delays then delays else [delays]
             promises = (@renderComponents(delay) for delay in delays)
-            promises.push @afterRender.call @
 
-            $.when.apply($, promises).promise()
+            $.when.apply($, promises).then( =>
+                @afterRender.call @
+            ).promise()
 
         dispose: ->
             c.dispose?() for c in @components if @components

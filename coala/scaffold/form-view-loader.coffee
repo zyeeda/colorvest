@@ -59,8 +59,7 @@ define [
 
     class TreePickerField extends GridPickerField
         constructor: ->
-
-                super
+            super
             @type = 'tree-picker'
 
     class MultiGridPickerField extends GridPickerField

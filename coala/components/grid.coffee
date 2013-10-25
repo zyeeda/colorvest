@@ -101,6 +101,19 @@ define [ 'jquery'
                     selected.push collection.get(val) or val
                 return null if selected.length is 0
                 if options.multiple then selected else selected[0]
+            getSelectedIndex: ->
+                selected = []
+                table.find('input[type="checkbox"]:checked').each (i, item) ->
+                    selected.push table.fnGetPosition item.parentNode.parentNode
+                return null if selected.length is 0
+                if options.multiple then selected else selected[0]
+            removeSelectedRow: ->
+                idx = table.getSelectedIndex()
+                return unless idx?
+                if options.multiple
+                    table.fnDeleteRow i for i in idx
+                else
+                    table.fnDeleteRow idx
             addParam: (key, value) ->
                 view.collection.extra[key] = value
             addFilter: (filter) ->
@@ -172,8 +185,6 @@ define [ 'jquery'
 
         if options.fixedHeader isnt false
             opt.sScrollY = options.scrollY or '350'
-
-        console.log options, opt
 
         table = el.dataTable opt
 

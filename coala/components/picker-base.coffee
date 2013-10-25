@@ -87,8 +87,6 @@ define [
 
     class Picker
         constructor: (@options = {}) ->
-            console.log 'picker', options
-
             @id = options.id or _.uniqueId 'picker'
             @name = options.name
             @value = options.value
