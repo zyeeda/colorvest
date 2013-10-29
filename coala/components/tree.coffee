@@ -30,7 +30,7 @@ define [
             name: options.root
             isRoot: true
             isParent: true
-            id: options.data?.rootPid or '-1'
+            id: options.data?.rootPId or '-1'
 
     normalEvents = [
         'beforeAsync', 'beforeCheck', 'beforeClick', 'beforeCollapse', 'beforeDblClick'
