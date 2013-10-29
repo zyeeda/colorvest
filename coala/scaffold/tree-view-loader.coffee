@@ -16,7 +16,10 @@ define [
                 submitSuccess: =>
                     @feature.views['form:add'].model.set isParent: true
                     selected = tree.getNodeByParam('id', '-1') if not selected
-                    tree.addNodes selected, @feature.views['form:add'].model.toJSON()
+                    if selected['__inited__'] is true
+                        tree.addNodes selected, @feature.views['form:add'].model.toJSON(), false
+                    else
+                        tree.expandNode selected, true, false, true, true
             , 'form:add', viewLoader.getDialogTitle(@feature.views['form:add'], 'add', '新增'), 'add'
 
         edit: ->
@@ -92,7 +95,7 @@ define [
                         if name is 'LI' or name is 'UL'
                             @components[0].cancelSelectedNode()
                             v = @feature.views['tree:toolbar']
-                            initVisibility.call v, v.options.operators
+                            visibility.call v, v.options.operators
                     selectionChanged: (e, treeId, node, status) ->
                         return if not status
                         v = @feature.views['tree:toolbar']

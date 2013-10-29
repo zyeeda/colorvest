@@ -49,10 +49,28 @@ define [
         prefix
 
     result.initOperatorsVisibility = (operators) ->
-        (if @feature.isPermitted(getPermissionId(o.id)) then @$(o.id).show()) for o in operators when ['add', 'refresh'].indexOf(o.id) isnt -1
+        for o in operators
+            if @feature.isPermitted(getPermissionId(o.id))
+                @$(o.id).show() if o.show in ['always', 'unselected']
 
     result.ensureOperatorsVisibility = (operators, id) ->
-        (if id and @feature.isPermitted(getPermissionId(o.id)) then @$(o.id).show() else @$(o.id).hide()) for o in operators when ['edit', 'del', 'show'].indexOf(o.id) isnt -1
+        for o in operators
+            if @feature.isPermitted(getPermissionId(o.id))
+                continue if o.show is 'always'
+
+                $op = @$(o.id)
+                if id
+                    if _.isArray id
+                        if id.length is 0
+                            if o.show is 'unselected' then $op.show() else $op.hide()
+                        else if id.length is 1
+                            if o.show in ['selected', 'single-selected'] then $op.show() else $op.hide()
+                        else
+                            if o.show in ['selected', 'multi-selected'] then $op.show() else $op.hide()
+                    else
+                        if not o.show or o.show in ['selected', 'single-selected'] then $op.show() else $op.hide()
+                else
+                    if o.show is 'unselected' then $op.show() else $op.hide()
 
     result.extendEventHandlers = (view, handlers) ->
         scaffold = view.feature.options.scaffold or {}
@@ -89,7 +107,7 @@ define [
             for name, value of data
                 value = label: value if _.isString value
                 value.id = name
-                value.style or value.style = ''
+                value.style or value.style = 'btn-primary'
                 value.label or value.label = ''
 
                 group = value.group or 'default'

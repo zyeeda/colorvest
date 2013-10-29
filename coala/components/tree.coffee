@@ -25,6 +25,13 @@ define [
         for d in nodes
             d.pId = root.id if not d.pId and root.id is '-1'
 
+    buildRootNode = (options) ->
+        if options.root
+            name: options.root
+            isRoot: true
+            isParent: true
+            id: options.data?.rootPid or '-1'
+
     normalEvents = [
         'beforeAsync', 'beforeCheck', 'beforeClick', 'beforeCollapse', 'beforeDblClick'
         'beforeExpand', 'beforeRightClick', 'onAsyncError', 'onAsyncSuccess', 'onCheck'
@@ -60,8 +67,7 @@ define [
             cb[name] = view.bindEventHandler value
         options.callback = cb
 
-        root = if options.root then name: options.root, isRoot: true, open: true, isParent: true, id: options.data?.rootPid or '-1' else null
-
+        root = buildRootNode options
         if options.treeData
             if root
                 resetId options.treeData, root
@@ -71,8 +77,8 @@ define [
         else
             if options.isAsync is true
                 options.callback.onExpand = (e, treeId, treeNode) ->
-                    return if treeNode?['__inited'] is true
-                    treeNode and treeNode['__inited'] = true
+                    return if treeNode?['__inited__'] is true
+                    treeNode and treeNode['__inited__'] = true
 
                     tree = $.fn.zTree.getZTreeObj treeId
                     simpleData = tree.setting.data.simpleData
@@ -84,9 +90,12 @@ define [
                     $.when(view.collection.fetch data: { _filters: filters }).done (data) ->
                         addTreeData tree, view.collection.toJSON(), treeNode, isParent: true
 
-                defaultRoot = if root then [root] else []
-                tree = $.fn.zTree.init el, options, defaultRoot
-                options.callback.onExpand null, tree.setting.treeId, tree.getNodeByParam('id', root.id)
+                if root
+                    tree = $.fn.zTree.init el, options, [root]
+                    tree.expandNode tree.getNodeByParam('id', root.id), true, false, true, true
+                else
+                    tree = $.fn.zTree.init el, options, []
+                    options.callback.onExpand null, tree.setting.treeId, null
             else
                 tree = $.fn.zTree.init el, options, []
                 loadAllData view, tree, root
@@ -99,9 +108,13 @@ define [
             data.initRoot @setting
             @setting.treeObj.empty()
 
+            root = buildRootNode options
             if options.isAsync is true
-                tree.addNodes null, [root], true if root
-                tree.setting.callback.onExpand null, @setting.treeId, root
+                if root
+                    tree.addNodes null, [root], true
+                    tree.expandNode tree.getNodeByParam('id', root.id), true, false, true, true
+                else
+                    options.callback.onExpand null, tree.setting.treeId, null
             else
                 loadAllData view, tree, root
 
