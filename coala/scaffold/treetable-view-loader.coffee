@@ -115,7 +115,6 @@ define [
                                     visit n for n in node.children or []
 
                             visit n for n in (i for i in data when not i.parent).concat data
-                            console.log d
                             d
 
                         sDom: 'Ttfr'

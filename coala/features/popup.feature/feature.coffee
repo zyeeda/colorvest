@@ -113,8 +113,6 @@ define [
                     @start().done =>
                         deferred.relative @
             else
-                console.log 'abc'
-
             deferred.promise()
 
         close: ->
@@ -135,4 +133,3 @@ define [
                 root = @module.getApplication()
                 root.stopFeature @
                 @popupContainer.remove()
-

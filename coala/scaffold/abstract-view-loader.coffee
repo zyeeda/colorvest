@@ -122,7 +122,6 @@ define [
                     events['click ' + o.id] = o.id
                     delegates['click ' + o.id] = 'click:' + o.id if o.publish is true
             events['click filter'] = 'toggleFilter'
-            events['click picker'] = 'showPicker'
             viewOptions =
                 baseName: 'operators'
                 module: module
@@ -137,8 +136,6 @@ define [
                         if @feature.options.haveFilter and @feature.isPermitted('show')
                             html += '<div class="pull-right btn-group"><button id="filter" class="btn btn-warning c-filter-toggle"><i class="icon-chevron-down"/></button></div>'
 
-                        if @feature.startupOptions.inlineGrid?.picker
-                            html += '<div class="pull-right btn-group"><a id="picker" class="btn btn-warning" href="javascript:void 0"><i class="icon-search"/> 选择</a></div>'
                         template = Handlebars.compile html
                         template(data)
 
@@ -147,10 +144,6 @@ define [
             view.eventHandlers.toggleFilter = ->
                 @feature.layout.$('filter-container').toggle()
                 $(window).scroll() #fix the FixedHeader issue
-            view.eventHandlers.showPicker = ->
-                picker = @feature.layout.findComponent 'picker'
-                return unless picker
-                picker.chooser.show picker
 
             deferred.resolve view
 
