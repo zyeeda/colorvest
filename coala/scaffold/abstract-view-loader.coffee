@@ -51,7 +51,8 @@ define [
     result.initOperatorsVisibility = (operators) ->
         for o in operators
             if @feature.isPermitted(getPermissionId(o.id))
-                @$(o.id).show() if o.show in ['always', 'unselected']
+                $op = @$ o.id
+                if o.show in ['always', 'unselected'] then $op.show() else $op.hide()
 
     result.ensureOperatorsVisibility = (operators, id) ->
         for o in operators

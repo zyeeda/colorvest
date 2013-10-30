@@ -94,7 +94,7 @@ define [
                     selectionChanged: (e, models) ->
                         v = @feature.views['grid:toolbar']
                         visibility.call v, v.options.operators, models
-                    refresh: () ->
+                    refresh: ->
                         v = @feature.views['grid:toolbar']
                         initVisibility.call v, v.options.operators
                     adjustGridHeight: -> resetGridHeight(@components[0])
