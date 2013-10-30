@@ -274,3 +274,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 .dataTables_scrollBody thead tr th[class*="sort"]:after {
     content: "";
 }
+
+.dataTables_info {
+    margin: 6px 0 0 12px;
+}
