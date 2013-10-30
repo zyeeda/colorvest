@@ -139,9 +139,9 @@ define [ 'jquery'
             bPaginate: options.paginate isnt false
             view: view
             oLanguage:
-                sInfo: '显示_START_-_END_条, 共_TOTAL_条'
+                sInfo: '显示 _START_ - _END_ 条, 共 _TOTAL_ 条'
                 sEmptyTable: '没有相关记录'
-                sInfoEmpty: '显示0-0条, 共0条'
+                sInfoEmpty: '显示 0 - 0 条, 共 0 条'
                 sZeroRecords: '没有相关记录'
             bSortCellsTop: true
             bScrollCollapse: true
