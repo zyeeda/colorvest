@@ -17,28 +17,27 @@ define [
                 avoidLoadingTemplate: true
 
             views = []
-            if data.views
-                views = data.views
-            else
-                if data.style is 'grid'
-                    opts.layout = 'coala:grid'
-                    views.push name: 'grid:toolbar', region: 'toolbar'
-                    views.push name: 'grid:body', region: 'body'
+            if data.style is 'grid'
+                opts.layout = 'coala:grid'
+                views.push name: 'grid:toolbar', region: 'toolbar'
+                views.push name: 'grid:body', region: 'body'
 
-                else if data.style is 'tree'
-                    opts.layout = 'coala:tree'
-                    views.push name: 'tree:toolbar', region: 'toolbar'
-                    views.push name: 'tree:body', region: 'body'
+            else if data.style is 'tree'
+                opts.layout = 'coala:tree'
+                views.push name: 'tree:toolbar', region: 'toolbar'
+                views.push name: 'tree:body', region: 'body'
 
-                else if data.style is 'treeTable'
-                    opts.layout = 'coala:grid'
-                    views.push name: 'treetable:toolbar', region: 'toolbar'
-                    views.push name: 'treetable:body', region: 'body'
+            else if data.style is 'treeTable'
+                opts.layout = 'coala:grid'
+                views.push name: 'treetable:toolbar', region: 'toolbar'
+                views.push name: 'treetable:body', region: 'body'
 
-                views.push 'form:add'
-                views.push 'form:edit'
-                views.push 'form:show'
-                views.push name: 'form:filter', region: 'filter' if data.haveFilter
+            views.push 'form:add'
+            views.push 'form:edit'
+            views.push 'form:show'
+            views.push name: 'form:filter', region: 'filter' if data.haveFilter
+
+            views = views.concat data.views if _.isArray(data.views)
 
             opts.views = views
             opts.haveFilter = data.haveFilter

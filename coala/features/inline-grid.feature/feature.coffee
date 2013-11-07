@@ -8,8 +8,8 @@ define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
     views: [
         name: 'inline:operators', region: 'operators',
         components: [ ->
-            picker = @feature.startupOptions.picker
-            if picker
+            {picker, readOnly} = @feature.startupOptions
+            if picker and not readOnly
                 _.extend type: 'grid-picker', selector: 'picker', picker
         ]
         events:
@@ -55,6 +55,8 @@ define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
                 data = su.apply @
                 data.allowPick = @feature.startupOptions.allowPick
                 data.allowAdd = @feature.startupOptions.allowAdd
+                data.readOnly = @feature.startupOptions.readOnly
+
                 data
     ,
         name: 'inline:grid', region: 'grid', avoidLoadingHandlers: true,

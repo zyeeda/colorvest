@@ -2,9 +2,7 @@
 <div class="c-layout-container c-layout-grid">
     <div class="c-layout-north">
         <div>
-            <div class="row-fluid">
-                <div id="operators" class="btn-toolbar"></div>
-            </div>
+            <div class="row-fluid" id="operators"> </div>
         </div>
     </div>
     <div class="c-layout-center">
@@ -14,6 +12,8 @@
 {{/layout}}
 
 {{#view "operators"}}
+{{#unless readOnly}}
+<div id="operators" class="btn-toolbar">
 {{#if allowAdd}}
 <a href="javascript:void 0" id="add" class="btn btn-success">添加</a>
 {{/if}}
@@ -23,6 +23,8 @@
 <a href="javascript:void 0" id="pick" class="btn btn-purple">选择</a>
 {{/if}}
 <div id="picker" style="display:none"></div>
+</div>
+{{/unless}}
 {{/view}}
 
 {{#view "grid"}}
