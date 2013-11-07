@@ -11,6 +11,7 @@ define [
             @fieldOptions = fieldOptions = [fieldOptions] if not _.isArray fieldOptions
             @containerId = _.uniqueId 'group'
 
+            @visible = @options.visible isnt false
             @hiddenFields = []
             @fields = []
             for field in fieldOptions
@@ -18,6 +19,7 @@ define [
                     field = name: field, type: 'text' if _.isString field
                     field.readOnly = true
                 (if field.type is 'hidden' then @hiddenFields else @fields).push FormField.build field, @, form
+
 
         getColumns: ->
             if not @cols
@@ -27,7 +29,7 @@ define [
             @cols
 
         getTemplateString: -> '''
-            <fieldset id="<%= containerId %>" class="c-form-group-cols-<%= columns %>">
+            <fieldset id="<%= containerId %>" class="c-form-group-cols-<%= columns %>" style="<% if (!visible) {%>display:none<%}%>">
                 <% if (label) { %>
                 <legend><%= label %></legend>
                 <% } %>
@@ -67,6 +69,7 @@ define [
                 groupContent: contents.join(''),
                 containerId: @containerId
                 columns: @getColumns()
+                visible: @visible
 
         getHiddenFieldsTemplate: ->
             (field.getTemplate() for field in @hiddenFields).join ''
