@@ -128,6 +128,19 @@ define [
 
             loadResource path, plugin
 
+        loadFeature: (featurePath, options = {}) ->
+            [names..., featureName] = featurePath.split '/'
+            module = @findModule(names) or @module(names)
+
+            deferred = $.Deferred()
+            $.when(loaderPluginManager.invoke('feature', module, null, featureName, options)).then (feature) ->
+                if feature is null
+                    error module, "Feature not found at path: #{featurePath}."
+                feature.deferredView.done ->
+                    deferred.resolve feature
+
+            deferred.promise()
+
         startFeature: (featurePath, options) ->
             [names..., featureName] = featurePath.split '/'
             module = @findModule(names) or @module(names)
@@ -136,12 +149,9 @@ define [
             return f.activate(options) if f and ignoreExists isnt true
 
             deferred = $.Deferred()
-            module.addPromise deferred
+            @addPromise deferred
 
-            $.when(loaderPluginManager.invoke('feature', module, null, featureName, options)).then (feature) ->
-                if feature is null
-                    error module, "Feature not found at path: #{featurePath}."
-
+            @loadFeature(featurePath, options).done (feature) =>
                 feature.start().done ->
                     deferred.resolve feature
                 .fail ->
