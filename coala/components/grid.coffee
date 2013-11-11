@@ -67,7 +67,7 @@ define [ 'jquery'
             $(settings.oInstance).trigger('xhr', [settings, json])
             fn json
 
-    adaptColumn = (col) ->
+    adaptColumn = (col, view) ->
         col = name: col, header: col if _.isString col
         o =
             bSearchable: !!col.searchable
@@ -76,7 +76,7 @@ define [ 'jquery'
             aDataSort: col.dataSort if col.dataSort
             asSorting: col.sorting if col.sorting
             fnCreatedCell: col.cellCreated if col.cellCreated
-            mRender: col.render if col.render
+            mRender: col.pattern if col.pattern
             iDataSort: col.dataSort if col.dataSort
             mData: col.name if col.name
             sCellType: col.cellType if col.cellType
@@ -86,6 +86,15 @@ define [ 'jquery'
             sTitle: col.header if col.header
             sType: col.type if col.type
             sWidth: col.width if col.width
+        if col.renderer
+            if _.isFunction col.renderer
+                o.mRender = col.renderer
+            else
+                scaffold = view.feature.options.scaffold or {}
+                renderers = scaffold.renderers or {}
+                throw new Error("no renderer can be found in name: #{col.renderer}") if not renderers[col.renderer]
+                o.mRender = _.bind renderers[col.renderer], view
+        o
 
     extendApi = (table, view, options) ->
         collection = view.collection
@@ -155,7 +164,7 @@ define [ 'jquery'
             if options.checkBoxColumn isnt false
                 columns.unshift
                     sortable: false, searchable: false, name: 'id', header: '', width: '25px'
-                    render: (data) -> """ <input type="checkbox" id="chk-#{data}" value="#{data}" class="select-row"/> <label class="lbl"></lable> """
+                    renderer: (data) -> """ <input type="checkbox" id="chk-#{data}" value="#{data}" class="select-row"/> <label class="lbl"></lable> """
             if options.numberColumn is true
                 columns.unshift
                     sortable: false, searchable: false, name: 'i', header: '#', width: '25px'
@@ -169,7 +178,8 @@ define [ 'jquery'
                 else
                     filters.push null
                 footers.push "<th></th>"
-                adaptColumn col
+                adaptColumn col, view
+
 
         opt.aaData = options.data if options.data
         opt.iDeferLoading = options.deferLoading if _.has options, 'deferLoading'

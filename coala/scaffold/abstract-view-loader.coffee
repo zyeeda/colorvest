@@ -97,6 +97,9 @@ define [
         ).done (dialog) ->
             v = dialog.startupOptions.view
             v.setFormData(v.model.toJSON())
+            scaffold = v.feature.options.scaffold or {}
+            if _.isFunction scaffold.afterShowDialog
+                scaffold.afterShowDialog.call v, type, v, v.model.toJSON()
 
     result.generateOperatorsView = (options, module, feature, deferred) ->
         feature.request(url: options.url or 'configuration/operators').done (data) ->

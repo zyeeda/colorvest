@@ -11,7 +11,7 @@ define [
             viewLoader.submitHandler.call @,
                 submitSuccess: (type) =>
                     @feature.views['grid:body'].components[0].refresh()
-            , 'form:add', viewLoader.getDialogTitle(@feature.views['form:add'], 'add', '新增')
+            , 'form:add', viewLoader.getDialogTitle(@feature.views['form:add'], 'add', '新增'), 'add'
 
         edit: ->
             grid = @feature.views['grid:body'].components[0]
@@ -25,7 +25,7 @@ define [
                 viewLoader.submitHandler.call @,
                     submitSuccess: (type) =>
                         @feature.views['grid:body'].components[0].refresh()
-                , 'form:edit', viewLoader.getDialogTitle(@feature.views['form:edit'], 'edit', '编辑')
+                , 'form:edit', viewLoader.getDialogTitle(@feature.views['form:edit'], 'edit', '编辑'), 'edit'
 
         del: ->
             grid = @feature.views['grid:body'].components[0]
@@ -59,6 +59,9 @@ define [
                     buttons: []
                 ).done ->
                     view.setFormData view.model.toJSON()
+                    scaffold = view.feature.options.scaffold or {}
+                    if _.isFunction scaffold.afterShowDialog
+                        scaffold.afterShowDialog.call view, 'show', view, view.model.toJSON()
 
         refresh: ->
             grid = @feature.views['grid:body'].components[0]
