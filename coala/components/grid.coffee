@@ -105,14 +105,14 @@ define [ 'jquery'
                 table.fnAddData(data)
             getSelected: ->
                 selected = []
-                table.find('input[type="checkbox"]:checked').each (i, item) ->
+                table.find('input[id*="chk-"]:checked').each (i, item) ->
                     val = $(item).val()
                     selected.push collection.get(val) or val
                 return null if selected.length is 0
                 if options.multiple then selected else selected[0]
             getSelectedIndex: ->
                 selected = []
-                table.find('input[type="checkbox"]:checked').each (i, item) ->
+                table.find('input[id*="chk-"]:checked').each (i, item) ->
                     selected.push table.fnGetPosition item.parentNode.parentNode
                 return null if selected.length is 0
                 if options.multiple then selected else selected[0]
@@ -120,6 +120,7 @@ define [ 'jquery'
                 idx = table.getSelectedIndex()
                 return unless idx?
                 if options.multiple
+                    idx = idx.sort().reverse()
                     table.fnDeleteRow i for i in idx
                 else
                     table.fnDeleteRow idx
@@ -163,8 +164,16 @@ define [ 'jquery'
             columns = [].concat options.columns
             if options.checkBoxColumn isnt false
                 columns.unshift
-                    sortable: false, searchable: false, name: 'id', header: '', width: '25px'
-                    renderer: (data) -> """ <input type="checkbox" id="chk-#{data}" value="#{data}" class="select-row"/> <label class="lbl"></lable> """
+                    sortable: false
+                    searchable: false
+                    name: 'id'
+                    header: if options.multiple then '<input type="checkbox" class="select-all" id="check-all-' + view.cid + '"> <label class="lbl"/>' else ''
+                    width: '25px'
+                    renderer: (data) -> """
+                        <input type="#{if options.multiple then 'checkbox' else 'radio'}"
+                        id="chk-#{data}" value="#{data}" class="select-row" name="chk-#{view.cid}"/>
+                        <label class="lbl"></lable>
+                    """
             if options.numberColumn is true
                 columns.unshift
                     sortable: false, searchable: false, name: 'i', header: '#', width: '25px'
@@ -198,15 +207,26 @@ define [ 'jquery'
 
         table = el.dataTable opt
 
-        table.delegate 'tr', 'click', (e) ->
+        checkAllSelector = 'input#check-all-' + view.cid
+        table.delegator = table.parents('div.c-grid-body')
+        checkAll = table.delegator.find checkAllSelector
+
+        table.delegator.delegate checkAllSelector, 'change.deletage', (e) ->
+            checked = checkAll.is ':checked'
+
+            table.find('input[id*="chk-"]').prop 'checked', checked
+            table.trigger 'selectionChanged', table.getSelected()
+
+        table.delegator.delegate 'tr', 'click.deletage', (e) ->
             return if $(e.target).is('input')
 
             t = $(e.currentTarget)
-            chk = t.find 'input[type="checkbox"][id*="chk-"]:eq(0)'
+            chk = t.find 'input[id*="chk-"]:eq(0)'
+            return if chk.is(':disabled')
             checked = chk.is(':checked')
             chk.prop('checked', !checked).trigger('change')
 
-        table.delegate 'input[type="checkbox"][id*="chk-"]', 'change', (e) ->
+        table.delegator.delegate 'input[id*="chk-"]', 'change.delegate', (e) ->
             input = $(e.currentTarget)
             checked = input.is(':checked')
             tr = input.closest('tr')
@@ -215,6 +235,11 @@ define [ 'jquery'
                 table.find('input[id*="chk-"]:checked').prop('checked', false)
                 table.find('tr.selected').removeClass('selected')
                 input.prop('checked', true)
+            if options.multiple
+                allSelected = true
+                table.find('input[id*="chk-"]').each (i, item) ->
+                    allSelected = false if not $(item).is(':checked')
+                checkAll.prop 'checked', allSelected
             tr[if checked then 'addClass' else 'removeClass']('selected')
             table.trigger 'selectionChanged', table.getSelected()
 
@@ -227,5 +252,6 @@ define [ 'jquery'
         table.dispose = ->
             table._oPluginFixedHeader?.fnDestroy()
             table.fnDestroy(true)
+            table.delegator.unbind '.delegate'
 
         table

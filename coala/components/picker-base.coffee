@@ -42,7 +42,7 @@ define [
                 selector: 'grid'
                 deferLoading: 0
             ,
-                if @picker.options.multiple is true then multiselect: true else {}
+                if @picker.options.multiple is true then multiple: true else {}
 
             [grid]
 
@@ -76,6 +76,8 @@ define [
                         selected = selected[0] if not @picker.options.multiple
                         @picker.setValue selected
                 ]
+                onClose: ->
+                    @view.findComponent('grid').unbind 'draw'
             .done =>
                 form = @picker.options.form
                 grid = @view.findComponent('grid')
@@ -83,6 +85,9 @@ define [
                     data = form.getFormData()
                     grid.addParam 'data', data
 
+                selected = @picker.getFormData()
+                grid.on 'draw', ->
+                    grid.find('#chk-' + d.id).prop('checked', true).prop('disabled', true) for d in selected
                 grid.refresh()
 
     class Picker

@@ -27,7 +27,13 @@ define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
                 if picker
                     grid = @feature.views['inline:grid'].components[0]
                     picker.setValue = (value) ->
-                        grid.addRow value
+                        data = grid.fnGetData()
+                        for v in value
+                            exists = false
+                            exists = true for d in data when d.id is v.id
+                            grid.addRow v if not exists
+                    picker.getFormData = ->
+                        grid.fnGetData()
 
                 if @feature.startupOptions.allowAdd
                     return if @loadAddFormDeferred
