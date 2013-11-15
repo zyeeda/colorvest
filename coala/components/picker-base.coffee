@@ -77,10 +77,11 @@ define [
                         @picker.setValue selected
                 ]
                 onClose: ->
-                    @view.findComponent('grid').unbind 'draw'
+                    @view.findComponent('grid')?.unbind 'draw'
             .done =>
                 form = @picker.options.form
                 grid = @view.findComponent('grid')
+                return if not grid
                 if form
                     data = form.getFormData()
                     grid.addParam 'data', data

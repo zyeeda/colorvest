@@ -39,13 +39,6 @@ define [
     LoaderPluginManager.register coalaFeatureLoader
 
     attachDefaultApplicationMethods = (app) ->
-
-        # This is a shortcut for default view loader.
-        app.loadView = (feature, name, args...) ->
-            throw new Error('a view must be within a feature') if not feature
-            args = ['view', feature.module, feature, name].concat args
-            LoaderPluginManager.invoke args...
-
         # dialog
         app.showDialog = (options) ->
             deferred = $.Deferred()

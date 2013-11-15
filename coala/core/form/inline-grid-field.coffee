@@ -23,6 +23,7 @@ define [
                     remoteDefined: true
                     title: '选择' + (options.label or '')
                     multiple: options.multiple is true
+                    type: options.pickerType
 
             super form, group, opt
             @type = 'inline-grid'

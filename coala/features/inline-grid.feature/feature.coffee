@@ -9,8 +9,10 @@ define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
         name: 'inline:operators', region: 'operators',
         components: [ ->
             {picker, readOnly} = @feature.startupOptions
+            console.log picker, 'picker'
+
             if picker and not readOnly
-                _.extend type: 'grid-picker', selector: 'picker', picker
+                _.extend selector: 'picker', picker
         ]
         events:
             'click pick': 'showPicker'
@@ -27,6 +29,8 @@ define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
                 if picker
                     grid = @feature.views['inline:grid'].components[0]
                     picker.setValue = (value) ->
+                        value = [value] unless _.isArray value
+
                         data = grid.fnGetData()
                         for v in value
                             exists = false
