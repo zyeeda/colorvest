@@ -215,7 +215,7 @@ define [ 'jquery'
             checked = checkAll.is ':checked'
 
             table.find('input[id*="chk-"]').prop 'checked', checked
-            table.trigger 'selectionChanged', table.getSelected()
+            table.trigger 'selectionChanged', [table.getSelected()]
 
         table.delegator.delegate 'tr', 'click.deletage', (e) ->
             return if $(e.target).is('input')
@@ -241,7 +241,7 @@ define [ 'jquery'
                     allSelected = false if not $(item).is(':checked')
                 checkAll.prop 'checked', allSelected
             tr[if checked then 'addClass' else 'removeClass']('selected')
-            table.trigger 'selectionChanged', table.getSelected()
+            table.trigger 'selectionChanged', [table.getSelected()]
 
         settings = table.fnSettings()
         view.collection.extra = _.extend {}, options.params or {}
