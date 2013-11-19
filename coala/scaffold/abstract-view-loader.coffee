@@ -54,17 +54,17 @@ define [
                 $op = @$ o.id
                 if o.show in ['always', 'unselected'] then $op.show() else $op.hide()
 
-    result.ensureOperatorsVisibility = (operators, id) ->
+    result.ensureOperatorsVisibility = (operators, selected) ->
         for o in operators
             if @feature.isPermitted(getPermissionId(o.id))
                 continue if o.show is 'always'
 
                 $op = @$(o.id)
-                if id
-                    if _.isArray id
-                        if id.length is 0
+                if selected
+                    if _.isArray selected
+                        if selected.length is 0
                             if o.show is 'unselected' then $op.show() else $op.hide()
-                        else if id.length is 1
+                        else if selected.length is 1
                             if o.show in ['selected', 'single-selected'] then $op.show() else $op.hide()
                         else
                             if o.show in ['selected', 'multi-selected'] then $op.show() else $op.hide()
