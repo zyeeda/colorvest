@@ -7,7 +7,7 @@ define [
         constructor: (@form, @group, @options) ->
             @options = options = name: options if _.isString options
 
-            @id = options.id or _.uniqueId options.name
+            @id = options.id or _.uniqueId (options.name or '').replace(/\./g, '_')
             @name = options.name
             @value = options.value or options.name
             @label = options.label or @name
@@ -66,7 +66,7 @@ define [
                         <span class="required-mark">*</span>
                     <% } %></label>
                   <div class="controls">
-                    <input type="<%= type %>" class="input span12" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}" />
+                    <input autofocus type="<%= type %>" class="input span12" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}" />
                   </div>
                 </div>
             <% } %>

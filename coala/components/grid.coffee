@@ -35,12 +35,15 @@ define [ 'jquery'
         view = settings.oInit.view
         d = {}
         d[item.name] = item.value for item in data
+
         cname = d['sColumns'].split(',')[d['iSortCol_0']]
         order = d['sSortDir_0']
+        sortable = d['bSortable_' + d['iSortCol_0']]
         params =
             _first: d['iDisplayStart']
             _pageSize: d['iDisplayLength']
             _order: cname + '-' + order
+        delete params['_order'] unless sortable
         _.extend params, view.collection.extra
 
         if params['_pageSize'] is -1

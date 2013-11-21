@@ -103,7 +103,6 @@ define [
 
     result.generateOperatorsView = (options, module, feature, deferred) ->
         feature.request(url: options.url or 'configuration/operators').done (data) ->
-            strings = {}
             events = {}
             delegates = {}
             ops = []
@@ -119,12 +118,15 @@ define [
                 groups.push value
                 ops.push value
             for name, value of opGroups
-                strings[name] = []
                 for o in value
                     o.icon = 'icon-file' if not o.icon
-                    strings[name].push result.templates.operator o
+                    o.HTML = result.templates.operator o
+                    o.order = 10000 if not o.order
                     events['click ' + o.id] = o.id
                     delegates['click ' + o.id] = 'click:' + o.id if o.publish is true
+                opGroups[name] = _.sortBy value, (item) -> item.order
+            groupNames = _.keys(opGroups).sort()
+
             events['click filter'] = 'toggleFilter'
             viewOptions =
                 baseName: 'operators'
@@ -136,7 +138,7 @@ define [
                 avoidLoadingHandlers: true
                 extend:
                     renderHtml: (su, data) ->
-                        html = (result.templates.buttonGroup buttons: value.join('') for name, value of strings).join('')
+                        html = (result.templates.buttonGroup buttons: (v.HTML for v in opGroups[name]).join('') for name in groupNames).join('')
                         if @feature.options.haveFilter and @feature.isPermitted('show')
                             html += '<div class="pull-right btn-group"><button id="filter" class="btn btn-warning c-filter-toggle"><i class="icon-chevron-down"/></button></div>'
 
