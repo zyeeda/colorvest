@@ -52,7 +52,7 @@ define [
             @deferredView.done ->
                 promise = su.call(me)
                 promise.done ->
-                    me.modal = $('#' + me.containerId).modal()
+                    me.modal = $('#' + me.containerId).modal(backdrop: 'static')
                     deferred.resolve me
 
 
