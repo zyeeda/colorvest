@@ -22,4 +22,5 @@ build/spacelab/*
 node_modules/
 coala/themes/spacelab/css/bootstrap*.css
 
+*.msi
 syntax: regexp
