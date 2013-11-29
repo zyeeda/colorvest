@@ -223,8 +223,11 @@ div.modal-body {
     width: 38px;
 }
 
-.c-filter-toggle i {
+.gecko .c-filter-toggle i {
     margin-left: 4px;
+}
+.webkit .c-filter-toggle i {
+    margin-left: -2px;
 }
 
 .c-date-range {
