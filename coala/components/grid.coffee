@@ -4,8 +4,8 @@ define [ 'jquery'
     'coala/vendors/jquery/dataTables/jquery.dataTables'
     'coala/vendors/jquery/dataTables/jquery.dataTables.bootstrap'
     'coala/vendors/jquery/dataTables/jquery.dataTables.columnFilter'
-    'coala/vendors/jquery/dataTables/FixedHeader'
-    'coala/vendors/jquery/dataTables/ColReorderWithResize'
+    #'coala/vendors/jquery/dataTables/FixedHeader'
+    #'coala/vendors/jquery/dataTables/ColReorderWithResize'
 ], ($, _, coala) ->
 
     searchExp = /^sSearch_(\d+)$/
@@ -157,7 +157,6 @@ define [ 'jquery'
                 sInfoEmpty: '显示 0 - 0 条, 共 0 条'
                 sZeroRecords: '没有相关记录'
             bSortCellsTop: true
-            bScrollCollapse: true
         , options.options
 
         el.addClass 'table'
@@ -199,7 +198,6 @@ define [ 'jquery'
         opt.oColReorder =
             allowReorder: false
             allowResize: true
-
 
         if filterEnabled
             el.prepend "<thead><tr>#{footers.join('')}</tr><tr>#{footers.join('')}</tr></thead>"
