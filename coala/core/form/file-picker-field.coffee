@@ -10,6 +10,9 @@ define [
             @type = 'file-picker'
 
         getComponent: ->
+            if _.isString @options.acceptFileTypes
+                @options.acceptFileTypes = new RegExp(@options.acceptFileTypes, 'i')
+
             _.extend
                 title: '选择' + @options.label
             , @options,
