@@ -13,7 +13,7 @@ define [
                 path: 'coala:inline-grid'
                 options:
                     allowPick: options.allowPick, allowAdd: options.allowAdd, url: options.source, readOnly: options.readOnly
-                    gridOptions: deferLoading: 0, paginate: false, multiple: options.multiple is true
+                    gridOptions: deferLoading: 0, paginate: false, multiple: options.multiple is true, form: form
             , options
             _.extend opt.options.gridOptions, options.grid
 

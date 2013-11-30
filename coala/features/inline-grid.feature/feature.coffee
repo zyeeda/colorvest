@@ -9,8 +9,6 @@ define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
         name: 'inline:operators', region: 'operators',
         components: [ ->
             {picker, readOnly} = @feature.startupOptions
-            console.log picker, 'picker'
-
             if picker and not readOnly
                 _.extend selector: 'picker', picker
         ]
@@ -71,12 +69,19 @@ define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
     ,
         name: 'inline:grid', region: 'grid', avoidLoadingHandlers: true,
         components: [ ->
+            options = @feature.startupOptions.gridOptions
+            scaffold = options.form.feature.options.scaffold or {}
+            columns = options.columns
+            renderers = scaffold.renderers or {}
+            for column in columns
+                column.renderer = renderers[column.renderer] if _.isString(column.renderer)
+
             _.extend
                 type: 'grid'
                 selector: 'grid'
                 data: []
                 fixedHeader: false
-            , @feature.startupOptions.gridOptions
+            , options
         ]
     ]
 
