@@ -145,7 +145,7 @@ define [
             deferred = $.Deferred()
             [names..., featureName] = featurePath.split '/'
 
-            if config.disableAuthz isnt true
+            if config.disableAuthz isnt true and featurePath.indexOf('coala:') isnt 0
                 i = featureName.indexOf(':')
                 key = if i isnt -1 then featureName.substring(i + 1) else featureName
                 key = names.concat([key]).join '/'

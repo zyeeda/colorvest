@@ -27,6 +27,8 @@ define [
                 message += "<li>#{v.message}</li>" for v in data.violations when v.message
             message += '</ul>'
             app.error '请求验证失败' + message
+        if response.status is 500 and app
+            app.error '系统错误'
         else if response.status is 401 and not onContextLogin
             onContextLogin = true
 
