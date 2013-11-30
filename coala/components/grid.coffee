@@ -61,6 +61,7 @@ define [ 'jquery'
         settings.jqXHR = view.collection.fetch(data: params).done ->
             data = view.collection.toJSON()
             data = settings.oInit.afterRequest.call view, data if settings.oInit.afterRequest
+            d['_i'] = (i+1) for d, i in data
 
             json =
                 aaData: data
@@ -178,7 +179,7 @@ define [ 'jquery'
                     """
             if options.numberColumn is true
                 columns.unshift
-                    sortable: false, searchable: false, name: 'i', header: '#', width: '25px'
+                    sortable: false, searchable: false, name: '_i', header: '#', width: '25px'
             filterEnabled = false
             filters = []
             footers = []

@@ -142,7 +142,20 @@ define [
             deferred.promise()
 
         startFeature: (featurePath, options) ->
+            deferred = $.Deferred()
             [names..., featureName] = featurePath.split '/'
+
+            if config.disableAuthz isnt true
+                i = featureName.indexOf(':')
+                key = if i isnt -1 then featureName.substring(i + 1) else featureName
+                key = names.concat([key]).join '/'
+                key = key + ':show'
+
+                if not (@settings and @settings and @settings.session.permissions and @settings.session.permissions[key])
+                    app.error('没有操作权限')
+                    console.log key
+                    return deferred.reject()
+
             module = @findModule(names) or @module(names)
             f = module.findFeature featureName
             ignoreExists = f?.ignoreExists or options?.ignoreExists
