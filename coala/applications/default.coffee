@@ -37,7 +37,7 @@ define [
                 login = $('''
                     <div class="modal hide fade" id="LOGIN-DIALOG">
                       <div class="modal-header">
-                        <h3>Login</h3>
+                        <h3>上下文登录</h3>
                       </div>
                       <div class="modal-body">
                         <iframe src="" class="context-login-iframe"></iframe>
