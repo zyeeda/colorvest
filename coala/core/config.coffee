@@ -13,6 +13,7 @@ define ['config', 'underscore'], (projectConfig, _) ->
         urlPrefix: 'invoke/scaffold/'
         minimumResultsForSearch: 10
         featureFileName: 'feature'
+        whitelist: []
 
         folders:
             layout: 'layouts'
