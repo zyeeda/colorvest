@@ -29,8 +29,9 @@ define [
             if @readOnly
                 select.loadData(data)
             else
-                if value
+                if value?
                     super
+                    _.defer -> select.select2('val', value + '')
                 else
                     select.select2('val', '') if select.select2('val')
 

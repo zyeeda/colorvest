@@ -49,6 +49,12 @@ define [
                         <input type="file" style="display:none" id="hidden-input-<%= id %>"/>
                     </div>
                 '''
+        loadData: (data) ->
+            super
+            value = data[@name]
+            @setValue id: value
+            @setText value
+
         renderSingle: (input) ->
             percent = @container.find '#percent-' + @id
             options = _.extend {}, @options,

@@ -16,6 +16,7 @@ define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
             'click pick': 'showPicker'
             'click remove': 'removeItem'
             'click add': 'createItem'
+            'click edit': 'updateItem'
         extend:
             fakeId: (su, id) ->
                 if id then id.indexOf('FAKEID-') is 0 else _.uniqueId 'FAKEID-'
@@ -38,26 +39,46 @@ define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
                         grid.fnGetData()
 
                 if @feature.startupOptions.allowAdd
-                    return if @loadAddFormDeferred
-                    @loadAddFormDeferred = $.Deferred()
-
                     app = @feature.module.getApplication()
-                    url = app.url @feature.startupOptions.url + '/configuration/forms/add'
-                    $.get(url).done (data) =>
-                        def = _.extend
-                            baseName: 'add'
-                            module: @feature.module
-                            feature: @feature
-                            avoidLoadingHandlers: true
-                            entityLabel: data.entityLabel
-                            formName: 'add'
-                        , data
-                        def.form =
-                            groups: data.groups or []
-                            tabs: data.tabs
 
-                        view = new FormView def
-                        @loadAddFormDeferred.resolve view, data.entityLabel
+                    if not @loadAddFormDeferred
+                        @loadAddFormDeferred = $.Deferred()
+
+                        app = @feature.module.getApplication()
+                        url = app.url @feature.startupOptions.url + '/configuration/forms/add'
+                        $.get(url).done (data) =>
+                            def = _.extend
+                                baseName: 'add'
+                                module: @feature.module
+                                feature: @feature
+                                avoidLoadingHandlers: true
+                                entityLabel: data.entityLabel
+                                formName: 'add'
+                            , data
+                            def.form =
+                                groups: data.groups or []
+                                tabs: data.tabs
+
+                            view = new FormView def
+                            @loadAddFormDeferred.resolve view, data.entityLabel
+                    if not @loadEditFormDeferred
+                        @loadEditFormDeferred = $.Deferred()
+                        url = app.url @feature.startupOptions.url + '/configuration/forms/edit'
+                        $.get(url).done (data) =>
+                            def = _.extend
+                                baseName: 'add'
+                                module: @feature.module
+                                feature: @feature
+                                avoidLoadingHandlers: true
+                                entityLabel: data.entityLabel
+                                formName: 'add'
+                            , data
+                            def.form =
+                                groups: data.groups or []
+                                tabs: data.tabs
+
+                            view = new FormView def
+                            @loadEditFormDeferred.resolve view, data.entityLabel
 
             serializeData: (su) ->
                 data = su.apply @
