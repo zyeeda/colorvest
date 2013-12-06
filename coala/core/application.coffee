@@ -151,7 +151,7 @@ define [
                 key = names.concat([key]).join '/'
                 key = key + ':show'
 
-                if not (@settings and @settings and @settings.session.permissions and @settings.session.permissions[key])
+                if not (@settings and @settings.session and @settings.session.permissions and @settings.session.permissions[key])
                     app.error('没有操作权限')
                     console.log key
                     return deferred.reject()
