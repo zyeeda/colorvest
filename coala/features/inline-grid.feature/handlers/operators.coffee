@@ -45,7 +45,9 @@ define
                     fn: =>
                         return false unless form.isValid()
                         d = form.getFormData()
-                        grid.fnUpdate d, index
+                        d.id = @fakeId()
+                        grid.fnDeleteRow index
+                        grid.addRow d
                 ]
             .done ->
                 form.setFormData(data)
