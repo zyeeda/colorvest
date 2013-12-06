@@ -72,7 +72,7 @@ define [
         ComponentHandler.register name, init, fn
 
     if config.loadSettings isnt false and config.noBackend isnt true
-        path = 'system/settings/all'
+        path = 'system/settings/all?' + new Date().getTime()
         prefix = config.urlPrefix
         path = if _.isFunction prefix
             prefix undefined, path
