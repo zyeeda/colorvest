@@ -33,7 +33,7 @@ define [
                     super
                     _.defer -> select.select2('val', value + '')
                 else
-                    select.select2('val', '') if select.select2('val')
+                    select.select2('val', @options.defaultValue or '')
 
         getTemplateString: -> '''
             <% if (readOnly) {%>
