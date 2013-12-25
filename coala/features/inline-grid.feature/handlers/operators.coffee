@@ -32,6 +32,7 @@ define
         @loadEditFormDeferred.done (form, title = '') =>
             grid = @feature.views['inline:grid'].components[0]
             index = grid.getSelectedIndex()
+            index = index[0] if _.isArray index
             return if index is null
             data = grid.fnGetData(index)
             app.showDialog
