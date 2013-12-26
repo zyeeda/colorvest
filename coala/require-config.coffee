@@ -35,3 +35,6 @@ require =
         'coala/vendors/jquery/dataTables/FixedHeader': ['jquery', 'coala/vendors/jquery/dataTables/jquery.dataTables.bootstrap']
         'coala/vendors/jquery/dataTables/dataTables.treeTable': ['jquery', 'coala/vendors/jquery/dataTables/jquery.dataTables']
         'coala/vendors/jquery/dataTables/jquery.dataTables.columnFilter': ['jquery', 'coala/vendors/jquery/dataTables/jquery.dataTables']
+
+        'coala/vendors/jquery/select2/select2': ['jquery']
+        'coala/vendors/jquery/select2/select2_locale_zh-CN': ['jquery', 'coala/vendors/jquery/select2/select2']

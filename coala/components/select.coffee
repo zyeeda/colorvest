@@ -4,6 +4,7 @@ define [
     'coala/coala'
     'coala/core/config'
     'coala/vendors/jquery/select2/select2'
+    'coala/vendors/jquery/select2/select2_locale_zh-CN'
 ], (_, $, coala, config) ->
 
     callback = (q, view, textKey) ->
