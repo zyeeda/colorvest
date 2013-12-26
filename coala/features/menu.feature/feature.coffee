@@ -8,25 +8,22 @@ define ['underscore'], (_) ->
     views: [
         name: 'inline:shortcut', region: 'top', avoidLoadingHandlers: true
     ,
-      name: 'menu', region: 'center'
+        name: 'menu', region: 'center'
     ,
-      name: 'inline:tool', region: 'bottom', events:
-        'click btn': 'minMenu'
+        name: 'inline:tool', region: 'bottom', events:
+            'click btn': 'minMenu'
     ]
 
     extend:
         activateMenu: (_super, url) ->
-            menuView = undefined
-            models = undefined
-            menuItem = undefined
             menuView = @views.menu
             models = menuView.collection.where(path: url)
             if models.length > 0
                 menuItem = menuView.$('child-' + models[0].get('id')).parent()
                 @_lightUpMenu menuItem
+                models[0]
 
         _lightUpMenu: (_super, menuItem) ->
-            subMenuContainer = undefined
             menuItem.parents('ul.nav').find('.active').removeClass 'active'
             subMenuContainer = menuItem.parents('ul.submenu')
             if subMenuContainer.length > 0

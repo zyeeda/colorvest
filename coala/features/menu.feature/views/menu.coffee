@@ -17,8 +17,19 @@ define [
         result
 
     templates =
-        leaf: H.compile('<li><a href=\"{{path}}\" id=\"child-{{id}}\" data-id=\"{{id}}\">' + '{{#if iconClass}}<i class=\"{{iconClass}}\"></i>{{/if}}{{name}}</a> </li>')
-        branch: H.compile('<li> <a href=\"javascript:void 0;\" class=\"dropdown-toggle\" id=\"parent-{{id}}\">' + '{{#unless isRoot}}<i class=\"icon-double-angle-right\"></i>{{/unless}}' + '{{#if iconClass}}<i class=\"{{iconClass}}\"></i>{{/if}}{{name}}<b class=\"arrow icon-angle-down\"></b> </a>' + '<ul class=\"submenu\">{{{childrenHtml}}}</ul></li>')
+        leaf: H.compile '''
+            <li><a href="{{path}}" id="child-{{id}}" data-id="{{id}}">{{#if iconClass}}<i class="{{iconClass}}"></i>{{/if}}
+                <span class="menu-text">{{name}}</span>
+            </a> </li>
+        '''
+        branch: H.compile '''
+            <li> <a href="javascript:void 0;" class="dropdown-toggle" id="parent-{{id}}">
+                {{#unless isRoot}}<i class="icon-double-angle-right"></i>{{/unless}}
+                {{#if iconClass}}<i class="{{iconClass}}"></i>{{/if}}
+                <span class="menu-text">{{name}}</span><b class="arrow icon-angle-down"></b> </a>
+                <ul class="submenu">{{{childrenHtml}}}</ul>
+            </li>
+        '''
 
     processNode = (node, isRoot) ->
         isLeaf = node.children.length is 0
@@ -52,4 +63,4 @@ define [
             _.each data.items, (item) ->
                 htmls.push processNode(item, true)
 
-            '<ul class=\"nav nav-list\" id=\"menu\">' + htmls.join('') + '</ul>'
+            '<ul class="nav nav-list" id="menu">' + htmls.join('') + '</ul>'
