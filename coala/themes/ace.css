@@ -1,5 +1,5 @@
-@import url('default/css/index.css');
-@import url('ace/css/index.css');
+@import url('default/styles/index.css');
+@import url('ace/styles/index.css');
 
 html, body {
     height: 100%;
