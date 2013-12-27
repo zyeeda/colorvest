@@ -1,5 +1,21 @@
+@import url('default/css/index.css');
+@import url('ace/css/index.css');
+
 html, body {
     height: 100%;
+}
+
+.c-fill {
+    height: 100%;
+}
+
+.c-page-content {
+    padding: 86px 0 0 0;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+         -o-box-sizing: border-box;
+            box-sizing: border-box;
 }
 
 .c-system-logo {
@@ -19,13 +35,6 @@ html, body {
     height: 100%;
     overflow: hidden;
 }
-
-/*
-.c-layout-grid-container {
-    height: 100%;
-    overflow: hidden;
-}
-*/
 
 .c-layout-container .c-layout-center {
     height: 100%;
@@ -50,6 +59,7 @@ html, body {
     border-top: 60px solid #FFFFFF;
     -webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;
+         -o-box-sizing: border-box;
             box-sizing: border-box;
 }
 
@@ -77,35 +87,35 @@ html, body {
     height: 100%;
     width: 100%;
     overflow: auto;
-    /*margin-top: -58px;*/
-    /*border-top: solid 58px;*/
     -webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;
+         -o-box-sizing: border-box;
             box-sizing: border-box;
 }
 
 .c-picker {
-  width: 100%;
-  position: relative;
+    width: 100%;
+    position: relative;
 }
 
 .c-picker .uneditable-input {
-  width: 100%;
-  display: inline-block;
-  height: 32px;
-  border-radius: 0;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+    width: 100%;
+    display: inline-block;
+    height: 32px;
+    border-radius: 0;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+         -o-box-sizing: border-box;
+            box-sizing: border-box;
 }
 
 .c-picker a.btn {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  height: 21px;
-  line-height: 22px;
-  padding: 1px 10px 0 14px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 21px;
+    line-height: 22px;
+    padding: 1px 10px 0 14px;
 }
 
 .c-picker a.btn.plus {
@@ -113,10 +123,10 @@ html, body {
 }
 
 .c-picker .text {
-  position: absolute;
-  overflow: hidden;
-  width: 90%;
-  top: 7px;
+    position: absolute;
+    overflow: hidden;
+    width: 90%;
+    top: 7px;
 }
 
 .c-action-form .tab-content {
@@ -210,14 +220,6 @@ html, body {
     width: 30%;
 }
 
-div.modal {
-    position: absolute;
-}
-
-div.modal-body {
-    max-height: inherit;
-}
-
 .btn-group button.btn.c-filter-toggle {
     border-radius: 24px;
     width: 38px;
@@ -259,27 +261,6 @@ div.modal-body {
 
 .c-filter-body .form-horizontal .control-group {
     margin-bottom: 0;
-}
-
-select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-    height: 32px;
-}
-
-
-.dataTables_scrollBody table {
-    border-top-width: 0px;
-}
-
-.dataTables_scrollBody thead tr {
-    line-height: 0;
-}
-
-.dataTables_scrollBody thead tr th[class*="sort"]:after {
-    content: "";
-}
-
-.dataTables_info {
-    margin: 6px 0 0 12px;
 }
 
 .required-mark {

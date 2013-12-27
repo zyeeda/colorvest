@@ -1,3 +1,13 @@
+/*!
+ * Stylesheet for the Date Range Picker, for use with Bootstrap 2.x
+ *
+ * Copyright 2013 Dan Grossman ( http://www.dangrossman.info )
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Built for http://www.improvely.com
+ */
+
 .daterangepicker.dropdown-menu {
   max-width: none;
 }
@@ -17,13 +27,23 @@
   text-align: left;
 }
 
+.daterangepicker .ranges .range_inputs>div {
+  float: left;
+}
+
+.daterangepicker .ranges .range_inputs>div:nth-child(2) {
+  padding-left: 11px;
+}
+
 .daterangepicker .calendar {
   display: none;
-  max-width: 230px;
+  max-width: 250px;
 }
 
 .daterangepicker .calendar th, .daterangepicker .calendar td {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;  
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  white-space: nowrap;
+  text-align: center;
 }
 
 .daterangepicker .ranges label {
@@ -63,11 +83,17 @@
   color: #fff;
 }
 
-.daterangepicker .calendar {
+.daterangepicker .calendar-date {
   border: 1px solid #ddd;
   padding: 4px;
   border-radius: 4px;
   background: #fff;
+}
+
+.daterangepicker .calendar-time {
+  text-align: center;
+  margin: 8px auto 0 auto;
+  line-height: 30px;
 }
 
 .daterangepicker {
@@ -148,8 +174,19 @@
   color: #999;
 }
 
-.daterangepicker td:hover, .daterangepicker th:hover {
+.daterangepicker td.disabled {
+  color: #999;
+}
+
+.daterangepicker td.available:hover, .daterangepicker th.available:hover {
   background: #eee;
+}
+
+.daterangepicker td.in-range {
+  background: #ebf4f8;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
 }
 
 .daterangepicker td.active, .daterangepicker td.active:hover {
@@ -167,4 +204,31 @@
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
   color: #fff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.daterangepicker td.week, .daterangepicker th.week {
+  font-size: 80%;
+  color: #ccc;
+}
+
+.daterangepicker select.monthselect, .daterangepicker select.yearselect {
+  font-size: 12px;
+  padding: 1px;
+  height: auto;
+  margin: 0;
+  cursor: default;
+}
+
+.daterangepicker select.monthselect {
+  margin-right: 2%;
+  width: 56%;
+}
+
+.daterangepicker select.yearselect {
+  width: 40%;
+}
+
+.daterangepicker select.hourselect, .daterangepicker select.minuteselect, .daterangepicker select.ampmselect {
+  width: 60px;
+  margin-bottom: 0;
 }
