@@ -44,6 +44,7 @@ define [ 'jquery'
             _pageSize: d['iDisplayLength']
             _order: cname + '-' + order
         delete params['_order'] unless sortable
+        params['_order'] = settings.oInit.defaultOrder if not params['_order'] and settings.oInit.defaultOrder
         _.extend params, view.collection.extra
 
         if params['_pageSize'] is -1
@@ -152,6 +153,7 @@ define [ 'jquery'
             bServerSide: !options.data
             bPaginate: options.paginate isnt false
             view: view
+            defaultOrder: options.defaultOrder
             oLanguage:
                 sInfo: '显示 _START_ - _END_ 条, 共 _TOTAL_ 条'
                 sEmptyTable: '没有相关记录'
