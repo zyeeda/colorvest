@@ -22,10 +22,12 @@ define [
     $(document).on 'ajaxComplete', (e, response, options) ->
         if response.status is 422 and app
             data = JSON.parse response.responseText
-            message = '<ul>'
+
+            message = ''
             if data.violations
                 message += "<li>#{v.message}</li>" for v in data.violations when v.message
-            message += '</ul>'
+            message = "<ul>#{message}</ul>" if message isnt ''
+
             app.error '请求验证失败' + message
         if response.status is 500 and app
             app.error '系统错误'
