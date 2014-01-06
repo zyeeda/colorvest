@@ -52,11 +52,18 @@ define [
         loadData: (data) ->
             super
             value = data[@name]
-            @setValue id: value
-            @setText value
+            value = if _.isString(value) then id: value else value
+            @setValue value
+            @setText value?.filename
+            if value and value.id
+                trigger = @container.find '#trigger-' + @id
+                trigger.addClass('btn-danger')
+                trigger.html('<i class="icon-remove"></i>')
+
 
         renderSingle: (input) ->
             percent = @container.find '#percent-' + @id
+            trigger = @container.find '#trigger-' + @id
             options = _.extend {}, @options,
                 fileInput: null
                 add: (e, data) =>
@@ -80,6 +87,8 @@ define [
                     percent.removeClass('label-info').removeClass('label-important').addClass 'label-success'
                     percent.html '<i class="icon-ok"/>'
                     @setValue data.result
+                    trigger.addClass('btn-danger')
+                    trigger.html('<i class="icon-remove"></i>')
                 fail: (e, data) ->
                     percent.removeClass('label-info').removeClass('label-success').addClass 'label-important'
                     percent.html '<i class="icon-remove"/>'
@@ -155,8 +164,16 @@ define [
             else
                 @renderSingle input
 
-            @container.find('#trigger-' + @id).click =>
-                input.click()
+            @container.find('#trigger-' + @id).click (e) =>
+                t = $(e.currentTarget)
+                if t.hasClass('btn-danger')
+                    @value = id: ''
+                    t.removeClass('btn-danger')
+                    t.html '<i class="icon-search"></i>'
+                    @container.find('#percent-' + @id).empty()
+                    @container.find('#text-' + @id).empty()
+                else
+                    input.click()
 
     coala.registerComponentHandler 'file-picker', (->), (el, options = {}, view) ->
         opt = _.extend {}, options,
