@@ -66,7 +66,7 @@ define [
                         <span class="required-mark">*</span>
                     <% } %></label>
                   <div class="controls">
-                    <input autofocus type="<%= type %>" class="input span12" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}" />
+                    <input type="<%= type %>" class="input span12" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}" />
                   </div>
                 </div>
             <% } %>
