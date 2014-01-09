@@ -38,7 +38,9 @@ define [
         getTemplateString: -> '''
             <% if (readOnly) { %>
                 <div class="c-view-form-field">
-                    <div class="field-label"><%= label %></div><div id="<%= id %>" class="field-value">{{<%= name %>}}</div>
+                    <div class="field-label"><%= label %></div><div id="<%= id %>" class="field-value">
+                        <a target="_blank" href="<%= options.url %>/{{<%= name %>.id}}">{{<%= name %>.filename}}</a>
+                    </div>
                 </div>
             <% } else { %>
                 <div class="control-group">
