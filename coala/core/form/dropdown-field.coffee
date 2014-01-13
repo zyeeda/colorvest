@@ -24,6 +24,11 @@ define [
                         fn(item) if String(item.id) == String(val)
             ]
 
+        afterRender: ->
+            if @options.defaultValue
+                select = @form.findComponent(@id)
+                select.select2('val', @options.defaultValue)
+
         loadFormData: (value, data) ->
             select = @form.findComponent(@id)
             if @readOnly

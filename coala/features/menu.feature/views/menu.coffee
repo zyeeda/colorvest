@@ -45,7 +45,7 @@ define [
     events:
         'click parent-*': 'toggleSubMenu'
 
-    model: 'system/menu'
+    model: 'system/menu/all'
     extend:
         serializeData: (su) ->
             deferred = $.Deferred()
