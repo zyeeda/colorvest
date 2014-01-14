@@ -39,7 +39,13 @@ define [
             <% if (readOnly) { %>
                 <div class="c-view-form-field">
                     <div class="field-label"><%= label %></div><div id="<%= id %>" class="field-value">
+                        <% if (options.multiple) { %>
+                        {{#each <%= name %>}}
+                        <a target="_blank" href="<%= options.url %>/{{id}}">{{filename}}</a>
+                        {{/each}}
+                        <% } else { %>
                         <a target="_blank" href="<%= options.url %>/{{<%= name %>.id}}">{{<%= name %>.filename}}</a>
+                        <% } %>
                     </div>
                 </div>
             <% } else { %>

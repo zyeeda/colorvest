@@ -22,8 +22,7 @@ define [
         <td><div class="progress" style="margin-bottom: 0px">
             <div class="bar" id="bar-{{id}}" style="width:1%; color: black;text-align:left;">&nbsp;&nbsp;{{name}}</div>
         </div></td>
-        <td>{{size}}</td>
-        <td><a id="remove-{{id}}" href="javascript: void 0">remove</a></td>
+        <td><a id="remove-{{id}}" href="javascript: void 0">删除</a></td>
     </tr>'''
 
     class FilePicker extends Picker.Picker
@@ -33,7 +32,7 @@ define [
                     <a id="trigger-<%= id %>" class="btn <%= triggerClass %>"><i class="icon-search"/></a>
                     <input type="file" style="display:none" multiple="true" id="hidden-input-<%= id %>"/>
                     <table class="table table-bordered">
-                        <thead><tr><th>Name</th><th width="70">Size</th><th width="70"></th></tr></thead>
+                        <thead><tr><th>文件名</th><th width="70"></th></tr></thead>
                         <tbody id="files-container-<%= id %>">
                         </tbody>
                     </table>
@@ -55,6 +54,15 @@ define [
             value = if _.isString(value) then id: value else value
             @setValue value
             @setText value?.filename
+
+            if @options.multiple and @value
+                ctn = @container.find '#files-container-' + @id
+                ctn.empty()
+                @datas or= {}
+                for item in @value or []
+                    ctn.append(row(id: item.id, name: item.filename))
+                    @datas[item.id] = result: item, uploaded: true
+                ctn.find('div.progress > div').addClass('bar-success').css('width', '100%')
             if value and value.id
                 trigger = @container.find '#trigger-' + @id
                 trigger.addClass('btn-danger')
@@ -145,6 +153,7 @@ define [
                 delete @datas[id]
                 $(e.target).closest('tr').remove()
 
+
             input.fileupload options
             input.change (e) ->
                 input.fileupload 'add', files: e.target.files
@@ -158,6 +167,8 @@ define [
             @renderred = true
 
             @container.html @getTemplate() @
+            console.log @value
+
             input = @container.find '#hidden-input-' + @id
             if @options.multiple is true
                 @renderMultiple input
