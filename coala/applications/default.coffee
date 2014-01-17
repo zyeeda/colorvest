@@ -7,7 +7,6 @@ define [
     'coala/core/component-handler'
     'coala/core/config'
     'coala/core/form-view'
-    'coala/vendors/jquery/pnotify/jquery.pnotify'
     'coala/vendors/jquery/jquery.gritter'
     'coala/vendors/bootbox'
     'coala/scaffold/scaffold'
@@ -110,44 +109,5 @@ define [
 
             application.prompt = (message, fn) ->
                 bootbox.prompt message, '取消', '确定', fn
-
-            ###
-            $.pnotify.defaults.history = false
-            stack_bar_top = "dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0
-            application.message = (content, title = false) ->
-                content = if _.isObject content then content else {text: content}
-                content.title = title if _.isString title
-
-                options = _.extend stack: stack_bar_top, addclass: 'stack-bar-top', width: '70%', cornerclass: "", content
-                $.pnotify options
-
-            application.error = (content, title = false) ->
-                content = if _.isObject content then content else {text: content}
-                content.title = title if _.isString title
-
-                options = _.extend type: 'error', content
-                application.message options
-
-            application.info = (content, title = false) ->
-                content = if _.isObject content then content else {text: content}
-                content.title = title if _.isString title
-
-                options = _.extend type: 'info', content
-                application.message options
-
-            application.success = (content, title = false) ->
-                content = if _.isObject content then content else {text: content}
-                content.title = title if _.isString title
-
-                options = _.extend type: 'success', content
-                application.message options
-
-            application.confirm = (content, fn) ->
-                fn() if window.confirm content
-
-            application.prompt = (content, fn) ->
-                s = window.prompt(content)
-                fn(s) if s
-            ###
 
         application
