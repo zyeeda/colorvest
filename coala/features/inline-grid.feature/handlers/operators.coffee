@@ -9,13 +9,14 @@ define
         grid.removeSelectedRow()
 
     createItem: ->
+        gridView = @feature.views['inline:grid']
+
         return if not @loadAddFormDeferred
 
-        if _.isFunction @feature.views['inline:grid'].beforeShowInlineGridDialog
-            return if (@feature.views['inline:grid'].beforeShowInlineGridDialog.call @, 'add', @) == false
+        if _.isFunction gridView.beforeShowInlineGridDialog
+            return unless (gridView.beforeShowInlineGridDialog.call @, 'add', @) == true
 
         @loadAddFormDeferred.done (form, title = '') =>
-            gridView = @feature.views['inline:grid']
             grid = gridView.components[0]
             app.showDialog
                 title: '新增' + title
@@ -27,6 +28,10 @@ define
                     status: 'btn-primary'
                     fn: =>
                         return false unless form.isValid()
+
+                        if _.isFunction gridView.validInlineGridFormData
+                            return false unless (gridView.validInlineGridFormData.call @, 'add', @, form.getFormData()) == true
+
                         data = form.getFormData()
                         data.id = @fakeId()
                         grid.addRow data
@@ -36,13 +41,14 @@ define
                     gridView.afterShowInlineGridDialog.call @, 'add', @, {}
 
     updateItem: ->
+        gridView = @feature.views['inline:grid']
+
         return if not @loadEditFormDeferred
 
-        if _.isFunction @feature.views['inline:grid'].beforeShowInlineGridDialog
-            return if (@feature.views['inline:grid'].beforeShowInlineGridDialog.call @, 'edit', @) == false
+        if _.isFunction gridView.beforeShowInlineGridDialog
+            return unless (gridView.beforeShowInlineGridDialog.call @, 'edit', @) == true
 
         @loadEditFormDeferred.done (form, title = '') =>
-            gridView = @feature.views['inline:grid']
             grid = gridView.components[0]
             index = grid.getSelectedIndex()
             index = index[0] if _.isArray index
@@ -58,6 +64,10 @@ define
                     status: 'btn-primary'
                     fn: =>
                         return false unless form.isValid()
+
+                        if _.isFunction gridView.validInlineGridFormData
+                            return false unless (gridView.validInlineGridFormData.call @, 'add', @, form.getFormData()) == true
+
                         d = form.getFormData()
                         d.id = @fakeId()
                         grid.fnDeleteRow index
