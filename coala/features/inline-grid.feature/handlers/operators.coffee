@@ -11,8 +11,8 @@ define
     createItem: ->
         return if not @loadAddFormDeferred
 
-        if _.isFunction gridView.beforeShowInlineGridDialog
-            return if (gridView.beforeShowInlineGridDialog.call @, 'add', @) == false
+        if _.isFunction @feature.views['inline:grid'].beforeShowInlineGridDialog
+            return if (@feature.views['inline:grid'].beforeShowInlineGridDialog.call @, 'add', @) == false
 
         @loadAddFormDeferred.done (form, title = '') =>
             gridView = @feature.views['inline:grid']
@@ -38,8 +38,8 @@ define
     updateItem: ->
         return if not @loadEditFormDeferred
 
-        if _.isFunction gridView.beforeShowInlineGridDialog
-            return if (gridView.beforeShowInlineGridDialog.call @, 'edit', @) == false
+        if _.isFunction @feature.views['inline:grid'].beforeShowInlineGridDialog
+            return if (@feature.views['inline:grid'].beforeShowInlineGridDialog.call @, 'edit', @) == false
 
         @loadEditFormDeferred.done (form, title = '') =>
             gridView = @feature.views['inline:grid']
