@@ -10,8 +10,13 @@ define
 
     createItem: ->
         return if not @loadAddFormDeferred
+
+        if _.isFunction gridView.beforeShowInlineGridDialog
+            return if (gridView.beforeShowInlineGridDialog.call @, 'add', @) == false
+
         @loadAddFormDeferred.done (form, title = '') =>
-            grid = @feature.views['inline:grid'].components[0]
+            gridView = @feature.views['inline:grid']
+            grid = gridView.components[0]
             app.showDialog
                 title: '新增' + title
                 view: form
@@ -26,11 +31,19 @@ define
                         data.id = @fakeId()
                         grid.addRow data
                 ]
+            .done ->
+                if _.isFunction gridView.afterShowInlineGridDialog
+                    gridView.afterShowInlineGridDialog.call @, 'add', @, {}
 
     updateItem: ->
         return if not @loadEditFormDeferred
+
+        if _.isFunction gridView.beforeShowInlineGridDialog
+            return if (gridView.beforeShowInlineGridDialog.call @, 'edit', @) == false
+
         @loadEditFormDeferred.done (form, title = '') =>
-            grid = @feature.views['inline:grid'].components[0]
+            gridView = @feature.views['inline:grid']
+            grid = gridView.components[0]
             index = grid.getSelectedIndex()
             index = index[0] if _.isArray index
             return if index is null
@@ -51,4 +64,6 @@ define
                         grid.addRow d
                 ]
             .done ->
+                if _.isFunction gridView.afterShowInlineGridDialog
+                    gridView.afterShowInlineGridDialog.call @, 'edit', @, data
                 form.setFormData(data)

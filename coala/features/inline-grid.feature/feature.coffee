@@ -66,12 +66,12 @@ define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
                         url = app.url @feature.startupOptions.url + '/configuration/forms/edit'
                         $.get(url).done (data) =>
                             def = _.extend
-                                baseName: 'add'
+                                baseName: 'edit'
                                 module: @feature.module
                                 feature: @feature
                                 avoidLoadingHandlers: true
                                 entityLabel: data.entityLabel
-                                formName: 'add'
+                                formName: 'edit'
                             , data
                             def.form =
                                 groups: data.groups or []
@@ -94,6 +94,8 @@ define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
             scaffold = options.form.feature.options.scaffold or {}
             columns = options.columns
             renderers = scaffold.renderers or {}
+            @beforeShowInlineGridDialog = scaffold.beforeShowInlineGridDialog
+            @afterShowInlineGridDialog = scaffold.afterShowInlineGridDialog
             for column in columns
                 column.renderer = renderers[column.renderer] if _.isString(column.renderer)
 
