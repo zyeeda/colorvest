@@ -102,6 +102,9 @@ define [
             @triggerClass = options.triggerClass
             @allowAdd = options.allowAdd
 
+            #picker回调函数
+            @callback = options.callback
+
             if options.chooser
                 @chooser = options.chooser
             else
@@ -143,6 +146,10 @@ define [
                 @container.find('#text-' + @id).html text
 
         setValue: (value) ->
+            _this = @
+            feature = @options.view.feature
+            callback = feature.options.scaffold.handlers[@callback]
+
             text = @options.toText or (data) -> if data then data.name else ''
             #text = @options.toText or (data) -> data.name
             if _.isArray value
@@ -155,7 +162,14 @@ define [
             if @options.form and @options.extraFields and value
                 data = {}
                 data[target] = value[field] for field,target of @options.extraFields
-                @options.form.setFormData data, true
+
+                #picker有配置回调函数时先设置name属性,再调用回调函数,
+                #      未配置回调函数,则直接设置name属性
+                if (_.isFunction callback) == true
+                    @options.form.setFormData data, true
+                    callback.call _this, _this.options.view, value
+                else
+                    @options.form.setFormData data, true
 
         loadData: (data) ->
             @setValue if @name then data[@name] else data
