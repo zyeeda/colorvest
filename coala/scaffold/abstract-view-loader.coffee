@@ -82,6 +82,11 @@ define [
         view = @feature.views[viewName]
         id = view.model.get 'id'
         app = @feature.module.getApplication()
+        scaffold = @feature.options.scaffold or {}
+
+        if _.isFunction scaffold.beforeShowDialog
+            return unless (scaffold.beforeShowDialog.call view, type, view) == true
+
         ok = ->
             view.submit(id: id).done (data) ->
                 options.submitSuccess(type)
