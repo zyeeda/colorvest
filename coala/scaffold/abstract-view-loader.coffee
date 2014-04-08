@@ -85,7 +85,9 @@ define [
         scaffold = @feature.options.scaffold or {}
 
         if _.isFunction scaffold.beforeShowDialog
-            return unless (scaffold.beforeShowDialog.call view, type, view) == true
+            if (scaffold.beforeShowDialog.call view, type, view) != true
+                view.model.clear()
+                return
 
         ok = ->
             view.submit(id: id).done (data) ->
