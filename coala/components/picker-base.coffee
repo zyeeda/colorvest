@@ -148,7 +148,8 @@ define [
         setValue: (value) ->
             _this = @
             feature = @options.view.feature
-            handlers = feature.options.scaffold.handlers or {}
+            scaffold = feature.options.scaffold or {}
+            handlers = scaffold.handlers or {}
             callback = handlers[@callback]
 
             text = @options.toText or (data) -> if data then data.name else ''
