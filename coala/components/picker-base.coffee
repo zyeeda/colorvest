@@ -86,7 +86,7 @@ define [
                     data = form.getFormData()
                     grid.addParam 'data', data
 
-                selected = @picker.getFormData()
+                selected = @picker.getFormData() or []
                 grid.on 'draw', ->
                     grid.find('#chk-' + d.id).prop('checked', true).prop('disabled', true) for d in selected
                 grid.refresh()
@@ -148,7 +148,8 @@ define [
         setValue: (value) ->
             _this = @
             feature = @options.view.feature
-            callback = feature.options.scaffold.handlers[@callback]
+            handlers = feature.options.scaffold.handlers or {}
+            callback = handlers[@callback]
 
             text = @options.toText or (data) -> if data then data.name else ''
             #text = @options.toText or (data) -> data.name
