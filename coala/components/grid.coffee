@@ -95,8 +95,13 @@ define [ 'jquery'
             if _.isFunction col.renderer
                 o.mRender = col.renderer
             else
-                scaffold = view.feature.options.scaffold or {}
-                renderers = scaffold.renderers or {}
+                if view.feature.baseName is 'inline-grid'
+                    scaffold = view.feature.startupOptions.gridOptions.form.feature.options.scaffold or {}
+                    renderers = scaffold.inlineGridPickerRenderers or {}
+                else
+                    scaffold = view.feature.options.scaffold or {}
+                    renderers = scaffold.renderers or {}
+                
                 throw new Error("no renderer can be found in name: #{col.renderer}") if not renderers[col.renderer]
                 o.mRender = _.bind renderers[col.renderer], view
         o
