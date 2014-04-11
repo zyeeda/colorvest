@@ -167,7 +167,6 @@ define [
             @renderred = true
 
             @container.html @getTemplate() @
-            console.log @value
 
             input = @container.find '#hidden-input-' + @id
             if @options.multiple is true
