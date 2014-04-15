@@ -66,7 +66,7 @@ define
                         return false unless form.isValid()
 
                         if _.isFunction gridView.validInlineGridFormData
-                            return false unless (gridView.validInlineGridFormData.call @, 'add', @, form.getFormData()) == true
+                            return false unless (gridView.validInlineGridFormData.call @, 'edit', @, form.getFormData()) == true
 
                         d = form.getFormData()
                         d.id = @fakeId()
