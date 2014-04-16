@@ -148,6 +148,12 @@ define [
         setValue: (value) ->
             _this = @
             feature = @options.view.feature
+            featureType = 'feature'
+
+            if feature.baseName is 'inline-grid'
+                feature = @options.view.feature.startupOptions.gridOptions.form.feature
+                featureType = 'inline-grid'
+
             scaffold = feature.options.scaffold or {}
             handlers = scaffold.handlers or {}
             callback = handlers[@callback]
@@ -167,9 +173,9 @@ define [
 
                 #picker有配置回调函数时先设置name属性,再调用回调函数,
                 #      未配置回调函数,则直接设置name属性
-                if (_.isFunction callback) == true
+                if (_.isFunction callback) is true
                     @options.form.setFormData data, true
-                    callback.call _this, _this.options.view, value
+                    callback.call _this, _this.options.view, value, featureType
                 else
                     @options.form.setFormData data, true
 
