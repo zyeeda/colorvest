@@ -17,11 +17,20 @@ define [
 
         generateView: ->
             tpl = H.compile @getViewTemplate()
+            
+            pickerFiled = @picker.name or ''
+            feature = @feature
+            pickerFeatureName = feature.baseName
+            pickerFeatureType = 'feature'
+            if feature.baseName is 'inline-grid'
+                pickerFeatureName = feature.startupOptions.gridOptions.form.feature.baseName
+                pickerFeatureType = 'inline-grid'
+
             options =
                 feature: @feature
                 module: @module
                 baseName: 'picker-chooser'
-                model: @picker.options.url + '/picker'
+                model: @picker.options.url + '/picker?pickerFeatureName=' + pickerFeatureName + '&pickerFeatureType=' + pickerFeatureType + '&pickerFiled=' + pickerFiled
                 components: @getViewComponents()
                 events: @getViewEvents()
                 avoidLoadingHandlers: true
