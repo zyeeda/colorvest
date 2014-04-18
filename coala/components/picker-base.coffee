@@ -74,6 +74,18 @@ define [
                         selected = @getSelectedItems()
                         return false if not selected
                         selected = selected[0] if not @picker.options.multiple
+
+                        feature = @view.feature
+                        featureType = 'feature'
+                        if feature.baseName is 'inline-grid'
+                            feature = feature.startupOptions.gridOptions.form.feature
+                            featureType = 'inline-grid'
+                            scaffold = feature.options.scaffold or {}
+                            handlers = scaffold.handlers or {}
+                            callback = handlers[@picker.callback]
+                            if (_.isFunction callback) is true
+                                callback.call @, @view, selected, featureType
+
                         @picker.setValue selected
                 ]
                 onClose: ->
