@@ -6,7 +6,15 @@ define
 
     removeItem: ->
         grid = @feature.views['inline:grid'].components[0]
+        gridView = @feature.views['inline:grid']
+
+        if _.isFunction gridView.handlers.beforeInlineGridRemove
+            gridView.handlers.beforeInlineGridRemove.call @, grid, @feature.formView
+
         grid.removeSelectedRow()
+
+        if _.isFunction gridView.handlers.afterInlineGridRemove
+            gridView.handlers.afterInlineGridRemove.call @, grid, @feature.formView
 
     createItem: ->
         gridView = @feature.views['inline:grid']
