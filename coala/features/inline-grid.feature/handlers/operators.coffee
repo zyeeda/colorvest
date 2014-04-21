@@ -70,7 +70,7 @@ define
                 buttons: [
                     label: '确定'
                     status: 'btn-primary'
-                    fn: =>
+                    fn: => 
                         return false unless form.isValid()
 
                         if _.isFunction gridView.validInlineGridFormData
@@ -78,7 +78,9 @@ define
 
                         d = form.getFormData()
                         d.id = @fakeId()
-                        grid.fnDeleteRow index
+                        idx = grid.getSelectedIndex()
+                        idx = idx[0] if _.isArray idx
+                        grid.fnDeleteRow idx 
                         grid.addRow d
                 ]
             .done ->
