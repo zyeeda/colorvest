@@ -38,10 +38,16 @@ define [
                 , 'form:edit', viewLoader.getDialogTitle(@feature.views['form:edit'], 'edit', '编辑'), 'edit'
 
         del: ->
-            tree = @feature.views['tree:body'].components[0]
+            treeView = @feature.views['tree:body']
+            tree = treeView.components[0]
             selected = tree.getSelectedNodes()[0]
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
+
+            scaffold = gridView.feature.options.scaffold or {}
+            handlers = scaffold.handlers or {}
+            if _.isFunction handlers.beforeDel
+                return if (handlers.beforeDel.call treeView, treeView, tree, selected.toJSON()) is false
 
             app.confirm '确定要删除选中的记录吗?', (confirmed) =>
                 return if not confirmed
