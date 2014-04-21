@@ -6,7 +6,15 @@ define
 
     removeItem: ->
         grid = @feature.views['inline:grid'].components[0]
+        gridView = @feature.views['inline:grid']
+
+        if _.isFunction gridView.handlers.beforeInlineGridRemove
+            gridView.handlers.beforeInlineGridRemove.call @, grid, @feature.formView
+
         grid.removeSelectedRow()
+
+        if _.isFunction gridView.handlers.afterInlineGridRemove
+            gridView.handlers.afterInlineGridRemove.call @, grid, @feature.formView
 
     createItem: ->
         gridView = @feature.views['inline:grid']
@@ -30,7 +38,7 @@ define
                         return false unless form.isValid()
 
                         if _.isFunction gridView.validInlineGridFormData
-                            return false unless (gridView.validInlineGridFormData.call @, 'add', @, form.getFormData()) == true
+                            return false unless (gridView.validInlineGridFormData.call @, 'add', form, form.getFormData()) == true
 
                         data = form.getFormData()
                         data.id = @fakeId()
@@ -38,7 +46,7 @@ define
                 ]
             .done ->
                 if _.isFunction gridView.afterShowInlineGridDialog
-                    gridView.afterShowInlineGridDialog.call @, 'add', @, {}
+                    gridView.afterShowInlineGridDialog.call @, 'add', form, {}
 
     updateItem: ->
         gridView = @feature.views['inline:grid']
@@ -66,7 +74,7 @@ define
                         return false unless form.isValid()
 
                         if _.isFunction gridView.validInlineGridFormData
-                            return false unless (gridView.validInlineGridFormData.call @, 'edit', @, form.getFormData()) == true
+                            return false unless (gridView.validInlineGridFormData.call @, 'edit', form, form.getFormData()) == true
 
                         d = form.getFormData()
                         d.id = @fakeId()
@@ -75,5 +83,5 @@ define
                 ]
             .done ->
                 if _.isFunction gridView.afterShowInlineGridDialog
-                    gridView.afterShowInlineGridDialog.call @, 'edit', @, data
+                    gridView.afterShowInlineGridDialog.call @, 'edit', form, data
                 form.setFormData(data)

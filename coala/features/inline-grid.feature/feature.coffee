@@ -95,6 +95,7 @@ define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
             columns = options.columns
             renderers = scaffold.renderers or {}
 
+            @handlers = scaffold.handlers or {}
             @beforeShowInlineGridDialog = scaffold.beforeShowInlineGridDialog
             @afterShowInlineGridDialog = scaffold.afterShowInlineGridDialog
             @validInlineGridFormData = scaffold.validInlineGridFormData
