@@ -98,7 +98,7 @@ define [
                                 return false if beforePickerConfirm.call @, @view, selected, featureType is false
 
                             callback = handlers[@picker.callback]
-                            if (_.isFunction callback) is true and @view.baseName isnt 'edit'
+                            if (_.isFunction callback) is true
                                 callback.call @, @view, selected, featureType
                         else
                             scaffold = feature.options.scaffold or {}
@@ -214,9 +214,8 @@ define [
 
                 ###
                     picker有配置回调函数时先设置name属性,再调用回调函数,未配置回调函数,则直接设置name属性
-                    编辑界面不调用picker的回调函数，因会影响view中的数据，如编辑界面需要此处功能须在afterShowDialog中实现
                 ###
-                if (_.isFunction callback) is true and @options.view.baseName isnt 'edit'
+                if (_.isFunction callback) is true
                     @options.form.setFormData data, true
                     callback.call _this, _this.options.view, value, featureType
                 else
