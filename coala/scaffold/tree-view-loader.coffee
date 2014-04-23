@@ -44,7 +44,7 @@ define [
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
 
-            scaffold = gridView.feature.options.scaffold or {}
+            scaffold = treeView.feature.options.scaffold or {}
             handlers = scaffold.handlers or {}
             if _.isFunction handlers.beforeDel
                 return if (handlers.beforeDel.call treeView, treeView, tree, selected.toJSON()) is false
