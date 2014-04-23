@@ -95,7 +95,7 @@ define [
 
                             beforePickerConfirm = handlers[@picker.beforePickerConfirm]
                             if _.isFunction beforePickerConfirm
-                                return false if beforePickerConfirm.call @, @view, selected, featureType is false
+                                return false if (beforePickerConfirm.call @, @view, selected, featureType) is false
 
                             callback = handlers[@picker.callback]
                             if (_.isFunction callback) is true
@@ -106,7 +106,7 @@ define [
 
                             beforePickerConfirm = handlers[@picker.beforePickerConfirm]
                             if _.isFunction beforePickerConfirm
-                                return false if beforePickerConfirm.call @, @view, selected, featureType is false
+                                return false if (beforePickerConfirm.call @, @view, selected, featureType) is false
 
                         @picker.setValue selected
                 ]

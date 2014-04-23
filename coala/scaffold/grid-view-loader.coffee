@@ -21,11 +21,10 @@ define [
             return app.info '请选择要操作的记录' if not selected
 
             view.model.set selected
-            $.when(view.model.fetch()).then =>
-                viewLoader.submitHandler.call @,
-                    submitSuccess: (type) =>
-                        @feature.views['grid:body'].components[0].refresh()
-                , 'form:edit', viewLoader.getDialogTitle(@feature.views['form:edit'], 'edit', '编辑'), 'edit'
+            viewLoader.submitHandler.call @,
+                submitSuccess: (type) =>
+                    @feature.views['grid:body'].components[0].refresh()
+            , 'form:edit', viewLoader.getDialogTitle(@feature.views['form:edit'], 'edit', '编辑'), 'edit'
 
         del: ->
             gridView = @feature.views['grid:body']
