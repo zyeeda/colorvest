@@ -28,6 +28,7 @@ require =
 
         'coala/vendors/jquery/validation/messages_zh': ['coala/vendors/jquery/validation/jquery.validate']
 
+        'coala/vendors/jquery/flot/jquery.flot.min': ['jquery']
         'coala/vendors/jquery/flot/jquery.flot.pie.min': ['jquery', 'coala/vendors/jquery/flot/jquery.flot.min']
         'coala/vendors/jquery/flot/jquery.flot.resize.min': ['jquery', 'coala/vendors/jquery/flot/jquery.flot.min']
 
@@ -44,4 +45,5 @@ require =
         'coala/vendors/jquery/jquery.easy-pie-chart.min': ['jquery']
         'coala/vendors/jquery/jquery.colorbox': ['jquery']
         'coala/vendors/jquery/jquery.gritter': ['jquery']
+        'coala/vendors/bootbox': ['jquery']
 
