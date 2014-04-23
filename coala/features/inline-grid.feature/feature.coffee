@@ -115,7 +115,14 @@ define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
     extend:
         loadFormData: (ignore, values) ->
             grid = @views['inline:grid'].components[0]
-            grid.addRow d for d in values or []
+            ids = []
+            data = grid.fnGetData()
+            for d in data or []
+                ids.push d.id
+
+            for v in values or []
+                if ($.inArray v.id, ids) is -1
+                    grid.addRow v
 
         getFormData: ->
             grid = @views['inline:grid'].components[0]
