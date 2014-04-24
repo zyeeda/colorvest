@@ -144,7 +144,7 @@ define [
             ###
                 picker点击确定按钮之前调用的回调函数
             ###
-            @beforePickerConfirm = options.beforePickerConfirm;
+            @beforePickerConfirm = options.beforePickerConfirm
 
             if options.chooser
                 @chooser = options.chooser
