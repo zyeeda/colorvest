@@ -85,6 +85,14 @@ define [
 
         close: -> # for close button
             options = @startedOptions.pop()
+
+            if _.isFunction(options.beforeClose)
+                if (options.beforeClose.call options, options) is false
+                    @startedOptions = @startedOptions
+                    @startedOptions.pop = ->
+                        return options
+                    return false
+
             if _.isFunction(options.onClose)
                 options.onClose.apply options
 
