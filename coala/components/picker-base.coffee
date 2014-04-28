@@ -73,6 +73,23 @@ define [
             items
 
         show: ->
+            feature = @view.feature
+            pickerFeatureType = 'feature'
+
+            if feature.baseName is 'inline-grid'
+                feature = feature.startupOptions.gridOptions.form.feature
+                pickerFeatureType = 'inline-grid'
+
+            pickerFiled = @picker.name or ''
+            pickerFeatureName = feature.baseName
+
+            scaffold = feature.options.scaffold or {}
+            handlers = scaffold.handlers or {}
+
+            beforeShowPicker = handlers[@picker.beforeShowPicker]
+            if _.isFunction beforeShowPicker
+                return unless (beforeShowPicker.call @, @view, pickerFiled, pickerFeatureType, pickerFeatureName) is true
+
             @app.showDialog
                 title: @picker.options.title
                 view: @view
@@ -140,6 +157,11 @@ define [
                 picker回调函数
             ###
             @callback = options.callback
+
+            ###
+                弹出picker之前调用的回调函数
+            ###
+            @beforeShowPicker = options.beforeShowPicker
 
             ###
                 picker点击确定按钮之前调用的回调函数
