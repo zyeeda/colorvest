@@ -22,7 +22,7 @@ define
         return if not @loadAddFormDeferred
 
         if _.isFunction gridView.beforeShowInlineGridDialog
-            return unless (gridView.beforeShowInlineGridDialog.call @, 'add', @) == true
+            return unless (gridView.beforeShowInlineGridDialog.call @, 'add', @) is true
 
         @loadAddFormDeferred.done (form, title = '') =>
             grid = gridView.components[0]
@@ -38,7 +38,7 @@ define
                         return false unless form.isValid()
 
                         if _.isFunction gridView.validInlineGridFormData
-                            return false unless (gridView.validInlineGridFormData.call @, 'add', form, form.getFormData()) == true
+                            return false unless (gridView.validInlineGridFormData.call @, 'add', form, form.getFormData()) is true
 
                         data = form.getFormData()
                         data.id = @fakeId()
@@ -54,7 +54,7 @@ define
         return if not @loadEditFormDeferred
 
         if _.isFunction gridView.beforeShowInlineGridDialog
-            return unless (gridView.beforeShowInlineGridDialog.call @, 'edit', @) == true
+            return unless (gridView.beforeShowInlineGridDialog.call @, 'edit', @) is true
 
         @loadEditFormDeferred.done (form, title = '') =>
             grid = gridView.components[0]
