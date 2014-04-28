@@ -475,6 +475,11 @@ $.extend($.validator, {
 					console.error( "%o has no name assigned", this);
 				}
 
+				// if element is display in form, then don't bind validation rules
+				if( 'none' === $(this).css('display')){
+					return false;
+				}
+
 				// select only the first element for each name, and only those with rules specified
 				if ( this.name in rulesCache || !validator.objectLength($(this).rules()) ) {
 					return false;
