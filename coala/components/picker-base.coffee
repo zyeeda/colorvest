@@ -98,7 +98,10 @@ define [
                     status: 'btn-primary'
                     fn: =>
                         selected = @getSelectedItems()
-                        return false if not selected
+                        if not selected
+                            @app.error '请选择记录'
+                            return false
+
                         selected = selected[0] if not @picker.options.multiple
 
                         feature = @view.feature
