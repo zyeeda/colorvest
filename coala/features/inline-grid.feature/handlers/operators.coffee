@@ -84,6 +84,6 @@ define
                         grid.addRow d
                 ]
             .done ->
+                form.setFormData data, true
                 if _.isFunction gridView.afterShowInlineGridDialog
                     gridView.afterShowInlineGridDialog.call @, 'edit', form, data
-                form.setFormData(data)
