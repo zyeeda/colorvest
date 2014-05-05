@@ -30,6 +30,10 @@ define
                 title: '新增' + title
                 view: form
                 onClose: ->
+                    form.unbindAll()
+                    _.each form.components, (v, i) ->
+                        if v.chooser
+                            $('#text-' + v.id, $('span'), form.$el).text ''
                     form.reset()
                 buttons: [
                     label: '确定'
@@ -66,6 +70,10 @@ define
                 title: '编辑' + title
                 view: form
                 onClose: ->
+                    form.unbindAll()
+                    _.each form.components, (v, i) ->
+                        if v.chooser
+                            $('#text-' + v.id, $('span'), form.$el).text ''
                     form.reset()
                 buttons: [
                     label: '确定'
