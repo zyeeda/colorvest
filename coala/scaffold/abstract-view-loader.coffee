@@ -107,7 +107,7 @@ define [
         ).done (dialog) ->
             view.setFormData(view.model.toJSON())
             if _.isFunction scaffold.afterShowDialog
-                    scaffold.afterShowDialog.call view, type, view, view.model.toJSON()
+                scaffold.afterShowDialog.call view, type, view, view.model.toJSON()
 
     result.generateOperatorsView = (options, module, feature, deferred) ->
         feature.request(url: options.url or 'configuration/operators').done (data) ->
