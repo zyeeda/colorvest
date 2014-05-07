@@ -73,6 +73,23 @@ define [
             items
 
         show: ->
+            feature = @view.feature
+            pickerFeatureType = 'feature'
+
+            if feature.baseName is 'inline-grid'
+                feature = feature.startupOptions.gridOptions.form.feature
+                pickerFeatureType = 'inline-grid'
+
+            pickerFiled = @picker.name or ''
+            pickerFeatureName = feature.baseName
+
+            scaffold = feature.options.scaffold or {}
+            handlers = scaffold.handlers or {}
+
+            beforeShowPicker = handlers[@picker.beforeShowPicker]
+            if _.isFunction beforeShowPicker
+                return unless (beforeShowPicker.call @, @view, pickerFiled, pickerFeatureType, pickerFeatureName) is true
+
             @app.showDialog
                 title: @picker.options.title
                 view: @view
@@ -81,7 +98,10 @@ define [
                     status: 'btn-primary'
                     fn: =>
                         selected = @getSelectedItems()
-                        return false if not selected
+                        if not selected
+                            @app.error '请选择记录'
+                            return false
+
                         selected = selected[0] if not @picker.options.multiple
 
                         feature = @view.feature
@@ -136,15 +156,24 @@ define [
             @triggerClass = options.triggerClass
             @allowAdd = options.allowAdd
 
-            ###
-                picker回调函数
-            ###
+            # after confirm picker's function
+            #
             @callback = options.callback
 
-            ###
-                picker点击确定按钮之前调用的回调函数
-            ###
-            @beforePickerConfirm = options.beforePickerConfirm;
+            # before show picker dialog's function
+            #
+            @beforeShowPicker = options.beforeShowPicker
+
+            # before picker confirm function return's function
+            #
+            @beforePickerConfirm = options.beforePickerConfirm
+
+            # allow init picker filed's data after show dialog
+            # * if one form has two or more picker, after show dialog then will call picker's setValue function twice or more, this will cause formData structure error
+            # * if one form has only one picker, but has special requirement
+            # for example(Object{a: 'a', b: Object{b1: 'b1', b2: 'b2'}} will be changed to Object{a: 'a', 'b.b1': 'b1', 'b.b2': 'b2'})
+            #
+            @allowInitPickerFieldData = options.allowInitPickerFieldData
 
             if options.chooser
                 @chooser = options.chooser
@@ -200,7 +229,6 @@ define [
             callback = handlers[@callback]
 
             text = @options.toText or (data) -> if data then data.name else ''
-            #text = @options.toText or (data) -> data.name
             if _.isArray value
                 t = (text item for item in value).join ','
             else
@@ -212,9 +240,8 @@ define [
                 data = {}
                 data[target] = value[field] for field,target of @options.extraFields
 
-                ###
-                    picker有配置回调函数时先设置name属性,再调用回调函数,未配置回调函数,则直接设置name属性
-                ###
+                # if picker has callback function, then set name value first, then call callback, or set name value dircetly
+                #
                 if (_.isFunction callback) is true
                     @options.form.setFormData data, true
                     callback.call _this, _this.options.view, value, featureType
@@ -222,7 +249,13 @@ define [
                     @options.form.setFormData data, true
 
         loadData: (data) ->
-            @setValue if @name then data[@name] else data
+            # allow init picker filed's data after show dialog
+            # * if one form has two or more picker, after show dialog then will call picker's setValue function twice or more, this will cause formData structure error
+            # * if one form has only one picker, but has special requirement
+            # for example(Object{a: 'a', b: Object{b1: 'b1', b2: 'b2'}} will be changed to Object{a: 'a', 'b.b1': 'b1', 'b.b2': 'b2'})
+            #
+            if @allowInitPickerFieldData isnt false
+                @setValue if @name then data[@name] else data
 
         getTemplate: -> _.template '''
             <div class="c-picker">

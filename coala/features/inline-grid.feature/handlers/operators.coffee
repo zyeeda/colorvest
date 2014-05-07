@@ -22,7 +22,7 @@ define
         return if not @loadAddFormDeferred
 
         if _.isFunction gridView.beforeShowInlineGridDialog
-            return unless (gridView.beforeShowInlineGridDialog.call @, 'add', @) == true
+            return unless (gridView.beforeShowInlineGridDialog.call @, 'add', @) is true
 
         @loadAddFormDeferred.done (form, title = '') =>
             grid = gridView.components[0]
@@ -30,6 +30,10 @@ define
                 title: '新增' + title
                 view: form
                 onClose: ->
+                    form.unbindAll()
+                    _.each form.components, (v, i) ->
+                        if v.chooser
+                            $('#text-' + v.id, $('span'), form.$el).text ''
                     form.reset()
                 buttons: [
                     label: '确定'
@@ -38,7 +42,7 @@ define
                         return false unless form.isValid()
 
                         if _.isFunction gridView.validInlineGridFormData
-                            return false unless (gridView.validInlineGridFormData.call @, 'add', form, form.getFormData()) == true
+                            return false unless (gridView.validInlineGridFormData.call @, 'add', form, form.getFormData()) is true
 
                         data = form.getFormData()
                         data.id = @fakeId()
@@ -54,7 +58,7 @@ define
         return if not @loadEditFormDeferred
 
         if _.isFunction gridView.beforeShowInlineGridDialog
-            return unless (gridView.beforeShowInlineGridDialog.call @, 'edit', @) == true
+            return unless (gridView.beforeShowInlineGridDialog.call @, 'edit', @) is true
 
         @loadEditFormDeferred.done (form, title = '') =>
             grid = gridView.components[0]
@@ -66,6 +70,10 @@ define
                 title: '编辑' + title
                 view: form
                 onClose: ->
+                    form.unbindAll()
+                    _.each form.components, (v, i) ->
+                        if v.chooser
+                            $('#text-' + v.id, $('span'), form.$el).text ''
                     form.reset()
                 buttons: [
                     label: '确定'
@@ -74,7 +82,7 @@ define
                         return false unless form.isValid()
 
                         if _.isFunction gridView.validInlineGridFormData
-                            return false unless (gridView.validInlineGridFormData.call @, 'edit', form, form.getFormData()) == true
+                            return false unless (gridView.validInlineGridFormData.call @, 'edit', form, form.getFormData()) is true
 
                         d = form.getFormData()
                         d.id = @fakeId()
@@ -84,6 +92,6 @@ define
                         grid.addRow d
                 ]
             .done ->
+                form.setFormData data, true
                 if _.isFunction gridView.afterShowInlineGridDialog
                     gridView.afterShowInlineGridDialog.call @, 'edit', form, data
-                form.setFormData(data)
