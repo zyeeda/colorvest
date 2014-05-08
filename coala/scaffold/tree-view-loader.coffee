@@ -45,9 +45,9 @@ define [
             return app.info '请选择要操作的记录' if not selected
 
             scaffold = treeView.feature.options.scaffold or {}
-            handlers = scaffold.handlers or {}
-            if _.isFunction handlers.beforeDel
-                return if (handlers.beforeDel.call treeView, treeView, tree, selected.toJSON()) is false
+            _handlers = scaffold.handlers or {}
+            if _.isFunction _handlers.beforeDel
+                return if (_handlers.beforeDel.call treeView, treeView, tree, selected.toJSON()) is false
 
             app.confirm '确定要删除选中的记录吗?', (confirmed) =>
                 return if not confirmed
