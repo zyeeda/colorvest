@@ -1,4 +1,15 @@
 
+classToType = {}
+for name in "Boolean Number String Function Array Date RegExp Undefined Null".split(" ")
+    classToType["[object " + name + "]"] = name.toLowerCase()
+
+classToType['[object JavaClass]'] = 'class'
+classToType['[object JavaPackage]'] = 'package'
+
+type = (obj) ->
+    strType = Object::toString.call(obj)
+    classToType[strType] or "object"
+
 util =
     getBaseName: (base) ->
         str = []
@@ -20,4 +31,15 @@ util =
         messages.unshift util.getBaseName base
         throw new Error(messages.join ' ')
 
+    join: (paths..., cleanStartAndEndSlash) ->
+        if type(cleanStartAndEndSlash) is 'string'
+            paths.push cleanStartAndEndSlash
+            cleanStartAndEndSlash = false
+
+        result = ''
+        result += '/' + p for p in paths
+        result = result.substring 1
+        result = result.replace /(\/){2,3}/g, '/'
+        result = result.replace /(^\/)|(\/$)/g, '' if cleanStartAndEndSlash
+        result
 define util
