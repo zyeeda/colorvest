@@ -26,6 +26,7 @@ require =
         'coala/vendors/jquery/timepicker/jquery-ui-timepicker': ['coala/vendors/jquery/ui/datepicker']
         'coala/vendors/jquery/timepicker/jquery-ui-timepicker-zh-CN': ['coala/vendors/jquery/timepicker/jquery-ui-timepicker']
 
+        'coala/vendors/jquery/validation/jquery.validate': ['jquery']
         'coala/vendors/jquery/validation/messages_zh': ['coala/vendors/jquery/validation/jquery.validate']
 
         'coala/vendors/jquery/flot/jquery.flot.min': ['jquery']

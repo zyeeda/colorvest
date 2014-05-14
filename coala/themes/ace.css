@@ -266,3 +266,27 @@ html, body {
 .required-mark {
     color: #ff0000;
 }
+
+/* upload preview */
+.upload-preview-btn ~ .popover > .popover-content {
+    width: 280px;
+    height: 180px;
+    padding: 2px;
+    display: table-cell;
+    vertical-align:middle;
+    text-align:center;
+}
+.upload-preview {
+    max-width: 270px;
+    max-height: 170px;
+    cursor: pointer;
+    vertical-align:middle;
+}
+.upload-multiple-preview {
+    position: absolute;
+    padding-left: 1em;
+    padding-right: 1em;
+    z-index: 0;
+}
+/* end upload preview */
+
