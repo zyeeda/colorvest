@@ -2533,7 +2533,7 @@ button.btn:active {
   margin: 0 1px 0 0;
 }
 .btn-group > .btn:first-child {
-  margin: 0 1px 0 0;
+  margin: 0 1px 0 1px;
 }
 .btn-group > .btn:first-child,
 .btn-group > .btn:last-child {
