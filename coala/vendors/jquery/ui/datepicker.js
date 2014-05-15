@@ -773,9 +773,9 @@ $.extend(Datepicker.prototype, {
         var origyearshtml,
             numMonths = this._getNumberOfMonths(inst),
             cols = numMonths[1],
-            width = 17;
+            width = 18;
 
-        inst.dpDiv.removeClass("ui-datepicker-multi-2 ui-datepicker-multi-3 ui-datepicker-multi-4").width("");
+        inst.dpDiv.removeClass("ui-datepicker-multi-2 ui-datepicker-multi-3 ui-datepicker-multi-4").css("width", 18 + "em");
         if (cols > 1) {
             inst.dpDiv.addClass("ui-datepicker-multi-" + cols).css("width", (width * cols) + "em");
         }
