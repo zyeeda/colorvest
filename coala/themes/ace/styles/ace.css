@@ -5091,6 +5091,10 @@ input[type=checkbox].ace.ace-switch.ace-switch-7:checked + .lbl::after {
   color: #848484 !important;
   background-color: #eeeeee !important;
 }
+.control-group textarea[disabled], .control-group textarea:disabled {
+    background-color: #EEEEEE !important;
+    color: #848484 !important;
+}
 .tab-content {
   border: 1px solid #c5d0dc;
   padding: 16px 12px;
