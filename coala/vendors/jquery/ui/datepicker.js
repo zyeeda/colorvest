@@ -746,7 +746,7 @@ $.extend(Datepicker.prototype, {
         if (!inst.inline) {
             showAnim = $.datepicker._get(inst, "showAnim");
             duration = $.datepicker._get(inst, "duration");
-            inst.dpDiv.zIndex(100);
+            inst.dpDiv.zIndex($(input).zIndex() + 100);
             $.datepicker._datepickerShowing = true;
 
             if ( $.effects && $.effects.effect[ showAnim ] ) {
@@ -775,7 +775,7 @@ $.extend(Datepicker.prototype, {
             cols = numMonths[1],
             width = 18;
 
-        inst.dpDiv.removeClass("ui-datepicker-multi-2 ui-datepicker-multi-3 ui-datepicker-multi-4").css("width", 18 + "em");
+        inst.dpDiv.removeClass("ui-datepicker-multi-2 ui-datepicker-multi-3 ui-datepicker-multi-4").css("width", width + "em");
         if (cols > 1) {
             inst.dpDiv.addClass("ui-datepicker-multi-" + cols).css("width", (width * cols) + "em");
         }
