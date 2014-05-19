@@ -7,6 +7,7 @@ define [
     'coala/core/component-handler'
     'coala/core/config'
     'coala/core/form-view'
+    'coala/core/custom-form-view'
     'coala/vendors/jquery/jquery.gritter'
     'coala/vendors/bootbox'
     'coala/scaffold/scaffold'

@@ -4,8 +4,9 @@ define [
     'underscore'
     'jquery'
     'coala/core/form-view'
+    'coala/core/custom-form-view'
     'coala/core/form/form-field'
-], (View, Handlebars, _, $, FormView, FormField) ->
+], (View, Handlebars, _, $, FormView, CustomFormView, FormField) ->
 
     class GridPickerField extends FormField
         constructor: ->
@@ -100,8 +101,10 @@ define [
             def.form =
                 groups: data.groups
                 tabs: data.tabs
-
-            view = new FormView def
+            if def.custom
+                view = new CustomFormView def
+            else
+                view = new FormView def
             view.eventHandlers.formStatusChanged = (e) ->
                 scaffold = @feature.options.scaffold or {}
                 fsc = scaffold.handlers?.formStatusChanged
