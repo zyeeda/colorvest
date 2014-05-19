@@ -47,7 +47,6 @@ define [
             @eachField (field) ->
                 content[field.name] = field.getTemplate()
             o.content = @tpl(content)
-            console.log o.content
             template = _.template(@getTemplateString()) o
 
         getTemplateString: -> '''
