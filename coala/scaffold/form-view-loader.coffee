@@ -27,6 +27,7 @@ define [
             allowAdd: !!@options.allowAdd
             extraFields: @options.extraFields or []
             form: @form
+            multiple: !!@options.multiple
 
         getComponents: ->
             if @readOnly then [] else [@getComponent()]
