@@ -73,14 +73,14 @@ function Datepicker() {
         hideIfNoPrevNext: false, // True to hide next/previous month links
             // if not applicable, false to just disable them
         navigationAsDateFormat: false, // True if date formatting applied to prev/today/next links
-        gotoCurrent: false, // True if today link goes back to current selection instead
-        changeMonth: false, // True if month can be selected directly, false if only prev/next
-        changeYear: false, // True if year can be selected directly, false if only prev/next
+        gotoCurrent: true, // True if today link goes back to current selection instead
+        changeMonth: true, // True if month can be selected directly, false if only prev/next
+        changeYear: true, // True if year can be selected directly, false if only prev/next
         yearRange: "c-10:c+10", // Range of years to display in drop-down,
             // either relative to today's year (-nn:+nn), relative to currently displayed year
             // (c-nn:c+nn), absolute (nnnn:nnnn), or a combination of the above (nnnn:-n)
-        showOtherMonths: false, // True to show dates in other months, false to leave blank
-        selectOtherMonths: false, // True to allow selection of dates in other months, false for unselectable
+        showOtherMonths: true, // True to show dates in other months, false to leave blank
+        selectOtherMonths: true, // True to allow selection of dates in other months, false for unselectable
         showWeek: false, // True to show week of the year, false to not show it
         calculateWeek: this.iso8601Week, // How to calculate the week of the year,
             // takes a Date and returns the number of the week for it
@@ -734,6 +734,7 @@ $.extend(Datepicker.prototype, {
         inst.dpDiv.empty();
         // determine sizing offscreen
         inst.dpDiv.css({position: "absolute", display: "block", top: "-1000px"});
+
         $.datepicker._updateDatepicker(inst);
         // fix width for dynamic number of date pickers
         // and adjust position before showing
@@ -745,7 +746,7 @@ $.extend(Datepicker.prototype, {
         if (!inst.inline) {
             showAnim = $.datepicker._get(inst, "showAnim");
             duration = $.datepicker._get(inst, "duration");
-            inst.dpDiv.zIndex($(input).zIndex()+1);
+            inst.dpDiv.zIndex($(input).zIndex() + 100);
             $.datepicker._datepickerShowing = true;
 
             if ( $.effects && $.effects.effect[ showAnim ] ) {
@@ -772,9 +773,9 @@ $.extend(Datepicker.prototype, {
         var origyearshtml,
             numMonths = this._getNumberOfMonths(inst),
             cols = numMonths[1],
-            width = 17;
+            width = 18;
 
-        inst.dpDiv.removeClass("ui-datepicker-multi-2 ui-datepicker-multi-3 ui-datepicker-multi-4").width("");
+        inst.dpDiv.removeClass("ui-datepicker-multi-2 ui-datepicker-multi-3 ui-datepicker-multi-4").css("width", width + "em");
         if (cols > 1) {
             inst.dpDiv.addClass("ui-datepicker-multi-" + cols).css("width", (width * cols) + "em");
         }

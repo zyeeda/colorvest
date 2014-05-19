@@ -254,7 +254,7 @@ define [
             # * if one form has only one picker, but has special requirement
             # for example(Object{a: 'a', b: Object{b1: 'b1', b2: 'b2'}} will be changed to Object{a: 'a', 'b.b1': 'b1', 'b.b2': 'b2'})
             #
-            if @allowInitPickerFieldData isnt false
+            if @allowInitPickerFieldData isnt false || @view.baseName is 'add'
                 @setValue if @name then data[@name] else data
 
         getTemplate: -> _.template '''
