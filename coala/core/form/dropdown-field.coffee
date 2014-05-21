@@ -15,6 +15,7 @@ define [
                 type: 'select'
                 data: @options.source
                 fieldName: @name
+                name: @name
                 readOnly: @readOnly
                 initSelection: (el, fn) =>
                     val = $(el).val()

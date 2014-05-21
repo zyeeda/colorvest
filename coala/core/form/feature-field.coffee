@@ -31,7 +31,7 @@ define [
         getComponents: -> [
             selector: @id
             type: 'form-feature-field'
-
+            name: @options.name
             path: @options.path
             options: @options.options
             field: @

@@ -72,9 +72,7 @@ define [
                     id = $(e.target).attr('id')
                     id = id.match(/a\-(\w+)/)[1]
                     deferred = @renderComponents id
-                    if deferred
-                        deferred.done => @setFormData @model.toJSON()
-
+                    (deferred.done (components) => @setTabFormData components) if deferred
             else
                 @eachField (field) ->
                     _.extend events, es if (es = field.getEvents())
@@ -137,6 +135,13 @@ define [
                 filter = field.getFilter()
                 filters.push filter if filter
             filters
+
+        setTabFormData: (components) ->
+            data = @model.toJSON()
+            @eachField (field) ->
+                _.each components, (n, i) ->
+                    if n['__options__'].name == field.name
+                        field.loadFormData data[field.name], data if _.has data, field.name
 
         setFormData: (data = {}, onlyExists) ->
             @eachField (field) ->

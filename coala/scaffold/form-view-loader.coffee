@@ -37,10 +37,17 @@ define [
                 @form.$(@id).text(value?.name)
                 @value = value
             else
-                @form.findComponent('a-' + @id).loadData data
+                picker = @form.findComponent('a-' + @id)
+                return unless picker
+                picker.loadData data
 
         getFormData: ->
-            if @readOnly then @value?.id else @form.findComponent('a-' + @id).getFormData()
+            if @readOnly
+                @value?.id
+            else
+                picker = @form.findComponent('a-' + @id)
+                return unless picker
+                picker.getFormData()
 
         getTemplateString: -> '''
             <% if (readOnly) { %>
