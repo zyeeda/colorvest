@@ -15,7 +15,6 @@ define [
     'coala/core/loaders/coala-layout-loader'
     'coala/core/loaders/coala-feature-loader'
     'coala/core/handlebar-helpers'
-    'coala/core/form/handlebar-helpers'
     'coala/core/sync'
     'bootstrap'
     'coala/features/dialog.feature/feature'

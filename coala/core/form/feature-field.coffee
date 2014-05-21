@@ -37,6 +37,8 @@ define [
             field: @
         ]
 
+        getFormData: ->
+
         getTemplateString: -> '''
             <div class="control-group">
                 <% if (!hideLabel) { %>

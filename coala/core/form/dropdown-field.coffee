@@ -31,6 +31,7 @@ define [
 
         loadFormData: (value, data) ->
             select = @form.findComponent(@id)
+            return unless select
             if @readOnly
                 select.loadData(data)
             else

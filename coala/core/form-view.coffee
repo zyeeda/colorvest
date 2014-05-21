@@ -71,7 +71,10 @@ define [
                 (@eventHandlers or = {})['form-change-tab'] = (e) =>
                     id = $(e.target).attr('id')
                     id = id.match(/a\-(\w+)/)[1]
-                    @renderComponents id
+                    deferred = @renderComponents id
+                    if deferred
+                        deferred.done => @setFormData @model.toJSON()
+
             else
                 @eachField (field) ->
                     _.extend events, es if (es = field.getEvents())
