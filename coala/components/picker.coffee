@@ -10,21 +10,24 @@ define [
         getViewTemplate: ->
             '<ul id="tree" class="ztree"></ul>'
         getViewComponents: ->
-            tree = _.extend @picker.options.tree or {},
+            tree =
                 type: 'tree'
                 selector: 'tree'
                 data:
                     simpleData:
                         enable: true
-            ,
-                if @picker.options.multiple is true
-                    check:
-                        enable: true
-                else
-                    check:
-                        enable: true
-                        chkStyle: 'radio'
-                        radioType: 'all'
+
+            if @picker.options.multiple is true
+                tree.check = enable: true
+                if @picker.options.tree and @picker.options.tree.check
+                    tree.check = _.extend @picker.options.tree.check, tree.check
+            else
+                tree.check = 
+                    enable: true
+                    chkStyle: 'radio'
+                    radioType: 'all'
+                if @picker.options.tree and @picker.options.tree.check
+                    tree.check = _.extend @picker.options.tree.check, tree.check
             [tree]
         getSelectedItems: ->
             tree = @view.components[0]
@@ -76,7 +79,7 @@ define [
             picker.render()
             picker
 
-
+    # :TODO mutil-grid-picker multi-tree-picker 可以用inline-grid替代， 后期重构是否考虑去掉
     coala.registerComponentHandler 'grid-picker', (->), _.bind(fn, @, Picker.Picker, Picker.Chooser)
     coala.registerComponentHandler 'tree-picker', (->), _.bind(fn, @, Picker.Picker, TreePickerChooser)
     coala.registerComponentHandler 'multi-grid-picker', (->), _.bind(fn, @, ManyPicker, Picker.Chooser)
