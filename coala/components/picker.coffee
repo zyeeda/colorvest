@@ -3,6 +3,7 @@ define [
     'jquery'
     'coala/coala'
     'coala/components/picker-base'
+    'coala/components/jqgrid'
 ], (_, $, coala, Picker) ->
 
     class TreePickerChooser extends Picker.Chooser
