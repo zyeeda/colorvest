@@ -13,10 +13,11 @@ define [
                     <div class="field-label"><%= label %></div><div id="<%= id %>" class="field-value">{{<%= value %>}}</div>
                 </div>
             <% } else { %>
+                <% if (label) { %>
                 <div class="control-group">
                   <label class="control-label" for="<%= id %>"><%= label %><% if (required) { %>
                         <span class="required-mark">*</span>
-                    <% } %></label>
+                    <% } %></label><% } %>
                   <div class="controls">
                         <textarea class="input span12" id="<%= id %>" name="<%= name %>" rows="<%= rowspan %>">{{<%= value %>}}</textarea>
                   </div>

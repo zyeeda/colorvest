@@ -41,7 +41,7 @@ define [
 
         getTemplateString: -> '''
             <div class="control-group">
-                <% if (!hideLabel) { %>
+                <% if (!hideLabel || label) { %>
                     <label class="control-label" for="<%= id %>"><%= label %><% if (required) { %>
                         <span class="required-mark">*</span>
                     <% } %></label>

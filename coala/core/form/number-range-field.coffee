@@ -10,7 +10,9 @@ define [
 
         getTemplateString: -> '''
             <div class="control-group c-<%= type %>">
+              <% if (label) { %>
               <label class="control-label" for="<%= id %>"><%= label %></label>
+              <% } %>
               <div class="controls">
                 <input type="text" class="input span5" id="<%= id %>-1"/> - <input type="text" class="input span5" id="<%= id %>-2"/>
               </div>
