@@ -1,4 +1,4 @@
-define ['underscore'], (_) ->
+define ['underscore', 'coala/vendors/jquery/jquery.slimscroll.min'], (_) ->
     layout:
         regions:
             top: 'sidebar-shortcuts'
@@ -49,3 +49,12 @@ define ['underscore'], (_) ->
 
         _isMiniMenu: (_super, menuItem) ->
             menuItem.prev().hasClass 'menu-min'
+
+        onStart: () ->
+            logoHeight = 46
+            shortcutsHeight = 40
+            collapseHeight = 28
+            @views['menu'].$el.slimScroll
+                height: $(document).height() - (logoHeight + shortcutsHeight + collapseHeight) + 'px'
+                color: '#393939'
+                wheelStep: 5
