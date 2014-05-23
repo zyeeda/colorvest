@@ -26,10 +26,22 @@ define [
             d.pId = root.id if not d.pId and root.id is '-1'
 
     buildRootNode = (options) ->
+        rootNodeSetting = options.rootNodeSetting or {}
+
         if options.root
             name: options.root
             isRoot: true
+            checked: rootNodeSetting.checked or false
+            chkDisabled: rootNodeSetting.chkDisabled or false
+            halfCheck: rootNodeSetting.halfCheck or false
+            icon: rootNodeSetting.icon or ''
+            iconClose: rootNodeSetting.iconClose or ''
+            iconOpen: rootNodeSetting.iconClose or ''
+            iconSkin: rootNodeSetting.iconSkin or ''
             isParent: true
+            nocheck: rootNodeSetting.nocheck or false
+            target: rootNodeSetting.target or ''
+            url: rootNodeSetting.url or ''
             id: options.data?.rootPId or '-1'
 
     normalEvents = [
