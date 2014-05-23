@@ -46,6 +46,7 @@ define [
             content = {}
             @eachField (field) ->
                 content[field.name] = field.getTemplate()
+                content[field.name + 'Id'] = field.id
             o.content = @tpl(content)
             template = _.template(@getTemplateString()) o
 
