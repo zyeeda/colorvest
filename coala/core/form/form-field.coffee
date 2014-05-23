@@ -10,7 +10,10 @@ define [
             @id = options.id or _.uniqueId (options.name or '').replace(/\./g, '_')
             @name = options.name
             @value = options.value or options.name
-            @label = options.label or @name
+            if @form.constructor.name is 'CustomFormView'
+                @label = options.label
+            else
+                @label = options.label or @name
             @readOnly = !!options.readOnly
             @required = !!options.required
             @visible = true
@@ -62,9 +65,10 @@ define [
                 </div>
             <% } else { %>
                 <div class="control-group">
+                    <% if (label) { %>
                     <label class="control-label" for="<%= id %>"><%= label %><% if (required) { %>
                         <span class="required-mark">*</span>
-                    <% } %></label>
+                    <% } %></label><% } %>
                   <div class="controls">
                     <input type="<%= type %>" class="input span12" id="<%= id %>" name="<%= name %>" value="{{<%= value %>}}" />
                   </div>
