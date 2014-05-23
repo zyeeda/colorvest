@@ -57,7 +57,7 @@ define [
                 </div>
             <% } else { %>
                 <div class="control-group">
-                  <% if (label) { %>
+                  <% if (!hideLabel) { %>
                   <label class="control-label" for="<%= id %>"><%= label %><% if (required) { %>
                         <span class="required-mark">*</span>
                     <% } %></label><% } %>

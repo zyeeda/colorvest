@@ -10,7 +10,7 @@ define [
 
         getTemplateString: -> '''
             <div class="control-group c-<%= type %>">
-              <% if (label) { %>
+              <% if (!hideLabel) { %>
               <label class="control-label" for="<%= id %>"><%= label %></label>
               <% } %>
               <div class="controls">

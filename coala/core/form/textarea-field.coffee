@@ -13,7 +13,7 @@ define [
                     <div class="field-label"><%= label %></div><div id="<%= id %>" class="field-value">{{<%= value %>}}</div>
                 </div>
             <% } else { %>
-                <% if (label) { %>
+                <% if (!hideLabel) { %>
                 <div class="control-group">
                   <label class="control-label" for="<%= id %>"><%= label %><% if (required) { %>
                         <span class="required-mark">*</span>
