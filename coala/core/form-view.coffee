@@ -140,7 +140,7 @@ define [
             data = @model.toJSON()
             @eachField (field) ->
                 _.each components, (n, i) ->
-                    if n['__options__'].name == field.name
+                    if n && n['__options__'].name == field.name
                         field.loadFormData data[field.name], data if _.has data, field.name
 
         setFormData: (data = {}, onlyExists) ->
