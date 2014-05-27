@@ -10,7 +10,10 @@ define [
         getTemplateString: -> '''
             <% if (readOnly) { %>
                 <div class="c-view-form-field">
-                    <div class="field-label"><%= label %></div><div id="<%= id %>" class="field-value">{{<%= value %>}}</div>
+                    <% if (!hideLabel) { %>
+                    <div class="field-label"><%= label %></div>
+                    <% } %> 
+                    <div id="<%= id %>" class="field-value">{{<%= value %>}}</div>
                 </div>
             <% } else { %>
                 <% if (!hideLabel) { %>
