@@ -20,7 +20,7 @@ define [
         '''
 
         loadFormData: (value, data) ->
-            if not value
+            if value == null or value == undefined
                 @form.$(@id + '-1').val('')
                 @form.$(@id + '-2').val('')
             else

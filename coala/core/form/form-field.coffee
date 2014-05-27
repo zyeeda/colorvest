@@ -28,11 +28,11 @@ define [
             @form.$(@id).val()
 
         loadFormData: (value, data) ->
-            value = '' if not value
+            value = '' if value == null or value == undefined
             if _.isArray value
                 idx = _.indexOf @form.findField(@name), @
                 return @loadFormData value[idx]
-            if @readOnly then @form.$(@id).text(value or '') else @form.$(@id).val(value)
+            if @readOnly then @form.$(@id).text(value) else @form.$(@id).val(value)
 
         isReadOnly: ->
             @readOnly
@@ -63,7 +63,7 @@ define [
                     <% if (!hideLabel) { %>
                     <div class="field-label"><%= label %></div>
                     <% } %>
-                    <div id="<%= id %>" class="field-value">{{<%= name %>}}</div>
+                    <div id="<%= id %>" class="field-value">{{<%= value %>}}</div>
                 </div>
             <% } else { %>
                 <div class="control-group">
