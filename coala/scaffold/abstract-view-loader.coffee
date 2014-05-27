@@ -156,6 +156,7 @@ define [
             view = if options.createView then options.createView(viewOptions) else new View(viewOptions)
             result.extendEventHandlers view, options.handlers
             view.eventHandlers.toggleFilter = ->
+                @feature.views['form:filter'].reset()
                 @feature.layout.$('filter-container').toggle()
                 $(window).scroll() #fix the FixedHeader issue
 
