@@ -3,7 +3,7 @@ define
         picker = @components[0]
         return unless picker
         picker.chooser.show(picker).done (feature) ->
-            feature.inRegionViews.body.components[0].removeSelectedNodes()
+            removeSelectedNodes() if removeSelectedNodes = feature.inRegionViews.body.components[0].removeSelectedNodes
 
     removeItem: ->
         grid = @feature.views['inline:grid'].components[0]
