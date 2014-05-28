@@ -52,6 +52,7 @@ define [
                 deferLoading: 0
             ,
                 if @picker.options.multiple is true then multiple: true else {}
+                if @picker.options.crossPage is true then crossPage: true else {}
 
             [grid]
 

@@ -114,6 +114,7 @@ define [ 'jquery'
             addRow: (data) ->
                 table.fnAddData(data)
             getSelected: ->
+                return table.selectNodes if options.multiple && options.crossPage
                 selected = []
                 table.find('input[id*="chk-"]:checked').each (i, item) ->
                     val = $(item).val()
@@ -134,6 +135,8 @@ define [ 'jquery'
                     table.fnDeleteRow i for i in idx
                 else
                     table.fnDeleteRow idx
+            removeSelectedNodes: ->
+                table.selectNodes = undefined if options.crossPage
             addParam: (key, value) ->
                 view.collection.extra[key] = value
             addFilter: (filter) ->
@@ -150,6 +153,22 @@ define [ 'jquery'
                 delete view.collection.extra?[key]
             refresh: (includeParams = true) ->
                 table.fnDraw()
+
+    changeNodes = (view, table, nodes, status, op) ->
+        collections = []
+        _.each _.toArray(nodes), (n) ->
+            collections.push view.collection.get n.value
+        if status
+            table.selectNodes = if table.selectNodes && table.selectNodes.length > 0 then  _.union table.selectNodes, collections else collections
+            if op = 'all'
+                table.selectNodes = _.uniq table.selectNodes, false, (obj) ->
+                    obj.id
+        else
+            _.each collections, (k) ->
+                _.each table.selectNodes, (n, i) ->
+                    if n && n.id == k.id
+                        table.selectNodes.splice i, 1
+        window.t = table.selectNodes
 
     coala.registerComponentHandler 'grid', (->), (el, options, view) ->
 
@@ -225,6 +244,7 @@ define [ 'jquery'
 
             table.find('input[id*="chk-"]').prop 'checked', checked
             table.trigger 'selectionChanged', [table.getSelected()]
+            changeNodes view, table, table.find('input[id*="chk-"]'), checked, 'all' if options.crossPage
 
         table.delegator.delegate 'tr', 'click.deletage', (e) ->
             return if $(e.target).is('input')
@@ -251,12 +271,19 @@ define [ 'jquery'
                 checkAll.prop 'checked', allSelected
             tr[if checked then 'addClass' else 'removeClass']('selected')
             table.trigger 'selectionChanged', [table.getSelected()]
+            changeNodes view, table, [input[0]], checked, 'one' if options.crossPage
 
         settings = table.fnSettings()
         view.collection.extra = _.extend {}, options.params or {}
         extendApi table, view, options
 
         table.columnFilter sPlaceHolder: 'head:after', aoColumns: filters, sRangeFormat: '{from} - {to}' if filterEnabled
+
+        if options.crossPage
+            table.on 'processing.dt', (e) ->
+                if table.selectNodes
+                    _.each table.selectNodes, (n, i) ->
+                        table.find('#chk-' + n.id).attr('checked', true)
 
         table.dispose = ->
             table._oPluginFixedHeader?.fnDestroy()

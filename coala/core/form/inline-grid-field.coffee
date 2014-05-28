@@ -16,15 +16,14 @@ define [
                     gridOptions: deferLoading: 0, paginate: false, multiple: options.multiple is true, form: form
             , options
             _.extend opt.options.gridOptions, options.grid
-
             if options.allowPick is true
                 opt.options.picker =
                     url: options.source
                     remoteDefined: true
                     title: '选择' + (options.label or '')
                     multiple: options.multiple is true
+                    crossPage: options.crossPage is true
                     type: options.pickerType
-
             super form, group, opt
             @type = 'inline-grid'
 
