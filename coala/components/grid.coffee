@@ -136,7 +136,7 @@ define [ 'jquery'
                 else
                     table.fnDeleteRow idx
             removeSelectedNodes: ->
-                table.selectNodes = undefined if options.crossPage
+                table.selectNodes = undefined if options.crossPage && options.multiple
             addParam: (key, value) ->
                 view.collection.extra[key] = value
             addFilter: (filter) ->
@@ -244,7 +244,7 @@ define [ 'jquery'
 
             table.find('input[id*="chk-"]').prop 'checked', checked
             table.trigger 'selectionChanged', [table.getSelected()]
-            changeNodes view, table, table.find('input[id*="chk-"]'), checked, 'all' if options.crossPage
+            changeNodes view, table, table.find('input[id*="chk-"]'), checked, 'all' if options.crossPage && options.multiple
 
         table.delegator.delegate 'tr', 'click.deletage', (e) ->
             return if $(e.target).is('input')
@@ -271,7 +271,7 @@ define [ 'jquery'
                 checkAll.prop 'checked', allSelected
             tr[if checked then 'addClass' else 'removeClass']('selected')
             table.trigger 'selectionChanged', [table.getSelected()]
-            changeNodes view, table, [input[0]], checked, 'one' if options.crossPage
+            changeNodes view, table, [input[0]], checked, 'one' if options.crossPage && options.multiple
 
         settings = table.fnSettings()
         view.collection.extra = _.extend {}, options.params or {}
@@ -279,7 +279,7 @@ define [ 'jquery'
 
         table.columnFilter sPlaceHolder: 'head:after', aoColumns: filters, sRangeFormat: '{from} - {to}' if filterEnabled
 
-        if options.crossPage
+        if options.crossPage && options.multiple
             table.on 'processing.dt', (e) ->
                 if table.selectNodes
                     _.each table.selectNodes, (n, i) ->
