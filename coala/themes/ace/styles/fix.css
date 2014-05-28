@@ -44,7 +44,7 @@ div.modal-body {
 
 .filter_column {display:inline-block !important; width:100% !important;}
 
-.text_filter, .select_filter, .filter_date_range, .filter_number_range {
+.text_filter, .number_filter, .select_filter, .filter_date_range, .filter_number_range {
 	width:90% !important;
 }
 
