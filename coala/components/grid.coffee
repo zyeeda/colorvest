@@ -168,7 +168,6 @@ define [ 'jquery'
                 _.each table.selectNodes, (n, i) ->
                     if n && n.id == k.id
                         table.selectNodes.splice i, 1
-        window.t = table.selectNodes
 
     coala.registerComponentHandler 'grid', (->), (el, options, view) ->
 

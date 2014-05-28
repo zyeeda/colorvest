@@ -42,3 +42,16 @@ div.modal-body {
     max-height: inherit;
 }
 
+.filter_column {display:inline-block !important; width:100% !important;}
+
+.text_filter, .select_filter, .filter_date_range, .filter_number_range {
+	width:90% !important;
+}
+
+.date_range_filter {
+	width: 30%;
+}
+
+.filter_column input {
+	height: 22px !important; 
+}
