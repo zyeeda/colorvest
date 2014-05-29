@@ -51,10 +51,10 @@ define [
                     <div id="<%= id %>" class="field-value">
                         <% if (options.multiple) { %>
                         {{#each <%= name %>}}
-                        <a target="_blank" href="<%= options.url %>/{{id}}">{{filename}}</a>
+                        <a target="_blank" style="word-break:break-all;" href="<%= options.url %>/{{id}}">{{filename}}</a>
                         {{/each}}
                         <% } else { %>
-                        <a target="_blank" href="<%= options.url %>/{{<%= name %>.id}}">{{<%= name %>.filename}}</a>
+                        <a target="_blank" style="word-break:break-all;" href="<%= options.url %>/{{<%= name %>.id}}">{{<%= name %>.filename}}</a>
                         <% } %>
                     </div>
                 </div>
