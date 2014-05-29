@@ -4,6 +4,7 @@
     background: none;
 }
 
-.custom-form .control-group {
+.custom-form .control-group,
+.custom-form .controls {
     margin-bottom: 0px !important;
 }
