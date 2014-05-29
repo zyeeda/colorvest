@@ -47,4 +47,5 @@ require =
         'coala/vendors/jquery/jquery.colorbox': ['jquery']
         'coala/vendors/jquery/jquery.gritter': ['jquery']
         'coala/vendors/bootbox': ['jquery']
+        'coala/vendors/jquery/jquery.tooltipster.min': ['jquery']
 

@@ -9,3 +9,5 @@
 @import url('ztree/zTreeStyle.css');
 @import url('ztree/fix.css');
 
+@import url('tooltipster/tooltipster.css');
+@import url('tooltipster/themes/tooltipster-shadow.css');

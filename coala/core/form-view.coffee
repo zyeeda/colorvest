@@ -18,6 +18,7 @@ define [
     'coala/core/form/inline-grid-field'
     'coala/vendors/jquery/validation/messages_zh'
     #'coala/vendors/jquery/validation/jquery.validate' # check it later
+    'coala/vendors/jquery/jquery.tooltipster.min'
 ], ($, _, View, Handlebars, FormField, FormGroup) ->
 
     ###
@@ -192,6 +193,7 @@ define [
         bindValidation: ->
             # check it later
             return if not @options.validation
+            options = @options
             validator = @$$('form').validate
                 rules: @options.validation.rules
                 ignore: @options.validation.ignore or ''
@@ -199,18 +201,28 @@ define [
                     validator.element el
                 errorPlacement: (error, element) ->
                     $el = $ element
-                    elPos = $el.position()
-                    $(error).css
-                        color: '#CC0000'
-                        position: 'absolute'
-                        top: (elPos.top + $el.outerHeight())
-                        #right: $el.parents('.modal-body').outerWidth() - elPos.left - $el.outerWidth()
-                    $(error).insertAfter element
+                    if options.validation.errorsAppend
+                        elPos = $el.position()
+                        $(error).css
+                            color: '#CC0000'
+                            position: 'absolute'
+                            top: (elPos.top + $el.outerHeight())
+                            #right: $el.parents('.modal-body').outerWidth() - elPos.left - $el.outerWidth()
+                        $(error).insertAfter element
+                    else
+                        $el.tooltipster 'destroy' if $el.hasClass('tooltipstered')
+                        $(error).css color: '#CC0000'
+                        $el.tooltipster content: $(error), contentAsHTML: true, theme: 'tooltipster-shadow'
                 highlight: (label) ->
                     $(label).closest('.control-group').addClass('error')
-                success: (label) ->
-                    $(label).closest('.control-group').removeClass('error')
-                    $(label).remove()
+                success: (label, element) ->
+                    if options.validation.errorsAppend      
+                        $(label).closest('.control-group').removeClass('error')
+                        $(label).remove()
+                    else
+                        $(element).tooltipster 'destroy' 
+                        $(element).closest('.control-group').removeClass('error')
+                        $(element).attr('title', '')
 
         getTemplate: ->
             style = 'form-horizontal' if @options.labelOnTop is false
