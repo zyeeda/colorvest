@@ -157,7 +157,9 @@ define [
             result.extendEventHandlers view, options.handlers
             view.eventHandlers.toggleFilter = ->
                 $('i', '.c-filter-toggle', @feature.layout.$('filter-container')).toggleClass('icon-chevron-down').toggleClass('icon-chevron-up')
-                @feature.views['form:filter'].reset()
+                filterForm = @feature.views['form:filter']
+                filterForm.formData = filterForm.getFormData() or {}
+                filterForm.setFormData filterForm.formData
                 @feature.layout.$('filter-container').toggle()
                 $(window).scroll() #fix the FixedHeader issue
 
