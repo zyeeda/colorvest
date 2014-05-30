@@ -31,7 +31,7 @@ define [
         getTemplateString: -> '''
             <fieldset id="<%= containerId %>" class="c-form-group-cols-<%= columns %>" style="<% if (!visible) {%>display:none<%}%>">
                 <% if (label) { %>
-                <legend><span class="badge badge-info"><%= label %></span></legend>
+                <legend><span class="label label-info arrowed-in arrowed-in-right"><%= label %></span></legend>
                 <% } %>
                 <%= groupContent %>
             </fieldset>
