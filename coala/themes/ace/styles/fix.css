@@ -18,8 +18,14 @@ input[type="color"],
     height: 32px;
 }
 
+.dataTables_scrollHeadInner,
+.dataTables_scrollHeadInner table {
+    width: 100% !important;
+}
+
 .dataTables_scrollBody table {
     border-top-width: 0px;
+    width: 100% !important;
 }
 
 .dataTables_scrollBody thead tr {

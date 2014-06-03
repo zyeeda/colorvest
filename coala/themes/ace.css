@@ -290,7 +290,3 @@ html, body {
 }
 /* end upload preview */
 
-.dataTables_scrollHeadInner,
-.dataTables_scrollHeadInner table {
-    width: 100% !important;
-}
