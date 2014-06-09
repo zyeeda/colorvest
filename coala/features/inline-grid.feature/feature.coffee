@@ -1,4 +1,4 @@
-define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
+define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-view'], ($, _, FormView, CustomFormView) ->
 
     layout:
         regions:
@@ -58,8 +58,7 @@ define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
                             def.form =
                                 groups: data.groups or []
                                 tabs: data.tabs
-
-                            view = new FormView def
+                            view = if def.custom then new CustomFormView def else new FormView def
                             @loadAddFormDeferred.resolve view, data.entityLabel
                     if not @loadEditFormDeferred
                         @loadEditFormDeferred = $.Deferred()
@@ -76,8 +75,7 @@ define ['jquery', 'underscore', 'coala/core/form-view'], ($, _, FormView) ->
                             def.form =
                                 groups: data.groups or []
                                 tabs: data.tabs
-
-                            view = new FormView def
+                            view = if def.custom then new CustomFormView def else new FormView def
                             @loadEditFormDeferred.resolve view, data.entityLabel
 
             serializeData: (su) ->

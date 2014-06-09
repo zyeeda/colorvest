@@ -19,7 +19,8 @@ define [
 
         initTpl: (options) ->
             deferred = $.Deferred()
-            M.TemplateCache.get(@module.resolveResoucePath(@feature.baseName + '.feature/views/' + @baseName + config.templateSuffix)).done (tpl) =>
+            path = if @options.template then @module.resolveResoucePath('/' + @options.template) else @module.resolveResoucePath(@feature.baseName + '.feature/views/' + @baseName + config.templateSuffix)
+            M.TemplateCache.get(path).done (tpl) =>
                 @tpl = tpl
                 deferred.resolve()
                 return deferred.promise() 
