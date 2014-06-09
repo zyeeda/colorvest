@@ -16,6 +16,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
             'click pick': 'showPicker'
             'click remove': 'removeItem'
             'click add': 'createItem'
+            'click show': 'showItem'
             'click edit': 'updateItem'
         extend:
             fakeId: (su, id) ->
@@ -24,6 +25,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
             afterRender: (su) ->
                 su.apply @
                 picker = @components[0]
+                app = @feature.module.getApplication()
 
                 if picker
                     grid = @feature.views['inline:grid'].components[0]
@@ -38,8 +40,25 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                     picker.getFormData = ->
                         grid.fnGetData()
 
+                if not @loadViewFormDeferred
+                    @loadViewFormDeferred = $.Deferred()
+                    url = app.url @feature.startupOptions.url + '/configuration/forms/show'
+                    $.get(url).done (data) =>
+                        def = _.extend
+                            baseName: 'show'
+                            module: @feature.module
+                            feature: @feature
+                            avoidLoadingHandlers: true
+                            entityLabel: data.entityLabel
+                            formName: 'show'
+                        , data
+                        def.form =
+                            groups: data.groups or []
+                            tabs: data.tabs
+                        view = if def.custom then new CustomFormView def else new FormView def
+                        @loadViewFormDeferred.resolve view, data.entityLabel
+
                 if @feature.startupOptions.allowAdd
-                    app = @feature.module.getApplication()
 
                     if not @loadAddFormDeferred
                         @loadAddFormDeferred = $.Deferred()
@@ -76,7 +95,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                                 groups: data.groups or []
                                 tabs: data.tabs
                             view = if def.custom then new CustomFormView def else new FormView def
-                            @loadEditFormDeferred.resolve view, data.entityLabel
+                            @loadEditFormDeferred.resolve view, data.entityLabel                
 
             serializeData: (su) ->
                 data = su.apply @

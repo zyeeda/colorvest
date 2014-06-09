@@ -96,3 +96,25 @@ define
                 form.setFormData data, true
                 if _.isFunction gridView.afterShowInlineGridDialog
                     gridView.afterShowInlineGridDialog.call @, 'edit', form, data
+    showItem: ->
+        gridView = @feature.views['inline:grid']
+
+        return if not @loadViewFormDeferred
+
+        if _.isFunction gridView.beforeShowInlineGridDialog
+            return unless (gridView.beforeShowInlineGridDialog.call @, 'show', @) is true
+
+        @loadViewFormDeferred.done (form, title = '') =>
+            grid = gridView.components[0]
+            index = grid.getSelectedIndex()
+            index = index[0] if _.isArray index
+            return if index is null
+            data = grid.fnGetData(index)
+            app.showDialog
+                title: '查看' + title
+                view: form
+                buttons: []
+            .done ->
+                form.setFormData data, true
+                if _.isFunction gridView.afterShowInlineGridDialog
+                    gridView.afterShowInlineGridDialog.call @, 'show', form, data
