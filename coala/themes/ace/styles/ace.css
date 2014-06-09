@@ -2530,13 +2530,13 @@ button.btn:active {
 }
 .btn-group > .btn,
 .btn-group > .btn + .btn {
-  margin: 0 0 0 1px !important;
+  margin: 0 0 0 1px;
 }
 .btn-group > .btn:first-child {
   margin: 0 0 0 0 !important;
 }
 .btn-group > .btn:last-child {
-  margin: 0 1px 0 1px !important;
+  margin: 0 0 0 1px !important;
 }
 .btn-group > .btn:first-child,
 .btn-group > .btn:last-child {
