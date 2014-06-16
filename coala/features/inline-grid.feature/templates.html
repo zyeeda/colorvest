@@ -15,16 +15,36 @@
 {{#unless readOnly}}
 <div id="operators" class="btn-toolbar">
 {{#if allowAdd}}
-<a href="javascript:void 0" id="add" class="btn btn-success">添加</a>
+<a href="javascript:void 0" id="add" title="添加">
+    <button class="btn btn-success">
+        <i class="icon-plus icon-only"></i>
+    </button>
+</a>
 {{/if}}
-<a href="javascript:void 0" id="show" class="btn btn-primary">查看</a>
+<a href="javascript:void 0" id="show" title="查看" style="margin-left: 1px;">
+    <button class="btn btn-primary">
+        <i class="icon-eye-open icon-only"></i>
+    </button>
+</a>
 {{#if allowAdd}}
-<a href="javascript:void 0" id="edit" class="btn btn-primary">编辑</a>
+<a href="javascript:void 0" id="edit" title="编辑" style="margin-left: 1px;">
+    <button class="btn btn-primary">
+        <i class="icon-edit icon-only"></i>
+    </button>
+</a>
 {{/if}}
-<a href="javascript:void 0" id="remove" class="btn btn-danger">删除</a>
+<a href="javascript:void 0" id="remove" title="删除" style="margin-left: 1px;">
+    <button class="btn btn-danger">
+        <i class="icon-minus icon-only"></i>
+    </button>
+</a>
 
 {{#if allowPick}}
-<a href="javascript:void 0" id="pick" class="btn btn-purple">选择</a>
+<a href="javascript:void 0" id="pick" title="选择" style="margin-left: 1px;">
+    <button class="btn btn-purple">
+        <i class="icon-search icon-only"></i>
+    </button>
+</a>
 {{/if}}
 <div id="picker" style="display:none"></div>
 </div>

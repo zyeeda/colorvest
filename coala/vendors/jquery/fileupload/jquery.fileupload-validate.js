@@ -66,12 +66,16 @@
             // has to be overriden for maxNumberOfFiles validation:
             getNumberOfFiles: $.noop,
 
+            maxFileSize: 100000000,
+            minFileSize: undefined,
+            maxNumberOfFiles: 100,
+
             // Error and info messages:
             messages: {
-                maxNumberOfFiles: 'Maximum number of files exceeded',
-                acceptFileTypes: 'File type not allowed',
-                maxFileSize: 'File is too large',
-                minFileSize: 'File is too small'
+                maxNumberOfFiles: '文件个数超过限制',
+                acceptFileTypes: '不支持的文件格式',
+                maxFileSize: '文件大小超过限制',
+                minFileSize: '文件大小超过限制'
             }
         },
 
@@ -84,19 +88,31 @@
                 var dfd = $.Deferred(),
                     settings = this.options,
                     file = data.files[data.index],
-                    numberOfFiles = settings.getNumberOfFiles();
+                    numberOfFiles = settings.getNumberOfFiles(),
+                    reg, acceptFileTypesStr;
+
                 if (numberOfFiles && $.type(options.maxNumberOfFiles) === 'number' &&
                         numberOfFiles + data.files.length > options.maxNumberOfFiles) {
                     file.error = settings.i18n('maxNumberOfFiles');
+                    app.error('请不要上传多于100个的文件');
                 } else if (options.acceptFileTypes &&
                         !(options.acceptFileTypes.test(file.type) ||
                         options.acceptFileTypes.test(file.name))) {
+                    acceptFileTypesStr = options.acceptFileTypes.toString();
+                    acceptFileTypesStr = acceptFileTypesStr.substring(acceptFileTypesStr.lastIndexOf('(') + 1, acceptFileTypesStr.lastIndexOf(')'));
+
+                    reg = new RegExp("\\|","g");
+                    acceptFileTypesStr = acceptFileTypesStr.replace(reg, '、');
+
                     file.error = settings.i18n('acceptFileTypes');
+                    app.error('文件格式不支持，请参照以下格式：</br>' + acceptFileTypesStr);
                 } else if (options.maxFileSize && file.size > options.maxFileSize) {
                     file.error = settings.i18n('maxFileSize');
+                    app.error('请不要上传大于100MB的文件');
                 } else if ($.type(file.size) === 'number' &&
                         file.size < options.minFileSize) {
                     file.error = settings.i18n('minFileSize');
+                    app.error('请不要上传小于0KB的文件');
                 } else {
                     delete file.error;
                 }
