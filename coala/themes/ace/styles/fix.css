@@ -61,3 +61,21 @@ div.modal-body {
 .filter_column input {
 	height: 22px !important; 
 }
+
+.select2-container .select2-choice {
+    background: #FFF none;
+    min-height: 28px;
+    border: 1px solid #d5d5d5;
+}
+
+.select2-container-active .select2-choice, .select2-container-active .select2-choices {
+    border: 1px solid #5897fb;
+}
+
+.select2-search:after {
+    top: -2.5px;
+}
+
+.hasDatepicker {
+    border: 1px solid #d5d5d5;
+}
