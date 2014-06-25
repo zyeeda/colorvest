@@ -15,7 +15,7 @@ define [
             @view = @generateView()
             @view.eventHandlers = @getViewHandlers()
 
-        generateView: ->
+        generateView: (dynamic) ->
             tpl = H.compile @getViewTemplate()
             
             pickerFiled = @picker.name or ''
@@ -25,12 +25,19 @@ define [
             if feature.baseName is 'inline-grid'
                 pickerFeatureName = feature.startupOptions.gridOptions.form.feature.baseName
                 pickerFeatureType = 'inline-grid'
+            url = @picker.options.url + '/picker?pickerFeatureName=' + pickerFeatureName + '&pickerFeatureType=' + pickerFeatureType + '&pickerFiled=' + pickerFiled
 
+            if dynamic 
+                if dynamic.indexOf('&') == 0
+                    url = url + dynamic
+                else
+                    url = dynamic
+            
             options =
                 feature: @feature
                 module: @module
                 baseName: 'picker-chooser'
-                model: @picker.options.url + '/picker?pickerFeatureName=' + pickerFeatureName + '&pickerFeatureType=' + pickerFeatureType + '&pickerFiled=' + pickerFiled
+                model: url
                 components: @getViewComponents()
                 events: @getViewEvents()
                 avoidLoadingHandlers: true
@@ -90,6 +97,8 @@ define [
             beforeShowPicker = handlers[@picker.beforeShowPicker]
             if _.isFunction beforeShowPicker
                 return unless (beforeShowPicker.call @, @view, pickerFiled, pickerFeatureType, pickerFeatureName) is true
+            
+            @view = @generateView(@view.options.dynamic) if @view.options.dynamic
 
             @app.showDialog
                 title: @picker.options.title

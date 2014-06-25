@@ -17,25 +17,26 @@ define [
                 fieldName: @name
                 name: @name
                 readOnly: @readOnly
+                change: @options.change
+
             if @options.url
                 textKey = @options.textKey or 'name'
-                config.ajax =
-                    url: @options.url,
-                    dataType: 'json',
-                    data: (term, page) ->
-                        q: term
-                    results: (data, page) ->
-                        (d.text = d[textKey] if not d.text) for d in data.results
-                        results: data.results
-
-                config.initSelection = (el, fn) =>
-                    val = $(el).val()
-                    if val != ''
-                        $.ajax(@options.url, dataType: 'json').done (data) ->
-                            _(data.results).each (item) ->
-                                (d.text = d[textKey] if not d.text) for d in data.results
-                                return fn(data.results[0]) if not val
-                                fn(item) if String(item.id) == String(val)
+                me = this
+                $.ajax(me.options.url, dataType: 'json').done (data) ->
+                    config.query = (q) ->
+                        t = q.term
+                        result = []
+                        for d in data.results
+                            text = if d.text then d.text else d[textKey]
+                            if text.indexOf(t) >= 0
+                                result.push id: d.id, text: text
+                        q.callback(results: result)
+                    config.initSelection= (e, fn) ->
+                        val = $(e).val()
+                        results = data.results
+                        # return fn(results[0]) if not val
+                        _(results).each (item) ->
+                            fn(item) if String(item.id) == String(val)  
                 
             else
                 config.data = @options.source
@@ -51,7 +52,7 @@ define [
             if @options.defaultValue
                 select = @form.findComponent(@id)
                 select.select2?('val', @options.defaultValue)
-
+        
         loadFormData: (value, data) ->
             select = @form.findComponent(@id)
             return unless select

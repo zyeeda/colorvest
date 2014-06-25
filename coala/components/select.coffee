@@ -30,16 +30,18 @@ define [
         #             $.when(view.collection.fetch()).done -> callback q, view, textKey
         #         else
         #             _.delay (-> callback q, view, textKey), 50
-
+        
         selector = el.select2 options
 
         id = el.attr('id').split('-')
         id.shift()
         id = id.join('-')
-
-        events = ['change']
-        for e in events
-            selector.on(e, view.feature.delegateComponentEvent(view, {component: selector}, "select:#{id}:#{e}"))
+        # events = ['change']
+        # for e in events
+            # selector.on(e, view.feature.delegateComponentEvent(view, {component: selector}, "select:#{id}:#{e}"))            
+        if options.change && view.feature.options.scaffold.handlers[options.change]
+            selector.on 'change', ->
+                view.feature.options.scaffold.handlers[options.change](view, selector)
 
         selector.dispose = ->
             @select2 'destroy'

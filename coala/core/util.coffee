@@ -10,6 +10,25 @@ type = (obj) ->
     strType = Object::toString.call(obj)
     classToType[strType] or "object"
 
+changeDropdownSource = (el, data, textKey) ->
+    textKey = 'name' unless textKey
+    el.select2
+        width: '100%'
+        query: (q) ->
+            t = q.term
+            result = []
+            for d in data
+                text = if d.text then d.text else d[textKey]
+                if text.indexOf(t) >= 0
+                    result.push id: d.id, text: text
+            q.callback(results: result)
+
+        initSelection: (e, fn) ->
+            val = $(e).val()
+            results = data
+            _(results).each (item) ->
+                fn(item) if String(item.id) == String(val) 
+
 util =
     getBaseName: (base) ->
         str = []
@@ -42,4 +61,22 @@ util =
         result = result.replace /(\/){2,3}/g, '/'
         result = result.replace /(^\/)|(\/$)/g, '' if cleanStartAndEndSlash
         result
+
+    changeDropdownData: (el, data, textKey) -> 
+        if data instanceof Array
+            changeDropdownSource(el, data, textKey)
+        else
+            $.ajax(data, dataType: 'json').done (d) =>
+                changeDropdownSource el, d.results, textKey
+
+    changePickerData: (view, data) ->
+        url = ''
+        if data instanceof Object
+            for p of data
+                url += '&' + p + '=' + data[p]
+        else
+            url = data
+        view.options.dynamic = url
+        true
+
 define util
