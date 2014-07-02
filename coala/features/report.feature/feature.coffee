@@ -17,3 +17,5 @@ define [
     ]    
 
     avoidLoadingModel: true
+
+    
