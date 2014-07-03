@@ -111,6 +111,8 @@ define [
             else
                 tree = $.fn.zTree.init el, options, []
                 loadAllData view, tree, root
+                if root
+                    tree.expandNode root, true, false, true, true
 
         tree.reload = ->
             return if options.treeData
@@ -129,6 +131,9 @@ define [
                     options.callback.onExpand null, tree.setting.treeId, null
             else
                 loadAllData view, tree, root
+
+                if root
+                    tree.expandNode root, true, false, true, true
 
         bk = tree.getSelectedNodes
         tree.getSelectedNodes = ->
