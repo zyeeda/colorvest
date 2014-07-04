@@ -14,6 +14,7 @@ define [
                 options:
                     allowPick: options.allowPick, allowAdd: options.allowAdd, url: options.source, readOnly: options.readOnly
                     gridOptions: deferLoading: 0, paginate: false, multiple: options.multiple is true, form: form
+                    loadViewFormDeferred: options.loadViewFormDeferred or undefined, disableShow: options.disableShow
             , options
             _.extend opt.options.gridOptions, options.grid
             if options.allowPick is true

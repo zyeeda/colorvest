@@ -173,7 +173,8 @@ define [ 'jquery'
 
         opt = _.extend
             sDom: if options.paginate is false then "<'c-grid-body't>" else "Rs<'row-fluid c-grid-top'<'span6'i><'span6'p>><'c-grid-body't>",
-            bServerSide: !options.data
+            # bServerSide: !options.data
+            bServerSide: true # false 则不向后台发送数据请求
             bPaginate: options.paginate isnt false
             view: view
             defaultOrder: options.defaultOrder
@@ -218,8 +219,8 @@ define [ 'jquery'
                 adaptColumn col, view
 
 
-        opt.aaData = options.data if options.data
-        opt.iDeferLoading = options.deferLoading if _.has options, 'deferLoading'
+        # opt.aaData = options.data if options.data
+        # opt.iDeferLoading = options.deferLoading if _.has options, 'deferLoading'
 
         opt.oColReorder =
             allowReorder: false

@@ -40,7 +40,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                     picker.getFormData = ->
                         grid.fnGetData()
 
-                if not @loadViewFormDeferred
+                if not @loadViewFormDeferred and (@startupOptions and not @startupOptions.loadViewFormDeferred)
                     @loadViewFormDeferred = $.Deferred()
                     url = app.url @feature.startupOptions.url + '/configuration/forms/show'
                     $.get(url).done (data) =>
@@ -102,6 +102,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                 data.allowPick = @feature.startupOptions.allowPick
                 data.allowAdd = @feature.startupOptions.allowAdd
                 data.readOnly = @feature.startupOptions.readOnly
+                data.disableShow = @feature.startupOptions.disableShow
 
                 data
     ,

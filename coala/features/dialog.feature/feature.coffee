@@ -84,6 +84,7 @@ define [
                 deferred.promise()
 
         close: -> # for close button
+            # 取出最上层的 view
             options = @startedOptions.pop()
 
             if _.isFunction(options.beforeClose)

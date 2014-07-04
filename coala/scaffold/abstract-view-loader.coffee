@@ -37,6 +37,9 @@ define [
         tree: '''
             <ul id="tree" class="ztree"/>
         '''
+        blank: '''
+            <table style="width:100%;" id="grid" />
+        '''
 
     result.getDialogTitle = (view, type, prefix) ->
         dt = view.feature.options.scaffold?.defineDialogTitle
@@ -78,6 +81,7 @@ define [
         eventHandlers = _.extend {}, handlers, scaffold.handlers
         _.extend view.eventHandlers, eventHandlers
 
+    # 点击 toolbar 内的按钮后的具体处理方法
     result.submitHandler = (options, viewName, title, type) ->
         view = @feature.views[viewName]
         id = view.model.get 'id'
@@ -164,6 +168,46 @@ define [
                 $(window).scroll() #fix the FixedHeader issue
 
             deferred.resolve view
+
+    # 生成流程多标签 
+    result.generateTabsView = (options, module, feature, deferred) ->
+        events = {}
+        delegates = {}
+        viewOptions =
+            baseName: 'tabs'
+            module: module
+            feature: feature
+            events: events
+            delegates: delegates
+            avoidLoadingHandlers: true
+            events: events
+            extend:
+                renderHtml: (su, data) ->
+                    # result.templates.tabs
+      
+        view = if options.createView then options.createView(viewOptions) else new View(viewOptions)
+        result.extendEventHandlers view, options.handlers
+        deferred.resolve view
+
+    # 生成空白页面，用于流程视图
+    result.generateBlankView = (options, module, feature, deferred) ->
+        data = {}
+        _.extend data, feature.options.gridOptions, feature.startupOptions.gridOptions
+        events = {}
+        viewOptions =
+            baseName: 'grid'
+            module: module
+            feature: feature
+            components: [data]
+            avoidLoadingHandlers: true
+            events: events
+            extend:
+                renderHtml: (su, data) ->
+                    result.templates.blank
+
+        view = if options.createView then options.createView(viewOptions) else new View(viewOptions)
+        result.extendEventHandlers view, options.handlers
+        deferred.resolve view
 
     result.generateGridView = (options, module, feature, deferred) ->
         feature.request(url: options.url or 'configuration/grid').done (data) ->

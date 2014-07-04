@@ -31,11 +31,23 @@ define [
                 opts.layout = 'coala:grid'
                 views.push name: 'treetable:toolbar', region: 'toolbar'
                 views.push name: 'treetable:body', region: 'body'
+                
+            # process 流程
+            else if data.style is 'process'
+                opts.layout = 'coala:process'
+                views.push name: 'process:tabs', region: 'tabs' # 多标签
+                # 首先不加载记录列表和操作按钮
+                views.push name: 'process:toolbar-waiting', region: 'toolbar_waiting' # 操作按钮
+                views.push name: 'process:body-waiting', region: 'body_waiting'
+                views.push 'process-form:show'
+                views.push 'process-form:complete'
+                opts.activeTab = 'waiting'
 
-            views.push 'form:add'
-            views.push 'form:edit'
-            views.push 'form:show'
-            views.push name: 'form:filter', region: 'filter' if data.haveFilter
+            if data.style isnt 'process'
+                views.push 'form:add'
+                views.push 'form:edit'
+                views.push 'form:show'
+                views.push name: 'form:filter', region: 'filter' if data.haveFilter
 
             views = views.concat data.views if _.isArray(data.views)
 
