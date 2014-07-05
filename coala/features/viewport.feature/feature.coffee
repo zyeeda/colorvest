@@ -24,7 +24,7 @@ define [
             homepageFeaturePath: 'main/home-page'
         ]
 
-        model: 'system/menuitems'
+        model: 'system/menu'
         extend:
             serializeData: (su) ->
                 deferred = $.Deferred()
