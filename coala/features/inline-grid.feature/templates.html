@@ -34,8 +34,10 @@ class="btn btn-purple icon-search icon-only"></a>
 </div>
 {{/unless}}
 {{#if readOnly}}
+{{#unless disableShow}}
 <a href="javascript:void 0" id="show" title="查看" style="margin-left: 2px;" 
 class="btn btn-primary icon-eye-open icon-only"></a>
+{{/unless}}
 {{/if}}
 {{/view}}
 

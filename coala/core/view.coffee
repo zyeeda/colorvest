@@ -38,6 +38,9 @@ define [
 
             if not @options.path
                 @model = @feature.model
+                # TODO 将此类参数移植到 feature.collection 外的其他地方，以便多标签时容易扩展
+                @feature.collection.extra = {} if not @feature.collection.extra
+                @feature.collection.extra['_task_type'] = @options.extra['_task_type'] if @options.extra and @options.extra['_task_type']
                 @collection = @feature.collection
                 deferred.resolve()
                 return deferred.promise()
@@ -62,9 +65,13 @@ define [
             deferred.promise()
 
         initCollection: ->
-            return if @collection
+            if @collection
+                # @collection.extra = @options.extra or {}
+                @collection.extra = {} if not @collection.extra
+                @collection.extra['_task_type'] = @options.extra['_task_type'] if @options.extra and @options.extra['_task_type']
+                return
             @deferredModel.done =>
-                @collection = new (Collection.extend {feature: @feature, path: @options.path})(null, model: @modelDefinition)
+                @collection = new (Collection.extend {feature: @feature, path: @options.path, extra: @options.extra or {}})(null, model: @modelDefinition)
 
     viewTypes = {}
     View.add = (type, clazz) ->

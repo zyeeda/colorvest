@@ -21,7 +21,9 @@ define [
             @model = options.model if options.model
             @collection = options.collection if options.collection
             @module.features[@cid] = @
-
+            # 活动的标签
+            @activeTab = @options.activeTab
+            
             if @options.extend
                 for key, value of @options.extend
                     old = @[key]
@@ -80,18 +82,47 @@ define [
             return if @collection
             @deferredModel.done =>
                 @collection = new (Collection.extend feature: @)(null, model: @ModelDefinition)
+                
+        ###
+        appendViews 为附加的 view 列表，在构造方法默认初始化 feature 时此参数为空
+        appendViews 此参数用于同一个 feature 中的多个 view 需要按顺序或单独加载时使用
+        ###
+        initViews: (appendViews = []) ->
+            # @inRegionViews = {}
+            # @views = {}
 
-        initViews: () ->
-            @inRegionViews = {}
-            @views = {}
+            # views = []
+            # promises = [@deferredTemplate, @deferredLayout, @deferredModel]
+            # for view in @options.views or []
+            #     view = if _.isString view then name: view else view
+            #     views.push view
+            #     promises.push loaderPluginManager.invoke 'view', @module, @, view
 
+            # deferred = $.when.apply($, promises).then _.bind (vs, u1, u2, u3, args...) =>
+            #     for v, i in args
+            #         @views[vs[i].name] = v
+            #         @inRegionViews[vs[i].region] = @views[vs[i].name] if vs[i].region
+            #     return
+            # , @, views
+
+            # deferred.promise()
+            
+            @inRegionViews = @inRegionViews or {}
+            @views = @views or {}
+
+            # 需要用户初始化的 view 列表
+            viewToInit = if _.isEmpty appendViews then @options.views else appendViews
             views = []
             promises = [@deferredTemplate, @deferredLayout, @deferredModel]
-            for view in @options.views or []
+
+            # 处理用户自定义的 views
+            for view in viewToInit or []
                 view = if _.isString view then name: view else view
                 views.push view
                 promises.push loaderPluginManager.invoke 'view', @module, @, view
 
+            # 当 promises 内的所有方法执行完,计算所有在 region 内的 view
+            # then 内的方法被调用时会将 promises 内的每个方法的结果作为参数传过来
             deferred = $.when.apply($, promises).then _.bind (vs, u1, u2, u3, args...) =>
                 for v, i in args
                     @views[vs[i].name] = v

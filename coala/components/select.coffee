@@ -30,7 +30,6 @@ define [
         #             $.when(view.collection.fetch()).done -> callback q, view, textKey
         #         else
         #             _.delay (-> callback q, view, textKey), 50
-        
         selector = el.select2 options
 
         id = el.attr('id').split('-')
