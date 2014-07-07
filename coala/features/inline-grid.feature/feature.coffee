@@ -79,6 +79,9 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                                 tabs: data.tabs
                             view = if def.custom then new CustomFormView def else new FormView def
                             @loadAddFormDeferred.resolve view, data.entityLabel
+
+                if @feature.startupOptions.allowEdit
+
                     if not @loadEditFormDeferred
                         @loadEditFormDeferred = $.Deferred()
                         url = app.url @feature.startupOptions.url + '/configuration/forms/edit'
@@ -101,6 +104,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                 data = su.apply @
                 data.allowPick = @feature.startupOptions.allowPick
                 data.allowAdd = @feature.startupOptions.allowAdd
+                data.allowEdit = @feature.startupOptions.allowEdit
                 data.readOnly = @feature.startupOptions.readOnly
                 data.disableShow = @feature.startupOptions.disableShow
 
