@@ -80,7 +80,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                             view = if def.custom then new CustomFormView def else new FormView def
                             @loadAddFormDeferred.resolve view, data.entityLabel
 
-                if @feature.startupOptions.allowEdit
+                if @feature.startupOptions.allowEdit || true
 
                     if not @loadEditFormDeferred
                         @loadEditFormDeferred = $.Deferred()
