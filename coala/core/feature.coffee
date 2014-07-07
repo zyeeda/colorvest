@@ -22,7 +22,7 @@ define [
             @collection = options.collection if options.collection
             @module.features[@cid] = @
             # 活动的标签
-            @activeTab = @options.activeTab
+            @activeTab = @options.activeTab if @options.activeTab
             
             if @options.extend
                 for key, value of @options.extend
