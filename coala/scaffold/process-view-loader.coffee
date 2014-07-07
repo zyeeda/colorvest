@@ -17,7 +17,7 @@ define [
 
         edit: ->
             grid = @feature.views['process:body-'+@feature.activeTab].components[0]
-            view = @feature.views['form:edit']
+            view = @feature.views['process-form:edit']
             app = @feature.module.getApplication()
             selected = grid.getSelected()
             return app.info '请选择要操作的记录' if not selected
@@ -27,7 +27,7 @@ define [
                 viewLoader.submitHandler.call @,
                     submitSuccess: (type) =>
                         @feature.views['process:body-'+@feature.activeTab].components[0].refresh()
-                , 'form:edit', viewLoader.getDialogTitle(@feature.views['form:edit'], 'edit', '编辑'), 'edit'
+                , 'process-form:edit', viewLoader.getDialogTitle(@feature.views['process-form:edit'], 'edit', '编辑'), 'edit'
 
         del: ->
             grid = @feature.views['process:body-'+@feature.activeTab].components[0]
@@ -129,11 +129,8 @@ define [
             if @feature.activeTab is 'waiting'
                 buttons.push claimButton
                 buttons.push completeButton
-                # buttons.push claimCompleteButton
             else if @feature.activeTab is 'doing'
                 buttons.push completeButton
-            # else if @feature.activeTab is 'done'
-                # buttons.push recallButton
 
             $.when(view.model.fetch()).then =>
                 view.model._t_taskId = view.model.get '_t_taskId'

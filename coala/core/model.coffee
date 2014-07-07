@@ -7,8 +7,7 @@ define [
             # url = @view?.url() or @feature?.url() or ''
             if @feature.baseName is 'inline-grid'
             	url = @view?.url() or @feature?.url() or ''
-            	if @feature.startupOptions.url
-	            	# url = url.replace 'inline-grid', ''
+            	if @feature.startupOptions.gridOptions.form.options.feature.activeTab and @feature.startupOptions.url
 	            	url = @feature.startupOptions.url + '/history/' + @feature.startupOptions.gridOptions.form.model.get 'id'
             else
             	url = @view?.url() or @feature?.url() or ''
