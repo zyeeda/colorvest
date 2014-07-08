@@ -41,6 +41,8 @@ define [
                 views.push name: 'process:body-waiting', region: 'body_waiting'
                 views.push 'process-form:show'
                 views.push 'process-form:complete'
+                views.push 'process-form:reject'
+                views.push 'process-form:recall'
                 opts.activeTab = 'waiting'
 
             if data.style isnt 'process'

@@ -6,13 +6,26 @@ define [
     'coala/scaffold/abstract-view-loader'
 ], ($, _, View, config, viewLoader) ->
 
+    # 操作完成后刷新页面
+    kit = 
+        refresh: (feature) ->
+            activeTab = feature.activeTab
+            feature.activeTab = 'waiting'
+            feature.views['process:body-waiting']?.components[0]?.refresh()
+            feature.activeTab = 'doing'
+            feature.views['process:body-doing']?.components[0]?.refresh()
+            feature.activeTab = 'done'
+            feature.views['process:body-done']?.components[0]?.refresh()
+            feature.activeTab = 'none'
+            feature.views['process:body-none']?.components[0]?.refresh()
+            feature.activeTab = activeTab
+
     handlers =
         add: ->
             viewLoader.submitHandler.call @,
                 submitSuccess: (type) =>
                     @feature.views['process:body-none'].components[0].refresh()
                     @feature.views['process:body-waiting']?.components[0]?.refresh()
-            # , 'process-form:add', viewLoader.getDialogTitle(@feature.views['process-form:add'], 'add', '新增'), 'add'
             , 'process-form:add', '新增', 'add'
 
         edit: ->
@@ -46,8 +59,7 @@ define [
 
         show: ->
             grid = @feature.views['process:body-'+@feature.activeTab].components[0]
-            viewName = 'process-form:show'
-            view = @feature.views[viewName]
+            view = @feature.views['process-form:show']
             selected = grid.getSelected()
             view.model.set selected
             app = @feature.module.getApplication()
@@ -58,39 +70,94 @@ define [
                 label: '认领',
                 status: 'btn-primary'
                 fn: =>
-                    id = view.model.get 'id'
-                    view.model.taskOperatorType = 'claim'
-                    view.submit(id: id).done (data) =>
-                        view.model.taskOperatorType = undefined
-                        @feature.views['process:body-waiting'].components[0].refresh()
-                        @feature.views['process:body-doing']?.components[0]?.refresh()
-                        @
-                    
+                    app.confirm '确定认领此任务么?', (confirmed) =>
+                        return if not confirmed
+                        view = @feature.views['process-form:show']
+                        # confirm 后， view下 model 的属性会消失 ？？？
+                        selected = grid.getSelected()
+                        view.model.set selected
+                        id = view.model.get 'id'
+                        view.model.taskOperatorType = 'claim'
+                        view.submit(id: id).done (data) =>
+                            delete view.model.taskOperatorType
+                            kit.refresh @feature
+                            @
+            
             rejectButton = 
-                label: '回退',
+                label: '回退...',
                 status: 'btn-primary'
                 fn: =>
-                    id = view.model.get 'id'
-                    view.model.taskOperatorType = 'reject'
-                    view.submit(id: id).done (data) =>
-                        view.model.taskOperatorType = undefined
-                        @feature.views['process:body-waiting']?.components[0]?.refresh()
-                        @feature.views['process:body-doing']?.components[0]?.refresh()
-                        @feature.views['process:body-none']?.components[0]?.refresh()
-                        @
+                    v = @feature.views['process-form:reject']
+                    btns = []
+                    rejectBtn = 
+                        label: '回退',
+                        status: 'btn-primary'
+                        fn: =>
+                            id = v.model.get 'id'
+                            v.model.taskOperatorType = 'reject'
+                            v.dialogFeature.close()
+
+                            v.submit(id: id).done (data) =>
+                                view.dialogFeature.modal.modal "hide"
+                                v.model.taskOperatorType = undefined
+                                kit.refresh @feature
+                                @
+                            false
+                    btns.push rejectBtn
+                    app.showDialog(
+                        view: v
+                        onClose: ->
+                            view.model.clear()
+                        title: '回退任务'
+                        buttons: btns
+                    ).done ()->
+                        view.setFormData view.model.toJSON()
+                    false # 点击按钮后是否关闭窗口
             recallButton = 
-                label: '召回',
+                label: '召回...',
                 status: 'btn-primary'
                 fn: =>
-                    id = view.model.get 'id'
-                    view.model.taskOperatorType = 'recall'
-                    view.submit(id: id).done (data) =>
-                        view.model.taskOperatorType = undefined
-                        @feature.views['process:body-waiting']?.components[0]?.refresh()
-                        @feature.views['process:body-doing']?.components[0]?.refresh()
-                        @
+                    app.confirm '确定召回此任务么?', (confirmed) =>
+                        return if not confirmed
+                        selected = grid.getSelected()
+                        view.model.set selected
+                        id = view.model.get 'id'                        
+                        view.model.taskOperatorType = 'recall'
+                        view.submit(id: id).done (data) =>
+                            view.model.taskOperatorType = undefined
+                            kit.refresh @feature
+                            @
+                    # 增加召回原因，由于目前流程任务只能在完成之前添加 comment， 
+                    # 所以此项功能尚无法启用
+                    # v = @feature.views['process-form:recall']
+                    # btns = []
+                    # recallBtn = 
+                    #     label: '召回',
+                    #     status: 'btn-primary'
+                    #     fn: =>
+                    #         id = v.model.get 'id'
+                    #         v.model.taskOperatorType = 'recall'
+                    #         v.dialogFeature.close()
+
+                    #         v.submit(id: id).done (data) =>
+                    #             view.dialogFeature.modal.modal "hide"
+                    #             delete v.model.taskOperatorType
+                    #             kit.refresh @feature
+                    #             @
+                    #         false
+                    # btns.push recallBtn
+                    # app.showDialog(
+                    #     view: v
+                    #     onClose: ->
+                    #         view.model.clear()
+                    #     title: '召回任务'
+                    #     buttons: btns
+                    # ).done ()->
+                    #     view.setFormData view.model.toJSON()
+                    # false # 点击按钮后是否关闭窗口
+
             completeButton = 
-                label: '完成',
+                label: '完成...',
                 status: 'btn-primary'
                 fn: =>
                     v = @feature.views['process-form:complete']
@@ -100,18 +167,13 @@ define [
                         status: 'btn-primary'
                         fn: =>
                             id = v.model.get 'id'
-                            window._v = v
-                            window._view = view
                             v.model.taskOperatorType = 'complete'
                             v.dialogFeature.close()
-                            # view.dialogFeature.close()
+
                             v.submit(id: id).done (data) =>
                                 view.dialogFeature.modal.modal "hide"
-                                v.model.taskOperatorType = undefined
-                                @feature.views['process:body-doing']?.components[0]?.refresh()
-                                @feature.views['process:body-waiting']?.components[0]?.refresh()
-                                @feature.views['process:body-done']?.components[0]?.refresh()
-                                @feature.views['process:body-none']?.components[0]?.refresh()
+                                delete v.model.taskOperatorType
+                                kit.refresh @feature
                                 @
                             false
                     btns.push completeBtn
@@ -134,8 +196,9 @@ define [
 
             $.when(view.model.fetch()).then =>
                 view.model._t_taskId = view.model.get '_t_taskId'
-                # 回退按钮
+                # 回退按钮, 可以回退并且已经被认领的情况下显示
                 buttons.push rejectButton if view.model.get('_t_rejectable') is true
+                # 召回按钮
                 buttons.push recallButton if view.model.get('_t_recallable') is true
                 app.showDialog(
                     view: view
@@ -151,7 +214,7 @@ define [
 
         refresh: ->
             grid = @feature.views['process:body-'+@feature.activeTab].components[0]
-            grid.addParam('_task_type', @feature.activeTab) 
+            # grid.addParam('_task_type', @feature.activeTab) 
             grid.refresh()
 
     resetGridHeight = (table) ->
@@ -171,13 +234,6 @@ define [
             viewLoader.generateTabsView
                 handlers: {}
                 , module, feature, deferred
-
-            # tab 加载完成后加载 toolbar 和 grid
-            views = []
-            # $.when(deferred).done ->
-            #     # window._waiting = $("a[href='#waiting']")
-            #     $("a[href='#waiting']").hide()
-            #     # $('.t-waiting').hide()
             
         else if viewName.indexOf('toolbar-') is 0
             viewLoader.generateOperatorsView 

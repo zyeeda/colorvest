@@ -34,6 +34,7 @@ define ->
             views.push name: 'process:body-doing', region: 'body-doing' # 对应标签下的列表内容
             views.push 'process-form:show' if not @feature.views['process-form:show']
             views.push 'process-form:complete' if not @feature.views['process-form:complete']
+            views.push 'process-form:reject' if not @feature.views['process-form:reject']
 
             deferredView = @feature.initViews views
             _feature = @feature
