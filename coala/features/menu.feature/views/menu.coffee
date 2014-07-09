@@ -27,7 +27,7 @@ define [
                 {{#unless isRoot}}<i class="icon-double-angle-right"></i>{{/unless}}
                 {{#if iconClass}}<i class="{{iconClass}}"></i>{{/if}}
                 <span class="menu-text">{{name}}</span><b class="arrow icon-angle-down"></b> </a>
-                <ul class="submenu">{{{childrenHtml}}}</ul>
+                <ul class="submenu" {{#opened}}style="display:block;"{{/opened}}>{{{childrenHtml}}}</ul>
             </li>
         '''
 
