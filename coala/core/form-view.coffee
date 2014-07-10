@@ -169,6 +169,8 @@ define [
                 @model.set @feature.extraFormData if @feature.extraFormData
                 @model.set options
                 @model.save().done (data) ->
+                    if data.violations
+                        deferred.reject data
                     deferred.resolve data
 
             deferred.promise()
