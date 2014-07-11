@@ -170,8 +170,9 @@ define [
                 @model.set options
                 @model.save().done (data) ->
                     if data.violations
-                        deferred.reject data
-                    deferred.resolve data
+                        deferred.reject()
+                    else
+                        deferred.resolve data
 
             deferred.promise()
 

@@ -100,7 +100,7 @@ define [
 
                 if _.isFunction scaffold.afterCloseDialog
                     scaffold.afterCloseDialog.call view, type, view, data
-            # false
+            false
 
         app.showDialog(
             view: view

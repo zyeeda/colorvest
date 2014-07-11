@@ -14,7 +14,6 @@ define ["underscore"], (_) ->
                     return if @$(id).hasClass('disabled')
                     result = fn.apply(this, [b])
                     # @feature.modal.modal "hide"  if result isnt false
-                    @feature.modal.modal "hide" if result.isResolved()
                 ).bind(this, buttons[i].fn, buttons[i])
                 i++
             el = @$el
