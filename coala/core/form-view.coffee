@@ -168,12 +168,11 @@ define [
                 @getFormData()
                 @model.set @feature.extraFormData if @feature.extraFormData
                 @model.set options
-                @model.save().done (data) ->
-                    if data.violations
-                        deferred.reject()
-                    else
-                        deferred.resolve data
-
+                @model.save()
+                .done (data) ->
+                    deferred.resolve data
+                .fail (data) ->
+                    deferred.reject()
             deferred.promise()
 
         getMaxColumns: ->
