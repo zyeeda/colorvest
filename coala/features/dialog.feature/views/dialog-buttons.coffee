@@ -13,7 +13,7 @@ define ["underscore"], (_) ->
                 @eventHandlers[id] = _((fn, b) ->
                     return if @$(id).hasClass('disabled')
                     result = fn.apply(this, [b])
-                    # @feature.modal.modal "hide"  if result isnt false
+                    @feature.modal.modal "hide"  if result isnt false
                 ).bind(this, buttons[i].fn, buttons[i])
                 i++
             el = @$el
