@@ -75,8 +75,8 @@ define [ 'jquery'
     adaptColumn = (col, view) ->
         col = name: col, header: col if _.isString col
         o =
-            bSearchable: !!col.searchable
-            bSortable: col.sortable isnt false
+            bSearchable: !!col.searchable and col.name.lastIndexOf('.') is -1
+            bSortable: col.sortable isnt false and col.name.lastIndexOf('.') is -1
             bVisible: col.visible isnt false
             aDataSort: col.dataSort if col.dataSort
             asSorting: col.sorting if col.sorting
@@ -101,7 +101,7 @@ define [ 'jquery'
                 else
                     scaffold = view.feature.options.scaffold or {}
                     renderers = scaffold.renderers or {}
-                
+
                 throw new Error("no renderer can be found in name: #{col.renderer}") if not renderers[col.renderer]
                 o.mRender = _.bind renderers[col.renderer], view
         o
