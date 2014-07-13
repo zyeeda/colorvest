@@ -86,7 +86,7 @@ define [ 'jquery'
             mData: col.name if col.name
             sCellType: col.cellType if col.cellType
             sClass: col.style if col.style
-            sDefaultContent: col.defaultContent if col.defaultContent isnt null
+            sDefaultContent: col.defaultContent or ''
             sName: col.name if col.name
             sTitle: col.header if col.header
             sType: col.type if col.type
