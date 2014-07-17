@@ -141,7 +141,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
             data = grid.fnGetData()
             for d in data or []
                 ids.push d.id
-
+            grid.clear()
             for v in values or []
                 if ($.inArray v.id, ids) is -1
                     grid.addRow v
