@@ -14,6 +14,7 @@ define [
             @hideLabel = options.hideLabel
             @label = options.label or @name
             @readOnly = !!options.readOnly
+            @disabled = !!options.disabled
             @required = !!options.required
             @visible = true
             @type = options.type

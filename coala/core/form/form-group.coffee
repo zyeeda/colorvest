@@ -18,6 +18,8 @@ define [
                 if @options.readOnly is true
                     field = name: field, type: 'text' if _.isString field
                     field.readOnly = true
+                if @options.disabled is true
+                    field.disabled = true
                 (if field.type is 'hidden' then @hiddenFields else @fields).push FormField.build field, @, form
 
 

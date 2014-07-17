@@ -12,7 +12,7 @@ define [
                 hideLabel: false
                 path: 'coala:inline-grid'
                 options:
-                    allowPick: options.allowPick, allowAdd: options.allowAdd, allowEdit: options.allowEdit, url: options.source, readOnly: options.readOnly
+                    allowPick: options.allowPick, allowAdd: options.allowAdd, allowEdit: options.allowEdit, url: options.source, readOnly: options.readOnly || options.disabled
                     gridOptions: deferLoading: 0, paginate: false, multiple: options.multiple is true, form: form
                     loadViewFormDeferred: options.loadViewFormDeferred or undefined, disableShow: options.disableShow
             , options

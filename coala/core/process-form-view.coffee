@@ -207,7 +207,11 @@ define [
             promises.push @renderComponents() if @needExtraComponentRender is true
             @eachField (field) ->
                 promises.push field.afterRender()
-
+                if field.disabled
+                    if ' grid-picker tree-picker file-picker'.indexOf(field.type) > 0
+                        $('#trigger-a-' + field.id, field.form.$el).unbind().css('cursor', 'not-allowed')
+                    else
+                        field.form.$(field.id).attr('disabled', true)
             $.when.apply($, promises).then =>
                 $.when(@bindValidation()).then ->
                     deferred.resolve @
