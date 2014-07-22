@@ -106,8 +106,10 @@ define [
                     refresh: ->
                         v = @feature.views['grid:toolbar']
                         initVisibility.call v, v.options.operators
-                    adjustGridHeight: -> resetGridHeight(@components[0])
-                    deferAdjustGridHeight: -> _.defer => resetGridHeight(@components[0])
+                    adjustGridHeight: ->
+                        resetGridHeight(@components[0]) if @components and @components[0]
+                    deferAdjustGridHeight: -> _.defer =>
+                        resetGridHeight(@components[0]) if @components and @components[0]
             , module, feature, deferred
 
         deferred
