@@ -10,8 +10,6 @@ define [
         getTemplateString: ->
             '<input id="<%= id %>" type="hidden" name="<%= name %>" value="{{<%= value %>}}"/>'
 
-        loadFormData: ->
-
     FormField.add 'hidden', HiddenField
 
     HiddenField
