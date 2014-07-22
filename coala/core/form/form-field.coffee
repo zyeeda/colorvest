@@ -29,7 +29,9 @@ define [
             @form.$(@id).val()
 
         loadFormData: (value, data) ->
-            value = '' if value == null or value == undefined
+            if value == null or value == undefined
+                value = ''
+                value = @options.defaultValue if @options.defaultValue
             if _.isArray value
                 idx = _.indexOf @form.findField(@name), @
                 return @loadFormData value[idx]
