@@ -125,7 +125,6 @@ define [
                     data[field.name].push field.getFormData()
                 else
                     data[field.name] = field.getFormData()
-
             @model.clear()
             @model.set data
             @model.toJSON()
@@ -142,12 +141,12 @@ define [
             @eachField (field) ->
                 _.each components, (n, i) ->
                     if n && n['__options__'].name == field.name
-                        field.loadFormData data[field.name], data if _.has data, field.name
+                        field.loadFormData data[field.name], data if _.has(data, field.name) or ' __ID__ __FORM_TYPE__ __FORM__FLAG__'.indexOf(field.name) > 0
 
         setFormData: (data = {}, onlyExists) ->
             @eachField (field) ->
                 if onlyExists is true
-                    field.loadFormData data[field.name], data if _.has data, field.name
+                    field.loadFormData data[field.name], data if _.has(data, field.name) or ' __ID__ __FORM_TYPE__ __FORM__FLAG__'.indexOf(field.name) > 0  
                 else
                     field.loadFormData data[field.name], data
 
@@ -266,7 +265,7 @@ define [
             <form class="<%= formClass %>">
                 <%= content %>
                 <%= hiddens %>
-                <input type="hidden" name="__formName__" value="<%= formName %>"/>
+                <input type="hidden" name="__FORM_NAME__" value="<%= formName %>"/>
             </form>
         '''
         getTabLayoutTemplate: -> _.template '''

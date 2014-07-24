@@ -289,7 +289,7 @@ define [
             <form class="<%= formClass %>">
                 <%= content %>
                 <%= hiddens %>
-                <input type="hidden" name="__formName__" value="<%= formName %>"/>
+                <input type="hidden" name="__FORM_NAME__" value="<%= formName %>"/>
             </form>
         '''
         getTabLayoutTemplate: -> _.template '''

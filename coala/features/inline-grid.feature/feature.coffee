@@ -26,13 +26,12 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                 su.apply @
                 picker = @components[0]
                 app = @feature.module.getApplication()
-
+                grid = @feature.views['inline:grid'].components[0]
                 if picker
-                    grid = @feature.views['inline:grid'].components[0]
                     picker.setValue = (value) ->
                         value = [value] unless _.isArray value
-
                         data = grid.fnGetData()
+
                         for v in value
                             exists = false
                             exists = true for d in data when d.id is v.id
@@ -40,7 +39,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                     picker.getFormData = ->
                         grid.fnGetData()
 
-                if not @loadViewFormDeferred and (@feature.startupOptions and not @feature.startupOptions.loadViewFormDeferred)
+                if not @loadViewFormDeferred and (@feature.startupOptions and not @feature.startupOptions.loadViewFormDeferred) 
                     @loadViewFormDeferred = $.Deferred()
                     url = app.url @feature.startupOptions.url + '/configuration/forms/show'
                     $.get(url).done (data) =>
@@ -56,10 +55,10 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                             groups: data.groups or []
                             tabs: data.tabs
                         view = if def.custom then new CustomFormView def else new FormView def
+                        grid.initData = grid.fnGetData() if !grid.initData
                         @loadViewFormDeferred.resolve view, data.entityLabel
 
                 if @feature.startupOptions.allowAdd
-
                     if not @loadAddFormDeferred
                         @loadAddFormDeferred = $.Deferred()
 
@@ -81,7 +80,6 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                             @loadAddFormDeferred.resolve view, data.entityLabel
 
                 if @feature.startupOptions.allowEdit or true
-
                     if not @loadEditFormDeferred
                         @loadEditFormDeferred = $.Deferred()
                         url = app.url @feature.startupOptions.url + '/configuration/forms/edit'
@@ -149,13 +147,29 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
         getFormData: ->
             grid = @views['inline:grid'].components[0]
             view = @views['inline:operators']
-            data = grid.fnGetData()
-            return [null] if not data.length
+            data = grid.fnGetData() || []
+            initData = grid.initData || []
+            for inda in initData
+                if !_.findWhere(data, {id: inda.id})
+                    inda['__ID__'] = inda.id
+                    inda['__FORM_TYPE__'] = 'delete'
+                    inda['__FORM_FLAG__'] = 'true'
+                    data = data.concat inda
             ids = []
-            ids.push d.id for d in data when not view.fakeId(d.id)
             for d in data
-                if view.fakeId(d.id)
-                    dd = _.extend {}, d
-                    delete dd.id
-                    ids.push dd
+                dd = _.extend {}, d
+                delete dd.id if d.id.indexOf('FAKEID-') is 0   
+                ids.push dd
             ids
+
+            # return [] if not data.length
+            # ids = []
+            # ids.push d.id for d in data when not view.fakeId(d.id)
+            # for d in data
+            #     if view.fakeId(d.id)
+            #         dd = _.extend {}, d
+            #         delete dd.id
+            #         ids.push dd
+            # ids
+            # return [] if not data.length
+            # data

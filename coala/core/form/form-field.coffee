@@ -29,14 +29,13 @@ define [
             @form.$(@id).val()
 
         loadFormData: (value, data) ->
-            if value == null or value == undefined
-                value = ''
-                value = @options.defaultValue if @options.defaultValue
+            value = @options.defaultValue or '' if value == null or value == undefined
+            value = data[@value] if @value isnt @name
             if _.isArray value
                 idx = _.indexOf @form.findField(@name), @
                 return @loadFormData value[idx]
             if @readOnly then @form.$(@id).text(value) else @form.$(@id).val(value)
-
+        
         isReadOnly: ->
             @readOnly
 

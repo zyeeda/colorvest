@@ -50,6 +50,7 @@ define
                         grid.addRow data
                 ]
             .done ->
+                form.reset()
                 if _.isFunction gridView.afterShowInlineGridDialog
                     gridView.afterShowInlineGridDialog.call @, 'add', form, {}
 
@@ -86,7 +87,8 @@ define
                             return false unless (gridView.validInlineGridFormData.call @, 'edit', form, form.getFormData()) is true
 
                         d = form.getFormData()
-                        d.id = @fakeId()
+                        # 更新有id，不需要再自动生成
+                        # d.id = @fakeId()
                         idx = grid.getSelectedIndex()
                         idx = idx[0] if _.isArray idx
                         grid.fnDeleteRow idx 

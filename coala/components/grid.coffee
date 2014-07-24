@@ -198,11 +198,17 @@ define [ 'jquery'
                     name: 'id'
                     header: if options.multiple then '<input type="checkbox" class="select-all" id="check-all-' + view.cid + '"> <label class="lbl"/>' else ''
                     width: '25px'
-                    renderer: (data) -> """
-                        <input type="#{if options.multiple then 'checkbox' else 'radio'}"
-                        id="chk-#{data}" value="#{data}" class="select-row" name="chk-#{view.cid}"/>
-                        <label class="lbl"></lable>
-                    """
+                    renderer: (data, type, row, a) ->
+                        if row['__FORM_TYPE__'] == 'delete'
+                            return """
+                            <input type="hidden" id="chk-#{data}" value="#{data}" class="select-row" name="chk-#{view.cid}" />
+                            <span class="red-fork">×</lable>
+                            """
+                        """
+                            <input type="#{if options.multiple then 'checkbox' else 'radio'}"
+                            id="chk-#{data}" value="#{data}" class="select-row" name="chk-#{view.cid}"/>
+                            <label class="lbl"></lable>
+                        """
             if options.numberColumn is true
                 columns.unshift
                     sortable: false, searchable: false, name: '_i', header: '#', width: '25px'

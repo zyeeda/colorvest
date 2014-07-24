@@ -28,6 +28,7 @@ define [
             extraFields: @options.extraFields or []
             form: @form
             multiple: !!@options.multiple
+            textKey: @options.textKey
 
         getComponents: ->
             if @readOnly then [] else [@getComponent()]

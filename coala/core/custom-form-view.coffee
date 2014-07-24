@@ -54,7 +54,7 @@ define [
         getTemplateString: -> '''
             <form class="<%= formClass %>">
                 <%= content %>
-                <input type="hidden" name="__formName__" value="<%= formName %>"/>
+                <input type="hidden" name="__FORM_NAME__" value="<%= formName %>"/>
             </form>
         '''
     

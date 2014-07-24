@@ -79,3 +79,9 @@ div.modal-body {
 .hasDatepicker {
     border: 1px solid #d5d5d5;
 }
+
+.red-fork {
+    font-size: 20px;
+    color: #FF0000;
+    font-weight: bold;
+}
