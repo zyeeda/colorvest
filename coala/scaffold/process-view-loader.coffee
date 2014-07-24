@@ -68,7 +68,7 @@ define [
             view.model.set selected
             claimButton = 
                 label: '认领',
-                status: 'btn-primary'
+                status: 'btn-purple'
                 fn: =>
                     app.confirm '确定认领此任务么?', (confirmed) =>
                         return if not confirmed
@@ -85,13 +85,13 @@ define [
             
             rejectButton = 
                 label: '回退...',
-                status: 'btn-primary'
+                status: 'btn-inverse'
                 fn: =>
                     v = @feature.views['process-form:reject']
                     btns = []
                     rejectBtn = 
                         label: '回退',
-                        status: 'btn-primary'
+                        status: 'btn-inverse'
                         fn: =>
                             id = v.model.get 'id'
                             v.model.taskOperatorType = 'reject'
@@ -99,7 +99,7 @@ define [
 
                             v.submit(id: id).done (data) =>
                                 view.dialogFeature.modal.modal "hide"
-                                v.model.taskOperatorType = undefined
+                                delete v.model.taskOperatorType
                                 kit.refresh @feature
                                 @
                             false
@@ -115,56 +115,57 @@ define [
                     false # 点击按钮后是否关闭窗口
             recallButton = 
                 label: '召回...',
-                status: 'btn-primary'
+                status: 'btn-inverse'
                 fn: =>
-                    app.confirm '确定召回此任务么?', (confirmed) =>
-                        return if not confirmed
-                        selected = grid.getSelected()
-                        view.model.set selected
-                        id = view.model.get 'id'                        
-                        view.model.taskOperatorType = 'recall'
-                        view.submit(id: id).done (data) =>
-                            view.model.taskOperatorType = undefined
-                            kit.refresh @feature
-                            @
+                    # app.confirm '确定召回此任务么?', (confirmed) =>
+                    #     return if not confirmed
+                    #     selected = grid.getSelected()
+                    #     view.model.set selected
+                    #     id = view.model.get 'id'
+                    #     view.model.taskOperatorType = 'recall'
+                    #     view.submit(id: id).done (data) =>
+                    #         delete view.model.taskOperatorType
+                    #         kit.refresh @feature
+                    #         @
+                    
                     # 增加召回原因，由于目前流程任务只能在完成之前添加 comment， 
                     # 所以此项功能尚无法启用
-                    # v = @feature.views['process-form:recall']
-                    # btns = []
-                    # recallBtn = 
-                    #     label: '召回',
-                    #     status: 'btn-primary'
-                    #     fn: =>
-                    #         id = v.model.get 'id'
-                    #         v.model.taskOperatorType = 'recall'
-                    #         v.dialogFeature.close()
+                    v = @feature.views['process-form:recall']
+                    btns = []
+                    recallBtn = 
+                        label: '召回',
+                        status: 'btn-inverse'
+                        fn: =>
+                            id = v.model.get 'id'
+                            v.model.taskOperatorType = 'recall'
+                            v.dialogFeature.close()
 
-                    #         v.submit(id: id).done (data) =>
-                    #             view.dialogFeature.modal.modal "hide"
-                    #             delete v.model.taskOperatorType
-                    #             kit.refresh @feature
-                    #             @
-                    #         false
-                    # btns.push recallBtn
-                    # app.showDialog(
-                    #     view: v
-                    #     onClose: ->
-                    #         view.model.clear()
-                    #     title: '召回任务'
-                    #     buttons: btns
-                    # ).done ()->
-                    #     view.setFormData view.model.toJSON()
-                    # false # 点击按钮后是否关闭窗口
+                            v.submit(id: id).done (data) =>
+                                view.dialogFeature.modal.modal "hide"
+                                delete v.model.taskOperatorType
+                                kit.refresh @feature
+                                @
+                            false
+                    btns.push recallBtn
+                    app.showDialog(
+                        view: v
+                        onClose: ->
+                            view.model.clear()
+                        title: '召回任务'
+                        buttons: btns
+                    ).done ()->
+                        view.setFormData view.model.toJSON()
+                    false # 点击按钮后是否关闭窗口
 
             completeButton = 
                 label: '完成...',
-                status: 'btn-primary'
+                status: 'btn-success'
                 fn: =>
                     v = @feature.views['process-form:complete']
                     btns = []
                     completeBtn = 
                         label: '完成',
-                        status: 'btn-primary'
+                        status: 'btn-success'
                         fn: =>
                             id = v.model.get 'id'
                             v.model.taskOperatorType = 'complete'

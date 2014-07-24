@@ -52,8 +52,11 @@ define [
                     "allowPick": false
                     "pickerType": "grid-picker"
                     "disableShow": true
+                    allowEdit: false
+                    allowAdd: false
+                    # deferLoading: 1
                     readOnly: true
-                    loadViewFormDeferred: true
+                    # loadViewFormDeferred: true
                     "source": url
                     grid: 
                         columns:[
