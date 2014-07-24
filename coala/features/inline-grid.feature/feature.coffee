@@ -40,9 +40,15 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                     picker.getFormData = ->
                         grid.fnGetData()
 
-                if not @loadViewFormDeferred and (@feature.startupOptions and not @feature.startupOptions.loadViewFormDeferred)
+                # if not @loadViewFormDeferred and (@feature.startupOptions and not @feature.startupOptions.loadViewFormDeferred)
+                if not @loadViewFormDeferred
                     @loadViewFormDeferred = $.Deferred()
-                    url = app.url @feature.startupOptions.url + '/configuration/forms/show'
+
+                    # style is 'process'
+                    if @feature.startupOptions.gridOptions.form.options.feature.activeTab and @feature.startupOptions.url
+                        url = @feature.startupOptions.url + '/history/' + @feature.startupOptions.gridOptions.form.model.get 'id'
+                    else
+                        url = app.url @feature.startupOptions.url + '/configuration/forms/show'
                     $.get(url).done (data) =>
                         def = _.extend
                             baseName: 'show'
@@ -58,7 +64,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                         view = if def.custom then new CustomFormView def else new FormView def
                         @loadViewFormDeferred.resolve view, data.entityLabel
 
-                if @feature.startupOptions.allowAdd
+                if @feature.startupOptions.allowAdd is true
 
                     if not @loadAddFormDeferred
                         @loadAddFormDeferred = $.Deferred()
@@ -80,7 +86,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                             view = if def.custom then new CustomFormView def else new FormView def
                             @loadAddFormDeferred.resolve view, data.entityLabel
 
-                if @feature.startupOptions.allowEdit or true
+                if @feature.startupOptions.allowEdit is true
 
                     if not @loadEditFormDeferred
                         @loadEditFormDeferred = $.Deferred()
@@ -128,7 +134,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
             _.extend
                 type: 'grid'
                 selector: 'grid'
-                data: []
+                # data: []
                 fixedHeader: false
             , options
         ]
