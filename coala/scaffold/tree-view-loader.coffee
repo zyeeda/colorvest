@@ -16,7 +16,7 @@ define [
                 submitSuccess: =>
                     @feature.views['form:add'].model.set isParent: true
                     selected = tree.getNodeByParam('id', '-1') if not selected
-                    if selected['__inited__'] is true
+                    if selected and selected['__inited__'] is true
                         tree.addNodes selected, @feature.views['form:add'].model.toJSON(), false
                     else
                         tree.expandNode selected, true, false, true, true
