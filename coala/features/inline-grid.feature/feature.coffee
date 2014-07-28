@@ -39,7 +39,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                     picker.getFormData = ->
                         grid.fnGetData()
 
-                if not @loadViewFormDeferred and (@feature.startupOptions and not @feature.startupOptions.loadViewFormDeferred) 
+                if not @loadViewFormDeferred and (@feature.startupOptions and not @feature.startupOptions.loadViewFormDeferred)
                     @loadViewFormDeferred = $.Deferred()
                     url = app.url @feature.startupOptions.url + '/configuration/forms/show'
                     $.get(url).done (data) =>
@@ -79,7 +79,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                             view = if def.custom then new CustomFormView def else new FormView def
                             @loadAddFormDeferred.resolve view, data.entityLabel
 
-                if @feature.startupOptions.allowEdit or true
+                if @feature.startupOptions.allowEdit is true
                     if not @loadEditFormDeferred
                         @loadEditFormDeferred = $.Deferred()
                         url = app.url @feature.startupOptions.url + '/configuration/forms/edit'
@@ -96,7 +96,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
                                 groups: data.groups or []
                                 tabs: data.tabs
                             view = if def.custom then new CustomFormView def else new FormView def
-                            @loadEditFormDeferred.resolve view, data.entityLabel                
+                            @loadEditFormDeferred.resolve view, data.entityLabel
 
             serializeData: (su) ->
                 data = su.apply @
@@ -126,7 +126,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
             _.extend
                 type: 'grid'
                 selector: 'grid'
-                data: []
+                # data: []
                 fixedHeader: false
             , options
         ]
@@ -158,7 +158,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
             ids = []
             for d in data
                 dd = _.extend {}, d
-                delete dd.id if d.id.indexOf('FAKEID-') is 0   
+                delete dd.id if d.id.indexOf('FAKEID-') is 0
                 ids.push dd
             ids
 
