@@ -46,7 +46,6 @@ div.modal {
 
 div.modal-body {
     max-height: inherit;
-    height: 400px;
 }
 
 .filter_column {display:inline-block !important; width:100% !important;}
