@@ -126,7 +126,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
             _.extend
                 type: 'grid'
                 selector: 'grid'
-                # data: []
+                data: []
                 fixedHeader: false
             , options
         ]
