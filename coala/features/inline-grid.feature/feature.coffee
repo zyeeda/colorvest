@@ -119,6 +119,7 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
             @beforeShowInlineGridDialog = scaffold.beforeShowInlineGridDialog
             @afterShowInlineGridDialog = scaffold.afterShowInlineGridDialog
             @validInlineGridFormData = scaffold.validInlineGridFormData
+            @beforeShowPicker = scaffold.beforeShowPicker
 
             for column in columns
                 column.renderer = renderers[column.renderer] if _.isString(column.renderer)

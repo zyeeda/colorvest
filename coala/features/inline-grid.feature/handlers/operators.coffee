@@ -2,6 +2,11 @@ define
     showPicker: ->
         picker = @components[0]
         return unless picker
+
+        gridView = @feature.views['inline:grid']
+        if _.isFunction gridView.beforeShowPicker
+            return unless (gridView.beforeShowPicker.call @, picker, gridView) is true
+
         picker.chooser.show(picker).done (feature) ->
             removeSelectedNodes() if removeSelectedNodes = feature.inRegionViews.body.components[0].removeSelectedNodes
 
