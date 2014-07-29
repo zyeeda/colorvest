@@ -49,14 +49,8 @@ define [
                 content[field.name] = field.getTemplate()
                 content[field.name + 'Id'] = field.id
             o.content = @tpl(content)
+            o.hiddens = (group.getHiddenFieldsTemplate() for group in @groups).join ''
             template = _.template(@getTemplateString()) o
-
-        getTemplateString: -> '''
-            <form class="<%= formClass %>">
-                <%= content %>
-                <input type="hidden" name="__FORM_NAME__" value="<%= formName %>"/>
-            </form>
-        '''
     
     View.add 'custom-form-view', CustomFormView
 
