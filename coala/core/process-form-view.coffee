@@ -45,7 +45,7 @@ define [
         initForm: (form, fieldGroups, options) ->
             # form 下的 group
             url = options.feature.url()
-            _.last(form.groups).columns = undefined
+            # _.last(form.groups).columns = undefined
             fieldGroups['history-group'] = [
                 {
                     type: 'inline-grid'
@@ -54,11 +54,11 @@ define [
                     "disableShow": true
                     allowEdit: false
                     allowAdd: false
-                    # deferLoading: 1
+                    needDeferLoading: false
                     readOnly: true
-                    # loadViewFormDeferred: true
+                    loadViewFormDeferred: true
                     "source": url
-                    grid: 
+                    grid:
                         columns:[
                             {name:'name', header:'任务名称', width: 160},
                             {name:'assigneeName', header:'执行人', width: 80},
@@ -273,7 +273,7 @@ define [
                             group = @findGroup(group)
                             unused = _.without unused, group
                             group.getTemplate()
-                        ).join(''), id: id, i: i  
+                        ).join(''), id: id, i: i
                     contents.push tabContent
                 # 表示没有在 tab 中使用到的组，显示在所有的 tab 的上方
                 unused = []
@@ -314,16 +314,16 @@ define [
             <div class="tab-pane <%if (i == 0) {%>active<%}%>" id="<%= id %>">
                 <%= content %>
             </div>
-        '''        
+        '''
         getProcessTabContentTemplate: -> _.template '''
             <div class="tab-pane <%if (i == 0) {%>active<%}%>" id="<%= id %>">
                 <%= content %>
                 <div></div>
             </div>
-        '''  
+        '''
         getHistoryTabContentTemplate: -> _.template '''
-            <div class="tab-pane" id="<%= id %>"> 
-                <%= content %> 
+            <div class="tab-pane" id="<%= id %>">
+                <%= content %>
             </div>
         '''
     ProcessFormView.FormGroup = FormGroup

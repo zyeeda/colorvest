@@ -16,6 +16,10 @@ define [
                     gridOptions: deferLoading: 0, paginate: false, multiple: options.multiple is true, form: form
                     loadViewFormDeferred: options.loadViewFormDeferred or undefined, disableShow: options.disableShow
             , options
+            # 用于流程历史历史信息 inline-grid 使用
+            if options.needDeferLoading is false
+                delete opt.options.gridOptions.deferLoading
+
             _.extend opt.options.gridOptions, options.grid
             if options.allowPick is true
                 opt.options.picker =
