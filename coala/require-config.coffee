@@ -3,7 +3,7 @@ require =
         text: 'coala/vendors/require/plugins/text'
 
         jquery: 'coala/vendors/jquery/jquery'
-        underscore: 'coala/vendors/lodash'
+        underscore: 'coala/vendors/lodash.underscore.min'
         backbone: 'coala/vendors/backbone'
         marionette: 'coala/vendors/backbone.marionette'
         handlebars: 'coala/vendors/handlebars-amd'
