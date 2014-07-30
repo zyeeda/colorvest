@@ -228,12 +228,10 @@ define [
             if _.isArray @value
                 for item in @value
                     return {} if !item
-                    # if item['__FORM_FLAG__'] then item else id: item.id, name: item[textKey]
-                    if item.id then id: item.id, name: item[textKey] else {}
+                    item
             else
                 return {} if !@value
-                # if @value['__FORM_FLAG__'] then @value else id: @value.id, name: @value[textKey]
-                if @value.id then id: @value.id, name: @value[textKey] else {}
+                @value
 
         setText: (text) ->
             @text = text
