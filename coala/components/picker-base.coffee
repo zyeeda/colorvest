@@ -213,14 +213,15 @@ define [
             # else
             #     id @value or {}
 
-            textKey = @options.textKey or 'name'
             if _.isArray @value
                 for item in @value
                     return {} if !item
-                    item
+                    # if item['__FORM_FLAG__'] then item else id: item.id, name: item[textKey]
+                    if item.id then id: item.id, name: item[textKey] else {}
             else
                 return {} if !@value
-                @value
+                # if @value['__FORM_FLAG__'] then @value else id: @value.id, name: @value[textKey]
+                if @value.id then id: @value.id, name: @value[textKey] else {}
 
         setText: (text) ->
             @text = text
