@@ -17,7 +17,7 @@ define [
 
         generateView: (dynamic) ->
             tpl = H.compile @getViewTemplate()
-            
+
             pickerFiled = @picker.name or ''
             feature = @feature
             pickerFeatureName = feature.baseName
@@ -27,12 +27,12 @@ define [
                 pickerFeatureType = 'inline-grid'
             url = @picker.options.url + '/picker?pickerFeatureName=' + pickerFeatureName + '&pickerFeatureType=' + pickerFeatureType + '&pickerFiled=' + pickerFiled
 
-            if dynamic 
+            if dynamic
                 if dynamic.indexOf('&') == 0
                     url = url + dynamic
                 else
                     url = dynamic
-            
+
             options =
                 feature: @feature
                 module: @module
@@ -97,7 +97,7 @@ define [
             beforeShowPicker = handlers[@picker.beforeShowPicker]
             if _.isFunction beforeShowPicker
                 return unless (beforeShowPicker.call @, @view, pickerFiled, pickerFeatureType, pickerFeatureName) is true
-            
+
             @view = @generateView(@view.options.dynamic) if @view.options.dynamic
 
             @app.showDialog
@@ -120,25 +120,25 @@ define [
                             feature = feature.startupOptions.gridOptions.form.feature
                             featureType = 'inline-grid'
 
-                            scaffold = feature.options.scaffold or {}
-                            handlers = scaffold.handlers or {}
+                        scaffold = feature.options.scaffold or {}
+                        handlers = scaffold.handlers or {}
 
-                            beforePickerConfirm = handlers[@picker.beforePickerConfirm]
-                            if _.isFunction beforePickerConfirm
-                                return false if (beforePickerConfirm.call @, @view, selected, featureType) is false
+                        beforePickerConfirm = handlers[@picker.beforePickerConfirm]
+                        if _.isFunction beforePickerConfirm
+                            return false if (beforePickerConfirm.call @picker, @picker.view, selected, featureType) is false
 
-                            callback = handlers[@picker.callback]
-                            if (_.isFunction callback) is true
-                                callback.call @, @view, selected, featureType
-                        else
-                            scaffold = feature.options.scaffold or {}
-                            handlers = scaffold.handlers or {}
+                        # callback = handlers[@picker.callback]
+                        # if (_.isFunction callback) is true
+                        #     callback.call @, @view, selected, featureType
 
-                            beforePickerConfirm = handlers[@picker.beforePickerConfirm]
-                            if _.isFunction beforePickerConfirm
-                                return false if (beforePickerConfirm.call @, @view, selected, featureType) is false
+                        data = @picker.setValue selected
 
-                        @picker.setValue selected
+                        afterPickerConfirm = handlers[@picker.afterPickerConfirm]
+                        if _.isFunction afterPickerConfirm
+                            afterPickerConfirm.call @picker, @picker.view, selected, featureType
+
+                        data
+
                 ]
                 onClose: ->
                     @view.findComponent('grid')?.unbind 'draw'
@@ -166,9 +166,13 @@ define [
             @triggerClass = options.triggerClass
             @allowAdd = options.allowAdd
 
-            # after confirm picker's function
+            # after load picker's function
             #
             @callback = options.callback
+
+            # after confirm picker's function
+            #
+            @afterPickerConfirm = options.afterPickerConfirm
 
             # before show picker dialog's function
             #
@@ -219,7 +223,7 @@ define [
             #     (id item for item in @value)
             # else
             #     id @value or {}
-            
+
             textKey = @options.textKey or 'name'
             if _.isArray @value
                 for item in @value
@@ -227,7 +231,7 @@ define [
                     # if item['__FORM_FLAG__'] then item else id: item.id, name: item[textKey]
                     if item.id then id: item.id, name: item[textKey] else {}
             else
-                return {} if !@value 
+                return {} if !@value
                 # if @value['__FORM_FLAG__'] then @value else id: @value.id, name: @value[textKey]
                 if @value.id then id: @value.id, name: @value[textKey] else {}
 
@@ -270,15 +274,7 @@ define [
                     @options.form.setFormData data, true
 
         loadData: (data) ->
-            # allow init picker filed's data after show dialog
-            # * if one form has two or more picker, after show dialog then will call picker's setValue function twice or more, this will cause formData structure error
-            # * if one form has only one picker, but has special requirement
-            # for example(Object{a: 'a', b: Object{b1: 'b1', b2: 'b2'}} will be changed to Object{a: 'a', 'b.b1': 'b1', 'b.b2': 'b2'})
-            #
-            if @view.feature.baseName is 'inline-grid'
-                @setValue if @name then data[@name] else data
-            else if @allowInitPickerFieldData isnt false || @view.baseName is 'add'
-                @setValue if @name then data[@name] else data
+            @setValue if @name then data[@name] else data
 
         getTemplate: -> _.template '''
             <div class="c-picker">
