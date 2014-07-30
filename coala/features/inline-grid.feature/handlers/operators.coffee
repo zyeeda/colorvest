@@ -4,8 +4,23 @@ define
         return unless picker
 
         gridView = @feature.views['inline:grid']
-        if _.isFunction gridView.beforeShowPicker
-            return unless (gridView.beforeShowPicker.call @, picker, gridView) is true
+
+        beforeShowPicker = picker.options.beforeShowPicker
+        scaffold = @feature.startupOptions.gridOptions.form.feature.options.scaffold or {}
+        handlers = scaffold.handlers or {}
+
+        feature = @feature
+        pickerFeatureType = 'feature'
+
+        if feature.baseName is 'inline-grid'
+            feature = feature.startupOptions.gridOptions.form.feature
+            pickerFeatureType = 'inline-grid'
+
+        pickerFiled = picker.name or ''
+        pickerFeatureName = feature.baseName
+
+        if _.isFunction handlers[beforeShowPicker]
+            return unless (handlers[beforeShowPicker].call @, gridView, pickerFiled, pickerFeatureType, pickerFeatureName) is true
 
         picker.chooser.show(picker).done (feature) ->
             removeSelectedNodes() if removeSelectedNodes = feature.inRegionViews.body.components[0].removeSelectedNodes
@@ -85,7 +100,7 @@ define
                 buttons: [
                     label: '确定'
                     status: 'btn-primary'
-                    fn: => 
+                    fn: =>
                         return false unless form.isValid()
 
                         if _.isFunction gridView.validInlineGridFormData
@@ -96,7 +111,7 @@ define
                         # d.id = @fakeId()
                         idx = grid.getSelectedIndex()
                         idx = idx[0] if _.isArray idx
-                        grid.fnDeleteRow idx 
+                        grid.fnDeleteRow idx
                         grid.addRow d
                 ]
             .done ->

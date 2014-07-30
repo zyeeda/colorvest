@@ -127,10 +127,6 @@ define [
                         if _.isFunction beforePickerConfirm
                             return false if (beforePickerConfirm.call @picker, @picker.view, selected, featureType) is false
 
-                        # callback = handlers[@picker.callback]
-                        # if (_.isFunction callback) is true
-                        #     callback.call @, @view, selected, featureType
-
                         data = @picker.setValue selected
 
                         afterPickerConfirm = handlers[@picker.afterPickerConfirm]
@@ -181,13 +177,6 @@ define [
             # before picker confirm function return's function
             #
             @beforePickerConfirm = options.beforePickerConfirm
-
-            # allow init picker filed's data after show dialog
-            # * if one form has two or more picker, after show dialog then will call picker's setValue function twice or more, this will cause formData structure error
-            # * if one form has only one picker, but has special requirement
-            # for example(Object{a: 'a', b: Object{b1: 'b1', b2: 'b2'}} will be changed to Object{a: 'a', 'b.b1': 'b1', 'b.b2': 'b2'})
-            #
-            @allowInitPickerFieldData = options.allowInitPickerFieldData
 
             if options.chooser
                 @chooser = options.chooser
