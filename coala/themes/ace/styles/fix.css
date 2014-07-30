@@ -86,7 +86,10 @@ div.modal-body {
     font-weight: bold;
 }
 
-
 .c-grid-top {
     z-index: 1 !important;
+}
+
+.c-grid-body table {
+    width: 100% !important;
 }
