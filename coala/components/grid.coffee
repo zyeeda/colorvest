@@ -236,8 +236,8 @@ define [ 'jquery'
             el.prepend "<thead><tr>#{footers.join('')}</tr><tr>#{footers.join('')}</tr></thead>"
             opt.filters = filters
 
-        if options.fixedHeader isnt false
-            opt.sScrollY = options.scrollY or '350'
+        # if options.fixedHeader isnt false
+        #     opt.sScrollY = options.scrollY or '350'
 
         table = el.dataTable opt
 

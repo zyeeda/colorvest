@@ -85,3 +85,8 @@ div.modal-body {
     color: #FF0000;
     font-weight: bold;
 }
+
+
+.c-grid-top {
+    z-index: 1 !important;
+}
