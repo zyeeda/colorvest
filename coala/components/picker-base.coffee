@@ -213,6 +213,7 @@ define [
             # else
             #     id @value or {}
 
+            textKey = @options.textKey or 'name'
             if _.isArray @value
                 for item in @value
                     return {} if !item
