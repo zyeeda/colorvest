@@ -22,7 +22,7 @@ define [
                         <span class="required-mark">*</span>
                     <% } %></label><% } %>
                   <div class="controls">
-                        <textarea class="input span12" id="<%= id %>" name="<%= name %>" rows="<%= rowspan %>">{{<%= value %>}}</textarea>
+                        <textarea class="input span12" id="<%= id %>" name="<%= name %>" style="height: <%= height %>px;">{{<%= value %>}}</textarea>
                   </div>
                 </div>
             <%  } %>
