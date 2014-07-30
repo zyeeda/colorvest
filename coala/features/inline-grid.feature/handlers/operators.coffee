@@ -9,8 +9,18 @@ define
         scaffold = @feature.startupOptions.gridOptions.form.feature.options.scaffold or {}
         handlers = scaffold.handlers or {}
 
+        feature = @feature
+        pickerFeatureType = 'feature'
+
+        if feature.baseName is 'inline-grid'
+            feature = feature.startupOptions.gridOptions.form.feature
+            pickerFeatureType = 'inline-grid'
+
+        pickerFiled = picker.name or ''
+        pickerFeatureName = feature.baseName
+
         if _.isFunction handlers[beforeShowPicker]
-            return unless (handlers[beforeShowPicker].call @, gridView, @feature.startupOptions.gridOptions.form) is true
+            return unless (handlers[beforeShowPicker].call @, gridView, pickerFiled, pickerFeatureType, pickerFeatureName) is true
 
         picker.chooser.show(picker).done (feature) ->
             removeSelectedNodes() if removeSelectedNodes = feature.inRegionViews.body.components[0].removeSelectedNodes
