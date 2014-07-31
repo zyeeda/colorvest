@@ -138,11 +138,12 @@ define ['jquery', 'underscore', 'coala/core/form-view', 'coala/core/custom-form-
             grid = @views['inline:grid'].components[0]
             ids = []
             data = grid.fnGetData()
+            
+            grid.clear()
             for d in data or []
                 ids.push d.id
-            grid.clear()
             for v in values or []
-                if ($.inArray v.id, ids) is -1
+                # if ($.inArray v.id, ids) is -1
                     grid.addRow v
 
         getFormData: ->
