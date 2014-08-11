@@ -127,7 +127,7 @@ define [
                         if _.isFunction beforePickerConfirm
                             return false if (beforePickerConfirm.call @picker, @picker.view, selected, featureType) is false
 
-                        data = @picker.setValue selected
+                        data = @picker.setValue selected, true
 
                         afterPickerConfirm = handlers[@picker.afterPickerConfirm]
                         if _.isFunction afterPickerConfirm
@@ -229,7 +229,7 @@ define [
             if @renderred is true
                 @container.find('#text-' + @id).html text
 
-        setValue: (value) ->
+        setValue: (value, isShowPicker) ->
             _this = @
             feature = @options.view.feature
             featureType = 'feature'
@@ -256,7 +256,7 @@ define [
 
                 # if picker has callback function, then set name value first, then call callback, or set name value dircetly
                 #
-                if (_.isFunction callback) is true
+                if (_.isFunction callback) is true and isShowPicker isnt true
                     @options.form.setFormData data, true
                     callback.call _this, _this.options.view, value, featureType
                 else
