@@ -142,9 +142,9 @@ define [
                 form = @picker.options.form
                 grid = @view.findComponent('grid')
                 return if not grid
-                if form
-                    data = form.getFormData()
-                    grid.addParam 'data', data
+                # if form
+                #     data = form.getFormData()
+                #     grid.addParam 'data', data
 
                 selected = @picker.getFormData() or []
                 grid.on 'draw', ->
