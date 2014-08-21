@@ -255,6 +255,7 @@ define [
                 data[target] = value[field] for field,target of @options.extraFields
 
                 # if picker has callback function, then set name value first, then call callback, or set name value dircetly
+                # if click picker confirm button then don't call callback
                 #
                 if (_.isFunction callback) is true and isShowPicker isnt true
                     @options.form.setFormData data, true
