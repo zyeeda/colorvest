@@ -78,6 +78,9 @@ define [
                     buttons: []
                 ).done ->
                     view.setFormData view.model.toJSON()
+                    scaffold = view.feature.options.scaffold or {}
+                    if _.isFunction scaffold.afterShowDialog
+                        scaffold.afterShowDialog.call view, 'show', view, view.model.toJSON()
 
         refresh: ->
             grid = @feature.views['treetable:body'].components[0]
