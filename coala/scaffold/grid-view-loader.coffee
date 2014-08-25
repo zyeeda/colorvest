@@ -81,6 +81,10 @@ define [
         el.height height
         table.fnSettings().oInit.sScrollY = height
 
+        # 在获取页面的 offsetHeight 高度时是包括了浏览器的边框的, 浏览器的边框是 2 个像素, 减去左右两个边框就是 4 个像素
+        if el[0].clientWidth < el[0].offsetWidth - 4
+            $('.dataTables_scrollHead').css 'width', el.width() - 15
+
     type: 'view'
     name: 'grid'
     fn: (module, feature, viewName, args) ->
