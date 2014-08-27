@@ -48,4 +48,5 @@ require =
         'coala/vendors/jquery/jquery.gritter': ['jquery']
         'coala/vendors/bootbox': ['jquery']
         'coala/vendors/jquery/jquery.tooltipster.min': ['jquery']
+        'coala/vendors/jquery/datarangepicker/daterangepicker': ['jquery']
 
