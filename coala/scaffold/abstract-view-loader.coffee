@@ -63,6 +63,7 @@ define [
                 continue if o.show is 'always'
 
                 $op = @$(o.id)
+                o.show = 'selected' unless o.show
                 if selected
                     if _.isArray selected
                         if selected.length is 0
