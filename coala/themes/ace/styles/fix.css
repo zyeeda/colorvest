@@ -93,3 +93,7 @@ div.modal-body {
 .c-grid-body table {
     width: 100% !important;
 }
+
+.nav-list > li.active:after {
+    z-index: 9999;
+}
