@@ -10,7 +10,7 @@ syntax: glob
 .settings
 .project
 
-coala.js
+cdeio.js
 require-config.js
 applications/**.js
 components/**.js
@@ -20,7 +20,7 @@ layouts/**.js
 scaffold/**.js
 build/spacelab/*
 node_modules/
-coala/themes/spacelab/css/bootstrap*.css
+cdeio/themes/spacelab/css/bootstrap*.css
 
 *.msi
 syntax: regexp
