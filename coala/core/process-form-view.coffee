@@ -273,7 +273,7 @@ define [
                             group = @findGroup(group)
                             unused = _.without unused, group
                             group.getTemplate()
-                        ).join(''), id: id, i: i
+                        ).join(''), id: id, i: i, processInstanceId: @model.get('processInstanceId')
                     contents.push tabContent
                 # 表示没有在 tab 中使用到的组，显示在所有的 tab 的上方
                 unused = []
@@ -318,7 +318,10 @@ define [
         getProcessTabContentTemplate: -> _.template '''
             <div class="tab-pane <%if (i == 0) {%>active<%}%>" id="<%= id %>">
                 <%= content %>
-                <div></div>
+                <br/><br/>
+                <div>
+                    <img src="invoke/scaffold/bpm/diagram/processInstanceId/<%= processInstanceId %>" />
+                </div>
             </div>
         '''
         getHistoryTabContentTemplate: -> _.template '''
