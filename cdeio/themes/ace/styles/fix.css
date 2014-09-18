@@ -95,5 +95,5 @@ div.modal-body {
 }
 
 .nav-list > li.active:after {
-    z-index: 9999;
+    z-index: 999;
 }
