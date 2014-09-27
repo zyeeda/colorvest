@@ -1,0 +1,292 @@
+@import url('default/styles/index.css');
+@import url('ace/styles/index.css');
+
+html, body {
+    height: 100%;
+}
+
+.c-fill {
+    height: 100%;
+}
+
+.c-page-content {
+    padding: 86px 0 0 0;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+         -o-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+.c-system-logo {
+    display: block;
+    float: left;
+    height: 25px;
+}
+
+.c-system-name {
+    float: left;
+    margin-left: 10px;
+    font-size: 85%;
+    margin-top: 5px;
+}
+
+.c-layout-container {
+    height: 100%;
+    overflow: hidden;
+}
+
+.c-layout-container .c-layout-center {
+    height: 100%;
+}
+
+.c-layout-tree .c-layout-center {
+    overflow: auto;
+}
+
+.c-layout-grid .c-layout-center {
+    overflow: hidden;
+}
+
+.c-layout-grid .c-layout-body {
+    overflow: hidden;
+}
+
+.c-layout-body {
+    height: 100%;
+    overflow: auto;
+    margin-top: -60px;
+    border-top: 60px solid #FFFFFF;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+         -o-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+.c-layout-toolbar {
+    height: 59px;
+    border-bottom: 1px solid #D3D3D3;
+}
+
+.c-layout-toolbar .btn-toolbar {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.c-layout-body .dataTables_wrapper {
+    height: 100%;
+    overflow: hidden;
+}
+
+.c-grid-top {
+    position: relative;
+    z-index: 200;
+}
+
+.c-grid-body {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+         -o-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+.c-picker {
+    width: 100%;
+    position: relative;
+}
+
+.c-picker .uneditable-input {
+    width: 100%;
+    display: inline-block;
+    height: 32px;
+    border-radius: 0;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+         -o-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+.c-picker a.btn {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 21px;
+    line-height: 22px;
+    padding: 1px 10px 0 14px;
+}
+
+.c-picker a.btn.plus {
+    right: 52px;
+}
+
+.c-picker .text {
+    position: absolute;
+    overflow: hidden;
+    width: 90%;
+    top: 7px;
+}
+
+.c-action-form .tab-content {
+    border: 1px solid #C5D0DC;
+}
+
+.c-action-form-show {
+    font-size: 14px;
+}
+
+.c-action-form-show fieldset:first-child .row-fluid:first-child {
+    border-top: 1px solid #BCE8F1;
+}
+
+.c-action-form-show .row-fluid {
+    border: 1px solid #BCE8F1;
+    border-top: 0;
+    overflow: hidden;
+}
+
+.c-action-form-show .field-label {
+    display: inline-block;
+    padding: 11px 5px 0 5px;
+    background-color: #D9EDF7;
+    font-weight: bold;
+    text-align: right;
+    border-right: 1px solid #BCE8F1;
+    float: left;
+    margin-bottom: -9999px;
+    padding-bottom: 9999px;
+    cursor: pointer;
+}
+
+.c-action-form-show .row-fluid .span6:nth-child(2) .field-label {
+    border-left: 1px solid #BCE8F1;
+}
+
+.c-action-form-show .field-value {
+    display: inline-block;
+    padding: 10px 5px;
+}
+
+.c-form-group-cols-1 .field-label {
+    width: 25%;
+}
+
+.c-form-group-cols-1 .field-value {
+    width: 55%
+}
+
+.c-form-group-cols-2 .field-label {
+    width: 35%;
+}
+
+.c-form-group-cols-2 .field-value {
+    width: 55%;
+}
+
+.field-value:after {
+    content: "a";
+    visibility: hidden;
+    width: 0;
+}
+
+.c-modal-size-mini {
+    width: 360px;
+    margin-left: -180px;
+}
+
+.c-modal-size-small {
+    width: 560px;
+    margin-left: -280px;
+}
+
+.c-modal-size-medium {
+    width: 760px;
+    margin-left: -380px;
+}
+
+.c-modal-size-large {
+    width: 960px;
+    margin-left: -480px;
+}
+
+.filter_column {
+    text-align: center;
+    display: block;
+}
+
+.number_range_filter {
+    width: 30%;
+}
+
+.btn-group button.btn.c-filter-toggle {
+    border-radius: 24px;
+    width: 38px;
+}
+
+.gecko .c-filter-toggle i {
+    margin-left: 4px;
+}
+.webkit .c-filter-toggle i {
+    margin-left: -2px;
+}
+
+.c-date-range {
+    position: relative;
+    z-index: 300;
+}
+
+.c-filter-body {
+    padding: 10px 10px 0;
+}
+
+.c-filter-operates {
+    background-color: #eee;
+    padding: 10px 0;
+}
+
+.c-filter-body .form-horizontal .control-label {
+    width: 80px;
+}
+
+.c-filter-body .form-horizontal .controls {
+    margin-left: 100px;
+    margin-bottom: 0;
+}
+
+.c-filter-body .form-horizontal {
+    margin: 0;
+}
+
+.c-filter-body .form-horizontal .control-group {
+    margin-bottom: 0;
+}
+
+.required-mark {
+    color: #ff0000;
+}
+
+/* upload preview */
+.upload-preview-btn ~ .popover > .popover-content {
+    width: 280px;
+    height: 180px;
+    padding: 2px;
+    display: table-cell;
+    vertical-align:middle;
+    text-align:center;
+}
+.upload-preview {
+    max-width: 270px;
+    max-height: 170px;
+    cursor: pointer;
+    vertical-align:middle;
+}
+.upload-multiple-preview {
+    position: absolute;
+    padding-left: 1em;
+    padding-right: 1em;
+    z-index: 0;
+}
+/* end upload preview */
+

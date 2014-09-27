@@ -1,0 +1,17 @@
+{{#layout}}
+<div class="modal-header" id="modal-header"></div>
+<div class="modal-body" id="modal-body"></div>
+<div class="modal-footer" id="modal-footer"></div>
+{{/layout}}
+
+{{#view "dialog-buttons"}}
+{{#each buttons}}
+<a href="javascript:void 0" class="btn {{status}}" id="{{id}}">{{label}}</a>
+{{/each}}
+<a href="javascript:void 0" class="btn" data-dismiss="modal">关闭</a>
+{{/view}}
+
+{{#view "dialog-title"}}
+<button type="button" class="close" data-dismiss="modal" id="close">&times;</button>
+<h3>{{title}}</h3>
+{{/view}}

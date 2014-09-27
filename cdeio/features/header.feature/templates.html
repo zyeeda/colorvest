@@ -1,0 +1,19 @@
+{{#layout}}
+<div id="inner-header" class="navbar-inner"></div>
+{{/layout}}
+
+{{#view "inner-header"}}
+<div class="container-fluid">
+    <a class="brand" href="javascript:void 0;">
+        <img
+            class="c-system-logo"
+            src="{{settings.application_logo}}"
+            alt="应用程序图标" />
+        <div class="c-system-name">
+        {{settings.application_name}}
+        </div>
+    </a>
+    <ul id="notification" class="nav ace-nav pull-right">
+    </ul>
+</div>
+{{/view}}

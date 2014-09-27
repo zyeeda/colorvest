@@ -1,0 +1,20 @@
+{{#layout}}
+<div id="popup-title"></div>
+<div class="space-6"></div>
+<div id="popup-content"></div>
+<div class="space-16"></div>
+<div id="popup-buttons" class="row-fluid" style="text-align:right;"></div>
+{{/layout}}
+
+{{#view "popup-title"}}
+<h4 class="header green lighter bigger">{{title}}</h4>
+{{/view}}
+
+{{#view "popup-buttons"}}
+{{#each buttons}}
+<button class="btn btn-small {{btnClass}}">
+    <i class="pull-right {{iconClass}}"></i>
+    {{label}}
+</button>
+{{/each}}
+{{/view}}

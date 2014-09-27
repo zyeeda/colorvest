@@ -1,0 +1,50 @@
+{{#layout}}
+<ul class="nav nav-tabs">
+  <li class="active"><a data-target="todo" data-toggle="tab">待办</a></li>
+  <li><a data-target="completed" data-toggle="tab">已办</a></li>
+</ul>
+
+<div class="tab-content no-padding">
+  <div class="tab-pane active" id="todo">
+    <div id="operators" class="btn-toolbar"></div>
+    <div id="grid" class="c-layout-body"></div>
+  </div>
+  <div class="tab-pane" id="completed">
+    <div id="completedOperators" class="btn-toolbar"/>
+    <div id="completedGrid" class="c-layout-body"/>
+  </div>
+</div>
+{{/layout}}
+
+{{#view "completed-grid"}}
+<table id="grid"/>
+{{/view}}
+
+{{#view "completed-operators"}}
+<div class="btn-group">
+  <button id="view" class="btn btn-primary"><i class="icon-star"/>&nbsp;View</button>
+</div>
+<div class="pull-right">
+  <div class="btn-group" data-toggle="buttons-radio">
+    <a href="javascript:void 0" class="btn btn-primary active" id="all"><i class="icon-align-left"/>所有</a>
+    <a href="javascript:void 0" class="btn btn-primary" id="finished"><i class="icon-align-center"/>已完成</a>
+    <a href="javascript:void 0" class="btn btn-primary" id="unfinished"><i class="icon-align-right"/>未完成</a>
+  </div>
+</div>
+{{/view}}
+
+{{#view "grid"}}
+<table id="grid"/>
+<div id="pager"/>
+{{/view}}
+
+{{#view "operators"}}
+<div class="btn-group">
+  <button id="audit" class="btn btn-primary"><i class="icon-star"/>&nbsp;Audit</button>
+  <button id="batchAudit" class="btn btn-primary"><i class="icon-star"/>&nbsp;Batch Audit</button>
+</div>
+<div class="btn-group">
+  <button id="reject" class="btn btn-info"><i class="icon-star"/>&nbsp;Reject</button>
+  <button id="batchReject" class="btn btn-info"><i class="icon-star"/>&nbsp;Batch Reject</button>
+</div>
+{{/view}}

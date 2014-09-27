@@ -1,0 +1,9 @@
+.ztree li {
+  padding: 2px 0;
+}
+.ztree li a.curSelectedNode {
+  background-color: #FBFEC0;
+}
+.ztree * {
+  font-size: 13px;
+}

@@ -1,0 +1,47 @@
+{{#layout}}
+<div id="header" class="navbar navbar-fixed-top navbar-inverse"></div>
+<div class="container-fluid main-container c-fill">
+    <div id="sidebar" class="sidebar sidebar-fixed"></div>
+    <div class="clearfix main-content c-fill">
+        <div id="breadcrumbs" class="breadcrumbs breadcrumbs-fixed"></div>
+        <div id="content" class="clearfix c-fill page-content c-page-content"></div>
+    </div>
+</div>
+{{/layout}}
+
+{{#view "breadcrumbs"}}
+<ul class="breadcrumb">
+    <li>
+        <i class="{{home.iconClass}}"></i>
+        <a href="javascript:void 0;">{{home.name}}</a>
+
+        {{#unless home.isLast}}
+        <span class="divider">
+            <i class="icon-angle-right"></i>
+        </span>
+        {{/unless}}
+    </li>
+    {{#each items}}
+    {{#if isLast}}
+    <li class="active">
+    {{else}}
+    <li>
+    {{/if}}
+    {{name}}
+    {{#unless isLast}}
+    <span class="divider">
+        <i class="icon-angle-right"></i>
+    </span>
+    {{/unless}}
+    </li>
+    {{/each}}
+</ul>
+<div class="nav-search" id="nav-search">
+    <form class="form-search" id="search-form" method = "post" onsubmit="return false">
+        <span class="input-icon">
+            <input type="text" placeholder="输入关键字后回车查询" class="input-small nav-search-input width-90" id="nav-search-input" autocomplete="off" /> <i class="icon-search nav-search-icon"></i>
+        </span>
+        <input type="submit" value="提交" style="display:none;"/>
+    </form>
+</div>
+{{/view}}

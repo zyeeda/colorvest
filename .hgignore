@@ -1,0 +1,26 @@
+syntax: glob
+
+*.
+*.swp
+*.bak
+*~
+*.~ml
+*.orig
+.DS_Store
+.settings
+.project
+
+cdeio.js
+require-config.js
+applications/**.js
+components/**.js
+core/**.js
+features/**.js
+layouts/**.js
+scaffold/**.js
+build/spacelab/*
+node_modules/
+cdeio/themes/spacelab/css/bootstrap*.css
+
+*.msi
+syntax: regexp
