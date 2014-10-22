@@ -17,6 +17,7 @@ define [
                 fieldName: @name
                 name: @name
                 readOnly: @readOnly
+                multiple: @multiple
                 change: @options.change
 
             if @options.url
@@ -61,6 +62,7 @@ define [
             else
                 if value?
                     super
+                    console.log value
                     _.defer -> select.select2('val', value + '')
                 else
                     select.select2('val', @options.defaultValue or '')

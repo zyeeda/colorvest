@@ -23,6 +23,7 @@ define [
             # rows 用于textarea高度，转换成height才生效, 24px一行
             @height = (options.rows or 3) * 24
             @statusChanger = !!options.statusChanger
+            @multiple = options.multiple
 
         getElement: ->
             @form.$ @id
