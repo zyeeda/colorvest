@@ -97,3 +97,11 @@ div.modal-body {
 .nav-list > li.active:after {
     z-index: 999;
 }
+
+.select2-search-field {
+    height: 30px;
+}
+
+.select2-container-multi .select2-choices {
+    border: 1px solid #d5d5d5;
+}

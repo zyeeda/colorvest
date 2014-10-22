@@ -11,6 +11,7 @@ syntax: glob
 .project
 
 cdeio.js
+build
 require-config.js
 applications/**.js
 components/**.js

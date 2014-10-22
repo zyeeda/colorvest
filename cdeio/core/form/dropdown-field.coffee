@@ -17,6 +17,7 @@ define [
                 fieldName: @name
                 name: @name
                 readOnly: @readOnly
+                multiple: @multiple
                 change: @options.change
 
             if @options.url
