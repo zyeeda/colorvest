@@ -62,7 +62,6 @@ define [
             else
                 if value?
                     super
-                    console.log value
                     _.defer -> select.select2('val', value + '')
                 else
                     select.select2('val', @options.defaultValue or '')
