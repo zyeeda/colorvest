@@ -41,8 +41,9 @@ define [
                 field = @form.findComponent('a-' + @id)
                 return unless field
                 obj = field.getFormData()
-                return obj if obj and obj.id
-                id: null
+                return obj
+                # return obj if obj and obj.id
+                # id: null
 
         getTemplateString: -> '''
             <% if (readOnly) { %>
