@@ -19,6 +19,7 @@ define [
             app = @feature.module.getApplication()
             selected = grid.getSelected()
             return app.info '请选择要操作的记录' if not selected
+            selected = selected[0] if selected instanceof Array
 
             view.model.set selected
             $.when(view.model.fetch()).then =>
@@ -33,6 +34,7 @@ define [
             selected = grid.getSelected()
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
+            selected = selected[0] if selected instanceof Array
 
             scaffold = gridView.feature.options.scaffold or {}
             _handlers = scaffold.handlers or {}
@@ -54,6 +56,7 @@ define [
             selected = grid.getSelected()
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
+            selected = selected[0] if selected instanceof Array
 
             view.model.set selected
             $.when(view.model.fetch()).then =>
