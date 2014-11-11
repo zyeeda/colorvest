@@ -168,6 +168,7 @@ define [
                 @getFormData()
                 @model.set @feature.extraFormData if @feature.extraFormData
                 @model.set options
+                @model.unset 'id' if @model.get('id') is ''
                 @model.save()
                 .done (data) ->
                     deferred.resolve data
