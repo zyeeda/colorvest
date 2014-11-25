@@ -19,7 +19,7 @@ define [
         '''
 
         operator: _.template '''
-            <button id="<%= id %>" class="btn <% if (style) { %> <%=style%> <% } %>" onclick="return false;" style="display:none;">
+            <button id="<%= id %>" class="btn <% if (style) { %> <%=style%> <% } %>" title="<%=title%>" onclick="return false;" style="display:none;">
                 <% if (icon) { %>
                 <i class="<%= icon %> <% if (!label) { %>icon-only<% } %>" />
                 <% } %>
@@ -125,6 +125,7 @@ define [
                 value.id = name
                 value.style or value.style = 'btn-primary'
                 value.label or value.label = ''
+                value.title or value.title = value.label
 
                 group = value.group or 'default'
                 groups = opGroups[group] or (opGroups[group] = [])
@@ -170,7 +171,7 @@ define [
 
             deferred.resolve view
 
-    # 生成流程多标签 
+    # 生成流程多标签
     result.generateTabsView = (options, module, feature, deferred) ->
         events = {}
         delegates = {}
@@ -185,7 +186,7 @@ define [
             extend:
                 renderHtml: (su, data) ->
                     # result.templates.tabs
-      
+
         view = if options.createView then options.createView(viewOptions) else new View(viewOptions)
         result.extendEventHandlers view, options.handlers
         deferred.resolve view
