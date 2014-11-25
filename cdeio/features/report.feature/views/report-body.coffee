@@ -24,7 +24,10 @@ define
                             status: 'btn-primary',
                             fn: =>
                                 return false unless view.isValid()
-                                app.startFeature('cdeio:report', {report: @feature.startupOptions.report, params: view.getFormData(), paramsView: view})
+                                app.startFeature('cdeio:report', {report: @feature.startupOptions.report, params: view.getFormData(), paramsView: view}).done ->
+                                    callback = @feature.startupOptions.callback
+                                    callback.apply() if $.isFunction callback
+
                         ]
                 data.load = false
             data
