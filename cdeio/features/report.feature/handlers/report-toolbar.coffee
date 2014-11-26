@@ -16,9 +16,9 @@ define ['jquery'], ($) ->
                     status: 'btn-primary',
                     fn: =>
                         return false unless view.isValid()
-                        app.startFeature('cdeio:report', {report: @feature.startupOptions.report, params: view.getFormData(), paramsView: view}).done ->
-                            callback = @feature.startupOptions.callback
-                            callback.apply() if $.isFunction callback
+                        app.startFeature('cdeio:report', {report: @feature.startupOptions.report, params: view.getFormData(), paramsView: view, callback: @feature.startupOptions.callback}).done (feature) ->
+                            callback = feature.startupOptions.callback
+                            callback.call feature, feature if $.isFunction callback
 
                 ]
 	    else
