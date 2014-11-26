@@ -57,7 +57,7 @@ define [
                         <% if (options.multiple) { %>
                         {{#each <%= name %>}}
                         <a target="_blank" style="word-break:break-all;" href="<%= options.url %>/{{id}}">{{filename}}</a>
-                        </ br>
+                        </br>
                         {{/each}}
                         <% } else { %>
                         <a target="_blank" style="word-break:break-all;" href="<%= options.url %>/{{<%= name %>.id}}">{{<%= name %>.filename}}</a>
