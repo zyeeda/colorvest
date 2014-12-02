@@ -7,6 +7,7 @@ define [
     'cdeio/core/form/form-group'
     'cdeio/core/form/text-field'
     'cdeio/core/form/date-picker-field'
+    'cdeio/core/form/date-time-picker-field'
     'cdeio/core/form/textarea-field'
     'cdeio/core/form/dropdown-field'
     'cdeio/core/form/feature-field'
@@ -167,6 +168,7 @@ define [
                 @getFormData()
                 @model.set @feature.extraFormData if @feature.extraFormData
                 @model.set options
+                @model.unset 'id' if @model.get('id') is ''
                 @model.save()
                 .done (data) ->
                     deferred.resolve data

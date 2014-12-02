@@ -32,6 +32,7 @@ require =
         'cdeio/vendors/jquery/flot/jquery.flot.min': ['jquery']
         'cdeio/vendors/jquery/flot/jquery.flot.pie.min': ['jquery', 'cdeio/vendors/jquery/flot/jquery.flot.min']
         'cdeio/vendors/jquery/flot/jquery.flot.resize.min': ['jquery', 'cdeio/vendors/jquery/flot/jquery.flot.min']
+        'cdeio/vendors/jquery/flot/jquery.flot.axislabels': ['jquery', 'cdeio/vendors/jquery/flot/jquery.flot.min']
 
         'cdeio/vendors/jquery/dataTables/jquery.dataTables.bootstrap': ['jquery', 'cdeio/vendors/jquery/dataTables/jquery.dataTables']
         'cdeio/vendors/jquery/dataTables/ColReorderWithResize': ['jquery', 'cdeio/vendors/jquery/dataTables/jquery.dataTables.bootstrap']

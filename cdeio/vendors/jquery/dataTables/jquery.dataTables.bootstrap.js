@@ -1,12 +1,13 @@
 //http://datatables.net/plug-ins/pagination#bootstrap
-$.extend( true, $.fn.dataTable.defaults, {
-	"sDom": "<'row-fluid'<'span6'i><'span6'p>>t",
-	"sPaginationType": "bootstrap",
-	"oLanguage": {
-		"sLengthMenu": "Display _MENU_ records"
-	}
-} );
+define(['jquery', 'cdeio/vendors/jquery/dataTables/jquery.dataTables'], function($) {
 
+$.extend( true, $.fn.dataTable.defaults, {
+    "sDom": "<'row-fluid'<'span6'i><'span6'p>>t",
+    "sPaginationType": "bootstrap",
+    "oLanguage": {
+        "sLengthMenu": "Display _MENU_ records"
+    }
+} );
 
 /* API method to get paging information */
 $.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
@@ -98,3 +99,4 @@ $.extend( $.fn.dataTableExt.oPagination, {
         }
     }
 } );
+});

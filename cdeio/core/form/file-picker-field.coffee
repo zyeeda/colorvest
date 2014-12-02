@@ -36,14 +36,16 @@ define [
 
         getFormData: ->
             if @readOnly
-                @value?.id 
+                @value?.id
             else
                 field = @form.findComponent('a-' + @id)
                 return unless field
                 obj = field.getFormData()
-                return obj
-                # return obj if obj and obj.id
-                # id: null
+
+                if field.options.multiple
+                    return if obj.length == 0 then id: null else obj
+                return obj if obj and obj.id
+                id: null
 
         getTemplateString: -> '''
             <% if (readOnly) { %>
@@ -55,6 +57,7 @@ define [
                         <% if (options.multiple) { %>
                         {{#each <%= name %>}}
                         <a target="_blank" style="word-break:break-all;" href="<%= options.url %>/{{id}}">{{filename}}</a>
+                        </br>
                         {{/each}}
                         <% } else { %>
                         <a target="_blank" style="word-break:break-all;" href="<%= options.url %>/{{<%= name %>.id}}">{{<%= name %>.filename}}</a>

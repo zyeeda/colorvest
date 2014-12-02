@@ -8,6 +8,7 @@ define [
     'cdeio/core/loader-plugin-manager'
     'cdeio/core/form/text-field'
     'cdeio/core/form/date-picker-field'
+    'cdeio/core/form/date-time-picker-field'
     'cdeio/core/form/textarea-field'
     'cdeio/core/form/dropdown-field'
     'cdeio/core/form/feature-field'

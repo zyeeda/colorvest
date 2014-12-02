@@ -940,7 +940,7 @@
         // the bad hack :/ override datepicker so it doesnt close on select
         // inspired: http://stackoverflow.com/questions/1252512/jquery-datepicker-prevent-closing-picker-when-clicking-a-date/1762378#1762378
         //########################################################################
-        console.log('ooooooo', $.datapicker);
+        // console.log('ooooooo', $.datapicker);
         $.datepicker._base_selectDate = $.datepicker._selectDate;
         $.datepicker._selectDate = function (id, dateStr) {
             var inst = this._getInst($(id)[0]),
