@@ -10,13 +10,10 @@
 .settings
 .project
 node_modules
+bower_components
+lib
 
 cdeio.js
 require-config.js
 
-cdeio/applications/**/*.js
-cdeio/components/**/*.js
-cdeio/core/**/*.js
-cdeio/features/**/*.js
-cdeio/layouts/**/*.js
-cdeio/scaffold/**/*.js
+app/**/*.js

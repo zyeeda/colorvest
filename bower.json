@@ -1,0 +1,19 @@
+{
+    "name": "colorvest",
+    "version": "3.0.0",
+    "ignore": [
+        "jquery",
+        "underscore"
+    ],
+    "dependencies": {
+        "zepto": "latest",
+        "bootstrap": "latest",
+        "lodash": "latest",
+        "react": "latest",
+        "backbone": "latest",
+        "react-bootstrap": "latest"
+    },
+    "devDependencies": {
+        "mod": "https://github.com/fex-team/mod.git"
+    }
+}
