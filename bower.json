@@ -6,14 +6,14 @@
         "underscore"
     ],
     "dependencies": {
-        "zepto": "latest",
         "bootstrap": "latest",
         "lodash": "latest",
         "react": "latest",
         "backbone": "latest",
-        "react-bootstrap": "latest"
+        "react-bootstrap": "latest",
+        "mod": "https://github.com/fex-team/mod.git"
     },
     "devDependencies": {
-        "mod": "https://github.com/fex-team/mod.git"
+        "backbone.localStorage": "latest"
     }
 }
