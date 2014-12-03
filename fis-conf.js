@@ -7,9 +7,9 @@ fis.config.set('pack', {
         '/bower_components/backbone/backbone.js',
         '/bower_components/react/react.js',
         '/v.js',
-    ],
-    'pkg/test.js': '/modules/test/*',
-    'pkg/demo.js': '/modules/demo/*'
+    ]
+    // 'pkg/test.js': '/modules/test/*',
+    // 'pkg/demo.js': '/modules/demo/*'
 });
 
 fis.config.merge({
