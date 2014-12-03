@@ -15,7 +15,6 @@ fis.config.set('pack', {
 fis.config.merge({
     modules: {
         parser: {
-            tmpl: 'utc',
             //coffee后缀的文件使用fis-parser-coffee-script插件编译
             coffee : 'coffee-script',
             //less后缀的文件使用fis-parser-less插件编译
@@ -50,7 +49,7 @@ fis.config.merge({
             {
                 //一级同名组件，可以引用短路径，比如modules/jquery/juqery.js
                 //直接引用为var $ = require('jquery');
-                reg : /^\/modules\/([^\/]+)\/\1\.(js)$/i,
+                reg : /^\/modules\/([^\/]+)\/\1\.(coffee)$/i,
                 //是组件化的，会被jswrapper包装
                 isMod : true,
                 //id为文件夹名
@@ -59,7 +58,7 @@ fis.config.merge({
             },
             {
                 //modules目录下的其他脚本文件
-                reg : /^\/modules\/(.*)\.(js)$/i,
+                reg : /^\/modules\/(.*)\.(coffee)$/i,
                 //是组件化的，会被jswrapper包装
                 isMod : true,
                 //id是去掉modules和.js后缀中间的部分
@@ -137,7 +136,7 @@ fis.config.merge({
             },
             {
                 id: 'v',
-                reg: '/v.js',
+                reg: '/v.coffee',
                 release: 'vendor/v.js'
             },
             {
@@ -162,6 +161,10 @@ fis.config.merge({
         }
     }  
 });
+
+fis.config.set('project.fileType.text', 'jsx'); //*.jsx files are text file.
+fis.config.set('modules.parser.jsx', 'react');  //compile *.jsx with fis-parser-react plugin
+fis.config.set('roadmap.ext.jsx', 'js');        //*.jsx are exactly treat as *.js
 
 fis.config.set('settings.postpackager.simple.autoCombine', true);
 
