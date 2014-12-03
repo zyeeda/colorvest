@@ -13,7 +13,5 @@ node_modules
 bower_components
 lib
 
-cdeio.js
-require-config.js
-
-app/**/*.js
+v.js
+modules/**/*.js
