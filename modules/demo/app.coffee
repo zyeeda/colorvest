@@ -1,3 +1,4 @@
+v = require 'v'
 TodoList = require 'demo/list'
 
 TodoApp = v.r.createClass

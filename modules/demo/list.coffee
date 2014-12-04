@@ -1,3 +1,5 @@
+v = require 'v'
+
 TodoList = v.r.createClass 
     displayName: 'TodoList'
     render: ->

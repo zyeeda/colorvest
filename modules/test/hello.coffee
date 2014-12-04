@@ -1,3 +1,5 @@
+v = require 'v'
+
 say = ->
 	console.log 'Hello v:'
 	console.dir v

@@ -18,3 +18,5 @@ delete $
 delete _ 
 delete Backbone
 delete React
+
+module.exports = v

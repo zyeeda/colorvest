@@ -1,22 +1,15 @@
-fis.config.set('pack', {
-    'pkg/vendor.js': [
-        // '/bower_components/mod/mod.js',
-        '/bower_components/jquery/dist/jquery.js',
-        '/bower_components/bootstrap/dist/js/bootstrap.js',
-        '/bower_components/lodash/dist/lodash.underscore.js',
-        '/bower_components/backbone/backbone.js',
-        '/bower_components/react/react.js',
-        '/v.js',
-    ]
-    // 'pkg/test.js': '/modules/test/*',
-    // 'pkg/demo.js': '/modules/demo/*'
-});
+// //项目排除掉_xxx.scss，这些属于框架文件，不用关心
+// fis.config.set('project.exclude', '**/_*.scss');
+// //scss后缀的文件，用fis-parser-sass插件编译
+// fis.config.set('modules.parser.scss', 'sass');
+// //scss文件产出为css文件
+// fis.config.set('roadmap.ext.scss', 'css');
 
 fis.config.merge({
     modules: {
         parser: {
             //coffee后缀的文件使用fis-parser-coffee-script插件编译
-            coffee : 'coffee-script',
+            coffee : ['coffee-script'],
             //less后缀的文件使用fis-parser-less插件编译
             //处理器支持数组，或者逗号分隔的字符串配置
             less : ['less'],
@@ -162,18 +155,20 @@ fis.config.merge({
     }  
 });
 
-fis.config.set('project.fileType.text', 'jsx'); //*.jsx files are text file.
-fis.config.set('modules.parser.jsx', 'react');  //compile *.jsx with fis-parser-react plugin
-fis.config.set('roadmap.ext.jsx', 'js');        //*.jsx are exactly treat as *.js
+/*
+fis.config.set('pack', {
+    'pkg/vendor.js': [
+        '/bower_components/mod/mod.js',
+        '/bower_components/jquery/dist/jquery.js',
+        '/bower_components/bootstrap/dist/js/bootstrap.js',
+        '/bower_components/lodash/dist/lodash.underscore.js',
+        '/bower_components/backbone/backbone.js',
+        '/bower_components/react/react.js'
+    ]
+});
+*/
 
 fis.config.set('settings.postpackager.simple.autoCombine', true);
-
-//项目排除掉_xxx.scss，这些属于框架文件，不用关心
-fis.config.set('project.exclude', '**/_*.scss');
-//scss后缀的文件，用fis-parser-sass插件编译
-fis.config.set('modules.parser.scss', 'sass');
-//scss文件产出为css文件
-fis.config.set('roadmap.ext.scss', 'css');
 
 //静态资源域名，使用pure release命令时，添加--domains或-D参数即可生效
 //fis.config.set('roadmap.domain', 'http://127.0.0.1:8080');
