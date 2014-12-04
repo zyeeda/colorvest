@@ -2,6 +2,8 @@
 
 npm install -g fis
 
+npm install -g fis-parser-coffee-react 
+
 npm install -g fis-parser-coffee-script
 
 npm install -g fis-parser-sass
