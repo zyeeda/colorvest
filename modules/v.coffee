@@ -8,15 +8,3 @@
 ### 
 ####COLORVEST########
 
-v = window.v = {}
-v.$ = $
-v._ = _
-v.b = Backbone
-v.r = React
-
-delete $
-delete _ 
-delete Backbone
-delete React
-
-module.exports = v

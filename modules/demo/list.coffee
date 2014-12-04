@@ -1,10 +1,9 @@
-v = require 'v'
-
-TodoList = v.r.createClass 
+createItem = (itemText) ->
+	<li className="list-group-item">{itemText}</li>
+			
+TodoList = React.createClass 
     displayName: 'TodoList'
     render: ->
-        createItem = (itemText) ->
-            v.r.createElement 'li', {className: 'list-group-item'}, itemText
-        v.r.createElement 'ul', {className: 'list-group'}, @props.items.map createItem
+        <ul className="list-group">{this.props.items.map(createItem)}</ul>
 
 module.exports = TodoList

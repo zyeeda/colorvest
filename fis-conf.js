@@ -8,8 +8,8 @@
 fis.config.merge({
     modules: {
         parser: {
-            //coffee后缀的文件使用fis-parser-coffee-react fis-parser-coffee-script插件编译
-            coffee : ['coffee-react', 'coffee-script'],
+            //coffee后缀的文件使用fis-parser-coffee-react插件编译
+            coffee : ['coffee-react'],
             //less后缀的文件使用fis-parser-less插件编译
             //处理器支持数组，或者逗号分隔的字符串配置
             less : ['less'],

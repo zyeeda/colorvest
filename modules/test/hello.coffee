@@ -1,8 +1,5 @@
-v = require 'v'
-
 say = ->
-	console.log 'Hello v:'
-	console.dir v
+	console.log 'Hello Colorvest'
 
 exports.say = say
 # module.exports = say: say

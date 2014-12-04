@@ -1,7 +1,9 @@
-Car = React.createClass
-  render: ->
-    <Vehicle doors={4} locked={isLocked()} data-colour="red" on>
-      <Parts.FrontSeat />
-      <Parts.BackSeat />
-      <p className="seat">Which seat can I take? {@props?.seat or 'none'}</p>
-    </Vehicle>
+createItem = (itemText) ->
+	<li class="list-group-item">{itemText}</li>
+			
+TodoList = React.createClass 
+    displayName: 'TodoList'
+    render: ->
+        <ul class="list-group">{this.props.items.map(createItem)}</ul>
+
+module.exports = TodoList
