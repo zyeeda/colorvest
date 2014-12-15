@@ -1,4 +1,3 @@
-v = require 'v'
 TodoList = require 'demo/list'
 
 TodoApp = React.createClass
@@ -16,12 +15,13 @@ TodoApp = React.createClass
         @setState items: nextItems, text: nextText
 
     render: ->
-        React.createElement 'div', null, 
-            React.createElement('div', {className: 'alert alert-info'}, '任务列表'), 
-            React.createElement(TodoList, {items: @state.items}), 
-            React.createElement('form', {onSubmit: @handleSubmit}
-                React.createElement('input', {className: 'form-group form-control', onChange: @onChange, value: @state.text}), 
-                React.createElement('button', {className: 'btn btn-success glyphicon-plus'}, ' 增加 (' + (@state.items.length + 1) + ')')
-            )
-            
-React.render React.createElement(TodoApp, null), $('#demo')[0] 
+        <div>
+            <h3 className='alert alert-info'>任务列表</h3>
+            <TodoList items={this.state.items} />
+            <form onSubmit={this.handleSubmit}>
+                <input className='form-group form-control' onChange={this.onChange} value={this.state.text} />
+                <button className='btn btn-success glyphicon-plus'>{'增加 #' + (this.state.items.length + 1)}</button>
+            </form>
+        </div>
+
+module.exports = TodoApp
