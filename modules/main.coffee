@@ -1,3 +1,2 @@
-# require('test/main');
-TodoApp = require('demo/app');
-React.render <TodoApp />, $('#demo')[0]
+require('demo/stack');
+# require('demo/todo');
