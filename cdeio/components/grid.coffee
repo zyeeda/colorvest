@@ -127,12 +127,20 @@ define [ 'jquery'
                     selected.push table.fnGetPosition item.parentNode.parentNode
                 return null if selected.length is 0
                 if options.multiple then selected else selected[0]
+            getSelectedTrs: ->
+                selected = []
+                table.find('input[id*="chk-"]:checked').each (i, item) ->
+                    selected.push $(item).parent().parent()
+                selected
             removeSelectedRow: ->
+                selectedTrs = []
                 idx = table.getSelectedIndex()
                 return unless idx?
                 if options.multiple
-                    idx = idx.sort().reverse()
-                    table.fnDeleteRow i for i in idx
+                    selectedTrs = table.getSelectedTrs()
+                    for tr in selectedTrs
+                        table.fnDeleteRow $(tr)[0]
+                        # true
                 else
                     table.fnDeleteRow idx
             removeSelectedNodes: ->
