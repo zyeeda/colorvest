@@ -3,7 +3,7 @@ Widget = require 'core/widget'
 createItem = (itemText) ->
 	<li className="list-group-item">{itemText}</li>
 			
-TodoList = new Widget
+TodoList = React.createClass
 	render: ->
 		<ul className="list-group">{this.props.items.map(createItem)}</ul>
 

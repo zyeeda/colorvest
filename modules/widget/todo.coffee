@@ -1,9 +1,7 @@
 Widget = require 'core/widget'
-TodoListWidget = require 'widget/todo-list'
+TodoList = require 'widget/todo-list'
 
-TodoList = React.createClass TodoListWidget.options
-
-TodoWidget = new Widget
+Todo = React.createClass
     getInitialState: ->
         items: [], text: ''
 
@@ -26,4 +24,4 @@ TodoWidget = new Widget
             </form>
         </div>
 
-module.exports = React.createClass TodoWidget.options
+module.exports = Todo
