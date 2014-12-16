@@ -1,6 +1,3 @@
-//项目排除掉_xxx.scss，这些属于框架文件，不用关心
-fis.config.set('project.exclude', '**/_*.scss');
-
 fis.config.merge({
     modules: {
         parser: {
@@ -120,11 +117,6 @@ fis.config.merge({
                 useHash: false
             },
             {
-                id: 'v',
-                reg: '/v.coffee',
-                release: 'vendor/v.js'
-            },
-            {
                 reg: '**/*.coffee',
                 release: false
             },
@@ -147,6 +139,10 @@ fis.config.merge({
     }  
 });
 
+//项目排除掉_xxx.scss，这些属于框架文件，不用关心
+fis.config.set('project.exclude', '**/_*.scss');
+fis.config.set('settings.postpackager.simple.autoCombine', true);
+
 /*
 fis.config.set('pack', {
     'pkg/vendor.js': [
@@ -159,8 +155,6 @@ fis.config.set('pack', {
     ]
 });
 */
-
-fis.config.set('settings.postpackager.simple.autoCombine', true);
 
 //静态资源域名，使用pure release命令时，添加--domains或-D参数即可生效
 //fis.config.set('roadmap.domain', 'http://127.0.0.1:8080');
