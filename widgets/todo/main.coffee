@@ -1,5 +1,7 @@
-Widget = require 'core/widget'
-TodoList = require 'widget/todo-list'
+###
+@require widgets/todo.css
+###
+TodoList = require 'widgets/todo/list'
 
 Todo = React.createClass
     getInitialState: ->
@@ -20,7 +22,7 @@ Todo = React.createClass
             <TodoList items={@state.items} />
             <form onSubmit={@handleSubmit}>
                 <input className='form-group form-control' onChange={@onChange} value={@state.text} />
-                <button className='btn btn-success glyphicon-plus'>{'增加 #' + (@state.items.length + 1)}</button>
+                <button className='btn btn-success'> 添加 <i className='glyphicon glyphicon-plus' /> {(@state.items.length + 1)}</button>
             </form>
         </div>
 

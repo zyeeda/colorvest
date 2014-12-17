@@ -1,5 +1,3 @@
-Widget = require 'core/widget'
-
 createItem = (itemText) ->
 	<li className="list-group-item">{itemText}</li>
 			

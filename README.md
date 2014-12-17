@@ -39,3 +39,6 @@ cd colorvest
 fis release -opm 
 
 fis server start
+
+## 打包 & 发布
+fis release -op --dest local

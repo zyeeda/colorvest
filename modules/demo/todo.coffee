@@ -1,5 +1,5 @@
 App = require 'app/stack'
-Todo = require 'widget/todo'
+Todo = require 'widgets/todo'
 
 hello = ->
 	console.log 'hello colorvest'
