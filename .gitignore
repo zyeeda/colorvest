@@ -13,5 +13,4 @@ node_modules
 bower_components
 lib
 
-v.js
 modules/**/*.js
