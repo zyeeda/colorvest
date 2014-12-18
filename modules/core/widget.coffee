@@ -1,4 +1,4 @@
-class Widget extends Backbone.View
+class Widget
 	
 	constructor: (@options) ->
 
