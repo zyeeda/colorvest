@@ -1,20 +1,22 @@
-// //项目排除掉_xxx.scss，这些属于框架文件，不用关心
-// fis.config.set('project.exclude', '**/_*.scss');
-// //scss后缀的文件，用fis-parser-sass插件编译
-// fis.config.set('modules.parser.scss', 'sass');
-// //scss文件产出为css文件
-// fis.config.set('roadmap.ext.scss', 'css');
+fis.config.set('pack', {
+    'colorvest.js': [
+        '/bower_components/mod/mod.js',
+        '/modules/**',
+        '/jswrapper.coffee'
+    ]
+});
+
+//项目排除掉_xxx.scss，这些属于框架文件，不用关心
+fis.config.set('project.exclude', '**/_*.scss');
 
 fis.config.merge({
     modules: {
         parser: {
-            //coffee后缀的文件使用fis-parser-coffee-react插件编译
-            coffee : ['coffee-react'],
-            //less后缀的文件使用fis-parser-less插件编译
-            //处理器支持数组，或者逗号分隔的字符串配置
-            less : ['less'],
-            //md后缀的文件使用fis-parser-marked插件编译
-            md : 'marked'
+            coffee : 'coffee-react',
+            jsx: 'react',
+            less : 'less',
+            scss: 'sass'
+            // md : 'marked'
         },
         postprocessor: {
             js: "jswrapper, require-async",
@@ -22,42 +24,44 @@ fis.config.merge({
         },
         postpackager : ['autoload', 'simple']
     },
+    settings: {
+        postprocessor: {
+            jswrapper: {
+                type: 'amd'
+            }
+        }
+    },
+    deploy : {
+        local : {
+            to : './lib',
+            exclude : /\/lib|styles|modules|widgets|vendor|main.js|require.js|index.html|README.md|map.json/
+        }
+    },
     roadmap: {
          ext : {
             //less后缀的文件将输出为css后缀
-            //并且在parser之后的其他处理流程中被当做css文件处理
             less : 'css',
-            //coffee后缀的文件将输出为js文件
-            //并且在parser之后的其他处理流程中被当做js文件处理
+            scss: 'css',
             coffee : 'js',
-            //md后缀的文件将输出为html文件
-            //并且在parser之后的其他处理流程中被当做html文件处理
-            md : 'html'
+            jsx: 'js'
+            // md : 'html'
         },
-        path: [{
-                reg : /^\/page\/(.*)$/i,
-                useCache : false,
-                release : '$1'
-            },
+        path: [
             {
-                //一级同名组件，可以引用短路径，比如modules/jquery/juqery.js
-                //直接引用为var $ = require('jquery');
-                reg : /^\/modules\/([^\/]+)\/\1\.(coffee)$/i,
-                //是组件化的，会被jswrapper包装
+                //比如modules/app/index.coffee 可以直接引用为var app = require('app');
+                reg : /^\/modules\/([^\/]+)\/main\.(coffee)$/i,
                 isMod : true,
-                //id为文件夹名
                 id : '$1',
                 release : '/$&'
             },
             {
                 //modules目录下的其他脚本文件
                 reg : /^\/modules\/(.*)\.(coffee)$/i,
-                //是组件化的，会被jswrapper包装
                 isMod : true,
-                //id是去掉modules和.js后缀中间的部分
                 id : '$1',
                 release : '/$&'
             },
+<<<<<<< HEAD
             // {
             //     //less的mixin文件无需发布
             //     reg : /^(.*)mixin\.less$/i,
@@ -126,6 +130,8 @@ fis.config.merge({
                 reg: '/bower_components/backbone.localStorage/backbone.localStorage.js',
                 release: 'vendor/backbone.localStorage/backbone.localStorage.js',
             },
+=======
+>>>>>>> eb419c9f16f3e6d0d38eb2b31bfa654137711ce8
             {
                 id: 'mod',
                 reg: '/bower_components/mod/mod.js',
@@ -133,9 +139,10 @@ fis.config.merge({
                 useHash: false
             },
             {
-                id: 'v',
-                reg: '/v.coffee',
-                release: 'vendor/v.js'
+                id: 'jswrapper',
+                reg: 'jswrapper.coffee',
+                release: 'jswrapper.js',
+                useHash: false
             },
             {
                 reg: '**/*.coffee',
@@ -146,46 +153,13 @@ fis.config.merge({
                 release: false
             },
             {
-                reg: '/bower.json',
+                reg: '/node_modules/**',
+                release: false
+            },
+            {
+                reg: '/lib/**',
                 release: false
             }
         ]
-    },
-    settings: {
-        postprocessor: {
-            jswrapper: {
-                type: 'amd'
-            }
-        }
-    }  
+    }
 });
-
-/*
-fis.config.set('pack', {
-    'pkg/vendor.js': [
-        '/bower_components/mod/mod.js',
-        '/bower_components/jquery/dist/jquery.js',
-        '/bower_components/bootstrap/dist/js/bootstrap.js',
-        '/bower_components/lodash/dist/lodash.underscore.js',
-        '/bower_components/backbone/backbone.js',
-        '/bower_components/react/react.js'
-    ]
-});
-*/
-
-fis.config.set('settings.postpackager.simple.autoCombine', true);
-
-//静态资源域名，使用pure release命令时，添加--domains或-D参数即可生效
-//fis.config.set('roadmap.domain', 'http://127.0.0.1:8080');
-
-//如果要兼容低版本ie显示透明png图片，请使用pngquant作为图片压缩器，
-//否则png图片透明部分在ie下会显示灰色背景
-//使用spmx release命令时，添加--optimize或-o参数即可生效
-//fis.config.set('settings.optimzier.png-compressor.type', 'pngquant');
-
-//设置jshint插件要排除检查的文件，默认不检查bower_components、jquery、backbone、underscore等文件
-//使用pure release命令时，添加--lint或-l参数即可生效
-// fis.config.set('settings.lint.jshint.ignored', [ 'bower_components/**', /jquery|zepto|bootstrap|react|lodash|backbone|underscore|backbone.localStorage/i ]);
-
-//csssprite处理时图片之间的边距，默认是3px
-// fis.config.set('settings.spriter.csssprites.margin', 20);
