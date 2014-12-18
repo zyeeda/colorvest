@@ -117,6 +117,11 @@ fis.config.merge({
                 release: 'vendor/react/react.js',
             },
             {
+                id: 'text',
+                reg: '/modules/widget/text.coffee',
+                release: '/$&',
+            },
+            {
                 id: 'backbone.localStorage',
                 reg: '/bower_components/backbone.localStorage/backbone.localStorage.js',
                 release: 'vendor/backbone.localStorage/backbone.localStorage.js',
