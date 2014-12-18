@@ -16,6 +16,14 @@ class ReactBsApp extends App
 				defaultValue='123'
 				help = 'i need some help!'
 				/>
+			<Text 
+				id='name' 
+				text='性别' 
+				name='sex' 
+				color='has-warning' 
+				placeholder='请填写性别'
+				help = 'i need some help!'
+				/>
 		</div>
 
 module.exports = ReactBsApp
