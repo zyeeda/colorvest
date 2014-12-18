@@ -1,4 +1,4 @@
-Colorvest = require 'Colorvest'
+Colorvest = require 'colorvest'
 
 if typeof exports is 'object'
 	module.exports = Colorvest

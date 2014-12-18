@@ -2,7 +2,7 @@ fis.config.set('pack', {
     'colorvest.js': [
         '/bower_components/mod/mod.js',
         '/modules/**',
-        'jswrapper.coffee'
+        '/jswrapper.coffee'
     ]
 });
 
@@ -62,47 +62,15 @@ fis.config.merge({
                 release : '/$&'
             },
             {
-                id: 'jquery',
-                reg: '/bower_components/jquery/dist/jquery.js',
-                release: 'vendor/jquery/jquery.js',
-                isMod: true
-            },
-            {
-                id: 'bootstrap',
-                reg: '/bower_components/bootstrap/dist/js/bootstrap.js',
-                release: 'vendor/bootstrap/bootstrap.js',
-                requires: ['jquery', 'bootstrap.css'],
-                isMod: true
-            },
-            {
-                id: 'underscore',
-                reg: '/bower_components/lodash/dist/lodash.underscore.js',
-                release: 'vendor/underscore/underscore.js',
-                isMod: true
-            },
-            {
-                id: 'backbone',
-                reg: '/bower_components/backbone/backbone.js',
-                release: 'vendor/backbone/backbone.js',
-                requires: ['jquery', 'underscore'],
-                isMod: true
-            },
-            {
-                id: 'react',
-                reg: '/bower_components/react/react.js',
-                release: 'vendor/react/react.js',
-                isMod: true
-            },
-            {
                 id: 'mod',
                 reg: '/bower_components/mod/mod.js',
                 release: 'vendor/mod/mod.js',
                 useHash: false
             },
             {
-                id: 'packager',
-                reg: 'packager.coffee',
-                release: 'packager.js',
+                id: 'jswrapper',
+                reg: 'jswrapper.coffee',
+                release: 'jswrapper.js',
                 useHash: false
             },
             {
