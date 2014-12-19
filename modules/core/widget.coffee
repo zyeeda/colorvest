@@ -1,7 +1,5 @@
-class Widget
-	
-	constructor: (@options) ->
+BaseWidget = require 'colorvest/core/base-widget'
 
-	initialize: ->
+class Widget extends BaseWidget
 
 module.exports = Widget
