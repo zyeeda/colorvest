@@ -1,6 +1,6 @@
 fis.config.set('pack', {
     'colorvest.js': [
-        '/bower_components/mod/mod.js',
+        // '/bower_components/mod/mod.js',
         '/modules/**',
         '/jswrapper.coffee'
     ]
@@ -34,7 +34,7 @@ fis.config.merge({
     deploy : {
         local : {
             to : './lib',
-            exclude : /\/lib|styles|modules|widgets|vendor|main.js|require.js|index.html|README.md|map.json/
+            exclude : /\/lib|styles|modules|widgets|vendor|jswrapper.js|README.md|map.json/
         }
     },
     roadmap: {

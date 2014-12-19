@@ -2,14 +2,9 @@
     "name": "colorvest",
     "version": "3.0.0",
     "dependencies": {
-        "bootstrap": "latest",
-        "lodash": "latest",
-        "react": "latest",
-        "backbone": "latest",
         "mod": "https://github.com/fex-team/mod.git"
     },
     "devDependencies": {
-        "backbone.localStorage": "latest"
     },
     "author": "cheft"
 }

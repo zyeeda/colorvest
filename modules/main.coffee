@@ -1,4 +1,4 @@
 # require('demo/stack');
 # require('demo/todo');
 
-require 'demo/react-bs'
+# require 'demo/react-bs'

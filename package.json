@@ -4,7 +4,6 @@
     "dependencies": {
     },
     "devDependencies": {
-        "bower": "latest",
         "fis": "latest",
         "fis-parser-coffee-react": "latest",
         "fis-parser-coffee-script": "latest",

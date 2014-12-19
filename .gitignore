@@ -6,6 +6,7 @@
 *.orig
 *.msi
 .DS_Store
+fis
 
 .settings
 .project
