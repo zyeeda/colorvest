@@ -1,4 +1,4 @@
-Widget = require 'core/widget'
+Widget = require 'colorvest/core/widget'
 
 class App extends Widget
 
