@@ -6,6 +6,7 @@
 *.orig
 *.msi
 .DS_Store
+fis
 
 .settings
 .project
@@ -13,5 +14,4 @@ node_modules
 bower_components
 lib
 
-v.js
 modules/**/*.js

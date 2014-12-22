@@ -1,16 +1,16 @@
-Widget = require 'core/widget'
+BaseWidget = require 'colorvest/core/base-widget'
 
-class App extends Widget
+class App extends BaseWidget
 
-	constructor: (@options) ->
-		Router = Backbone.Router.extend options
-		@router = new Router()
+	# constructor: (@options) ->
+		# Router = Backbone.Router.extend options
+		# @router = new Router()
 
 	start: ->
 		React.render @render(), document.body
-		Backbone.history.start()
+		# Backbone.history.start()
 
-	route: (name, fn) ->
-		@router.route name, fn
+	# route: (name, fn) ->
+	# 	@router.route name, fn
 
 module.exports = App

@@ -1,4 +1,4 @@
-StackApp = require 'app/stack'
+StackApp = require 'colorvest/app/stack'
 
 Colorvest = StackApp: StackApp 
 

@@ -1,6 +1,6 @@
 fis.config.set('pack', {
     'colorvest.js': [
-        '/bower_components/mod/mod.js',
+        // '/bower_components/mod/mod.js',
         '/modules/**',
         '/jswrapper.coffee'
     ]
@@ -34,7 +34,7 @@ fis.config.merge({
     deploy : {
         local : {
             to : './lib',
-            exclude : /\/lib|styles|modules|widgets|vendor|main.js|require.js|index.html|README.md|map.json/
+            exclude : /\/lib|styles|modules|widgets|vendor|jswrapper.js|README.md|map.json/
         }
     },
     roadmap: {
@@ -48,17 +48,23 @@ fis.config.merge({
         },
         path: [
             {
-                //比如modules/app/index.coffee 可以直接引用为var app = require('app');
+                id: 'colorvest',
+                reg: '/modules/colorvest.coffee',
+                release: 'modules/colorvest.js',
+                isMod: true
+            },
+            {
+                //比如modules/app/main.coffee 可以直接引用为var app = require('app');
                 reg : /^\/modules\/([^\/]+)\/main\.(coffee)$/i,
                 isMod : true,
-                id : '$1',
+                id : 'colorvest/$1',
                 release : '/$&'
             },
             {
                 //modules目录下的其他脚本文件
                 reg : /^\/modules\/(.*)\.(coffee)$/i,
                 isMod : true,
-                id : '$1',
+                id : 'colorvest/$1',
                 release : '/$&'
             },
             {

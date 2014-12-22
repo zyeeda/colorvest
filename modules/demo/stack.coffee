@@ -1,4 +1,4 @@
-App = require 'app/stack'
+App = require 'colorvest/app/stack'
 
 app = window.app = new App
 	regions: [
