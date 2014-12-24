@@ -2,7 +2,7 @@ fis.config.set('pack', {
     'colorvest.js': [
         // '/bower_components/mod/mod.js',
         '/modules/**',
-        '/jswrapper.coffee'
+        // '/jswrapper.coffee'
     ]
 });
 
@@ -93,6 +93,10 @@ fis.config.merge({
             },
             {
                 reg: '/lib/**',
+                release: false
+            },
+            {
+                reg: 'map.json',
                 release: false
             }
         ]
