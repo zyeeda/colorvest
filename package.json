@@ -9,7 +9,7 @@
         "fis-parser-coffee-script": "latest",
         "fis-parser-sass": "latest",
         "fis-parser-less": "latest",
-        "fis-parser-react": "latest",
+        "fis-parser-jsx-react": "latest",
         "fis-parser-marked": "latest",
         "fis-postprocessor-require-async": "latest",
         "fis-postprocessor-jswrapper": "latest",

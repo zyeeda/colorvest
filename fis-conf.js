@@ -13,7 +13,7 @@ fis.config.merge({
     modules: {
         parser: {
             coffee : 'coffee-react',
-            jsx: 'react',
+            jsx: 'jsx-react',
             less : 'less',
             scss: 'sass'
             // md : 'marked'
