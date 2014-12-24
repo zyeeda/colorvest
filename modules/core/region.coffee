@@ -3,13 +3,18 @@ class Region
 		@name = options.name
 		@height = options.height
 		@content = options.content
-		@layout = options.layout
-		@widget = options.widget
+		@parent = options.parent
 
 	getParent: ->
-		@layout
+		@parent
 
 	getWidget: ->
 		@widget
+
+	mountWidget: (widget) ->
+		@widget = widget
+
+	unmountWidget: ->
+		@widget = undefined
 
 module.exports = Region

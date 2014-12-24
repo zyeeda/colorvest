@@ -13,4 +13,5 @@ class App extends BaseWidget
 	# route: (name, fn) ->
 	# 	@router.route name, fn
 
+
 module.exports = App
