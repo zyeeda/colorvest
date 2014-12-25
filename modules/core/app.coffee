@@ -1,4 +1,4 @@
-BaseWidget = require 'colorvest/core/base-widget'
+BaseWidget = require './base-widget'
 
 class App extends BaseWidget
 

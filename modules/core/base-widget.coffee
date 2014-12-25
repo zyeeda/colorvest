@@ -1,5 +1,5 @@
-Layout = require 'colorvest/core/layout'
-Region = require 'colorvest/core/region'
+Layout = require './layout'
+Region = require './region'
 
 class BaseWidget
 	
@@ -38,5 +38,6 @@ class BaseWidget
 				height: region.height
 				content: region.content
 				parent: @layout
+	
 
 module.exports = BaseWidget

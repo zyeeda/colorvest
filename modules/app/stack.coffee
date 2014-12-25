@@ -1,4 +1,4 @@
-App = require 'colorvest/core/app'
+App = require '../core/app'
 
 class StackApp extends App
 

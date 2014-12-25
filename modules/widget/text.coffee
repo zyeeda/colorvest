@@ -1,4 +1,4 @@
-Widget = require 'colorvest/core/widget'
+Widget = require '../core/widget'
 
 joinClasses = (className = '', others...) ->
     names = []

@@ -1,4 +1,4 @@
-BaseWidget = require 'colorvest/core/base-widget'
+BaseWidget = require './base-widget'
 
 class Widget extends BaseWidget
 
@@ -11,5 +11,9 @@ class Widget extends BaseWidget
 		region.unmountWidget()
 
 	activeRegion: (regionName) ->
+		# :TODO
+
+	render: ->
+		#: TODO
 
 module.exports = Widget

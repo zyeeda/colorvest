@@ -1,5 +1,5 @@
-StackApp = require 'colorvest/app/stack'
+StackApp = require './app/stack'
 
 Colorvest = StackApp: StackApp 
 
-module.exports = Colorvest
+window.Colorvest = Colorvest
