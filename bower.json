@@ -1,7 +1,12 @@
 {
     "name": "colorvest",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "dependencies": {
+    	"jquery": "latest",
+        "lodash": "latest",
+        "bootstrap": "latest",
+        "react": "latest",
+        "flux": "latest",
         "mod": "https://github.com/fex-team/mod.git"
     },
     "devDependencies": {

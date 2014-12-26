@@ -1,5 +1,5 @@
-Layout = require 'colorvest/core/layout'
-Region = require 'colorvest/core/region'
+Layout = require './layout'
+Region = require './region'
 
 class BaseWidget
 	
@@ -18,6 +18,8 @@ class BaseWidget
 	find: ->
 
 	findRegion: (name) ->
+		for region in @layout.regions
+			return region if region.widget.name is @name
 		@layout.regions[name]
 
 	findWidget: (name) ->
@@ -25,7 +27,7 @@ class BaseWidget
 			return region.widget if region.widget.name is name
 
 	initLayout: ->
-		@layout = new Layout name: @options.layout, widget: @
+		@layout = new Layout name: @options.layout, parent: @
 		@layout
 
 	initRegions: ->
@@ -35,7 +37,7 @@ class BaseWidget
 				name: region.region
 				height: region.height
 				content: region.content
-				layout: @layout
-				widget: @
+				parent: @layout
+	
 
 module.exports = BaseWidget

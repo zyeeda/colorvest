@@ -1,10 +1,10 @@
 class Layout
 	constructor: (@options) ->
 		@name = options.name
-		@widget = options.widget
+		@parent = options.parent
 	
 	getParent: ->
-		@widget
+		@parent
 
 	getRegions: ->
 		@regions

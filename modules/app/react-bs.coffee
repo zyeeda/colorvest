@@ -1,6 +1,5 @@
-App = require 'colorvest/core/app'
-
-Text = require 'colorvest/widget/text'
+App = require '../core/app'
+Text = require '../widget/text'
 
 class ReactBsApp extends App	
 
