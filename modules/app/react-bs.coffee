@@ -6,17 +6,9 @@ class ReactBsApp extends App
 	render: ->
 		# console.log ' render react bs app ...',	this
 		<div className="container-fluid">
+
 			<Text 
-				id='name' 
-				text='姓名' 
-				name='name' 
-				color='has-success' 
-				placeholder='请填写姓名'
-				defaultValue='123'
-				help = 'i need some help!'
-				/>
-			<Text 
-				id='name' 
+				id='sex' 
 				text='性别' 
 				name='sex' 
 				color='has-warning' 

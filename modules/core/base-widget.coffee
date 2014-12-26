@@ -9,7 +9,7 @@ class BaseWidget
 		@initRegions()
 	
 	getLayout: ->
-		@layout
+		# @layout
 
 	getParent: ->
 		for region in @layout.regions
