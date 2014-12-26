@@ -8,18 +8,18 @@ var imagemin   = require('gulp-imagemin');
 var sourcemaps = require('gulp-sourcemaps');
 var gzip       = require('gulp-gzip');
 var clean      = require('gulp-clean');
-var cjsx       = require('gulp-coffee-react-transform');
+var coffeex    = require('gulp-coffee-react');
 
 var config = {
     distFolder: 'dist',
-    distName: 'colorvest',
+    distName: 'colorvest.all',
     scripts: ['modules/colorvest.coffee'],
     styles: ['assets/main.scss'], 
     images: 'assets'
 };
 
 gulp.task('clean', function() {
-    gulp.src(config.distFolder, {read: false})
+    gulp.src(config.distFolder + '/**/*.js', {read: false})
     .pipe(clean());
 });
 
@@ -42,7 +42,7 @@ gulp.task('scripts', function() {
     }))
     // .pipe(sourcemaps.init())
     .pipe(concat(config.distName + '.js'))
-    // .pipe(uglify())
+    .pipe(uglify())
     // .pipe(gzip())
     // .pipe(sourcemaps.write())
     .pipe(gulp.dest(config.distFolder))
@@ -62,6 +62,11 @@ gulp.task('watch', function() {
     // gulp.watch(config.styles, ['styles']);
 });
 
-// The default task (called when you run `gulp` from cli)
-gulp.task('default', ['clean', 'scripts']);
+gulp.task('build', function() {
+    return gulp.src('modules/**/*.coffee')
+        .pipe(coffeex({ bare: true }))
+        .pipe(gulp.dest(config.distFolder));
+});
 
+// The default task (called when you run `gulp` from cli)
+gulp.task('default', ['clean', 'scripts', 'build']);

@@ -3,7 +3,8 @@
     "version": "3.0.1",
     "main": "dist/colorvest.js",
     "dependencies": {
-
+        "coffee-react-transform": "2.1.0",
+        "coffee-script": "1.8.0"
     },
     "devDependencies": {
         "gulp": "^3.8.10",
@@ -16,10 +17,8 @@
         "gulp-sourcemaps": "^1.2.8",
         "gulp-sass": "^1.2.4",
         "gulp-uglify": "^1.0.2",
-        "gulp-coffee-react-transform": "^0.0.2",
-        "coffee-reactify": "^2.1.0",
-        "coffee-react-transform": "2.1.0",
-        "coffee-script": "1.8.0"
+        "gulp-coffee-react": "^1.0.0",
+        "coffee-reactify": "^2.1.0"
     },
     "scripts": {
         "test": "jest"
