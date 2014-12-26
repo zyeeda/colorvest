@@ -7,12 +7,14 @@ heightSizingMapping =
     xsmall: 'input-sm'
 
 widgetHelper =
-
 	joinClasses: (className = '', others...) ->
 	    names = []
 	    names.push name for name in others
 	    names.push className if className isnt ''
-	    names
+	    if not _.isEmpty names
+	    	return  names.join ' '
+	    ''
+
 
 	# 获取高度
 	getHeightSizing: (sizing) ->

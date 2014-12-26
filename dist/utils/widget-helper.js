@@ -25,7 +25,10 @@ widgetHelper = {
     if (className !== '') {
       names.push(className);
     }
-    return names;
+    if (!_.isEmpty(names)) {
+      return names.join(' ');
+    }
+    return '';
   },
   getHeightSizing: function(sizing) {
     var heightSizing;
