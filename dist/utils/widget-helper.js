@@ -1,5 +1,12 @@
-var widgetHelper,
+var heightSizingMapping, widgetHelper,
   __slice = [].slice;
+
+heightSizingMapping = {
+  large: 'input-lg',
+  "default": '',
+  small: 'input-sm',
+  xsmall: 'input-sm'
+};
 
 widgetHelper = {
   joinClasses: function() {
@@ -17,6 +24,14 @@ widgetHelper = {
       names.push(className);
     }
     return names;
+  },
+  getHeightSizing: function(sizing) {
+    var heightSizing;
+    heightSizing = heightSizingMapping[sizing];
+    if (_.isUndefined(sizing)) {
+      heightSizing = '';
+    }
+    return heightSizing;
   }
 };
 
