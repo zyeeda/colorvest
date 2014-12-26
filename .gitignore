@@ -7,7 +7,7 @@
 *.msi
 .DS_Store
 fis
-
+dist
 .settings
 .project
 node_modules
