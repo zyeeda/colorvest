@@ -1,6 +1,8 @@
-var App, ReactBsApp, Text,
+var App, React, ReactBsApp, Text,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+React = require('react');
 
 App = require('../core/app');
 
@@ -17,15 +19,7 @@ ReactBsApp = (function(_super) {
     return React.createElement("div", {
       "className": "container-fluid"
     }, React.createElement(Text, {
-      "id": 'name',
-      "text": '姓名',
-      "name": 'name',
-      "color": 'has-success',
-      "placeholder": '请填写姓名',
-      "defaultValue": '123',
-      "help": 'i need some help!'
-    }), React.createElement(Text, {
-      "id": 'name',
+      "id": 'sex',
       "text": '性别',
       "name": 'sex',
       "color": 'has-warning',

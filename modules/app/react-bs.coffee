@@ -1,3 +1,4 @@
+React = require 'react'
 App = require '../core/app'
 Text = require '../widget/text'
 

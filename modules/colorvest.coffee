@@ -1,6 +1,6 @@
 StackApp = require './app/stack'
 
 Colorvest = StackApp: StackApp
-Colorvest.utils = joinClasses: require 'colorvest/utils/widget-helper'
+Colorvest.utils = joinClasses: require './utils/widget-helper'
 
-window.Colorvest = Colorvest
+module.exports = Colorvest

@@ -1,3 +1,4 @@
+React = require 'react'
 Widget = require '../core/widget'
 
 joinClasses = (className = '', others...) ->

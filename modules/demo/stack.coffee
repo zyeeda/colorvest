@@ -1,3 +1,4 @@
+React = require 'react'
 App = require '../app/stack'
 
 app = window.app = new App

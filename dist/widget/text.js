@@ -1,5 +1,7 @@
-var Text, Widget, joinClasses,
+var React, Text, Widget, joinClasses,
   __slice = [].slice;
+
+React = require('react');
 
 Widget = require('../core/widget');
 

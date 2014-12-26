@@ -12,9 +12,7 @@ BaseWidget = (function() {
     this.initRegions();
   }
 
-  BaseWidget.prototype.getLayout = function() {
-    return this.layout;
-  };
+  BaseWidget.prototype.getLayout = function() {};
 
   BaseWidget.prototype.getParent = function() {
     var region, _i, _len, _ref;

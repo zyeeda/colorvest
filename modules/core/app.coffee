@@ -1,3 +1,4 @@
+React = require 'react'
 BaseWidget = require './base-widget'
 
 class App extends BaseWidget

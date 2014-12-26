@@ -1,4 +1,6 @@
-var App, app;
+var App, React, app;
+
+React = require('react');
 
 App = require('../app/stack');
 

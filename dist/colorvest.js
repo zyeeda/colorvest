@@ -6,4 +6,8 @@ Colorvest = {
   StackApp: StackApp
 };
 
-window.Colorvest = Colorvest;
+Colorvest.utils = {
+  joinClasses: require('./utils/widget-helper')
+};
+
+module.exports = Colorvest;
