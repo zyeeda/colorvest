@@ -7,19 +7,20 @@ heightSizingMapping =
     xsmall: 'input-sm'
 
 widgetHelper =
-	joinClasses: (className = '', others...) ->
-	    names = []
-	    names.push name for name in others
-	    names.push className if className isnt ''
-	    if not _.isEmpty names
-	    	return  names.join ' '
-	    ''
+    joinClasses: (className = '', others...) ->
+        names = []
+        names.push name for name in others
+        names.push className if className isnt ''
+        # if not _.isEmpty names
+        #     return  names.join ' '
+        # ''
+        names.join ' '
 
 
-	# 获取高度
-	getHeightSizing: (sizing) ->
-	    heightSizing = heightSizingMapping[sizing]
-	    heightSizing = '' if _.isUndefined sizing
-	    heightSizing
+    # 获取高度
+    getHeightSizing: (sizing) ->
+        heightSizing = heightSizingMapping[sizing]
+        heightSizing = '' if _.isUndefined sizing
+        heightSizing
 
 module.exports = widgetHelper
