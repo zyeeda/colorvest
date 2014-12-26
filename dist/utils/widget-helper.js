@@ -1,5 +1,7 @@
-var heightSizingMapping, widgetHelper,
+var heightSizingMapping, widgetHelper, _,
   __slice = [].slice;
+
+_ = require('lodash');
 
 heightSizingMapping = {
   large: 'input-lg',

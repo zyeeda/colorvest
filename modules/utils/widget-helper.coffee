@@ -1,3 +1,4 @@
+_ = require 'lodash'
 # 高度列表
 heightSizingMapping =
     large: 'input-lg'
