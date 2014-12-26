@@ -1,13 +1,16 @@
-var Colorvest, StackApp;
+var Colorvest, StackApp, Widget;
 
 StackApp = require('./app/stack');
 
+Widget = require('./core/widget');
+
 Colorvest = {
-  StackApp: StackApp
+  StackApp: StackApp,
+  Widget: Widget
 };
 
 Colorvest.utils = {
-  joinClasses: require('./utils/widget-helper')
+  widgetHelper: require('./utils/widget-helper')
 };
 
 module.exports = Colorvest;

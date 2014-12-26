@@ -1,7 +1,11 @@
 StackApp = require './app/stack'
+Widget = require './core/widget'
 
-Colorvest = StackApp: StackApp
-Colorvest.utils = joinClasses: require './utils/widget-helper'
+Colorvest = 
+	StackApp: StackApp
+	Widget: Widget
+
+
+Colorvest.utils = widgetHelper: require './utils/widget-helper'
 
 module.exports = Colorvest
-
