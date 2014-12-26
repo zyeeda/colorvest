@@ -1,5 +1,14 @@
-var widgetHelper,
+var heightSizingMapping, widgetHelper, _,
   __slice = [].slice;
+
+_ = require('lodash');
+
+heightSizingMapping = {
+  large: 'input-lg',
+  "default": '',
+  small: 'input-sm',
+  xsmall: 'input-sm'
+};
 
 widgetHelper = {
   joinClasses: function() {
@@ -16,7 +25,18 @@ widgetHelper = {
     if (className !== '') {
       names.push(className);
     }
-    return names;
+    if (!_.isEmpty(names)) {
+      return names.join(' ');
+    }
+    return '';
+  },
+  getHeightSizing: function(sizing) {
+    var heightSizing;
+    heightSizing = heightSizingMapping[sizing];
+    if (_.isUndefined(sizing)) {
+      heightSizing = '';
+    }
+    return heightSizing;
   }
 };
 
