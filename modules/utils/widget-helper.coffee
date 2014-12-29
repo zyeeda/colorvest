@@ -6,7 +6,7 @@ heightSizingMapping =
     small: 'input-sm'
     xsmall: 'input-sm'
 
-sizeMapping: 
+sizeMapping = 
         large: 'btn-lg'
         small: 'btn-sm'
         xsmall: 'btn-xs'
@@ -30,7 +30,7 @@ widgetHelper =
         heightSizing
 
     getSize: (s) ->
-        size = data.sizeMapping[s]
+        size = sizeMapping[s]
         size = '' if _.isUndefined s
         size
 
