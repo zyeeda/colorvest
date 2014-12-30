@@ -1,6 +1,6 @@
 _ = require 'lodash'
 # 高度列表
-heightSizingMapping =
+heightSizeMapping =
     large: 'input-lg'
     default: ''
     small: 'input-sm'
@@ -24,8 +24,8 @@ widgetHelper =
 
 
     # 获取高度
-    getHeightSizing: (sizing) ->
-        heightSizing = heightSizingMapping[sizing]
+    getHeightSize: (sizing) ->
+        heightSizing = heightSizeMapping[sizing]
         heightSizing = '' if _.isUndefined sizing
         heightSizing
 
