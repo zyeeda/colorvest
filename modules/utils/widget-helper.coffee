@@ -6,6 +6,12 @@ heightSizingMapping =
     small: 'input-sm'
     xsmall: 'input-sm'
 
+sizeMapping = 
+        large: 'btn-lg'
+        small: 'btn-sm'
+        xsmall: 'btn-xs'
+        default: ''
+
 widgetHelper =
     joinClasses: (className = '', others...) ->
         names = []
@@ -22,5 +28,10 @@ widgetHelper =
         heightSizing = heightSizingMapping[sizing]
         heightSizing = '' if _.isUndefined sizing
         heightSizing
+
+    getSize: (s) ->
+        size = sizeMapping[s]
+        size = '' if _.isUndefined s
+        size
 
 module.exports = widgetHelper
