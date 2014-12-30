@@ -16,6 +16,7 @@ StackApp = (function(_super) {
   StackApp.prototype.mapRegions = function(item) {
     return React.createElement("div", {
       "id": item.region,
+      "key": Math.random(),
       "style": {
         height: item.height
       },
