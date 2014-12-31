@@ -11,14 +11,7 @@ typeMapping =
     button: 'btn'
     input: 'input'
 
-widgetHelper =
-    # 合并 class
-    joinClasses: (className = '', others...) ->
-        names = []
-        names.push name for name in others
-        names.push className if className isnt ''
-        names.join ' '
-
+module.exports =
     # 获取高度
     getHeightSize: (type="input", size="default") ->
         sz = sizeMapping[size]
@@ -28,4 +21,12 @@ widgetHelper =
         heightSize = '' if heightSize?
         heightSize
 
-module.exports = widgetHelper
+    getColumnSize: (size='') ->
+        s = size
+        s = 'col-sm-' + s if s isnt ''
+        s
+        
+    getClassName: (className='')->
+        cn = className
+        cn
+

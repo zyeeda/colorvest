@@ -6,6 +6,7 @@ Colorvest =
 	Widget: Widget
 
 
-Colorvest.utils = widgetHelper: require './utils/widget-helper'
+Colorvest.utils = 
+	widgetUtil: require './utils/widget-util'
 
 module.exports = Colorvest

@@ -10,7 +10,7 @@ Colorvest = {
 };
 
 Colorvest.utils = {
-  widgetHelper: require('./utils/widget-helper')
+  widgetUtil: require('./utils/widget-util')
 };
 
 module.exports = Colorvest;
