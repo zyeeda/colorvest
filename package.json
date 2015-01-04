@@ -1,21 +1,16 @@
 {
     "name": "colorvest",
     "version": "3.0.1",
-    "main": "dist/colorvest.js",
+    "main": "src/colorvest.js",
     "dependencies": {
+        
+    },
+    "devDependencies": {
         "jquery": "latest",
         "lodash": "latest",
         "bootstrap": "latest",
         "react": "latest",
         "flux": "latest"
-    },
-    "devDependencies": {
-        "gulp": "^3.8.10",
-        "gulp-clean": "^0.3.1",
-        "gulp-coffee-react": "^1.0.0",
-        "jest-cli" :"0.2.1",
-        "coffee-react-transform": "2.1.0",
-        "coffee-script": "1.8.0"
     },
     "scripts": {
         "test": "jest"
