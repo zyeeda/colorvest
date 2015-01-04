@@ -16,11 +16,11 @@ module.exports =
     # 获取高度设置
     getHeightSize: (type="input", size="default") ->
         sz = sizeMapping[size]
-        console.warn "不存在与 '#{size}' 对应的设置，请查看 heightSize 设置是否正确。" if not sz?
+        return console.warn "不存在与 '#{size}' 对应的设置，请查看 heightSize 设置是否正确。" if not sz?
         tp = typeMapping[type]
-        console.error "参数 type 的类型不正确，error(type=#{type})。" if not tp?
+        return console.error "参数 type 的类型不正确，error(type=#{type})。" if not tp?
 
-        heightSize = tp + "-" + sz if sz? and tp?
+        heightSize = tp + "-" + sz if sz? and tp? and sz isnt ''
         heightSize = heightSize || ''
         heightSize
 
