@@ -154,7 +154,7 @@ define [
                     renderHtml: (su, data) ->
                         html = (result.templates.buttonGroup buttons: (v.HTML for v in opGroups[name]).join('') for name in groupNames).join('')
                         if @feature.options.haveFilter and @feature.isPermitted('show')
-                            html += '<div class="pull-right btn-group"><button id="filter" class="btn btn-warning c-filter-toggle"><i class="icon-chevron-down"/></button></div>'
+                            html += '<div class="pull-right btn-group"><button id="filter" class="btn btn-success c-filter-toggle"><i class="icon-filter"/></button></div>'
 
                         template = Handlebars.compile html
                         template(data)
@@ -162,12 +162,41 @@ define [
             view = if options.createView then options.createView(viewOptions) else new View(viewOptions)
             result.extendEventHandlers view, options.handlers
             view.eventHandlers.toggleFilter = ->
-                $('i', '.c-filter-toggle', @feature.layout.$('filter-container')).toggleClass('icon-chevron-down').toggleClass('icon-chevron-up')
                 filterForm = @feature.views['form:filter']
                 filterForm.formData = filterForm.getFormData() or {}
-                filterForm.setFormData filterForm.formData
-                @feature.layout.$('filter-container').toggle()
-                $(window).scroll() #fix the FixedHeader issue
+
+                grid = filterForm.feature.views['grid:body'].components[0]
+                btns = []
+
+                filterBtn =
+                    label: '查询'
+                    status: 'btn-info'
+                    fn: =>
+                        app.filterForm = filterForm
+                        grid.effectiveFilters = filterForm.getFilters()
+                        grid.addFilters grid.effectiveFilters
+                        grid.refresh()
+                        true
+                resetBtn =
+                    label: '重置'
+                    status: 'btn-warning'
+                    fn: =>
+                        grid.removeFilters grid.effectiveFilters
+                        delete grid.effectiveFilters
+                        filterForm.reset()
+                        grid.refresh()
+                        false
+
+                btns.push filterBtn
+                btns.push resetBtn
+
+                app.showDialog(
+                    view: filterForm
+                    onClose: ->
+                    title: '条件查询'
+                    buttons: btns
+                ).done ()->
+                    filterForm.setFormData filterForm.formData
 
             deferred.resolve view
 

@@ -49,7 +49,7 @@ define [
                 views.push 'form:add'
                 views.push 'form:edit'
                 views.push 'form:show'
-                views.push name: 'form:filter', region: 'filter' if data.haveFilter
+                views.push name: 'form:filter' if data.haveFilter
 
             views = views.concat data.views if _.isArray(data.views)
 

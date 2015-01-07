@@ -4,7 +4,6 @@ define [
     regions:
         toolbar: 'toolbar'
         body: 'body'
-        filter: 'filter'
 
     avoidLoadingHandlers: false
     events:
