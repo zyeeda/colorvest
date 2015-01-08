@@ -1,14 +1,3 @@
-/*
-	delete
-*/
-.user-profile {
-	display: none;
-}
-.nav-search {
-	display: none;
-}
-
-/* end delete */
 
 .navbar .navbar-inner {
 	background-color: #FFFFFF;
@@ -19,13 +8,38 @@
 	color: #48587D;
 }
 
+.nav-search .show-source{
+	border-radius: 50%;
+	background: #259B9D !important;
+	border: 1px solid #259B9D;
+}
+
+.nav-search .close-source{
+	border-radius: 50%;
+	background: #FCB04E !important;
+	border: 1px solid #FCB04E;
+}
+
+
 .main-container {
 	background-color: rgba(0,0,0,0.0);
 }
 
+.exit-btn {
+	background-color: #FFF !important;
+}
+
+.exit-btn i{
+	color: #8E9AA5 !important;
+}
+
+.exit-btn:hover i {
+	color: #F76461 !important;
+}
+
 /* begin sidebar */
 .sidebar:before {
-	background: #20252B;
+	background-color: #20252B;
 }
 
 .sidebar-shortcuts {
@@ -180,6 +194,59 @@
 
 .nav-list > li > .submenu > li:first-child > a {
 	border-top: 1px solid #15191E;
+}
+
+.menu-min .sidebar-shortcuts-large {
+	background: #2AB3B3;
+	height: 78px;
+	box-shadow: none;
+	border-top: none;
+	border-right: none;
+	border-left: 1px dashed #FFF;
+	border-bottom: 1px dashed #FFF;
+}
+
+.large-user-photo {
+	width: 50px;
+	height: 50px;
+	margin-top: 12px;
+	border-radius: 50%;
+	border: 3px solid #f5a623;
+}
+
+.large-user-name {
+	color: #FFF;
+	font-size: 13px;
+	float: right;
+	margin-right: 20px;
+	margin-top: 8px;
+}
+
+.large-user-btns {
+	color: #FFF;
+	width: 19px;
+	height: 19px;
+	border-radius: 50%;
+	border: 1px solid #FFF;
+	margin-top: -26px;
+	margin-left: 100px;
+	cursor: pointer;
+}
+
+.large-user-btns i {
+	float: left;
+	padding-left: 4px;
+	padding-top: 1px;
+}
+
+.mini-user-photo {
+	width: 25px;
+	height: 25px;
+	margin-top: 26px;
+	margin-left: 5px;
+	border-radius: 50%;
+	border: 3px solid #f5a623;
+	float: left;
 }
 
 /* end sidebar */
