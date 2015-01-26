@@ -154,7 +154,7 @@ define [
                     renderHtml: (su, data) ->
                         html = (result.templates.buttonGroup buttons: (v.HTML for v in opGroups[name]).join('') for name in groupNames).join('')
                         if @feature.options.haveFilter and @feature.isPermitted('show')
-                            html += '<div class="pull-right btn-group"><button id="filter" class="btn btn-success c-filter-toggle"><i class="icon-filter"/></button></div>'
+                            html += '<div class="pull-right btn-group"><button id="filter" title="条件查询" class="btn btn-success c-filter-toggle"><i class="icon-filter"/></button></div>'
 
                         template = Handlebars.compile html
                         template(data)

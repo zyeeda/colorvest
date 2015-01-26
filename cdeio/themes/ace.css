@@ -5,6 +5,7 @@
 html, body {
     height: 100%;
 }
+/* c- 表示 cdeio- */
 
 .c-fill {
     height: 100%;
@@ -29,13 +30,18 @@ html, body {
     float: left;
     margin-left: 10px;
     font-size: 85%;
-    margin-top: 5px;
+    margin-top: 2px;
 }
 
 .c-layout-container {
     height: 100%;
     overflow: hidden;
 }
+
+/*.c-layout-border {
+    border: 1px solid #BAC1C8; 
+    margin-top: 20px;
+}*/
 
 .c-layout-container .c-layout-center {
     height: 100%;
@@ -80,6 +86,7 @@ html, body {
 }
 
 .c-grid-top {
+    padding: 10px 0 4px !important;
     position: relative;
     z-index: 200;
 }
@@ -138,7 +145,8 @@ html, body {
     font-size: 14px;
 }
 
-.c-action-form-show fieldset:first-child .row-fluid:first-child {
+/*.c-action-form-show fieldset:first-child .row-fluid:first-child {*/
+.c-action-form-show fieldset .row-fluid:first-child {
     border-top: 1px solid #BCE8F1;
 }
 
@@ -168,6 +176,42 @@ html, body {
 .c-action-form-show .field-value {
     display: inline-block;
     padding: 10px 5px;
+}
+/* 去掉 查看表单中 inling-grid 内操作按钮组的边框 */
+.c-action-form-show .c-inline-grid-container .row-fluid{
+    border: 0;
+}
+/* form 表单组样式，用户表单中分组样式的处理 */
+
+.c-form-group-container {
+    padding: 15px;
+}
+.c-form-group-margin {
+    margin-top: 20px;
+}
+.c-form-group-border {
+    border:1px solid #BAC1C8;
+}
+.c-form-group-title {
+    height: 30px; 
+    background: #20252B; 
+    color: #B6C2C9;
+}
+.c-form-group-title h5 {
+    margin: 0;
+    padding-top: 5px; 
+    padding-left: 12px;
+}
+
+.c-inline-grid-margin {
+    padding-bottom:10px;
+}
+
+.c-inline-grid-container {
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 .c-form-group-cols-1 .field-label {
@@ -215,6 +259,13 @@ html, body {
 .filter_column {
     text-align: center;
     display: block;
+}
+
+/* 将 filter 变为圆角 */
+.filter_column input {
+    border-radius: 5px !important;
+      -webkit-border-radius: 5px;
+         -moz-border-radius: 5px;
 }
 
 .number_range_filter {

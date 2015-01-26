@@ -2,7 +2,7 @@ define [
     'jquery'
     'cdeio/core/feature'
 ], ($, Feature) ->
-
+    # 处理各个 scaffold 的 view
     type: 'feature'
     name: 'scaffold'
     fn: (module, feature, featureName, args) ->
@@ -56,6 +56,7 @@ define [
             opts.views = views
             opts.haveFilter = data.haveFilter
 
+            # 判断是否加载前端 feature 
             if data.enableFrontendExtension is true
                 module.loadResource(featureName + '.feature/scaffold').done (scaffold) ->
                     opts.scaffold = scaffold

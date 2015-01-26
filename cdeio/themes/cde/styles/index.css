@@ -3,7 +3,7 @@ body:before {
 }
 .navbar .navbar-inner {
 	background-color: #FFFFFF;
-	box-shadow: rgba(0,0,0,.2) 0 0 6px;
+	/*box-shadow: rgba(0,0,0,.2) 0 0 6px;*/
 }
 
 .navbar .brand {
@@ -66,6 +66,10 @@ body:before {
 .nav-list a {
 	background-color: #20252B;
 	color: #8E9AA5;
+}
+.nav-list .active a {
+	background-color: #20252B;
+	color: red;
 }
 
 .nav-list > li .submenu > li > a {
@@ -340,4 +344,22 @@ body:before {
 
 .page-content .c-layout-grid {
 	border-left: 1px solid #E2E8E8;
+}
+/* 模态对话框 title */
+.modal-header {
+	background-color: #2AB3B3;
+	color: #FFF;
+	padding: 1px 15px;
+}
+/* 弹出窗口关闭样式，覆盖 bootstrap */
+.close {
+	color: #FFF;
+	font-weight: 200;
+	line-height: 24px;
+	text-shadow: 0 0 0 ;
+	opacity: 1.0;
+}
+/*解决 行间距问题, inherit 会导致 *-range 显示成两行*/
+.row-fluid input[class*="span"], .row-fluid textarea[class*="span"] {
+	/*display: inherit;*/
 }
