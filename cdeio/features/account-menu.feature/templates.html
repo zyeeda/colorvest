@@ -1,0 +1,33 @@
+{{#layout}}
+<li class="light-blue user-profile">
+    <a id="title" data-toggle="dropdown" href="javascript:void 0;" class="user-menu dropdown-toggle"></a>
+    <ul id="dropdown" class="pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer"></ul>
+</li>
+{{/layout}}
+
+{{#view "title"}}
+<img class="nav-user-photo" src="{{settings.currentUser.photo}}" alt="用户头像" />
+<span class="user-info">
+    <small>欢迎,</small>
+    {{settings.currentUser.realName}}
+</span>
+
+<i class="icon-caret-down"></i>
+{{/view}}
+
+{{#view "dropdown"}}
+
+<!--
+<li>
+    <a href="#"><i class="icon-cog"></i>偏好设置</a>
+</li>
+-->
+
+<li>
+    <a href="#profile"><i class="icon-user"></i>用户信息</a>
+</li>
+<li class="divider"></li>
+<li>
+    <a href="{{settings.signOutUrl}}"><i class="icon-off"></i>退出</a>
+</li>
+{{/view}}

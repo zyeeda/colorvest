@@ -1,24 +1,11 @@
-## muffin & 插件安装
+CoffeeScript 代码编译
+====================
 
-npm install -g fis-muffin
+## 安装 Nodejs
+[下载Node](http://www.nodejs.org/)
 
-npm install -g fis-postpackager-autoload
+## 安装 CoffeScript
+npm install -g coffee-script
 
-npm install -g fis-postpackager-simple
-
-npm install -g fis-parser-sass
-
-npm install -g fis-parser-coffee-react
-
-npm install -g browserify
-
-npm install -g watchify
-
-npm install -g jest-cli
-
-...
-
-## 编译 & 测试
-mfn && npm test
-
-
+## 编译代码
+make compile

@@ -1,0 +1,43 @@
+{{#layout}}
+<div class="c-layout-container c-layout-grid">
+    <div class="c-layout-north">
+        <div class="c-layout-toolbar">
+        	<div class="row-fluid">
+        	 	<div id="report-toolbar" class="btn-toolbar"></div>
+        	 </div>
+        </div>
+    </div>
+    <div class="c-layout-center">
+        <div id="report-body" class="c-layout-body"></div>
+    </div>
+</div>
+{{/layout}}
+
+{{#view "report-toolbar"}}
+<div class="btn-group">
+	<button id="birt-parameter" name="parameter" class="btn  btn-success " onclick="return false;">
+    	<i class="icon-search "></i>参数设置
+    </button>
+    <!-- <button id="birt-boolbar-toc" name="toc" class="btn  btn-info " onclick="return false;">
+    	<i class="icon-book"></i>切换目录
+    </button> -->
+    <button id="birt-boolbar-export" name="export" class="btn btn-warning " onclick="return false;">
+    	<i class="zicon-outexcel"></i>导出数据
+    </button>
+    <button id="birt-boolbar-exportReport" name="exportReport" class="btn btn-pink " onclick="return false;">
+    	<i class="zicon-outexcel"></i>导出报表
+    </button>
+    <button id="birt-boolbar-print" name="print" class="btn  btn-inverse " onclick="return false;">
+    	<i class="icon-print"></i>打印报表
+    </button>
+    <!-- <button id="birt-boolbar-printServer" name="printServer" class="btn btn-grey" onclick="return false;">
+    	<i class="icon-print"></i>在服务器上打印报表
+    </button> -->
+</div>
+{{/view}}
+
+{{#view "report-body"}}
+{{#load}}
+<iframe id="report-frame" src="frameset?__report=designs/{{report}}.rptdesign{{params}}" style="width: 100%; height: 100%; border:none;"></iframe>
+{{/load}}
+{{/view}}

@@ -1,0 +1,30 @@
+.ui-layout-pane {
+    padding: 0;
+    border: 0;
+    background: none;
+}
+
+.custom-form .control-group,
+.custom-form .controls {
+    margin-bottom: 0px !important;
+}
+
+.custom-form select,
+.custom-form textarea,
+.custom-form input[type="text"],
+.custom-form input[type="password"],
+.custom-form input[type="datetime"],
+.custom-form input[type="datetime-local"],
+.custom-form input[type="date"],
+.custom-form input[type="month"],
+.custom-form input[type="time"],
+.custom-form input[type="week"],
+.custom-form input[type="number"],
+.custom-form input[type="email"],
+.custom-form input[type="url"],
+.custom-form input[type="search"],
+.custom-form input[type="tel"],
+.custom-form input[type="color"],
+.custom-form .uneditable-input {
+	margin-bottom: 0px !important;
+}

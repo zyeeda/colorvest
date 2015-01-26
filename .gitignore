@@ -6,16 +6,6 @@
 *.orig
 *.msi
 .DS_Store
-fis
-dist
-.settings
-.project
-node_modules
-bower_components
-lib
-
-src/**/*.js
-assets/**/*.css
 
 .settings
 .project

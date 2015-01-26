@@ -1,0 +1,107 @@
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input {
+    height: 32px;
+}
+
+.dataTables_scrollHeadInner,
+.dataTables_scrollHeadInner table {
+    width: 100% !important;
+}
+
+.dataTables_scrollBody table {
+    border-top-width: 0px;
+    width: 100% !important;
+}
+
+.dataTables_scrollBody thead tr {
+    line-height: 0;
+}
+
+.dataTables_scrollBody thead tr th[class*="sort"]:after {
+    content: "";
+}
+
+.dataTables_info {
+    margin: 6px 0 0 12px;
+}
+
+div.modal {
+    position: absolute;
+}
+
+div.modal-body {
+    max-height: inherit;
+}
+
+.filter_column {display:inline-block !important; width:100% !important;}
+
+.text_filter, .number_filter, .select_filter, .filter_date_range, .filter_number_range {
+	width:90% !important;
+}
+
+.date_range_filter {
+	width: 30%;
+}
+
+.filter_column input {
+	height: 22px !important; 
+}
+
+.select2-container .select2-choice {
+    background: #FFF none;
+    min-height: 28px;
+    border: 1px solid #d5d5d5;
+}
+
+.select2-container-active .select2-choice, .select2-container-active .select2-choices {
+    border: 1px solid #5897fb;
+}
+
+.select2-search:after {
+    top: -2.5px;
+}
+
+.hasDatepicker {
+    border: 1px solid #d5d5d5;
+}
+
+.red-fork {
+    font-size: 20px;
+    color: #FF0000;
+    font-weight: bold;
+}
+
+.c-grid-top {
+    z-index: 1 !important;
+}
+
+.c-grid-body table {
+    width: 100% !important;
+}
+
+.nav-list > li.active:after {
+    z-index: 999;
+}
+
+.select2-search-field {
+    height: 30px;
+}
+
+.select2-container-multi .select2-choices {
+    border: 1px solid #d5d5d5;
+}
