@@ -35,6 +35,7 @@ define [
     LoaderPluginManager.register viewLoader
     LoaderPluginManager.register layoutLoader
     LoaderPluginManager.register inlineViewloader
+    
     LoaderPluginManager.register cdeioLayoutLoader
     LoaderPluginManager.register cdeioFeatureLoader
 
@@ -82,7 +83,6 @@ define [
         settingsPromise = $.get(path, (data) ->
             config.settings = _.extend {}, data
         )
-
     cdeio.startApplication = (path, options = {}) ->
         if _.isObject path
             options = path

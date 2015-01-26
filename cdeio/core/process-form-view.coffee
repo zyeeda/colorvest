@@ -260,20 +260,28 @@ define [
                     groups = tab.groups
                     groups = if _.isArray groups then groups else [groups]
                     if tab.title in ['基本信息', '历史信息']
-                        tabContent =  @getTabContentTemplate() content: (for group in groups
+                        tabContent =  @getTabContentTemplate() content: (for group, index in groups
                             group = @findGroup(group)
                             unused = _.without unused, group
+                            # console.log 'groups.lenght', groups.length
+                            # 小于2 为 历史信息，历史信息只包含一个 group
+                            if groups.length <2 or ( groups.length is 2 and _.isEmpty(@model.get('_t_taskId')) )
+                                single = true
+                                group.options.label = null
+                            else
+                                single = false
+
                             # 任务id 为空表示流程已经结束，不显示任务信息
                             if _.isEmpty(@model.get('_t_taskId')) and  group.options.name is 'task-info-group'
                                 ''
                             else
-                                group.getTemplate()
+                                group.getTemplate(single, index)
                         ).join(''), id: id, i: i
                     else
                         tabContent =  @getProcessTabContentTemplate() content: (for group in groups
                             group = @findGroup(group)
                             unused = _.without unused, group
-                            group.getTemplate()
+                            group.getTemplate(true, 0)
                         ).join(''), id: id, i: i, processInstanceId: @model.get('processInstanceId')
                     contents.push tabContent
                 # 表示没有在 tab 中使用到的组，显示在所有的 tab 的上方
@@ -281,7 +289,10 @@ define [
                 oo = pinedGroups: (group.getTemplate() for group in unused).join(''), lis: lis.join(''), content: contents.join('')
                 o.content = @getTabLayoutTemplate() oo
             else
-                o.content = (group.getTemplate() for group in @groups).join ''
+                # o.content = (group.getTemplate() for group in @groups).join ''
+                useableGroups = (group for group in @groups when not _.isEmpty group.fields)
+                single = true if useableGroups.length is 1
+                o.content = (group.getTemplate(single, index) for group, index in useableGroups).join ''
 
             o.hiddens = (group.getHiddenFieldsTemplate() for group in @groups).join ''
             _.template(@getTemplateString()) o

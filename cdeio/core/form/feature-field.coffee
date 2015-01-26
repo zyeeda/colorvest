@@ -7,6 +7,7 @@ define [
         app = view.feature.module.getApplication()
         path = options.path
         ops = _.extend {}, options.options,
+            label: options?.field?.label
             ignoreExists: true
             container: el
 
@@ -39,13 +40,13 @@ define [
 
         getFormData: ->
 
+                # <% if (!hideLabel) { %>
+                #     <label class="control-label label label-info arrowed-in arrowed-in-right" for="<%= id %>"><%= label %><% if (required) { %>
+                #         <span class="required-mark">*</span>
+                #     <% } %></label>
+                # <% } %>
         getTemplateString: -> '''
             <div class="control-group">
-                <% if (!hideLabel) { %>
-                    <label class="control-label label label-info arrowed-in arrowed-in-right" for="<%= id %>"><%= label %><% if (required) { %>
-                        <span class="required-mark">*</span>
-                    <% } %></label>
-                <% } %>
                 <div class="controls">
                     <div id="<%= id %>" class="c-feature-field" <% if (height) { %>style="height: <%= height %>;"<% } %>></div>
                 </div>

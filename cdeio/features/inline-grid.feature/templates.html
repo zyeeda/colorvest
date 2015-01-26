@@ -1,15 +1,29 @@
 {{#layout}}
-<div class="c-layout-container c-layout-grid">
-    <div class="c-layout-north">
-        <div>
-            <div class="row-fluid" id="operators"> </div>
+<div class="c-layout-container c-layout-grid" >
+	<!-- <div class="c-form-group-title"> -->
+        <!-- <h5 >任务分配</h5> -->
+	<!-- </div> -->
+    <div id="title"></div>
+    <div class="c-inline-grid-container" >
+        <div class="c-layout-north">
+            <div>
+                <div id="operators" class="row-fluid" > </div>
+            </div>
         </div>
-    </div>
-    <div class="c-layout-center">
-        <div id="body" class="c-layout-body"></div>
+        <div class="c-layout-center c-inline-grid-margin" >
+            <div id="body" class="c-layout-body"></div>
+        </div>
     </div>
 </div>
 {{/layout}}
+
+{{#view "title"}}
+{{#if title}}
+<div class="c-form-group-title">
+    <h5 >{{title}}</h5>
+</div>
+{{/if}}
+{{/view}}
 
 {{#view "operators"}}
 {{#unless readOnly}}

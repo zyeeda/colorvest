@@ -31,6 +31,10 @@ define [
                     type: options.pickerType
             super form, group, opt
             @type = 'inline-grid'
+        getTemplate: ->
+            template = super
+            # console.log '-----template', template
+            template
 
     FormField.add 'inline-grid', InlineGridField
 

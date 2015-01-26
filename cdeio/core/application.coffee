@@ -71,6 +71,7 @@ define [
             path.replace /\/{2,}/g, '/'
 
         # rewrite module
+        # 逐级构建 module, module 即一个 application 实例
         module: (names) ->
             names = if _.isArray names then names else names.split '/'
             parent = @
@@ -95,6 +96,7 @@ define [
                 @root = root
             @root
 
+        # 逐级查找  module
         findModule: (names) ->
             names = if _.isArray names then names else names.split '/'
             module = @
@@ -102,11 +104,14 @@ define [
             module
 
         findFeature: (name) ->
+            # scaffold:grid-user， ‘:’是为了去掉 scaffold 前缀
             index = name.indexOf ':'
             name = name.substring index + 1, name.length if index > 0
 
             for cid, feature of @features
                 return feature if feature.baseName is name
+            # why not?
+            # return feature for feature of @features when feature.baseName is name
 
         resolveResoucePath: (resourcePath) ->
             return @getApplication().path resourcePath.substring 1 if resourcePath.charAt(0) is '/'
@@ -141,6 +146,8 @@ define [
 
             deferred.promise()
 
+        # 1. 查找 module ，不存在则创建
+        # 2. 加载 feature
         startFeature: (featurePath, options) ->
             deferred = $.Deferred()
             [names..., featureName] = featurePath.split '/'

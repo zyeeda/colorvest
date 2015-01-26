@@ -45,6 +45,7 @@ define [
                 deferred.resolve()
                 return deferred.promise()
 
+            # ？？
             if @options.avoidLoadingModel is true
                 @modelDefinition = Model.extend feature: @feature, path: @options.path
                 @model = new @modelDefinition()

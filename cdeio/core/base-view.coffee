@@ -25,9 +25,11 @@ define [
                     @[key] = value
 
             super options
+            # 初始化 handlers
             @deferHandlers = @initHandlers(options.handlersIn)
             @promises.push @deferHandlers
 
+        # 覆盖 Backbone.View.initialize 方法，在创建时被调用。
         initialize: (options) ->
             events = options.events or {}
             events = events.apply @ if _.isFunction events
@@ -93,6 +95,7 @@ define [
                 _.extend @eventHandlers, handlers
 
         template: ->
+            # @options.template 存在，则为自定义视图
             name = @options.template or @baseName
             getPath @feature, 'template', name
 
@@ -102,12 +105,14 @@ define [
                 template = template.call this
             @module.resolveResoucePath template + config.templateSuffix
 
+        # Marionette.ItemView.render 中所支持的扩展方法
         renderHtml: (data) ->
             if @feature.template
                 @feature.template data
             else
                 super data
 
+        # 覆盖 Marionette.View.serializeDate 方法，在 render 中被调用。
         serializeData: ->
             data = super()
             data['__viewName__'] = @baseName
@@ -121,6 +126,8 @@ define [
         afterRender: ->
             @options.afterRender.call @ if _.isFunction @options.afterRender
 
+        # 覆盖 Marionette.ItemView.render 方法
+        # 扩展或覆盖方法 serializeData,renderHtml,onRender 依顺序先后执行。
         render: (fn) ->
             deferred = $.Deferred()
             $.when.apply($, @promises).then =>
@@ -144,6 +151,8 @@ define [
 
         renderComponents: (delay) ->
             @components or= []
+            # @components = [] unless components
+            # @components = [] unless components?
 
             d = delay or ''
             return if _.indexOf(@renderredComponents, d) isnt -1
@@ -156,7 +165,7 @@ define [
                 continue if not component
 
                 if (not delay and not component.delay) or (delay is component.delay)
-                    originalOptions[i] = component
+                    originalOptions[i] = components
                     options = _.extend {}, component
                     {type, selector} = options
                     delete options.type

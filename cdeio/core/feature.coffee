@@ -38,6 +38,7 @@ define [
             @deferredCollection = @initCollection()
             @deferredView = @initViews()
 
+        # 处理 container 
         initRenderTarget: ->
             target = @container or @options.container or @startupOptions.container or config.featureContainer
             target = target @ if _.isFunction target
@@ -122,7 +123,7 @@ define [
                 promises.push loaderPluginManager.invoke 'view', @module, @, view
 
             # 当 promises 内的所有方法执行完,计算所有在 region 内的 view
-            # then 内的方法被调用时会将 promises 内的每个方法的结果作为参数传过来
+            # then 内的方法被调用时会将 promises 内的每个方法的结果作为参数传过来, views 即 vs
             deferred = $.when.apply($, promises).then _.bind (vs, u1, u2, u3, args...) =>
                 for v, i in args
                     @views[vs[i].name] = v
@@ -227,6 +228,7 @@ define [
                     else
                         @deferredStart.resolve @
 
+            # 实际上执行的是 @layout.render 方法
             fn = =>
                 views = []
                 rendered = {}

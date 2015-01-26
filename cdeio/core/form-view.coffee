@@ -247,24 +247,32 @@ define [
                     lis.push @getTabLiTemplate() i: i, title: tab.title, id: id
                     groups = tab.groups
                     groups = if _.isArray groups then groups else [groups]
+                    useableGroups = (group for group in groups when not _.isEmpty @findGroup(group)?.fields)
+                    single = true if useableGroups.length is 1
                     contents.push @getTabContentTemplate() content: (for group in groups
                         group = @findGroup(group)
                         unused = _.without unused, group
-                        group.getTemplate()
+                        group.getTemplate single
                     ).join(''), id: id, i: i
                 oo = pinedGroups: (group.getTemplate() for group in unused).join(''), lis: lis.join(''), content: contents.join('')
                 o.content = @getTabLayoutTemplate() oo
             else
-                o.content = (group.getTemplate() for group in @groups).join ''
+                # 排除不包含字段的 group 
+                useableGroups = (group for group in @groups when not _.isEmpty group.fields)
+                single = true if useableGroups.length is 1
+                o.content = (group.getTemplate(single, index) for group, index in useableGroups).join ''
 
             o.hiddens = (group.getHiddenFieldsTemplate() for group in @groups).join ''
             _.template(@getTemplateString()) o
 
         renderHtml: (data) ->
+            # console.log 
+            #     template: @getTemplate()
+            #     data: data
             Handlebars.compile(@getTemplate()) data
 
         getTemplateString: -> '''
-            <form class="<%= formClass %>">
+            <form class="<%= formClass %>" style="margin:0;">
                 <%= content %>
                 <%= hiddens %>
                 <input type="hidden" name="__FORM_NAME__" value="<%= formName %>"/>

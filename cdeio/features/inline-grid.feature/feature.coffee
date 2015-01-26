@@ -1,11 +1,26 @@
-define ['jquery', 'underscore', 'cdeio/core/form-view', 'cdeio/core/custom-form-view'], ($, _, FormView, CustomFormView) ->
-
+define [
+    'jquery'
+    'underscore'
+    'cdeio/core/form-view'
+    'cdeio/core/custom-form-view'
+], ($, _, FormView, CustomFormView) ->
     layout:
         regions:
+            title: 'title'
             operators: 'operators'
             grid: 'body'
 
     views: [
+        # handlers 是默认加载的。
+        name: 'inline:title', region: 'title', avoidLoadingHandlers: true
+        extend:
+            # afterRender: (su) ->
+            #     console.log su, @feature, @
+            # 为什么 views/title 中的扩展不起作用？因为 loader 不同。
+            templateHelpers: ->
+                title = @feature.startupOptions.label
+                title: title
+    ,
         name: 'inline:operators', region: 'operators',
         components: [ ->
             {picker, readOnly} = @feature.startupOptions

@@ -10,12 +10,15 @@ define [
         deferred = $.Deferred()
         options = args[0]
 
+        # view 的 views/**(view) 默认是不加载的。
         if options?.avoidLoadingView is true
             def =
                 baseName: viewName
                 module: module
                 feature: feature
+                # view 中得 model 默认是不加载的。
                 avoidLoadingModel: true
+                # view 的 handler 是默认加载的。
                 avoidLoadingHandlers: if options.avoidLoadingHandlers is false then false else true
 
             deferred.resolve View.build def

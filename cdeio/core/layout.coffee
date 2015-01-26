@@ -5,6 +5,7 @@ define [
 ], (Marionette, BaseView, config) ->
     {getPath} = config
 
+    # layout 也是一个 view 
     class Layout extends BaseView
         constructor: (@options) ->
             options.avoidLoadingHandlers = if options.avoidLoadingHandlers is false then false else true
@@ -27,6 +28,7 @@ define [
         closeRegions: Marionette.Layout.prototype.closeRegions
         close: Marionette.Layout.prototype.close
 
+    # layout 只是个中间过度的概念，与 view 为一对一的关系，对 layout 的操作都是对 view 的简介操作。
     Marionette.Region.prototype.show = (view, appendMethod) ->
         @ensureEl()
         @close()
