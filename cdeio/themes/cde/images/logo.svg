@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="65px" height="46px" viewBox="0 0 65 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.1.1 (8761) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="logo-01-2" sketch:type="MSLayerGroup" transform="translate(0.000000, 1.000000)">
+            <g id="Group" sketch:type="MSShapeGroup">
+                <path d="M10.204,38.408 L5.874,26.114 L0.056,34.792 L10.204,38.408 Z" id="Shape" fill="#7AC9CE"></path>
+                <path d="M4.806,23.156 L0.087,9.879 L0.087,26.407 L4.806,23.156 Z" id="Shape" fill="#C491BF"></path>
+                <path d="M10.204,13.194 L0.087,9.879 L4.806,23.156 L10.204,19.354 L10.204,13.194 Z" id="Shape" fill="#9473B1"></path>
+                <path d="M10.204,19.354 L5.874,26.114 L10.204,38.408 L10.204,19.354 Z" id="Shape" fill="#45BAB0"></path>
+                <path d="M0.087,9.879 L10.204,13.194 L10.204,6.314 L0.087,9.879 Z" id="Shape" fill="#C6A1CA"></path>
+                <path d="M10.204,19.354 L17.332,23.572 L10.204,38.408 L10.204,19.354 Z" id="Shape" fill="#79C5A7"></path>
+                <path d="M5.874,26.114 L4.806,23.156 L0.087,26.407 L0.056,34.792 L5.874,26.114 Z" id="Shape" fill="#773F95"></path>
+                <path d="M10.204,19.354 L4.806,23.156 L5.874,26.114" id="Shape" fill="#1A91C7"></path>
+                <path d="M10.204,38.408 L17.332,23.572 L16.112,40.546 L10.204,38.408 Z" id="Shape" fill="#83CDDF"></path>
+                <path d="M44.852,4.05 L64.948,9.879 L59.658,17.523 L44.852,4.05 Z" id="Shape" fill="#DE1768"></path>
+                <path d="M43.341,41.033 L57.977,28.442 L64.952,34.792 L43.341,41.033 Z" id="Shape" fill="#EA648A"></path>
+                <path d="M17.332,23.572 L16.112,40.546 L27.305,44.588 L17.332,23.572 Z" id="Shape" fill="#32ADDB"></path>
+                <path d="M27.305,20.663 L17.332,23.572 L27.305,44.588 L27.305,20.663 Z" id="Shape" fill="#2789C4"></path>
+                <path d="M27.305,0.068 L17.332,23.572 L27.305,20.663 L27.305,0.068 Z" id="Shape" fill="#EB615C"></path>
+                <path d="M27.305,0.068 L10.204,19.354 L17.332,23.572 L27.305,0.068 Z" id="Shape" fill="#BB3679"></path>
+                <path d="M27.305,0.068 L10.204,6.314 L10.204,19.354 L27.305,0.068 Z" id="Shape" fill="#705096"></path>
+                <path d="M63.276,23.797 L57.977,28.442 L64.952,34.792 L64.946,23.892 L63.276,23.797 Z" id="Shape" fill="#EF8991"></path>
+                <path d="M52.521,23.187 L57.977,28.442 L63.276,23.797 L52.521,23.187 Z" id="Shape" fill="#D21427"></path>
+                <path d="M50.307,23.061 L43.341,41.033 L57.977,28.442 L52.521,23.187 L50.307,23.061 Z" id="Shape" fill="#DB492D"></path>
+                <path d="M43.962,22.701 L43.341,41.033 L50.307,23.061 L43.962,22.701 Z" id="Shape" fill="#EB6A37"></path>
+                <path d="M36.194,22.26 L43.341,41.033 L43.962,22.701 L36.194,22.26 Z" id="Shape" fill="#F5BE39"></path>
+                <path d="M30.536,44.702 L43.341,41.033 L36.194,22.26 L30.536,44.702 Z" id="Shape" fill="#43BBBE"></path>
+                <path d="M64.946,20.661 L64.951,9.879 L59.658,17.523 L62.982,20.548 L64.946,20.661 Z" id="Shape" fill="#2983BE"></path>
+                <path d="M62.982,20.548 L44.854,4.05 L50.261,19.815 L62.982,20.548 Z" id="Shape" fill="#991F3B"></path>
+                <path d="M50.261,19.815 L44.854,4.05 L44.097,19.46 L50.261,19.815 Z" id="Shape" fill="#F18E36"></path>
+                <path d="M44.097,19.46 L44.854,4.05 L36.445,19.019 L44.097,19.46 Z" id="Shape" fill="#F5F197"></path>
+                <path d="M36.445,19.019 L44.854,4.05 L30.536,-0.059 L36.445,19.019 Z" id="Shape" fill="#F6D950"></path>
+                <path d="M36.445,19.019 L30.536,-0.064 L30.536,18.679 L36.445,19.019 Z" id="Shape" fill="#EDB130"></path>
+                <path d="M30.536,21.912 L36.194,22.26 L30.536,44.704 L30.536,21.912 Z" id="Shape" fill="#1C58A7"></path>
+            </g>
+        </g>
+    </g>
+</svg>

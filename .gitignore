@@ -16,3 +16,17 @@ lib
 
 src/**/*.js
 assets/**/*.css
+
+.settings
+.project
+node_modules
+
+cdeio.js
+require-config.js
+
+cdeio/applications/**/*.js
+cdeio/components/**/*.js
+cdeio/core/**/*.js
+cdeio/features/**/*.js
+cdeio/layouts/**/*.js
+cdeio/scaffold/**/*.js
