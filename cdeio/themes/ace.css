@@ -215,11 +215,11 @@ html, body {
 }
 
 .c-form-group-cols-1 .field-label {
-    width: 25%;
+    width: 17%;
 }
 
 .c-form-group-cols-1 .field-value {
-    width: 55%
+    width: 63%;
 }
 
 .c-form-group-cols-2 .field-label {

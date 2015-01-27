@@ -19,6 +19,7 @@ define [
         size.toFixed(2) + ' ' + units[i]
 
     row = H.compile '''<tr>
+        <td style="text-align: center;"><input id="check-{{id}}" type="checkbox" /></td>
         <td><div class="progress" style="margin-bottom: 0px">
             <div class="bar" id="bar-{{id}}" style="width:1%; color: black;text-align:left;">&nbsp;&nbsp;{{name}}</div>
         </div></td>
@@ -27,7 +28,6 @@ define [
             <a id="popover-span-{{../id}}" class="upload-preview-btn upload-multiple-preview" href="javascript: void 0"  data-rel="popover" data-placement="{{../preview}}">&nbsp;</a>
             <a id="preview-{{../id}}" href="javascript: void 0" style="z-index: 1;position: relative;">预览</a>
             {{/preview}}
-            <a id="remove-{{id}}" href="javascript: void 0">删除</a> 
         </td>
     </tr>'''
 
@@ -35,10 +35,19 @@ define [
         getTemplate: ->
             if @options.multiple is true
                 _.template ''' <div>
-                    <a id="trigger-<%= id %>" class="btn <%= triggerClass %>"><i class="icon-search"/></a>
+                    <div style="margin-bottom: 10px">
+                        <a id="trigger-<%= id %>" class="btn btn-grey btn-small">上传</a>
+                        <a id="remove" href="javascript: void 0" class="btn btn-danger btn-small">删除</a>
+                    </div>
+
                     <input type="file" style="display:none" multiple="true" id="hidden-input-<%= id %>"/>
                     <table class="table table-bordered">
-                        <thead><tr><th>文件名</th><th width="70"></th></tr></thead>
+                        <thead><tr>
+                        <th style="text-align: center; width: 10%"><input id="checkbox" type="checkbox" /></th>
+                        <th style="width: 70%">文件名</th>
+                        <th>操作</th>
+                        </tr></thead>
+
                         <tbody id="files-container-<%= id %>">
                         </tbody>
                     </table>
@@ -169,10 +178,21 @@ define [
                     bar = @container.find '#bar-' + data.id
                     bar.removeClass('bar-success').addClass 'bar-danger'
                     
-            @container.delegate 'a[id^="remove"]', 'click', (e) =>
-                id = $(e.target).attr('id').match(/remove-(.*)$/)[1]
-                delete @datas[id]
-                $(e.target).closest('tr').remove()
+            @container.delegate 'input[id="checkbox"]', 'click', (e) =>
+                if $(e.target).attr('checked')
+                    $(e.target).attr('checked', true);
+                    $('tbody input[type="checkbox"]').attr('checked',true);
+                else 
+                    $(e.target).removeAttr('checked');
+                    $('tbody input[type="checkbox"]').removeAttr('checked');
+
+            @container.delegate 'a[id=^"remove"]', 'click', (e) =>
+                $('tbody input[type="checkbox"]').each (e) ->
+                    if $(this).attr('checked')
+                        id = $(this).attr('id').match(/check-(.*)$/)[1]
+                        delete _this.datas[id]
+                        $(this).closest('tr').remove()
+
 
             if @options.preview
                 @container.delegate 'a[id^="preview"]', 'click', (e) =>

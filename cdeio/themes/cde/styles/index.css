@@ -10,6 +10,22 @@ body:before {
 	color: #48587D;
 }
 
+.nav-tabs > li > a,
+.nav-tabs > li > a:focus {
+  background-color: #E5EBEC;
+  margin-right: 2px;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+  color: #576373;
+  border-top: 2px solid #00B9B6;
+  box-shadow: 1px -2px 3px 0 rgba(0, 0, 0, 0.15);
+  margin-bottom: -1px;
+  padding-top: 12px;
+}
+
 .nav-search .show-source{
 	border-radius: 50%;
 	background: #259B9D !important;
