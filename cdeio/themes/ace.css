@@ -360,14 +360,13 @@ html, body {
 }
 
 .info-content {
-    height: 200px;
+    height: 220px;
     padding: 1px;
 }
 
 .info-img {
     float: left;
     width: 140px;
-    height: 140px;
     padding: 5px 1px;
     margin: 5px 10px;
 }
@@ -407,17 +406,13 @@ html, body {
 
 .large-user-btns .popover.right .arrow {
     /*visibility: hidden;*/
-    top:18%;
+    top:50px;
 }
 
 .btn-groups {
     padding-left: 40px;
     margin-top: -10px;
     margin-bottom: 10px;
-}
-
-.btn-groups .view-hide {
-    display: none;
 }
 
 .info-password {
@@ -429,5 +424,10 @@ html, body {
 .btn-groups .btn-password {
     border-radius: 5px !important;
     margin-right: 10px;
+}
+
+.btn-change-password {
+    border-radius: 5px !important;
+    margin-left: 25px;
 }
 /* end personal information */
