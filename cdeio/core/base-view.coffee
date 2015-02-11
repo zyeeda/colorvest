@@ -165,7 +165,7 @@ define [
                 continue if not component
 
                 if (not delay and not component.delay) or (delay is component.delay)
-                    originalOptions[i] = components
+                    originalOptions[i] = component
                     options = _.extend {}, component
                     {type, selector} = options
                     delete options.type
