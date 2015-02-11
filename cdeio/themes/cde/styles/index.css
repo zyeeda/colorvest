@@ -74,6 +74,10 @@ body:before {
 	padding-bottom: 0px;
 }
 
+.nav-list {
+	padding-right: 2.5px;
+}
+
 .nav-list > li {
 	border-top: 1px solid #15191E;
 	border-bottom: 1px solid #15191E;
@@ -329,6 +333,16 @@ body:before {
 	border-top: 1px solid #E2E7EA;
 }
 
+/* 处理列表上过滤器居中显示的问题 */
+.table.table-bordered thead tr th {
+	text-align: center;
+}
+
+.dataTable th[class*=sort] {
+	text-align: left !important;
+}
+/* end */
+
 .pagination ul > li > a {
 	color: #2AB3B3;
 	border-color: #15191E;
@@ -378,4 +392,16 @@ body:before {
 /*解决 行间距问题, inherit 会导致 *-range 显示成两行*/
 .row-fluid input[class*="span"], .row-fluid textarea[class*="span"] {
 	/*display: inherit;*/
+}
+
+.c-action-form-filter input, .c-action-form-filter .select2-choice {
+	border-radius: 5px !important;
+}
+
+.c-action-form-filter .controls {
+	text-align: center;
+}
+
+.select2-container .select2-choice .select2-arrow {
+	padding-right: 5px;
 }
