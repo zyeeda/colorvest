@@ -78,11 +78,13 @@ define [
                 for item in @value or []
                     ctn.append(row(id: item.id, name: item.filename, preview: @options.preview))
                     @datas[item.id] = result: item, uploaded: true
-                ctn.find('div.progress > div').addClass('bar-success').css('width', '100%')
 
-                if @options.preview && item && item.id
-                    popover = $('#popover-span-' + item.id)
-                    @setPopoverData popover, @options.url + '/' + item.id, item.id
+                    ctn.find('div.progress > div').addClass('bar-success').css('width', '100%')
+                    if @options.preview && item && item.id
+                        popover = $('#popover-span-' + item.id)
+                        @setPopoverData popover, @options.url + '/' + item.id, item.id
+
+                        
             if value and value.id
                 trigger = @container.find '#trigger-' + @id
                 trigger.addClass('btn-danger')
@@ -216,6 +218,9 @@ define [
             if _next.hasClass('popover') && _next.css('display') == 'block'
                 _next.hide()
             else
+                $('a[id^="popover-span"]').each (e) ->
+                    if $(this).data('popover')
+                        $(this).next().hide()
                 popover.attr('data-content', popover.attr 'data-content')
                 popover.popover html: true
                 popover.popover 'show'
