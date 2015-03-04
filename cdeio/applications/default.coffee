@@ -106,7 +106,14 @@ define [
                 bootbox.alert message
 
             application.confirm = (message, fn) ->
-                bootbox.confirm message, '取消', '确定', fn
+                dialog = bootbox.confirm message, '取消', '确定', fn
+
+                # 解决重复点击确认按钮问题
+                okbtn = dialog.find('.btn-primary')
+                okbtn.click (e) ->
+                    okbtn.removeClass 'btn-primary'
+                    okbtn.addClass 'btn-grey'
+                    okbtn.bind 'click', false
 
             application.prompt = (message, fn) ->
                 bootbox.prompt message, '取消', '确定', fn

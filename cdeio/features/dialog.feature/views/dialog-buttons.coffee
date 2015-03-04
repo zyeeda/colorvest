@@ -12,6 +12,11 @@ define ["underscore"], (_) ->
                 @events[e.name] = e.handler
                 @eventHandlers[id] = _((fn, b) ->
                     return if @$(id).hasClass('disabled')
+                    # 解决重复提交问题
+                    if b.greyable isnt false
+                        @$(id).addClass('disabled')
+                        @$(id).addClass('btn-grey')
+
                     result = fn.apply(this, [b])
                     @feature.modal.modal "hide"  if result isnt false
                 ).bind(this, buttons[i].fn, buttons[i])
