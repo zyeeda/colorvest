@@ -29,13 +29,15 @@ define
         grid = @feature.views['inline:grid'].components[0]
         gridView = @feature.views['inline:grid']
 
-        if _.isFunction gridView.handlers.beforeInlineGridRemove
-            gridView.handlers.beforeInlineGridRemove.call @, grid, @feature.formView
+        app.confirm '确定要删除选中的记录吗?', (sure) =>
+            if sure
+                if _.isFunction gridView.handlers.beforeInlineGridRemove
+                    gridView.handlers.beforeInlineGridRemove.call @, grid, @feature.formView
 
-        grid.removeSelectedRow()
+                grid.removeSelectedRow()
 
-        if _.isFunction gridView.handlers.afterInlineGridRemove
-            gridView.handlers.afterInlineGridRemove.call @, grid, @feature.formView
+                if _.isFunction gridView.handlers.afterInlineGridRemove
+                    gridView.handlers.afterInlineGridRemove.call @, grid, @feature.formView
 
     createItem: ->
         gridView = @feature.views['inline:grid']
