@@ -121,9 +121,17 @@ html, body {
     position: absolute;
     top: 0px;
     right: 0px;
-    height: 21px;
-    line-height: 22px;
+    height: 29px;
+    line-height: 30px;
     padding: 1px 10px 0 14px;
+    background-color: #F0F3F5 !important;
+    border: 1px solid #CCCCCC;
+    color: #949DAA !important;
+}
+
+.c-picker a.btn:hover {
+    background-color: #D4DFEF !important;
+    color: #fff !important;
 }
 
 .c-picker a.btn.plus {
@@ -194,13 +202,12 @@ html, body {
 }
 .c-form-group-title {
     height: 30px; 
-    background: #20252B; 
-    color: #B6C2C9;
+    background: #D2D9DF;
 }
 .c-form-group-title h5 {
     margin: 0;
     padding-top: 5px; 
-    padding-left: 12px;
+    padding-left: 15px;
 }
 
 .c-inline-grid-margin {

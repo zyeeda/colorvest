@@ -34,8 +34,8 @@ define [
     class FilePicker extends Picker.Picker
         getTemplate: ->
             if @options.multiple is true
-                _.template ''' <div>
-                    <div style="margin-bottom: 10px">
+                _.template '''
+                    <div class="upload">
                         <a id="trigger-<%= id %>" class="btn btn-grey btn-small">上传</a>
                         <a id="remove" href="javascript: void 0" class="btn btn-danger btn-small">删除</a>
                     </div>
@@ -51,7 +51,7 @@ define [
                         <tbody id="files-container-<%= id %>">
                         </tbody>
                     </table>
-                </div>'''
+                '''
             else
                 _.template '''
                     <div class="input-append c-picker">
