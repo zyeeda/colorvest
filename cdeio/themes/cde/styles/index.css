@@ -10,20 +10,45 @@
 	color: #48587D;
 }
 
+.nav-tabs {
+	border-bottom: 0px;
+	top: 0px;
+}
+
+.nav-tabs > li {
+	margin-bottom: 0;
+}
+
 .nav-tabs > li > a,
 .nav-tabs > li > a:focus {
   background-color: #E5EBEC;
   margin-right: 2px;
+  margin-top: 1px;
+  padding-bottom: 6px;
+  padding-top: 7px;
+
 }
 
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
   color: #576373;
-  border-top: 2px solid #00B9B6;
-  box-shadow: 1px -2px 3px 0 rgba(0, 0, 0, 0.15);
+  border-top: 1px solid #C5D0DC;
+  box-shadow: none;
   margin-bottom: -1px;
-  padding-top: 12px;
+  padding-top: 10px;
+  padding-bottom: 8px;
+}
+
+.nav-tabs > li.active > a:after {
+	display: block;
+	content: "";
+	position: absolute !important;
+	right: 0;
+	top: 0;
+	border: 8px solid transparent;
+	border-right-color: #1BB3B3;
+	border-top-color: #1BB3B3;
 }
 
 .nav-search .show-source{
@@ -112,6 +137,10 @@
 
 .nav-list > li .submenu {
 	border-top: none;
+}
+
+.nav-list > li .submenu > li > a {
+	padding-left: 42px;
 }
 
 .nav-list > li > .submenu > li:first-child > a {
@@ -315,8 +344,8 @@
 
 .dataTables_wrapper {
 	/*background-color: #ECF0F1;*/
-	margin-left: 10px;
-	margin-right: 10px;
+	margin-left: 12px;
+	margin-right: 12px;
 }
 
 .dataTables_wrapper .row-fluid:first-child {
@@ -401,17 +430,9 @@
 	text-shadow: 0 0 0 ;
 	opacity: 1.0;
 }
-/*解决 行间距问题, inherit 会导致 *-range 显示成两行*/
-.row-fluid input[class*="span"], .row-fluid textarea[class*="span"] {
-	/*display: inherit;*/
-}
 
 .c-action-form-filter input, .c-action-form-filter .select2-choice {
 	border-radius: 5px !important;
-}
-
-.c-action-form-filter .controls {
-	text-align: center;
 }
 
 .select2-container .select2-choice .select2-arrow {
@@ -425,10 +446,12 @@
 .modal-footer > a.btn {
 	width: 60px;
 	height: 30px;
-	letter-spacing: 10px;
+	letter-spacing: 8px;
 	text-align: right;
 	background-color: #B3BCC4 !important;
 	border-color: #B3BCC4;
+	font-size: 18px;
+	margin-left: 6px !important;
 }
 .modal-footer > a.btn:hover {
 	background-color: #99A3AD !important;
@@ -450,6 +473,10 @@
 
 .modal-footer > a.btn-warning:hover {
 	background-color: #EEA70E !important;
+}
+
+.modal .c-grid-top {
+	padding: 5px 0 1px !important;
 }
 
 .modal .btn-toolbar {
