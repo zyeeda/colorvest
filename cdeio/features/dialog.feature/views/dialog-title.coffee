@@ -2,16 +2,18 @@ define
     extend:
         templateHelpers: ->
             title = @feature.startupOptions.title
-            # console.log title
-            # tilteOfAdd = true if title.contains '新增'
-            # tilteOfShow = true if title.contains '查看'
-            # tilteOfEdit = true if title.contains '编辑'
-            # tilteOfRemove = true if title.contains '删除'
-            # tilteOfAdd: tilteOfAdd,
-            # tilteOfShow: tilteOfShow,
-            # tilteOfEdit: tilteOfEdit,
-            # tilteOfRemove: tilteOfRemove
-            title: title
+            console.log title
+            if (title.indexOf '新增') > -1
+                icon = '<i class="icon-plus" style="margin-right: 5px;"></i>'
+            else if (title.indexOf '查看') > -1
+                icon = '<i class="icon-eye-open" style="margin-right: 5px;"></i>'
+            else if (title.indexOf '编辑') > -1
+                icon = '<i class="icon-edit" style="margin-right: 5px;"></i>'
+            else if (title.indexOf '选择') > -1
+                icon = '<i class="icon-search" style="margin-right: 5px;"></i>'
+
+            title: title,
+            icon: icon
 
     avoidLoadingHandlers: true
 

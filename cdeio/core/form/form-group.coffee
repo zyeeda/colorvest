@@ -85,7 +85,7 @@ define [
                     >
                     <% if (label) { %>
                         <div class="c-form-group-title">
-                            <h5><%= label %></h5>
+                            <h5><i class="icon-file-text" style="margin-right: 5px;"></i><%= label %></h5>
                         </div>
                         <div class="c-form-group-container" >
                             <%= groupContent %>
