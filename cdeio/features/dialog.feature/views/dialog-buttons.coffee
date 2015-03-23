@@ -18,6 +18,10 @@ define ["underscore"], (_) ->
                         @$(id).addClass('btn-grey')
 
                     result = fn.apply(this, [b])
+                    
+                    @$(id).removeClass('disabled')
+                    @$(id).removeClass('btn-grey')
+
                     @feature.modal.modal "hide"  if result isnt false
                 ).bind(this, buttons[i].fn, buttons[i])
                 i++
