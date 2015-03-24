@@ -1,6 +1,11 @@
 /*body:before {
 	background-color: #ECF0F1;
 }*/
+
+body {
+	font-family: "Lantinghei SC","Noto Sans S Chinese","Microsoft Yahei","Helvetica Neue",Helvetica,Arial,STHeiti,"Microsoft Sans Serif","WenQuanYi Micro Hei",sans-serif;
+}
+
 .navbar .navbar-inner {
 	background-color: #FFFFFF;
 	/*box-shadow: rgba(0,0,0,.2) 0 0 6px;*/
@@ -162,6 +167,10 @@
 }
 .nav-list > li > .submenu li > .submenu {
 	background-color: #20252B;
+}
+
+.nav-list > li > .submenu li > .submenu li > .submenu {
+	margin-left: 5px;
 }
 
 .nav-list > li > .submenu .green {
@@ -338,12 +347,10 @@
 }
 
 .c-layout-toolbar {
-	border-top: 1px solid #C0C9D0;
 	background: #FFF;	
 }
 
 .dataTables_wrapper {
-	/*background-color: #ECF0F1;*/
 	margin-left: 12px;
 	margin-right: 12px;
 }
@@ -351,6 +358,10 @@
 .dataTables_wrapper .row-fluid:first-child {
 	background: #20252B;
 	color: #B6C2C9;
+}
+
+.dataTables_empty {
+	padding-left: 12px !important;
 }
 
 .table thead tr {
@@ -514,6 +525,22 @@
 
 .btn-toolbar > a.btn-grey:hover, .upload a.btn-grey:hover {
 	background-color: #737E89 !important;
+}
+
+.btn-group .btn {
+	margin-right: 5px !important;
+}
+
+.btn-group > .btn:last-child {
+	margin: 0 5px 0 0 !important;
+}
+
+.btn-group > .btn:first-child {
+	margin: 0 5px 0 0 !important;
+}
+
+.btn-group + .btn-group {
+	margin-left: 0px;
 }
 
 .upload {
