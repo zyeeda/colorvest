@@ -285,8 +285,7 @@ html, body {
 .btn-group button.btn.c-filter-toggle {
     border-radius: 24px;
     width: 38px;
-    position: absolute;
-    right: 2px;
+    margin-right: 0 !important;
 }
 
 .gecko .c-filter-toggle i {
@@ -345,14 +344,17 @@ html, body {
     border: 0;
     background-color: #EEF3F4;
     margin-right: 0;
+    font-size: 16px;
+    text-align: center;
 }
 
 .process-tabs .nav-tabs li > a > i {
-    margin-top: 15px;
+    margin-top: 18px;
 }
 
 .process-tabs .nav-tabs li > a:hover {
     background-color: #2AB3B3;
+    color: #fff;
 }
 
 .process-tabs .nav-tabs > li.active > a, .process-tabs .nav-tabs > li.active > a:hover, .process-tabs .nav-tabs > li.active > a:focus {

@@ -1,6 +1,6 @@
-/*body:before {
+body:before {
 	background-color: #ECF0F1;
-}*/
+}
 
 body {
 	font-family: "Lantinghei SC","Noto Sans S Chinese","Microsoft Yahei","Helvetica Neue",Helvetica,Arial,STHeiti,"Microsoft Sans Serif","WenQuanYi Micro Hei",sans-serif;
@@ -442,10 +442,6 @@ body {
 	opacity: 1.0;
 }
 
-.c-action-form-filter input, .c-action-form-filter .select2-choice {
-	border-radius: 5px !important;
-}
-
 .select2-container .select2-choice .select2-arrow {
 	padding-right: 5px;
 }
@@ -527,20 +523,16 @@ body {
 	background-color: #737E89 !important;
 }
 
-.btn-group .btn {
-	margin-right: 5px !important;
-}
-
 .btn-group > .btn:last-child {
-	margin: 0 5px 0 0 !important;
-}
-
-.btn-group > .btn:first-child {
 	margin: 0 5px 0 0 !important;
 }
 
 .btn-group + .btn-group {
 	margin-left: 0px;
+}
+
+.btn-group > .btn + .btn {
+	margin-left: 5px !important;
 }
 
 .upload {
@@ -554,10 +546,11 @@ body {
 	border-radius: 2px;
 }
 
+.select2-choice,
 textarea,
 input[type="text"],
 input[type="password"],
-input[type="datetime"],
+input[type="datepicker"],
 input[type="datetime-local"],
 input[type="date"],
 input[type="month"],

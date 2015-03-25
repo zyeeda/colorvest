@@ -2,7 +2,6 @@ define
     extend:
         templateHelpers: ->
             title = @feature.startupOptions.title
-            console.log title
             if (title.indexOf '新增') > -1
                 icon = '<i class="icon-plus" style="margin-right: 5px;"></i>'
             else if (title.indexOf '查看') > -1
