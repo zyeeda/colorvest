@@ -66,8 +66,6 @@ html, body {
 .c-layout-body {
     height: 100%;
     overflow: auto;
-    margin-top: -60px;
-    border-top: 60px solid #FFFFFF;
     -webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;
          -o-box-sizing: border-box;
@@ -76,6 +74,7 @@ html, body {
 
 .c-layout-toolbar {
     height: 59px;
+    background-color: #ECF0F1;
 }
 
 .c-layout-toolbar .btn-toolbar {
@@ -338,14 +337,18 @@ html, body {
 .process-tabs .nav-tabs li {
     width: 25%;
     margin: 0;
+    
 }
+
 .process-tabs .nav-tabs li > a {
+    background-color: #BBCAD5;
     height: 50px;
     border: 0;
-    background-color: #EEF3F4;
-    margin-right: 0;
+    margin-right: 1px ;
     font-size: 16px;
     text-align: center;
+    margin-top: 0px;
+    color: #282E36;
 }
 
 .process-tabs .nav-tabs li > a > i {
@@ -354,20 +357,23 @@ html, body {
 
 .process-tabs .nav-tabs li > a:hover {
     background-color: #2AB3B3;
-    color: #fff;
+    color: #FFF;
 }
 
 .process-tabs .nav-tabs > li.active > a, .process-tabs .nav-tabs > li.active > a:hover, .process-tabs .nav-tabs > li.active > a:focus {
-    margin-top: 1px;
+    margin-top: 0px;
     background-color: #2AB3B3;
     height: 45px;
     border: 0;
-    margin-right: 0;
     color: #fff;
 }
 
 .process-tabs .nav-tabs > li.active > a > i {
     margin-top: 15px;
+}
+
+.process-tabs .nav-tabs li > a:hover i {
+    opacity: 1;
 }
 
 /* upload preview */

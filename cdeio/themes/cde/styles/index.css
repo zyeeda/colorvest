@@ -351,12 +351,12 @@ body {
 }
 
 .dataTables_wrapper {
-	margin-left: 12px;
-	margin-right: 12px;
+	background-color: #ECF0F1;
+	margin: 0 12px;
 }
 
 .dataTables_wrapper .row-fluid:first-child {
-	background: #20252B;
+	background: #243241;
 	color: #B6C2C9;
 }
 
@@ -385,6 +385,10 @@ body {
 	border-top: 1px solid #E2E7EA;
 }
 
+.even {
+	background-color: #F1F1F1;
+}
+
 /* 处理列表上过滤器居中显示的问题 */
 .table.table-bordered thead tr th {
 	text-align: center;
@@ -409,7 +413,7 @@ body {
 
 .pagination ul > li.disabled > a {
 	border-color: #15191E;
-	background-color: #20252B;
+	background-color: #243241;
 	margin-left: 5px;
 }
 
@@ -422,6 +426,11 @@ body {
 .pagination ul > li.active > a, .pagination ul > li.active > a:hover {
 	border-color: #15191E;
 	background-color: #2AB3B3;
+}
+
+.page-content {
+	/*margin: 0 12px;*/
+	background-color: #ECF0F1;
 }
 
 .page-content .c-layout-grid {
@@ -444,6 +453,34 @@ body {
 
 .select2-container .select2-choice .select2-arrow {
 	padding-right: 5px;
+}
+
+.select2-container, input[type="datepicker"] {
+	margin-bottom: 10px;
+}
+
+.select2-container .select2-choice {
+	min-height: 30px;
+}
+
+.select2-container .select2-choice .select2-chosen {
+	color: #8E9AA5;
+}
+
+.select2-container .select2-choice span {
+	margin-top: 3px;
+}
+
+.select2-container-active .select2-choice, .select2-drop {
+	border: 1px solid #1BB3B3;
+}
+
+.select2-results .select2-highlighted, .ui-datepicker td > a.ui-state-active {
+	background-color: #1BB3B3;
+}
+
+input[type="datepicker"] {
+	height: 32px;
 }
 
 .modal-footer {

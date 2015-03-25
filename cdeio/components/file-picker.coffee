@@ -41,8 +41,8 @@ define [
                     </div>
 
                     <input type="file" style="display:none" multiple="true" id="hidden-input-<%= id %>"/>
-                    <table class="table table-bordered">
-                        <thead><tr>
+                    <table class="table table-striped table-bordered table-hover dataTable">
+                        <thead><tr style="height: 45px;">
                         <th style="text-align: center; width: 10%"><input id="checkbox" type="checkbox" /></th>
                         <th style="width: 70%">文件名</th>
                         <th>操作</th>

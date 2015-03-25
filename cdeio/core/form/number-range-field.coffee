@@ -14,7 +14,7 @@ define [
               <label class="control-label" for="<%= id %>"><%= label %></label>
               <% } %>
               <div class="controls">
-                <input type="text" class="input span5" id="<%= id %>-1"/> - <input type="text" class="input span5" id="<%= id %>-2"/>
+                <input type="text" class="input span5" style="width: 48%;float: left;" id="<%= id %>-1"/><div style="float: left;text-align: center;width: 4%;margin-top: 6px;"> - </div><input type="text" class="input span5" style="width: 48%;float: left;" id="<%= id %>-2"/><div style="clear:both;"></div>
               </div>
             </div>
         '''
