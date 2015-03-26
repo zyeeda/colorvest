@@ -587,6 +587,7 @@ input[type="datepicker"] {
 textarea,
 input[type="text"],
 input[type="password"],
+input[type="datetime"],
 input[type="datepicker"],
 input[type="datetime-local"],
 input[type="date"],
@@ -600,4 +601,31 @@ input[type="search"],
 input[type="tel"],
 input[type="color"] {
 	color: #8E9AA5;
+}
+
+select:focus,
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus {
+  border-color: #1BB3B3;
+}
+
+input[type="datepicker"]:focus {
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	outline: none;
+	border: 1px solid #1BB3B3;
 }
