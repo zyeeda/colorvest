@@ -429,8 +429,11 @@ body {
 }
 
 .page-content {
-	/*margin: 0 12px;*/
 	background-color: #ECF0F1;
+}
+
+.page-content .page-content {
+	background-color: #FFF;
 }
 
 .page-content .c-layout-grid {
