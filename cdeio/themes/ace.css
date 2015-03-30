@@ -160,6 +160,10 @@ html, body {
     border-top: 1px solid #BCE8F1;
 }
 
+.c-action-form-show fieldset .c-layout-north .row-fluid {
+    border-top: 0;
+}
+
 .c-action-form-show .row-fluid {
     border: 1px solid #BCE8F1;
     border-top: 0;
@@ -168,7 +172,7 @@ html, body {
 
 .c-action-form-show .field-label {
     display: inline-block;
-    padding: 11px 5px 0 5px;
+    padding: 10px 5px 0 5px;
     background-color: #D9EDF7;
     font-weight: bold;
     text-align: right;
@@ -237,6 +241,10 @@ html, body {
 
 .c-form-group-cols-2 .field-value {
     width: 55%;
+}
+
+.c-view-form-field .field-value {
+    padding-left: 10px;
 }
 
 .field-value:after {

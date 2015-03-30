@@ -5,10 +5,10 @@
 {{/layout}}
 
 {{#view "dialog-buttons"}}
+<a href="javascript:void 0" class="btn" data-dismiss="modal">取消</a>
 {{#each buttons}}
 <a href="javascript:void 0" class="btn {{status}}" id="{{id}}">{{label}}</a>
 {{/each}}
-<a href="javascript:void 0" class="btn" data-dismiss="modal">关闭</a>
 {{/view}}
 
 {{#view "dialog-title"}}

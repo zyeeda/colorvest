@@ -187,8 +187,8 @@ define [
                         grid.refresh()
                         false
 
-                btns.push filterBtn
                 btns.push resetBtn
+                btns.push filterBtn
 
                 app.showDialog(
                     view: filterForm

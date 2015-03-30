@@ -188,9 +188,9 @@ define [ 'jquery'
             defaultOrder: options.defaultOrder
             oLanguage:
                 sInfo: '显示 _START_ - _END_ 条, 共 _TOTAL_ 条'
-                sEmptyTable: '没有相关记录'
+                sEmptyTable: '没有相关数据'
                 sInfoEmpty: '显示 0 - 0 条, 共 0 条'
-                sZeroRecords: '没有相关记录'
+                sZeroRecords: '没有相关数据'
             bSortCellsTop: true
         , options.options
 
@@ -217,6 +217,7 @@ define [ 'jquery'
                             id="chk-#{data}" value="#{data}" class="select-row" name="chk-#{view.cid}"/>
                             <label class="lbl"></lable>
                         """
+
             if options.numberColumn is true
                 columns.unshift
                     sortable: false, searchable: false, name: '_i', header: '#', width: '25px'

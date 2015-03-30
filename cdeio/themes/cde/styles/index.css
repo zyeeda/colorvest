@@ -24,36 +24,26 @@ body {
 	margin-bottom: 0;
 }
 
-.nav-tabs > li > a,
-.nav-tabs > li > a:focus {
-  background-color: #E5EBEC;
+.nav-tabs > li > a {
   margin-right: 2px;
   margin-top: 1px;
   padding-bottom: 6px;
   padding-top: 7px;
+}
 
+.nav-tabs > li > a:hover {
+	cursor: pointer;
 }
 
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
   color: #576373;
-  border-top: 1px solid #C5D0DC;
-  box-shadow: none;
+  border-top: 2px solid #1BB3B3;
   margin-bottom: -1px;
+  box-shadow: none;
   padding-top: 10px;
   padding-bottom: 8px;
-}
-
-.nav-tabs > li.active > a:after {
-	display: block;
-	content: "";
-	position: absolute !important;
-	right: 0;
-	top: 0;
-	border: 8px solid transparent;
-	border-right-color: #1BB3B3;
-	border-top-color: #1BB3B3;
 }
 
 .nav-search .show-source{
@@ -335,11 +325,16 @@ body {
 
 .breadcrumb > li > a {
 	color: #626F7E;
+	padding: 0;
 }
 
 .breadcrumb > li {
 	text-shadow: none;
 	color: #626F7E;
+}
+
+.breadcrumb > li > .divider {
+	margin: 0 5px;
 }
 
 .breadcrumb > li.active {
@@ -361,12 +356,24 @@ body {
 }
 
 .dataTables_empty {
-	padding-left: 12px !important;
+	text-align: center !important;
+}
+
+.dataTables_empty:hover {
+	background-color: #F9F9F9 !important;
 }
 
 .table thead tr {
 	background: #FFF;
 	color: #20252B;
+}
+
+.table.table-hover tbody tr:hover td {
+  background-color: #DADCDE;
+}
+
+.table.table-hover tbody tr.selected td {
+  background-color: #DDF4F2;
 }
 
 .table-striped tbody th, .table-striped tbody td {
@@ -492,13 +499,10 @@ input[type="datepicker"] {
 
 .modal-footer > a.btn {
 	width: 60px;
-	height: 30px;
-	letter-spacing: 8px;
-	text-align: right;
+	height: 28px;
 	background-color: #B3BCC4 !important;
 	border-color: #B3BCC4;
 	font-size: 18px;
-	margin-left: 6px !important;
 }
 .modal-footer > a.btn:hover {
 	background-color: #99A3AD !important;
@@ -534,6 +538,10 @@ input[type="datepicker"] {
 .modal .dataTables_wrapper {
 	margin-left: 0px;
 	margin-right: 0px;
+}
+
+.btn-toolbar > a.btn {
+	border-radius: 2px;
 }
 
 .btn-toolbar > a.btn-info, .modal-footer > a.btn-info {
@@ -572,7 +580,7 @@ input[type="datepicker"] {
 }
 
 .btn-group > .btn + .btn {
-	margin-left: 5px !important;
+	margin-left: 2px !important;
 }
 
 .upload {

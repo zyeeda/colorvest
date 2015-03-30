@@ -20,4 +20,5 @@ define ["underscore"], (_) ->
             @$el = @feature.dialogContainer
             @delegateEvents()
             @$el = el
+            console.log this.feature.startupOptions.buttons
             buttons: @feature.startupOptions.buttons
