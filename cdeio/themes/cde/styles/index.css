@@ -368,12 +368,12 @@ body {
 	color: #20252B;
 }
 
-.table.table-hover tbody tr:hover td {
-  background-color: #DADCDE;
-}
-
 .table.table-hover tbody tr.selected td {
   background-color: #DDF4F2;
+}
+
+.table.table-hover tbody tr:hover td {
+  background-color: #DADCDE;
 }
 
 .table-striped tbody th, .table-striped tbody td {
@@ -553,23 +553,88 @@ input[type="datepicker"] {
 	background-color: #0C6AA8 !important;
 }
 
-.btn-toolbar > a.btn-danger, .upload a.btn-danger {
+.btn-toolbar > a.btn-danger {
 	background-color: #FC625C !important;
 	border-color: #FC625C;
 }
 
-.btn-toolbar > a.btn-danger:hover, .upload a.btn-danger:hover {
+.btn-toolbar > a.btn-danger:hover {
 	background-color: #F03831 !important;
 }
 
-.btn-toolbar > a.btn-grey, .upload a.btn-grey {
+.btn-toolbar > a.btn-grey {
 	background-color: #8E9AA5 !important;
 	border-color: #8E9AA5;
 }
 
-.btn-toolbar > a.btn-grey:hover, .upload a.btn-grey:hover {
+.btn-toolbar > a.btn-grey:hover {
 	background-color: #737E89 !important;
 }
+
+/* 自定义按钮配色 覆盖bootstrap start */
+/*.btn-default {
+	background-color: #B4C1C9 !important;
+	border-color: #B4C1C9;
+}
+
+.btn-default:hover {
+	background-color: #737E89 !important;
+}
+
+.btn-primary {
+	background-color: #3C80E1 !important; 
+	border-color: #3C80E1;
+}
+
+.btn-primary:hover {
+	background-color: #0070DF !important;
+}
+
+.btn-info {
+	background-color: #31B5D6 !important;
+	border-color: #31B5D6;
+}
+
+.btn-info:hover {
+	background-color: #2E99B4 !important;
+}
+
+.btn-success {
+	background-color: #00B2AD !important;
+	border-color: #00B2AD;
+}
+
+.btn-success:hover {
+	background-color: #139793 !important;
+}
+
+.btn-danger {
+	background-color: #FF384D !important;
+	border-color: #FF384D;
+}
+
+.btn-danger:hover {
+	background-color: #FF001E !important;
+}
+
+.btn-warning {
+	background-color: #FA9D04 !important;
+	border-color: #FA9D04;
+}
+
+.btn-warning:hover {
+	background-color: #DD9317 !important;
+}
+
+.btn-inverse {
+	background-color: #2C343C !important;
+	border-color: #2C343C;
+}
+
+.btn-inverse:hover {
+	background-color: 
+}*/
+/* end */
 
 .btn-group > .btn:last-child {
 	margin: 0 5px 0 0 !important;
@@ -586,12 +651,6 @@ input[type="datepicker"] {
 .upload {
 	margin-top: 15px;
 	margin-bottom: 15px;
-}
-
-.upload a.btn {
-	width: 35px;
-	margin-right: 4px;
-	border-radius: 2px;
 }
 
 .select2-choice,

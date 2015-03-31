@@ -170,7 +170,7 @@ define [
 
                 filterBtn =
                     label: '查询'
-                    status: 'btn-info'
+                    status: 'btn-primary'
                     fn: =>
                         app.filterForm = filterForm
                         grid.effectiveFilters = filterForm.getFilters()

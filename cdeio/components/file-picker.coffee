@@ -35,9 +35,9 @@ define [
         getTemplate: ->
             if @options.multiple is true
                 _.template '''
-                    <div class="upload">
-                        <a id="trigger-<%= id %>" class="btn btn-grey btn-small">上传</a>
-                        <a id="remove" href="javascript: void 0" class="btn btn-danger btn-small">删除</a>
+                    <div class="upload btn-toolbar">
+                        <a id="trigger-<%= id %>" class="btn btn-grey btn-small icon-cloud-upload">上传</a>
+                        <a id="remove" href="javascript: void 0" class="btn btn-danger btn-small icon-minus">删除</a>
                     </div>
 
                     <input type="file" style="display:none" multiple="true" id="hidden-input-<%= id %>"/>
