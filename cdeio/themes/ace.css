@@ -364,13 +364,13 @@ html, body {
 }
 
 .process-tabs .nav-tabs li > a:hover {
-    background-color: #2AB3B3;
+    background-color: #00B9B6;
     color: #FFF;
 }
 
 .process-tabs .nav-tabs > li.active > a, .process-tabs .nav-tabs > li.active > a:hover, .process-tabs .nav-tabs > li.active > a:focus {
     margin-top: 0px;
-    background-color: #2AB3B3;
+    background-color: #00B9B6;
     height: 45px;
     border: 0;
     color: #fff;

@@ -20,7 +20,7 @@ define [
 
     row = H.compile '''<tr>
         <td style="text-align: center;"><input id="check-{{id}}" type="checkbox" /></td>
-        <td><div class="progress" style="margin-bottom: 0px">
+        <td><div class="progress" style="margin-bottom: 0px; margin-top: 5px;">
             <div class="bar" id="bar-{{id}}" style="width:1%; color: black;text-align:left;">&nbsp;&nbsp;{{name}}</div>
         </div></td>
         <td>
