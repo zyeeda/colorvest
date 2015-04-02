@@ -29,10 +29,13 @@ body {
   margin-top: 1px;
   padding-bottom: 6px;
   padding-top: 7px;
+  background-color: #E5EBEC;
 }
 
 .nav-tabs > li > a:hover {
 	cursor: pointer;
+	background-color: #E5EBEC;
+	color: #999;
 }
 
 .nav-tabs > li.active > a,
@@ -42,7 +45,7 @@ body {
   border-top: 2px solid #1BB3B3;
   margin-bottom: -1px;
   box-shadow: none;
-  padding-top: 10px;
+  padding-top: 8px;
   padding-bottom: 8px;
 }
 
@@ -346,13 +349,13 @@ body {
 }
 
 .dataTables_wrapper {
-	background-color: #ECF0F1;
 	margin: 0 12px;
 }
 
 .dataTables_wrapper .row-fluid:first-child {
-	background: #243241;
+	background: #fff;
 	color: #B6C2C9;
+	width: inherit;
 }
 
 .dataTables_empty {
@@ -409,8 +412,8 @@ body {
 
 .pagination ul > li > a {
 	color: #00B9B6;
-	border-color: #15191E;
-	background-color: #20252B;
+	/*border-color: #15191E;*/
+	background-color: #fff;
 	margin-left: 5px;
 }
 
@@ -420,19 +423,19 @@ body {
 }
 
 .pagination ul > li.disabled > a {
-	border-color: #15191E;
-	background-color: #243241;
+	/*border-color: #15191E;*/
+	background-color: #fff;
 	margin-left: 5px;
 }
 
 .pagination ul > li.disabled:hover > a {
 	color: #FFF;
-	border-color: #15191E;
+	/*border-color: #15191E;*/
 	background-color: #00B9B6;
 }
 
 .pagination ul > li.active > a, .pagination ul > li.active > a:hover {
-	border-color: #15191E;
+	/*border-color: #15191E;*/
 	background-color: #00B9B6;
 }
 
@@ -494,6 +497,15 @@ input[type="datepicker"] {
 	height: 32px;
 }
 
+.modal-body {
+	background-color: #ddd;
+}
+
+.modal-body fieldset {
+	background-color: #fff;
+	padding: 15px;
+}
+
 .modal-footer {
 	background-color: #fff;
 }
@@ -522,35 +534,9 @@ input[type="datepicker"] {
 	border-radius: 2px;
 }
 
-/*.btn-toolbar > a.btn-info, .modal-footer > a.btn-info {
-	background-color: #2983BE !important;
-	border-color: #2983BE;
-}
-
-.btn-toolbar > a.btn-info:hover, .modal-footer > a.btn-info:hover{
-	background-color: #0C6AA8 !important;
-}
-
-.btn-toolbar > a.btn-danger {
-	background-color: #FC625C !important;
-	border-color: #FC625C;
-}
-
-.btn-toolbar > a.btn-danger:hover {
-	background-color: #F03831 !important;
-}
-
-.btn-toolbar > a.btn-grey {
-	background-color: #8E9AA5 !important;
-	border-color: #8E9AA5;
-}
-
-.btn-toolbar > a.btn-grey:hover {
-	background-color: #737E89 !important;
-}*/
-
 /* 自定义按钮配色 覆盖bootstrap start */
 .btn, .btn-default {
+	text-shadow: none !important;
 	background-color: #B4C1C9 !important;
 	border-color: #B4C1C9;
 }
@@ -615,7 +601,7 @@ input[type="datepicker"] {
 /* end */
 
 .btn-group > .btn:last-child {
-	margin: 0 5px 0 0 !important;
+	margin: 0 8px 0 0 !important;
 }
 
 .btn-group + .btn-group {

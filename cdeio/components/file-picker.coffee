@@ -36,7 +36,7 @@ define [
             if @options.multiple is true
                 _.template '''
                     <div class="upload btn-toolbar">
-                        <a id="trigger-<%= id %>" class="btn btn-grey btn-small icon-cloud-upload">上传</a>
+                        <a id="trigger-<%= id %>" class="btn btn-small icon-cloud-upload">上传</a>
                         <a id="remove" href="javascript: void 0" class="btn btn-danger btn-small icon-minus">删除</a>
                     </div>
 
@@ -60,7 +60,7 @@ define [
                             <span id="text-<%= id %>"><%= text %></span>
                         </span>
                         <span id="preview-span-<%= id %>"></span>
-                        <a id="trigger-<%= id %>" class="btn <%= triggerClass %>"><i class="icon-search"/></a>
+                        <a id="trigger-<%= id %>" class="btn <%= triggerClass %>"><i class="icon-file-text"/></a>
                         <input type="file" style="display:none" id="hidden-input-<%= id %>"/>
                     </div>
                 '''
@@ -258,7 +258,7 @@ define [
                 if isdanger = t.hasClass('btn-danger')
                     @value = id: ''
                     t.removeClass('btn-danger')
-                    t.html '<i class="icon-search"></i>'
+                    t.html '<i class="icon-file-text"></i>'
                     @container.find('#percent-' + @id).empty()
                     @container.find('#text-' + @id).empty()
                 else

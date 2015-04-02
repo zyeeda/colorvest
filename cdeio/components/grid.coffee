@@ -187,9 +187,9 @@ define [ 'jquery'
             view: view
             defaultOrder: options.defaultOrder
             oLanguage:
-                sInfo: '显示 _START_ - _END_ 条, 共 _TOTAL_ 条'
+                sInfo: '显示 _START_ - _END_ 条&nbsp;&nbsp;&nbsp;&nbsp;共 _TOTAL_ 条'
                 sEmptyTable: '没有相关数据'
-                sInfoEmpty: '显示 0 - 0 条, 共 0 条'
+                sInfoEmpty: '显示 0 - 0 条&nbsp;&nbsp;&nbsp;&nbsp;共 0 条'
                 sZeroRecords: '没有相关数据'
             bSortCellsTop: true
         , options.options
