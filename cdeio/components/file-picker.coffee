@@ -41,17 +41,31 @@ define [
                     </div>
 
                     <input type="file" style="display:none" multiple="true" id="hidden-input-<%= id %>"/>
-                    <table class="table table-striped table-bordered table-hover dataTable">
-                        <thead><tr style="height: 45px;">
-                        <th style="text-align: center; width: 10%"><input id="checkbox" type="checkbox" /></th>
-                        <th style="width: 70%">文件名</th>
-                        <th>操作</th>
-                        </tr></thead>
-
-                        <tbody id="files-container-<%= id %>">
-                        </tbody>
-                    </table>
+                    <div id="grid_wrapper" class="dataTables_wrapper" role="grid">
+                        <div class="c-grid-body">
+                            <table style="width: 100%;" id="view416-grid" class="table table-striped table-bordered table-hover dataTable">
+                                <thead>
+                                <tr role="row">
+                                    <th class="sorting_disabled" tabindex="0" rowspan="1" colspan="1" aria-label="" style="width: 25px; text-align: center !important;"><input id="checkbox" type="checkbox"/></th>
+                                    <th class="sorting" tabindex="0" rowspan="1" colspan="1" aria-label="文件名: activate to sort column ascending">文件名</th>
+                                    <th class="sorting" tabindex="0" rowspan="1" colspan="1" aria-label="预览: activate to sort column ascending">预览</th>
+                                </tr>
+                                </thead>
+                                    <tbody id="files-container-<%= id %>" role="alert"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 '''
+                    # <table class="table table-striped table-bordered table-hover dataTable">
+                    #     <thead><tr style="height: 45px;">
+                    #     <th style="text-align: center; width: 10%"><input id="checkbox" type="checkbox" /></th>
+                    #     <th style="width: 70%">文件名</th>
+                    #     <th>操作</th>
+                    #     </tr></thead>
+
+                    #     <tbody id="files-container-<%= id %>">
+                    #     </tbody>
+                    # </table>
             else
                 _.template '''
                     <div class="input-append c-picker">

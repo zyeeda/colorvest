@@ -7,12 +7,12 @@ body {
 }
 
 .navbar .navbar-inner {
-	background-color: #FFFFFF;
+	background-color: #233241;
 	/*box-shadow: rgba(0,0,0,.2) 0 0 6px;*/
 }
 
 .navbar .brand {
-	color: #48587D;
+	color: #FFF;
 }
 
 .nav-tabs {
@@ -69,11 +69,11 @@ body {
 }
 
 .exit-btn {
-	background-color: #FFF !important;
+	background-color: #243241 !important;
 }
 
 .exit-btn i{
-	color: #8E9AA5 !important;
+	color: #FFF !important;
 }
 
 .exit-btn:hover i {
@@ -366,18 +366,35 @@ body {
 	background-color: #F9F9F9 !important;
 }
 
+.table td[class*="sorting"] {
+	text-align: center;
+}
+
 .table thead tr {
 	background: #FFF;
 	color: #20252B;
 }
 
+.table.table-bordered thead tr th:first-child {
+	border-left: transparent;
+}
+
+.table.table-bordered {
+	border-bottom: 0;
+	border-left: 0;
+	border-right: 0;
+}
+
+.table.table-bordered td:first-child {
+	border-left: 0;
+}
+
 .table.table-hover tbody tr.selected td {
-  /*background-color: #DDF4F2;*/
-  background-color: #DCE9F5;
+  background-color: #8ADBDB;
 }
 
 .table.table-hover tbody tr:hover td {
-  background-color: #DADCDE;
+  background-color: #DDF4F2;
 }
 
 .table-striped tbody th, .table-striped tbody td {
@@ -397,8 +414,13 @@ body {
 }
 
 .even {
-	background-color: #F1F1F1;
+	background-color: #FFF;
 }
+
+/*.table-striped tbody > tr:nth-child(odd) > td,
+.table-striped tbody > tr:nth-child(odd) > th {
+  background-color: #EFF2F5;
+}*/
 
 /* 处理列表上过滤器居中显示的问题 */
 .table.table-bordered thead tr th {
@@ -411,8 +433,7 @@ body {
 /* end */
 
 .pagination ul > li > a {
-	color: #00B9B6;
-	/*border-color: #15191E;*/
+	color: #626F7F;
 	background-color: #fff;
 	margin-left: 5px;
 }
@@ -498,12 +519,16 @@ input[type="datepicker"] {
 }
 
 .modal-body {
-	background-color: #ddd;
+	background-color: #EBF0F1;
+	padding: 18px;
 }
 
-.modal-body fieldset {
-	background-color: #fff;
-	padding: 15px;
+.modal-body form {
+	background-color: #FFF;
+}
+
+.modal-body form fieldset {
+	padding: 10px 15px;
 }
 
 .modal-footer {
