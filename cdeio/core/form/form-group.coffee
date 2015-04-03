@@ -96,7 +96,7 @@ define [
                         <% } else {%>
                             <div class="c-form-group-container" >
                                 <%= groupContent %>
-                            </div>                        
+                            </div>
                         <% } %>
                     <% } %>
                 </fieldset>

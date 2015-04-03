@@ -43,6 +43,8 @@ body {
 .nav-tabs > li.active > a:focus {
   color: #576373;
   border-top: 2px solid #1BB3B3;
+  border-left: 0;
+  border-right: 0;
   margin-bottom: -1px;
   box-shadow: none;
   padding-top: 8px;
@@ -417,10 +419,10 @@ body {
 	background-color: #FFF;
 }
 
-/*.table-striped tbody > tr:nth-child(odd) > td,
+.table-striped tbody > tr:nth-child(odd) > td,
 .table-striped tbody > tr:nth-child(odd) > th {
-  background-color: #EFF2F5;
-}*/
+  background-color: #F5F8FA;
+}
 
 /* 处理列表上过滤器居中显示的问题 */
 .table.table-bordered thead tr th {
@@ -520,15 +522,13 @@ input[type="datepicker"] {
 
 .modal-body {
 	background-color: #EBF0F1;
-	padding: 18px;
-}
-
-.modal-body form {
-	background-color: #FFF;
+	padding: 22px;
+	padding-bottom: 0;
 }
 
 .modal-body form fieldset {
-	padding: 10px 15px;
+	margin-bottom: 22px;
+	background-color: #FFF;
 }
 
 .modal-footer {

@@ -150,6 +150,14 @@ html, body {
 }
 
 .c-action-form .tab-content {
+    /*border-top: 1px solid #C5D0DC;*/
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+    background-color: #FFF;
+}
+
+.c-action-form .tab-content .tab-pane {
     border: 1px solid #C5D0DC;
 }
 
@@ -200,13 +208,12 @@ html, body {
 /* form 表单组样式，用户表单中分组样式的处理 */
 .c-form-group-title {
     background: #fff;
-    border: 1px solid #D3DBDF;
+    border-bottom: 1px solid #D3DBDF;
     border-top: 8px solid #D3DBDF;
 }
 
 .c-form-group-title + .c-form-group-container {
     padding: 15px;
-    border: 1px solid #D3DBDF;
     border-top: 0;
 }
 
@@ -224,7 +231,6 @@ html, body {
 .c-inline-grid-container {
     margin-top: 0px;
     margin-bottom: 0px;
-    border: 1px solid #ddd;
     border-top: 0;
     padding: 0 15px 10px 15px;
 }

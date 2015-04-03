@@ -272,7 +272,7 @@ define [
             Handlebars.compile(@getTemplate()) data
 
         getTemplateString: -> '''
-            <form class="<%= formClass %>" style="margin:0;">
+            <form class="<%= formClass %>" >
                 <%= content %>
                 <%= hiddens %>
                 <input type="hidden" name="__FORM_NAME__" value="<%= formName %>"/>
