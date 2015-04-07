@@ -29,12 +29,12 @@ body {
   margin-top: 1px;
   padding-bottom: 6px;
   padding-top: 7px;
-  background-color: #E5EBEC;
+  background-color: #FFF;
 }
 
 .nav-tabs > li > a:hover {
 	cursor: pointer;
-	background-color: #E5EBEC;
+	background-color: #FFF;
 	color: #999;
 }
 
@@ -45,10 +45,11 @@ body {
   border-top: 2px solid #1BB3B3;
   border-left: 0;
   border-right: 0;
-  margin-bottom: -1px;
   box-shadow: none;
   padding-top: 8px;
   padding-bottom: 8px;
+  padding-left: 13px;
+  padding-right: 13px;
 }
 
 .nav-search .show-source{
@@ -391,6 +392,19 @@ body {
 	border-left: 0;
 }
 
+fieldset .table.table-bordered thead tr th:first-child {
+	border-left: 1px solid #E2E7EA;
+}
+
+fieldset .table.table-bordered {
+	border-bottom: 1px solid #E2E7EA;
+	border-right: 1px solid #E2E7EA;
+}
+
+fieldset .table.table-bordered td:first-child {
+	border-left: 1px solid #E2E7EA;
+}
+
 .table.table-hover tbody tr.selected td {
   background-color: #8ADBDB;
 }
@@ -522,13 +536,18 @@ input[type="datepicker"] {
 
 .modal-body {
 	background-color: #EBF0F1;
-	padding: 22px;
+	padding: 24px;
 	padding-bottom: 0;
 }
 
 .modal-body form fieldset {
-	margin-bottom: 22px;
+	margin-bottom: 24px;
 	background-color: #FFF;
+}
+
+.modal-body .dataTables_wrapper {
+	background-color: #fff;
+	margin-bottom: 24px;
 }
 
 .modal-footer {
