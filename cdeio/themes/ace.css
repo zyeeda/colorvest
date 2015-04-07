@@ -160,6 +160,10 @@ html, body {
     border-top: 0;
 }
 
+.c-action-form .tab-content .tab-pane .control-group {
+    border-top: 8px solid #D3DBDF;
+}
+
 .c-action-form-show {
     font-size: 14px;
 }
@@ -208,7 +212,7 @@ html, body {
 .c-form-group-title {
     background: #fff;
     border-bottom: 1px solid #D3DBDF;
-    border-top: 8px solid #D3DBDF;
+    /*border-top: 8px solid #D3DBDF;*/
 }
 
 .c-form-group-title + .c-form-group-container {

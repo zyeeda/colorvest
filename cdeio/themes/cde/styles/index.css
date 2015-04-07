@@ -392,16 +392,19 @@ body {
 	border-left: 0;
 }
 
-fieldset .table.table-bordered thead tr th:first-child {
+fieldset .table.table-bordered thead tr th:first-child,
+.tab-pane .table.table-bordered thead tr th:first-child {
 	border-left: 1px solid #E2E7EA;
 }
 
-fieldset .table.table-bordered {
+fieldset .table.table-bordered,
+.tab-pane .table.table-bordered {
 	border-bottom: 1px solid #E2E7EA;
 	border-right: 1px solid #E2E7EA;
 }
 
-fieldset .table.table-bordered td:first-child {
+fieldset .table.table-bordered td:first-child,
+.tab-pane .table.table-bordered td:first-child {
 	border-left: 1px solid #E2E7EA;
 }
 
@@ -543,6 +546,7 @@ input[type="datepicker"] {
 .modal-body form fieldset {
 	margin-bottom: 24px;
 	background-color: #FFF;
+	border-top: 8px solid #D3DBDF;
 }
 
 .modal-body .dataTables_wrapper {
