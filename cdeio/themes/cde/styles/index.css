@@ -119,7 +119,7 @@ body {
 }
 
 .nav-list li.active > a:after {
-	border-right-color: #fff;
+	border-right-color: #ECF0F1;
 }
 
 .nav-list > li.active:after {
@@ -249,6 +249,13 @@ body {
 	border: 1px solid #15191E !important;
 }
 
+.sidebar {
+	border-right: 0;
+}
+
+.sidebar:before {
+	border-right: 0;
+}
 .sidebar-collapse {
 	border-bottom: 1px solid #15191E;
 	background-color: #20252B;
@@ -463,19 +470,16 @@ fieldset .table.table-bordered td:first-child,
 }
 
 .pagination ul > li.disabled > a {
-	/*border-color: #15191E;*/
 	background-color: #fff;
 	margin-left: 5px;
 }
 
 .pagination ul > li.disabled:hover > a {
 	color: #FFF;
-	/*border-color: #15191E;*/
 	background-color: #00B9B6;
 }
 
 .pagination ul > li.active > a, .pagination ul > li.active > a:hover {
-	/*border-color: #15191E;*/
 	background-color: #00B9B6;
 }
 
@@ -487,9 +491,6 @@ fieldset .table.table-bordered td:first-child,
 	background-color: #FFF;
 }
 
-.page-content .c-layout-grid {
-	border-left: 1px solid #E2E8E8;
-}
 /* 模态对话框 title */
 .modal-header {
 	background-color: #00B9B6;
