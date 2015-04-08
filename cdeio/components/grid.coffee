@@ -178,7 +178,6 @@ define [ 'jquery'
                         table.selectNodes.splice i, 1
 
     cdeio.registerComponentHandler 'grid', (->), (el, options, view) ->
-
         opt = _.extend
             sDom: if options.paginate is false then "<'c-grid-body't>" else "Rs<'row-fluid c-grid-top'<'span6'i><'span6'p>><'c-grid-body't>",
             bServerSide: !options.data
@@ -199,25 +198,40 @@ define [ 'jquery'
 
         if not opt.aoColumnDefs and not opt.aoColumns and options.columns
             columns = [].concat options.columns
-            if options.checkBoxColumn isnt false
-                columns.unshift
-                    sortable: false
-                    searchable: false
-                    name: 'id'
-                    header: if options.multiple then '<input type="checkbox" class="select-all" id="check-all-' + view.cid + '"> <label class="lbl"/>' else ''
-                    width: '25px'
-                    renderer: (data, type, row, a) ->
-                        if row['__FORM_TYPE__'] == 'delete'
-                            return """
-                            <input type="hidden" id="chk-#{data}" value="#{data}" class="select-row" name="chk-#{view.cid}" />
-                            <span class="red-fork">×</lable>
+            if options.form
+                if options.form.baseName is 'show'
+                    console.log view
+                    columns.unshift
+                        sortable: false
+                        searchable: false
+                        name: 'id'
+                        header: ''
+                        width: '25px'
+                        renderer: (data, type, row, a) ->
                             """
-                        """
-                            <input type="#{if options.multiple then 'checkbox' else 'radio'}"
-                            id="chk-#{data}" value="#{data}" class="select-row" name="chk-#{view.cid}"/>
-                            <label class="lbl"></lable>
-                        """
-
+                                <a href="javascript:void 0;" id="inline-#{data}" value="#{data}" class="select-row">
+                                    <i class="icon-eye-open"></i>
+                                </a>
+                            """
+            if options.checkBoxColumn isnt false
+                if !options.form or (options.form and options.form.baseName isnt 'show')
+                    columns.unshift
+                        sortable: false
+                        searchable: false
+                        name: 'id'
+                        header: if options.multiple then '<input type="checkbox" class="select-all" id="check-all-' + view.cid + '"> <label class="lbl"/>' else ''
+                        width: '25px'
+                        renderer: (data, type, row, a) ->
+                            if row['__FORM_TYPE__'] == 'delete'
+                                return """
+                                <input type="hidden" id="chk-#{data}" value="#{data}" class="select-row" name="chk-#{view.cid}" />
+                                <span class="red-fork">×</lable>
+                                """
+                            """
+                                <input type="#{if options.multiple then 'checkbox' else 'radio'}"
+                                id="chk-#{data}" value="#{data}" class="select-row" name="chk-#{view.cid}"/>
+                                <label class="lbl"></lable>
+                            """
             if options.numberColumn is true
                 columns.unshift
                     sortable: false, searchable: false, name: '_i', header: '#', width: '25px'
@@ -287,6 +301,25 @@ define [ 'jquery'
             tr[if checked then 'addClass' else 'removeClass']('selected')
             table.trigger 'selectionChanged', [table.getSelected()]
             changeNodes view, table, [input[0]], checked, 'one' if options.crossPage && options.multiple
+
+        table.delegator.delegate 'a[id*="inline-"]', 'click.delegate', (e) ->
+            feature = view.feature
+            gridView = feature.views['inline:grid']
+            operatorsView = feature.views['inline:operators']
+            titleView = feature.views['inline:title']
+
+            operatorsView.loadViewFormDeferred.done (form, title = '') =>
+                grid = gridView.components[0]
+                console.log grid
+                # index = grid
+                app.showDialog
+                    title: '查看' + title
+                    view: form
+                    buttons: []
+                .done ->
+                    # form.setFormData data, true
+                    # if _.isFunction gridView.afterShowInlineGridDialog
+                    #     gridView.afterShowInlineGridDialog.call @, 'show', form, data
 
         settings = table.fnSettings()
         view.collection.extra = _.extend {}, options.params or {}

@@ -407,7 +407,7 @@ body {
 }
 
 .dataTables_empty:hover {
-	background-color: #F9F9F9 !important;
+	background-color: #F5F8FA !important;
 }
 
 .table td[class*="sorting"] {
