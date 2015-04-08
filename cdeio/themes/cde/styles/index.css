@@ -85,7 +85,7 @@ body {
 
 /* begin sidebar */
 .sidebar:before {
-	background-color: #20252B;
+	background-color: #243241;
 }
 
 .sidebar-shortcuts {
@@ -105,13 +105,12 @@ body {
 	border-bottom: 1px solid #15191E;
 }
 
-.nav-list a {
-	background-color: #20252B;
+.nav-list > li > a,
+.nav-list > li > a:hover,
+.nav-list > li > a:focus,
+.nav-list > li > a:active {
+	background-color: #243241;
 	color: #8E9AA5;
-}
-.nav-list .active a {
-	background-color: #20252B;
-	color: red;
 }
 
 .nav-list > li .submenu > li > a {
@@ -130,14 +129,15 @@ body {
 	border-bottom-color: #15191E;
 }
 
-.nav-list > li.open > a {
-	background-color: #20252B;
+.nav-list > li.open a {
+	background-color: #243241;
 	color: #00B9B6;
 	border-bottom-color: #15191E;
 }
 
 .nav-list > li .submenu {
 	border-top: none;
+	background-color: #243241;
 }
 
 .nav-list > li .submenu > li > a {
@@ -148,21 +148,24 @@ body {
 	border-top: 1px solid #15191E;
 }
 
-.nav-list > li > a, .nav-list > li > a:hover,
-.nav-list > li > a:focus,.nav-list > li > a:active {
-	background-color: #20252B;
+.nav-list > li.active > a, 
+.nav-list > li.active > a:hover, 
+.nav-list > li.active > a:focus, 
+.nav-list > li.active > a:active {
+	color: #00B9B6;
+	background-color: #243241;
 }
 
-.nav-list > li.active > a, .nav-list > li.active > a:hover, .nav-list > li.active > a:focus, .nav-list > li.active > a:active {
-	color: #00B9B6;
-	background-color: #20252B;
+.nav-list > li.active .submenu {
+	background-color: #172639;
+}
+
+.nav-list > li.active > .submenu a {
+	background-color: #172639;
 }
 
 .nav-list > li > .submenu:before {
 	border-left: 1px solid #15191E;
-}
-.nav-list > li > .submenu li > .submenu {
-	background-color: #20252B;
 }
 
 .nav-list > li > .submenu li > .submenu li > .submenu {
@@ -173,14 +176,23 @@ body {
 	color: #8E9AA5 !important;
 }
 
-.nav-list .icon-double-angle-right {
-	background: #20252B !important;
+.nav-list > li > .submenu li > a:hover > .green,
+.nav-list > li > .submenu li.active > li.active > a > .green,
+.nav-list > li > .submenu li.active > a > .green {
 	color: #00B9B6 !important;
 }
 
-.nav-list .icon-double-angle-right:hover, .nav-list li:hover .icon-double-angle-right,
-.nav-list a:hover .icon-double-angle-right {
-	background: #20252B !important;
+.nav-list > li.active.open .icon-double-angle-right {
+	background: #172639 !important;
+}
+
+.nav-list > li.open .icon-double-angle-right {
+	background: #243241 !important;
+}
+
+.nav-list .icon-double-angle-right:hover, 
+.nav-list li.active a:hover .icon-double-angle-right {
+	background: #172639 !important;
 	color: #00B9B6 !important;
 }
 
@@ -224,16 +236,38 @@ body {
 	top: 10px;
 }
 
+.nav-list > li .submenu > li.active > a > [class*="icon-"]:first-child,
+.nav-list > li > .submenu li > .submenu li.active > a > [class*="icon-"]:first-child,
+.nav-list > li > .submenu li > .submenu li:hover > a > [class*="icon-"]:first-child,
+.nav-list > li > .submenu li > .submenu li.open > a:hover > [class*="icon-"]:first-child {
+	color: #00C0B9;
+}
+
+.nav-list > li .submenu > li a > [class*="icon-"]:first-child,
+.nav-list > li.open .submenu > li.open a > [class*="icon-"]:first-child {
+	background-color: #243241;
+}
+
+.nav-list > li.active .submenu > li a > [class*="icon-"]:first-child,
+.nav-list > li.active .submenu > li.open a > [class*="icon-"]:first-child,
+.nav-list > li.active .submenu > li.active a > [class*="icon-"]:first-child {
+	background-color: #172639;
+}
+
+.nav-list > li > .submenu li > .submenu li.open > a > [class*="icon-"]:first-child {
+	color: #626F7F;
+}
+
 .menu-min .nav-list > li.open > a {
-	background: #20252B;
+	background: #243241;
 }
 
 .menu-min .nav-list > li.open.active > a {
-	background: #20252B;
+	background: #243241;
 }
 
 .menu-min .nav-list > li > a > .menu-text {
-	background: #20252B;
+	background: #243241;
 }
 .menu-min .nav-list > li > a.dropdown-toggle > .menu-text {
 	border-bottom: 1px solid #15191E;
@@ -241,7 +275,7 @@ body {
 
 .menu-min .nav-list > li > .submenu {
 	border: 1px solid #15191E !important;
-	background-color: #20252B !important;
+	background-color: #243241 !important;
 }
 
 .menu-min .nav-list > li > a > .menu-text {
@@ -258,11 +292,11 @@ body {
 }
 .sidebar-collapse {
 	border-bottom: 1px solid #15191E;
-	background-color: #20252B;
+	background-color: #243241;
 }
 
 .sidebar-collapse:before {
-	border-top: 1px dashed #20252B;
+	border-top: 1px dashed #243241;
 }
 
 .sidebar-collapse > [class*="icon-"] {
@@ -416,7 +450,7 @@ fieldset .table.table-bordered td:first-child,
 }
 
 .table.table-hover tbody tr.selected td {
-  background-color: #8ADBDB;
+  background-color: #A8E5E5;
 }
 
 .table.table-hover tbody tr:hover td {

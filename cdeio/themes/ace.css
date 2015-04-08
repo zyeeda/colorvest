@@ -160,7 +160,7 @@ html, body {
     border-top: 0;
 }
 
-.c-action-form .tab-content .tab-pane .control-group {
+.c-action-form .tab-content > .tab-pane > .control-group {
     border-top: 8px solid #D3DBDF;
 }
 
