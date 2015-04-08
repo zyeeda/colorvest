@@ -620,66 +620,66 @@ input[type="datepicker"] {
 /* 自定义按钮配色 覆盖bootstrap start */
 .btn, .btn-default {
 	text-shadow: none !important;
-	background-color: #B4C1C9 !important;
-	border-color: #B4C1C9;
+	background-color: #B6C2C9 !important;
+	border-color: #B6C2C9;
 }
 
 .btn:hover, .btn-default:hover {
-	background-color: #909AA1 !important;
+	background-color: #A0B1BB !important;
 }
 
 .btn-primary {
-	background-color: #00B9B6 !important;
-	border-color: #00B9B6;
+	background-color: #4FB6D4 !important;
+	border-color: #4FB6D4;
 }
 
 .btn-primary:hover {
-	background-color: #22A09E !important;
+	background-color: #36A5C5 !important;
 }
 
 .btn-info {
-	background-color: #3C80E1 !important;
-	border-color: #3C80E1;
+	background-color: #3A91DF !important;
+	border-color: #3A91DF;
 }
 
 .btn-info:hover {
-	background-color: #0070DF !important;
+	background-color: #267BC7 !important;
 }
 
 .btn-success {
-	background-color: #00B2AD !important;
-	border-color: #00B2AD;
+	background-color: #1BACAB !important;
+	border-color: #1BACAB;
 }
 
 .btn-success:hover {
-	background-color: #139793 !important;
+	background-color: #0F9190 !important;
 }
 
 .btn-danger {
-	background-color: #FF384D !important;
-	border-color: #FF384D;
+	background-color: #FC5C5B !important;
+	border-color: #FC5C5B;
 }
 
 .btn-danger:hover {
-	background-color: #F21C33 !important;
+	background-color: #E44645 !important;
 }
 
 .btn-warning {
-	background-color: #FA9D04 !important;
-	border-color: #FA9D04;
+	background-color: #F39B30 !important;
+	border-color: #F39B30;
 }
 
 .btn-warning:hover {
-	background-color: #DD9317 !important;
+	background-color: #DE8110 !important;
 }
 
 .btn-inverse {
-	background-color: #2C343C !important;
-	border-color: #2C343C;
+	background-color: #243241 !important;
+	border-color: #243241;
 }
 
 .btn-inverse:hover {
-	background-color: 
+	background-color: #152332 !important;
 }
 /* end */
 
