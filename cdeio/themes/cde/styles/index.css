@@ -209,7 +209,7 @@ body {
 }
 
 .nav-list > li a {
-	color: #626F7F !important;
+	color: #A7B1C2 !important;
 }
 
 .nav-list > li a:hover {
@@ -240,7 +240,7 @@ body {
 .nav-list > li > .submenu li > .submenu li.active > a > [class*="icon-"]:first-child,
 .nav-list > li > .submenu li > .submenu li:hover > a > [class*="icon-"]:first-child,
 .nav-list > li > .submenu li > .submenu li.open > a:hover > [class*="icon-"]:first-child {
-	color: #00C0B9;
+	color: #00B9B6;
 }
 
 .nav-list > li .submenu > li a > [class*="icon-"]:first-child,
@@ -255,7 +255,10 @@ body {
 }
 
 .nav-list > li > .submenu li > .submenu li.open > a > [class*="icon-"]:first-child {
-	color: #626F7F;
+	color: #A7B1C2;
+}
+.nav-list > li > .submenu li > .submenu li.active.open > a > [class*="icon-"]:first-child {
+	color: #00B9B6;
 }
 
 .menu-min .nav-list > li.open > a {
@@ -414,6 +417,16 @@ body {
 	text-align: center;
 }
 
+.table td[class*="sorting"] > a {
+	color: #626F7F;
+}
+
+.table td[class*="sorting"] > a:hover,
+.table td[class*="sorting"] > a:focus {
+	text-decoration: none;
+	color: #00B9B6;
+}
+
 .table thead tr {
 	background: #FFF;
 	color: #20252B;
@@ -469,6 +482,10 @@ fieldset .table.table-bordered td:first-child,
 	border-left: 1px solid #E2E7EA;
 }
 
+.dataTables_scrollBody {
+	background-color: #ECF0F1;
+}
+
 .table th, .table td {
 	border-top: 1px solid #E2E7EA;
 }
@@ -489,6 +506,10 @@ fieldset .table.table-bordered td:first-child,
 
 .dataTable th[class*=sort] {
 	text-align: left !important;
+}
+
+.dataTable th[class*=sort]:first-child {
+	text-align: center !important;
 }
 /* end */
 

@@ -200,7 +200,6 @@ define [ 'jquery'
             columns = [].concat options.columns
             if options.form
                 if options.form.baseName is 'show'
-                    console.log view
                     columns.unshift
                         sortable: false
                         searchable: false
@@ -307,19 +306,17 @@ define [ 'jquery'
             gridView = feature.views['inline:grid']
             operatorsView = feature.views['inline:operators']
             titleView = feature.views['inline:title']
-
+            grid = gridView.components[0]
+            data = grid.fnGetData(@.parentNode.parentNode)
             operatorsView.loadViewFormDeferred.done (form, title = '') =>
-                grid = gridView.components[0]
-                console.log grid
-                # index = grid
                 app.showDialog
                     title: '查看' + title
                     view: form
                     buttons: []
                 .done ->
-                    # form.setFormData data, true
-                    # if _.isFunction gridView.afterShowInlineGridDialog
-                    #     gridView.afterShowInlineGridDialog.call @, 'show', form, data
+                    form.setFormData data, true
+                    if _.isFunction gridView.afterShowInlineGridDialog
+                        gridView.afterShowInlineGridDialog.call @, 'show', form, data
 
         settings = table.fnSettings()
         view.collection.extra = _.extend {}, options.params or {}
