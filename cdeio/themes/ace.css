@@ -368,6 +368,17 @@ html, body {
     /*color: #fff;*/
 }
 
+.process-tabs .nav-tabs li > a span:last-child {
+    color: #76848F;
+    letter-spacing: 1px;
+    padding-left:28px;
+    font-size:13px;
+}
+.process-tabs .nav-tabs li > a:hover span:last-child, 
+.process-tabs .nav-tabs li.active > a span:last-child {
+    color: #FFF;
+}
+
 .process-tabs .nav-tabs li > a:hover {
     background-color: #00B9B6;
     color: #FFF;
