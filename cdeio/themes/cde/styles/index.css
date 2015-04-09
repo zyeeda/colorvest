@@ -7,6 +7,10 @@ body {
 	letter-spacing: 2px;
 }
 
+.nav-search {
+	letter-spacing: 0;
+}
+
 .navbar .navbar-inner {
 	background-color: #233241;
 	/*box-shadow: rgba(0,0,0,.2) 0 0 6px;*/
@@ -623,6 +627,7 @@ input[type="datepicker"] {
 	text-shadow: none !important;
 	background-color: #B4C1C9 !important;
 	border-color: #B4C1C9;
+	color: #FFF !important;
 }
 
 .btn:hover, .btn-default:hover {
