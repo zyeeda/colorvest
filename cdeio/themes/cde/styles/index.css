@@ -416,6 +416,17 @@ body {
 	color: #20252B;
 }
 
+.table tbody tr td:first-child > a {
+	color: #62677F;
+	text-decoration: none;
+}
+
+.table tbody tr td:first-child > a:hover,
+.table tbody tr td:first-child > a:focus {
+	color: #00C0B9;
+	text-decoration: none;
+}
+
 .table.table-bordered thead tr th:first-child {
 	border-left: transparent;
 }
