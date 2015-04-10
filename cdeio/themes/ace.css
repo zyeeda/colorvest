@@ -155,7 +155,12 @@ html, body {
     padding: 18px 20px;
 }
 
-.c-action-form .tab-content .tab-pane {
+.c-action-form .tab-content .tab-pane fieldset{
+    border: 1px solid #C5D0DC;
+    border-top: 8px solid #D3DBDF;
+}
+
+.c-action-form .tab-content .tab-pane > .control-group {
     border: 1px solid #C5D0DC;
     border-top: 0;
 }
