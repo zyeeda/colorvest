@@ -83,6 +83,9 @@ define [
                         deferred.resolve @
                 deferred.promise()
 
+        hide: ->
+            @modal.modal 'hide'
+
         close: -> # for close button
             # 取出最上层的 view
             options = @startedOptions.pop()
