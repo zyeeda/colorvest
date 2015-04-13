@@ -316,6 +316,11 @@ body {
 	border-bottom: 1px dashed #FFF;
 }
 
+.large-userphoto {
+	width: 40%;
+	float: left;
+}
+
 .large-user-photo {
 	width: 50px;
 	height: 50px;
@@ -324,12 +329,26 @@ body {
 	border: 3px solid #f5a623;
 }
 
+.large-userinfo {
+	width: 60%;
+	float: left;
+	padding-top: 10px;
+}
+
+.large-username {
+	width: 100%;
+}
+
 .large-user-name {
 	color: #FFF;
 	font-size: 13px;
-	float: right;
-	margin-right: 20px;
-	margin-top: 8px;
+	/*float: right;*/
+	margin-right: 10px;
+}
+
+.large-setting-cog {
+	clear: both;
+	display: inline-block;
 }
 
 .large-user-btns {
@@ -341,12 +360,14 @@ body {
 	margin-top: -26px;
 	margin-left: 100px;
 	cursor: pointer;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .large-user-btns i {
 	float: left;
 	padding-left: 4px;
-	padding-top: 1px;
+	padding-top: 3px;
 }
 
 .mini-user-photo {
