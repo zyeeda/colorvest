@@ -74,7 +74,7 @@ define
             .done ->
                 form.reset()
                 if _.isFunction gridView.afterShowInlineGridDialog
-                    gridView.afterShowInlineGridDialog.call @, 'add', form, {}
+                    gridView.afterShowInlineGridDialog.call @, 'add', form, form.getFormData()
 
     updateItem: ->
         gridView = @feature.views['inline:grid']
