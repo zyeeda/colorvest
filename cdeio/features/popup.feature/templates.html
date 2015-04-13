@@ -11,10 +11,8 @@
 {{/view}}
 
 {{#view "popup-buttons"}}
+<button class="btn btn-small">关闭</button>
 {{#each buttons}}
-<button class="btn btn-small {{btnClass}}">
-    <i class="pull-right {{iconClass}}"></i>
-    {{label}}
-</button>
+<button class="btn btn-small {{status}}" id="{{id}}">{{label}}</button>
 {{/each}}
 {{/view}}
