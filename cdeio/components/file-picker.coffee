@@ -17,19 +17,39 @@ define [
             size = size / 1024
             i++
         size.toFixed(2) + ' ' + units[i]
+    # 图片类型
+    types = [
+        'image/png'
+        'image/bmp'
+        'image/jpeg'
+        'image/gif'
+        'image/x-icon'
+    ]
 
-    row = H.compile '''<tr>
-        <td style="text-align: center;"><input id="check-{{id}}" type="checkbox" /></td>
-        <td><div class="progress" style="margin-bottom: 0px; margin-top: 5px;">
-            <div class="bar" id="bar-{{id}}" style="width:1%; color: black;text-align:left;">&nbsp;&nbsp;{{name}}</div>
-        </div></td>
-        <td>
-            {{#preview}}
-            <a id="popover-span-{{../id}}" class="upload-preview-btn upload-multiple-preview" href="javascript: void 0"  data-rel="popover" data-placement="{{../preview}}">&nbsp;</a>
-            <a id="preview-{{../id}}" href="javascript: void 0" style="z-index: 1;position: relative;">预览</a>
-            {{/preview}}
-        </td>
-    </tr>'''
+    # 根据 content-type 判断是否为图片
+    isImage = (contentType) ->
+        _.contains types, contentType
+
+    row = H.compile '''
+        <tr>
+            <td style="text-align: center;"><input id="check-{{id}}" type="checkbox" /></td>
+            <td>
+                <div class="progress" style="margin-bottom: 0px; margin-top: 5px;">
+                    <div class="bar" id="bar-{{id}}" style="width:1%; color: black;text-align:left;">&nbsp;&nbsp;{{name}}</div>
+                </div>
+            </td>
+            <td>
+                {{#preview}}
+                <a id="popover-span-{{../id}}" class="upload-preview-btn upload-multiple-preview" href="javascript: void 0"  data-rel="popover" data-placement="{{../preview}}">&nbsp;</a>
+                {{#if ../isImageFile }}
+                <a id="preview-{{../../id}}" href="javascript: void 0" style="z-index: 1;position: relative;">预览</a>
+                &nbsp;
+                {{/if}}
+                <a id="download-{{../id}}" target="_blank" href="./{{../url}}" style="z-index: 2;position: relative;">下载</a>
+                {{/preview}}
+            </td>
+        </tr>
+    '''
 
     class FilePicker extends Picker.Picker
         getTemplate: ->
@@ -48,7 +68,7 @@ define [
                                 <tr role="row">
                                     <th class="sorting_disabled" tabindex="0" rowspan="1" colspan="1" aria-label="" style="width: 25px; text-align: center !important;"><input id="checkbox" type="checkbox"/></th>
                                     <th class="sorting" tabindex="0" rowspan="1" colspan="1" aria-label="文件名: activate to sort column ascending">文件名</th>
-                                    <th class="sorting" tabindex="0" rowspan="1" colspan="1" aria-label="预览: activate to sort column ascending">预览</th>
+                                    <th class="sorting" tabindex="0" rowspan="1" colspan="1" aria-label="操作: activate to sort column ascending">操作</th>
                                 </tr>
                                 </thead>
                                     <tbody id="files-container-<%= id %>" role="alert"></tbody>
@@ -74,6 +94,7 @@ define [
                             <span id="text-<%= id %>"><%= text %></span>
                         </span>
                         <span id="preview-span-<%= id %>"></span>
+                        <span id="download-span-<%= id %>"></span>
                         <a id="trigger-<%= id %>" class="btn <%= triggerClass %>"><i class="icon-file-text"/></a>
                         <input type="file" style="display:none" id="hidden-input-<%= id %>"/>
                     </div>
@@ -89,8 +110,14 @@ define [
                 ctn = @container.find '#files-container-' + @id
                 ctn.empty()
                 @datas or= {}
+
                 for item in @value or []
-                    ctn.append(row(id: item.id, name: item.filename, preview: @options.preview))
+                    if isImage item.contentType 
+                        isImageFile = true 
+                    else 
+                        isImageFile = false
+
+                    ctn.append(row(id: item.id, name: item.filename, url: @options.url + '/' + item.id, isImageFile: isImageFile, preview: @options.preview))
                     @datas[item.id] = result: item, uploaded: true
 
                     ctn.find('div.progress > div').addClass('bar-success').css('width', '100%')
@@ -104,7 +131,8 @@ define [
                 trigger.addClass('btn-danger')
                 trigger.html('<i class="icon-remove"></i>')
 
-                @previewSingle @options, @id, value.id, @id, @options.url
+                @downloadSingle @options, @id, value.id, @id, @options.url, value.contentType
+                @previewSingle @options, @id, value.id, @id, @options.url, value.contentType
 
         renderSingle: (input) ->
             me = @
@@ -121,7 +149,8 @@ define [
                         return input.fileupload 'process', data
                     .done (data) ->
                         data.submit().done (res) ->
-                            me.previewSingle options, data.id, res.id, @id, options.url
+                            me.downloadSingle options, data.id, res.id, @id, options.url, data.files[0].type
+                            me.previewSingle options, data.id, res.id, @id, options.url, data.files[0].type
                     .fail (data) =>
                         if data.files.error
                             percent.removeClass('label-success').removeClass('label-info').addClass 'label-important'
@@ -156,18 +185,23 @@ define [
                     @datas[d.id] = d
                     d.process ->
                         return input.fileupload 'process', data
-                    .done =>
+                    .done (a,b,c)=>
                         tpl = row
                             id: d.id
                             name: f.name
                             type: f.type
                             size: calcSize f.size
+                            isImageFile: isImage f.type
+                            # url: 
                             preview: options.preview
                         $(tpl).appendTo @container.find('#files-container-' + @id)
                         d.submit().done (res) ->
                             if options.preview
                                 popover = $('#popover-span-' + @id)
                                 me.setPopoverData popover, @url + '/' + res.id, res.id
+                            download = $('#download-' + @id)
+                            me.setDownloadData download, @url + '/' + res.id
+
                     .fail (dd) =>
                         tpl = row
                             id: d.id
@@ -226,6 +260,10 @@ define [
         setPopoverData: (popover, url, id) ->
             popover.attr 'data-content', '<img id="preview-img-' + id + '" class="upload-preview" src="' + url + '" />'
 
+        # 设置下载链接的地址
+        setDownloadData: (download, url) ->
+            download.attr 'href', url
+
         popoverToggle: (popover, url, id) ->
             me = @
             _next = popover.next()
@@ -241,19 +279,30 @@ define [
                 $('#preview-img-' + id).click ->
                         me.popoverToggle popover, url, id
                         window.open url, id
-
-        previewSingle: (options, did, rid, $id, url) ->
+        # 单附件预览
+        previewSingle: (options, did, rid, $id, url, contentType) ->
+            # 只有图片类型，才能预览
+            return if isImage(contentType) is false
             if options.preview
                 _url = url + '/' + rid
                 _preview = """
-                    <a id="popover-span-#{did}" class="btn btn-success upload-preview-btn" data-rel="popover" data-placement="#{options.preview}" style="margin-right:49px;" data-content="<img id='preview-img-#{rid}' class='upload-preview' src='#{_url}'' />"><i class="icon-eye-open"/></a>
-                    <a id="preview-#{did}" class="btn btn-success" href="javascript: void 0"  style="margin-right:49px;"><i class="icon-eye-open"/></a>
+                    <a id="popover-span-#{did}" class="btn btn-success upload-preview-btn" data-rel="popover" data-placement="#{options.preview}" style="margin-right:87px;" data-content="<img id='preview-img-#{rid}' class='upload-preview' src='#{_url}'' />"><i class="icon-eye-open"/></a>
+                    <a id="preview-#{did}" class="btn btn-success" href="javascript: void 0"  style="margin-right:87px;"><i class="icon-eye-open"/></a>
                 """
                 $('#preview-span-' + did).html _preview
 
                 @container.find('#preview-' + $id).click (e) =>
                     popover = @container.find('#popover-span-' + $id)
                     @popoverToggle popover, _url, rid
+
+        # 单附件下载
+        downloadSingle: (options, did, rid, $id, url, contentType) ->
+            # 只有图片类型，才能预览
+            _url = url + '/' + rid
+            _download = """
+                <a id="download-#{did}" class="btn btn-success" href="#{_url}"  style="margin-right:43px;"><i class="icon-download"/></a>
+            """
+            $('#download-span-' + did).html _download
 
         render: ->
             return if @renderred
