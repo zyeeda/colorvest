@@ -19,11 +19,13 @@ define [
     'bootstrap'
     'cdeio/features/dialog.feature/feature'
     'cdeio/features/routers'
-], ($, _, Marionette, Handlebars, Backbone, ComponentHandler, loadResource, config, LoaderPluginManager, featureLoader, viewLoader, layoutLoader, inlineViewloader, cdeioLayoutLoader, cdeioFeatureLoader) ->
+], ($, _, Marionette, Handlebars, Backbone, ComponentHandler, loadResource, \
+config, LoaderPluginManager, featureLoader, viewLoader, layoutLoader, \
+inlineViewloader, cdeioLayoutLoader, cdeioFeatureLoader) ->
 
     # override marionette's template loader
     Marionette.TemplateCache.loadTemplate = (templateId, callback) ->
-        loadResource(templateId, 'text').done (template) ->
+        loadResource(templateId, 'text').done (template) =>
             if template
                 callback.call @, Handlebars.compile template
             else
@@ -35,7 +37,7 @@ define [
     LoaderPluginManager.register viewLoader
     LoaderPluginManager.register layoutLoader
     LoaderPluginManager.register inlineViewloader
-    
+
     LoaderPluginManager.register cdeioLayoutLoader
     LoaderPluginManager.register cdeioFeatureLoader
 
@@ -60,7 +62,8 @@ define [
             fn s if s
 
         fn = (content, title = '') -> alert title + ': ' + content
-        app[name] = fn for name in ['success', 'info', 'error', 'message'] when not app[name]
+        app[name] = fn for name in ['success', 'info', 'error', 'message'] \
+            when not app[name]
 
         app
 
@@ -99,8 +102,10 @@ define [
         attachDefaultApplicationMethods app
 
         if options?.initFeatures
-            features = if _.isString(options.initFeatures) then [options.initFeatures] else options.initFeatures
-            featureOptions = if _.isArray(options.initFeatureOptions) then options.initFeatureOptions else [options.initFeatureOptions]
+            features = if _.isString(options.initFeatures) then \
+                [options.initFeatures] else options.initFeatures
+            featureOptions = if _.isArray(options.initFeatureOptions) then \
+                options.initFeatureOptions else [options.initFeatureOptions]
             app.done ->
                 app.startFeature name, featureOptions[i] for name, i in features
 
