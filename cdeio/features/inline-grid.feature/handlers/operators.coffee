@@ -122,7 +122,6 @@ define
                     gridView.afterShowInlineGridDialog.call @, 'edit', form, data
     showItem: ->
         gridView = @feature.views['inline:grid']
-
         return if not @loadViewFormDeferred
 
         if _.isFunction gridView.beforeShowInlineGridDialog
