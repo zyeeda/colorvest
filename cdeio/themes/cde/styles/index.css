@@ -332,7 +332,7 @@ body {
 .large-userinfo {
 	width: 60%;
 	float: left;
-	padding-top: 10px;
+	padding-top: 7px;
 }
 
 .large-username {
@@ -652,6 +652,15 @@ input[type="datepicker"] {
 
 .btn-toolbar > a.btn {
 	border-radius: 2px;
+}
+
+.btn-toolbar > [class^="icon-"]:before, .btn-toolbar > [class*="icon-"]:before {
+	width: 11px !important;
+}
+
+.btn > [class*="icon-"] {
+	display: inline-block;
+	width: 13px;
 }
 
 /* 自定义按钮配色 覆盖bootstrap start */
