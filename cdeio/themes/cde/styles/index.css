@@ -660,7 +660,7 @@ input[type="datepicker"] {
 	width: 11px !important;
 }
 
-.btn > [class*="icon-"] {
+button.btn > [class*="icon-"] {
 	display: inline-block;
 	width: 13px;
 }
