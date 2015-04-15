@@ -7,7 +7,7 @@ body {
 	letter-spacing: 2px;
 }
 
-.nav-search {
+.nav-search, .pre {
 	letter-spacing: 0;
 }
 
