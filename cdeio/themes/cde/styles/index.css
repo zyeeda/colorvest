@@ -650,11 +650,13 @@ input[type="datepicker"] {
 	margin-right: 0px;
 }
 
-.btn-toolbar > a.btn {
+.btn-toolbar > .btn-group > a.btn {
 	border-radius: 2px;
+	border-width: 4px !important;
+	font-size: 13px;
 }
 
-.btn-toolbar > [class^="icon-"]:before, .btn-toolbar > [class*="icon-"]:before {
+.btn-toolbar > .btn-group > [class^="icon-"]:before, .btn-toolbar > .btn-group > [class*="icon-"]:before {
 	width: 11px !important;
 }
 
