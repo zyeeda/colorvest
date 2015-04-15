@@ -491,6 +491,10 @@ fieldset .table.table-bordered td:first-child,
 	color: #626F7F;
 }
 
+.dataTable th[class=sorting_disabled] {
+	color: #20252B;
+}
+
 .dataTable th[class*=sort]:hover {
 	color: #00B9B6;
 }
