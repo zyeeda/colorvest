@@ -752,6 +752,18 @@ button.btn > [class*="icon-"] {
 	margin-left: 2px !important;
 }
 
+.ui-layout-west .btn-toolbar > .btn-group > .btn:last-child {
+	margin: 0 6px 0 0 !important;
+}
+
+.ui-layout-west .btn-toolbar > .btn-group > .btn + .btn {
+	margin-left: 2px !important;
+}
+
+.btn-toolbar > .btn-group:last-child > .btn:last-child {
+	margin: 0 !important;
+}
+
 .upload {
 	margin-top: 15px;
 	margin-bottom: 15px;
