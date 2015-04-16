@@ -609,6 +609,10 @@ input[type="datepicker"] {
 	height: 32px;
 }
 
+.bootbox .modal-body {
+	padding: 15px;
+}
+
 .modal-body {
 	background-color: #EBF0F1;
 	padding: 24px;
