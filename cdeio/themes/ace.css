@@ -127,15 +127,43 @@ html, body {
     right: 0px;
     height: 29px;
     line-height: 30px;
-    padding: 1px 10px 0 14px;
-    background-color: #F0F3F5 !important;
+    padding: 1px 10px 0 10px;
     border: 1px solid #CCCCCC;
+    background-color: #F0F3F5 !important;
     color: #949DAA !important;
+}
+
+.c-picker .btn > [class*="icon-"] {
+    margin-left: 4px;
+}
+
+.c-picker .btn > [class*="icon-"]:before {
+    width: 15px;
 }
 
 .c-picker a.btn:hover {
     background-color: #D4DFEF !important;
     color: #fff !important;
+}
+
+.c-picker a.btn.btn-remove {
+    background-color: #FF384D !important;
+    border-color: #FF384D;
+    color: #fff !important;
+}
+
+.c-picker a.btn.btn-remove:hover {
+    background-color: #F21C33 !important;
+}
+
+.c-picker a.btn.btn-success {
+    background-color: #00B2AD !important;
+    border-color: #00B2AD;  
+    color: #fff !important;  
+}
+
+.c-picker a.btn.btn-success:hover {
+    background-color: #139793 !important;
 }
 
 .c-picker a.btn.plus {
