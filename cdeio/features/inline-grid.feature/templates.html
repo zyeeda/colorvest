@@ -1,8 +1,5 @@
 {{#layout}}
-<div class="c-layout-container c-layout-grid" >
-	<!-- <div class="c-form-group-title"> -->
-        <!-- <h5 >任务分配</h5> -->
-	<!-- </div> -->
+<div class="c-layout-container c-layout-grid">
     <div id="title"></div>
     <div class="c-inline-grid-container {{#unless isTheOnlyField}}c-inline-grid-inside{{/unless}}">
         <div class="c-layout-north">
@@ -20,7 +17,7 @@
 {{#view "title"}}
 {{#if title}}
 <div class="c-form-group-title">
-    <h5>{{title}}</h5>
+    <h5 >{{title}}</h5>
 </div>
 {{/if}}
 {{/view}}
@@ -28,35 +25,26 @@
 {{#view "operators"}}
 {{#unless readOnly}}
 <div id="operators" class="btn-toolbar">
-{{#if allowAdd}}
-<a href="javascript:void 0" id="add" title="添加" class="btn btn-success btn-small icon-plus">&nbsp;添加</a>
-{{/if}}
-<a href="javascript:void 0" id="show" title="查看" 
-class="btn btn-info btn-small icon-eye-open">&nbsp;查看</a>
-{{#if allowEdit}}
-<a href="javascript:void 0" id="edit" title="编辑"
-class="btn btn-warning btn-small icon-edit">&nbsp;编辑</a>
-{{/if}}
-<a href="javascript:void 0" id="remove" title="删除" 
-class="btn btn-danger btn-small icon-minus">&nbsp;删除</a>
-
-{{#if allowPick}}
-<a href="javascript:void 0" id="pick" title="选择"
-class="btn btn-small icon-search">&nbsp;选择</a>
-{{/if}}
-<div id="picker" style="display:none"></div>
+    {{#if allowPick}}
+    <div class="btn-group">
+        <a href="javascript:void 0" id="pick" title="选择" class="btn btn-info btn-small icon-search">&nbsp;&nbsp;选择</a>
+    </div>
+    {{/if}}
+    <div class="btn-group">
+        {{#if allowAdd}}
+        <a href="javascript:void 0" id="add" title="添加" class="btn btn-info btn-small icon-plus">&nbsp;&nbsp;添加</a>
+        {{/if}}
+        <a href="javascript:void 0" id="show" title="查看" class="btn btn-primary btn-small icon-eye-open">&nbsp;&nbsp;查看</a>
+        {{#if allowEdit}}
+        <a href="javascript:void 0" id="edit" title="编辑" class="btn btn-primary btn-small icon-edit">&nbsp;&nbsp;编辑</a>
+        {{/if}}
+        <a href="javascript:void 0" id="remove" title="删除" class="btn btn-danger btn-small icon-minus">&nbsp;&nbsp;删除</a>
+    </div>
+    <div id="picker" style="display:none"></div>
 </div>
 {{/unless}}
-{{#if readOnly}}
-<div id="operators" class="btn-toolbar">
-<!-- {{#unless disableShow}}
-<a href="javascript:void 0" id="show" title="查看" 
-class="btn btn-info btn-small icon-eye-open"> 查看</a>
-{{/unless}} -->
-</div>
-{{/if}}
 {{/view}}
 
 {{#view "grid"}}
-<table style="width:100%;" id="grid"/>
+<table style="width:100%;" id="grid" />
 {{/view}}

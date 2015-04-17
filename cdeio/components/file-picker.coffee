@@ -32,20 +32,20 @@ define [
 
     row = H.compile '''
         <tr>
-            <td style="text-align: center;"><input id="check-{{id}}" type="checkbox" /></td>
+            <td style="text-align:center;"><input id="check-{{id}}" type="checkbox" /></td>
             <td>
-                <div class="progress" style="margin-bottom: 0px; margin-top: 5px;">
-                    <div class="bar" id="bar-{{id}}" style="width:1%; color: black;text-align:left;">&nbsp;&nbsp;{{name}}</div>
+                <div class="progress" style="margin-bottom:0px; margin-top:5px;">
+                    <div class="bar" id="bar-{{id}}" style="width:1%; color:black; text-align:left;">&nbsp;&nbsp;{{name}}</div>
                 </div>
             </td>
             <td>
                 {{#preview}}
-                <a id="popover-span-{{../id}}" class="upload-preview-btn upload-multiple-preview" href="javascript: void 0"  data-rel="popover" data-placement="{{../preview}}">&nbsp;</a>
-                {{#if ../isImageFile }}
-                <a id="preview-{{../../id}}" href="javascript: void 0" style="z-index: 1;position: relative;">预览</a>
+                <a id="popover-span-{{../id}}" class="upload-preview-btn upload-multiple-preview" href="javascript:void 0" data-rel="popover" data-placement="{{../preview}}">&nbsp;</a>
+                {{#if ../isImageFile}}
+                <a id="preview-{{../../id}}" href="javascript:void 0" style="z-index:1; position:relative;">预览</a>
                 &nbsp;
                 {{/if}}
-                <a id="download-{{../id}}" target="_blank" href="./{{../url}}" style="z-index: 2;position: relative;">下载</a>
+                <a id="download-{{../id}}" target="_blank" href="./{{../url}}" style="z-index:2; position:relative;">下载</a>
                 {{/preview}}
             </td>
         </tr>
@@ -57,17 +57,17 @@ define [
                 _.template '''
                     <div class="upload btn-toolbar">
                         <div class="btn-group">
-                            <a id="trigger-<%= id %>" class="btn btn-small icon-cloud-upload">&nbsp;上传</a>
+                            <a id="trigger-<%= id %>" class="btn btn-small btn-info icon-cloud-upload">&nbsp;&nbsp;上传</a>
                         </div>
                         <div class="btn-group">
-                            <a id="remove" href="javascript: void 0" class="btn btn-danger btn-small icon-minus">&nbsp;删除</a>
+                            <a id="remove" href="javascript:void 0" class="btn btn-danger btn-small icon-minus">&nbsp;&nbsp;删除</a>
                         </div>
                     </div>
 
                     <input type="file" style="display:none" multiple="true" id="hidden-input-<%= id %>"/>
                     <div id="grid_wrapper" class="dataTables_wrapper" role="grid">
                         <div class="c-grid-body">
-                            <table style="width: 100%;" id="view416-grid" class="table table-striped table-bordered table-hover dataTable">
+                            <table style="width:100%;" id="view416-grid" class="table table-striped table-bordered table-hover dataTable">
                                 <thead>
                                 <tr role="row">
                                     <th class="sorting_disabled" tabindex="0" rowspan="1" colspan="1" aria-label="" style="width: 25px; text-align: center !important;"><input id="checkbox" type="checkbox"/></th>
@@ -75,7 +75,7 @@ define [
                                     <th class="sorting" tabindex="0" rowspan="1" colspan="1" aria-label="操作: activate to sort column ascending">操作</th>
                                 </tr>
                                 </thead>
-                                    <tbody id="files-container-<%= id %>" role="alert"></tbody>
+                                <tbody id="files-container-<%= id %>" role="alert"></tbody>
                             </table>
                         </div>
                     </div>
@@ -103,7 +103,7 @@ define [
                         <input type="file" style="display:none" id="hidden-input-<%= id %>"/>
                     </div>
                 '''
-                
+
         loadData: (data) ->
             super
             value = data[@name]
