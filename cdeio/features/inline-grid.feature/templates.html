@@ -4,13 +4,13 @@
         <!-- <h5 >任务分配</h5> -->
 	<!-- </div> -->
     <div id="title"></div>
-    <div class="c-inline-grid-container" >
+    <div class="c-inline-grid-container {{#unless isTheOnlyField}}c-inline-grid-inside{{/unless}}">
         <div class="c-layout-north">
             <div>
-                <div id="operators" class="row-fluid" > </div>
+                <div id="operators" class="row-fluid"></div>
             </div>
         </div>
-        <div class="c-layout-center c-inline-grid-margin" >
+        <div class="c-layout-center c-inline-grid-margin">
             <div id="body" class="c-layout-body"></div>
         </div>
     </div>
@@ -20,7 +20,7 @@
 {{#view "title"}}
 {{#if title}}
 <div class="c-form-group-title">
-    <h5 ><i class="icon-file-text" style="margin-right: 5px;"></i>{{title}}</h5>
+    <h5>{{title}}</h5>
 </div>
 {{/if}}
 {{/view}}
@@ -29,20 +29,20 @@
 {{#unless readOnly}}
 <div id="operators" class="btn-toolbar">
 {{#if allowAdd}}
-<a href="javascript:void 0" id="add" title="添加" class="btn btn-success btn-small icon-plus"> 添加</a>
+<a href="javascript:void 0" id="add" title="添加" class="btn btn-success btn-small icon-plus">&nbsp;添加</a>
 {{/if}}
 <a href="javascript:void 0" id="show" title="查看" 
-class="btn btn-info btn-small icon-eye-open"> 查看</a>
+class="btn btn-info btn-small icon-eye-open">&nbsp;查看</a>
 {{#if allowEdit}}
 <a href="javascript:void 0" id="edit" title="编辑"
-class="btn btn-warning btn-small icon-edit"> 编辑</a>
+class="btn btn-warning btn-small icon-edit">&nbsp;编辑</a>
 {{/if}}
 <a href="javascript:void 0" id="remove" title="删除" 
-class="btn btn-danger btn-small icon-minus"> 删除</a>
+class="btn btn-danger btn-small icon-minus">&nbsp;删除</a>
 
 {{#if allowPick}}
 <a href="javascript:void 0" id="pick" title="选择"
-class="btn btn-small icon-search"> 选择</a>
+class="btn btn-small icon-search">&nbsp;选择</a>
 {{/if}}
 <div id="picker" style="display:none"></div>
 </div>
@@ -58,5 +58,5 @@ class="btn btn-info btn-small icon-eye-open"> 查看</a>
 {{/view}}
 
 {{#view "grid"}}
-<table style="width:100%;" id="grid" />
+<table style="width:100%;" id="grid"/>
 {{/view}}

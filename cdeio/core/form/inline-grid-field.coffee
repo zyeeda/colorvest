@@ -9,13 +9,25 @@ define [
         constructor: (form, group, options) ->
             throw new Error 'source must be specified' if not options.source
             opt = _.extend
-                hideLabel: false
                 path: 'cdeio:inline-grid'
                 options:
-                    allowPick: options.allowPick, allowAdd: options.allowAdd, allowEdit: options.allowEdit, url: options.source, readOnly: options.readOnly || options.disabled
-                    gridOptions: deferLoading: 0, paginate: false, multiple: options.multiple is true, form: form
-                    loadViewFormDeferred: options.loadViewFormDeferred or undefined, disableShow: options.disableShow
+                    label: options.label
+                    allowPick: options.allowPick
+                    allowAdd: options.allowAdd
+                    allowEdit: options.allowEdit
+                    url: options.source
+                    readOnly: options.readOnly or options.disabled
+                    gridOptions:
+                        deferLoading: 0,
+                        paginate: false,
+                        multiple: options.multiple is true
+                        form: form
+                    loadViewFormDeferred: options.loadViewFormDeferred or undefined
+                    disableShow: options.disableShow
+                    hideLabel: options.hideLabel
+                    isTheOnlyField: options.isTheOnlyField
             , options
+
             # 用于流程历史历史信息 inline-grid 使用
             if options.needDeferLoading is false
                 delete opt.options.gridOptions.deferLoading
@@ -29,12 +41,12 @@ define [
                     multiple: options.multiple is true
                     crossPage: options.crossPage is true
                     type: options.pickerType
+
             super form, group, opt
             @type = 'inline-grid'
+
         getTemplate: ->
-            template = super
-            # console.log '-----template', template
-            template
+            super
 
     FormField.add 'inline-grid', InlineGridField
 

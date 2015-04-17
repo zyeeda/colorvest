@@ -10,18 +10,25 @@ define [
             operators: 'operators'
             grid: 'body'
 
+        extend:
+            serializeData: (_super) ->
+                data = _super.apply this
+                data = _.extend isTheOnlyField: @feature.startupOptions.isTheOnlyField, data
+                data
+
     views: [
         # handlers 是默认加载的。
-        name: 'inline:title', region: 'title', avoidLoadingHandlers: true
+        name: 'inline:title'
+        region: 'title'
+        avoidLoadingHandlers: true
         extend:
-            # afterRender: (su) ->
-            #     console.log su, @feature, @
             # 为什么 views/title 中的扩展不起作用？因为 loader 不同。
             templateHelpers: ->
                 title = @feature.startupOptions.label
                 title: title
     ,
-        name: 'inline:operators', region: 'operators',
+        name: 'inline:operators'
+        region: 'operators',
         components: [ ->
             {picker, readOnly} = @feature.startupOptions
             if picker and not readOnly
@@ -123,7 +130,9 @@ define [
 
                 data
     ,
-        name: 'inline:grid', region: 'grid', avoidLoadingHandlers: true,
+        name: 'inline:grid'
+        region: 'grid'
+        avoidLoadingHandlers: true
         components: [ ->
             options = @feature.startupOptions.gridOptions
             scaffold = options.form.feature.options.scaffold or {}
@@ -153,7 +162,7 @@ define [
             grid = @views['inline:grid'].components[0]
             ids = []
             data = grid.fnGetData()
-            
+
             grid.clear()
             for d in data or []
                 ids.push d.id

@@ -119,7 +119,7 @@ define [
                         <span class="required-mark">*</span>
                     <% } %></label><% } %>
                   <div class="controls">
-                    <div id="a-<%= id %>"></div>
+                    <div id="a-<%= id %>" class="c-form-multi-fileuploader"></div>
                   </div>
                 </div>
             <% } %>

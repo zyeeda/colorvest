@@ -4,7 +4,10 @@ body:before {
 
 body {
 	font-family: "Lantinghei SC","Noto Sans S Chinese","Microsoft Yahei","Helvetica Neue",Helvetica,Arial,STHeiti,"Microsoft Sans Serif","WenQuanYi Micro Hei",sans-serif;
-	letter-spacing: 2px;
+}
+
+form {
+    margin: 0;
 }
 
 .nav-search {
@@ -188,7 +191,6 @@ body {
 .nav-list > li > .submenu li.active > a > .green {
 	color: #00B9B6 !important;
 }
-
 
 .nav-list .icon-double-angle-right {
 	background: #172639 !important;
@@ -560,17 +562,70 @@ fieldset .table.table-bordered td:first-child,
 
 /* 模态对话框 title */
 .modal-header {
-	background-color: #00B9B6;
-	color: #FFF;
-	padding: 1px 15px;
+    background-color: #00B9B6;
+    color: #FFF;
+	padding: 10px 15px;
+    font-size: 14px;
+    border-bottom: none;
 }
 /* 弹出窗口关闭样式，覆盖 bootstrap */
 .close {
-	color: #FFF;
+	color: #EEE;
 	font-weight: 200;
-	line-height: 24px;
-	text-shadow: 0 0 0 ;
-	opacity: 1.0;
+	text-shadow: 0 0 0;
+    opacity: 1;
+}
+.close:hover, .close:focus {
+    color: #FFF;
+    opacity: 1;
+}
+.modal-header .close {
+    font-size: 20px;
+    margin-top: 0;
+}
+
+.c-form-group-label {
+    margin: 10px 0 10px 0;
+    border-top: 10px solid #EFF3F5;
+    border-bottom: none;
+}
+
+.c-form-group-label h5 {
+    margin: 10px 20px 0 20px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.c-form-group-content {
+    margin: 5px 20px 15px 20px;
+    padding-top: 10px 0;
+}
+
+.c-form-group-container {
+    padding: 15px 10px !important;
+}
+
+.c-form-group-container .control-label {
+    color: #656565;
+    margin-bottom: 2px;
+}
+
+.c-form-feature-field {
+    margin-bottom: 10px;
+}
+
+.c-form-feature-field .c-layout-grid .c-form-group-title {
+    border: none;
+}
+
+.c-form-feature-field .c-layout-grid .c-form-group-title h5 {
+    margin-bottom: 5px;
+    padding: 0;
+    font-size: 14px;
+}
+
+.c-form-multi-fileuploader {
+    margin-bottom: 20px;
 }
 
 .select2-container .select2-choice .select2-arrow {
@@ -606,20 +661,15 @@ input[type="datepicker"] {
 }
 
 .modal-body {
-	background-color: #EBF0F1;
-	padding: 24px;
-	padding-bottom: 0;
+    padding: 20px 0;
+}
+
+.modal-body fieldset:first-child .c-form-group-label {
+    border-top: none;
 }
 
 .modal-body form fieldset {
-	margin-bottom: 24px;
 	background-color: #FFF;
-	border-top: 8px solid #D3DBDF;
-}
-
-.modal-body .dataTables_wrapper {
-	background-color: #fff;
-	margin-bottom: 24px;
 }
 
 .modal-body .dataTables_scrollBody {
@@ -641,8 +691,7 @@ input[type="datepicker"] {
 }
 
 .modal .btn-toolbar {
-	margin-top: 15px;
-	margin-bottom: 15px;
+	margin-top: 0;
 }
 
 .modal .dataTables_wrapper {
@@ -735,7 +784,7 @@ input[type="datepicker"] {
 
 .upload {
 	margin-top: 15px;
-	margin-bottom: 15px;
+	margin-bottom: 10px;
 }
 
 /*.select2-choice,
