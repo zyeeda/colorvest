@@ -85,7 +85,7 @@ define [
                     >
                     <% if (label) { %>
                         <div class="c-form-group-title">
-                            <h5><i class="icon-file-text" style="margin-right: 5px;"></i><%= label %></h5>
+                            <h5><i class="<%= labelIcon %>" style="margin-right: 5px;"></i><%= label %></h5>
                         </div>
                         <div class="c-form-group-container" >
                             <%= groupContent %>
@@ -96,7 +96,7 @@ define [
                         <% } else {%>
                             <div class="c-form-group-container" >
                                 <%= groupContent %>
-                            </div>                        
+                            </div>
                         <% } %>
                     <% } %>
                 </fieldset>
@@ -163,7 +163,8 @@ define [
             newRow(isInlineGrid) if row.length > 0
 
             opts = 
-                label: @options.label
+                label: @options.label or @options.name
+                labelIcon: @options.labelIcon or 'icon-file-text'
                 groupContent: contents.join('')
                 containerId: @containerId
                 columns: @getColumns()
@@ -172,7 +173,7 @@ define [
                 single: single
                 index: index
 
-            console.log 'opts', opts
+            #console.log 'opts', opts
             # console.log 'getTemplateString', @getTemplateString()
             _.template(@getTemplateString())(opts)
 

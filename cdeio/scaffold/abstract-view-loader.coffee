@@ -97,7 +97,7 @@ define [
         ok = ->
             view.submit(id: id).done (data) ->
                 options.submitSuccess(type)
-                app._modalDialog.modal.modal 'hide'
+                app._modalDialog.hide()
 
                 if _.isFunction scaffold.afterCloseDialog
                     scaffold.afterCloseDialog.call view, type, view, data

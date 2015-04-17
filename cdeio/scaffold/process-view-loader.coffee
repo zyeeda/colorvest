@@ -68,7 +68,7 @@ define [
             view.model.set selected
             claimButton = 
                 label: '认领',
-                status: 'btn-purple'
+                status: 'btn-primary'
                 fn: =>
                     app.confirm '确定认领此任务么?', (confirmed) =>
                         return if not confirmed

@@ -2,28 +2,47 @@ define [
     'jquery',
     'underscore',
     'scripts/cdeio/vendors/jquery/jquery.magnific-popup.js'
-], ($, _)->
+], ($, _) ->
     layout:
         regions:
-            title: 'popup-title',
-            content: 'popup-content',
+            title: 'popup-title'
+            content: 'popup-content'
             buttons: 'popup-buttons'
 
     views: [
-        name: 'inline:popup-title',
-        region: 'title',
+        name: 'inline:popup-title'
+        region: 'title'
         avoidLoadingHandlers: true
         extend:
             templateHelpers: ->
                 title = @feature.startupOptions.title
                 title: title
     ,
-        name: 'inline:popup-buttons',
-        region: 'buttons',
+        name: 'inline:popup-buttons'
+        region: 'buttons'
         avoidLoadingHandlers: true
         extend:
             templateHelpers: ->
                 buttons = @feature.startupOptions.buttons
+                @eventHandlers or @eventHandlers = {}
+                i = 0
+                while i < buttons.length
+                    id = _.uniqueId 'button'
+                    buttons[i].id = id
+                    e = @wrapEvent "click #{id}", id
+                    @events[e.name] = e.handler
+                    @eventHandlers[id] = _((fn, b) ->
+                        return if @$(id).hasClass 'disabled'
+                        result = fn.apply @, [b]
+                        $.magnificPopup.close() if result isnt false
+                        #@feature.modal.modal 'hide' if result isnt false # ????
+                    ).bind(@, buttons[i].fn, buttons[i])
+                    i++
+                el = @$el
+                @$el = @feature.popupContainer
+                @delegateEvents()
+                @$el = el
+
                 buttons: buttons
     ]
 
@@ -39,13 +58,13 @@ define [
                 xlarge: 'span10 offset1'
                 xxlarge: 'span12'
 
-            popupId = _.uniqueId 'popup'
+            @popupId = _.uniqueId 'popup'
             containerId = @startupOptions.view.cid
             popupClass = viewSizeMapping[@startupOptions.view.options.size or 'medium']
             @startupOptions.view.options.popupClass = popupClass
 
             template = _.template '''
-                <div id="<%= popupId %>" class="row-fluid mfp-hide">
+                <div id="<%= popupId %>" class="mfp-hide">
                     <div<% if (popupClass) { %> class="<%= popupClass %>"<% } %>>
                         <div class="position-relative">
                             <div class="widget-box no-border">
@@ -64,13 +83,11 @@ define [
                     </div>
                 </div>
             ''',
-                popupId: popupId,
-                containerId: containerId,
+                popupId: @popupId
+                containerId: containerId
                 popupClass: popupClass
 
             $(template).appendTo document.body
-
-            @popupId = popupId
 
             @popupContainer = $ '#' + popupId
             @widgetContainer = @popupContainer.children().eq 0
@@ -92,7 +109,7 @@ define [
                         items:
                             src: @popupContainer
                             type: 'inline'
-                        showCloseBtn: false
+                        closeBtnInside: false
                         closeOnBgClick: false
 
             deferred.promise()
@@ -112,7 +129,7 @@ define [
                     @startupOptions = options
                     @start().done =>
                         deferred.relative @
-            else
+
             deferred.promise()
 
         close: ->
