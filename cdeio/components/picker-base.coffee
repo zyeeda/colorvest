@@ -230,7 +230,6 @@ define [
                 @container.find('#text-' + @id).html text
 
         setValue: (value, isShowPicker) ->
-            _this = @
             feature = @options.view.feature
             featureType = 'feature'
 
@@ -242,7 +241,8 @@ define [
             handlers = scaffold.handlers or {}
             callback = handlers[@callback]
 
-            text = @options.toText or (data) -> if data then data.name else ''
+            text = @options.toText or (data) => if data then data[@options.textKey] or data.name else ''
+
             if _.isArray value
                 t = (text item for item in value).join ','
             else
@@ -257,9 +257,9 @@ define [
                 # if picker has callback function, then set name value first, then call callback, or set name value dircetly
                 # if click picker confirm button then don't call callback
                 #
-                if (_.isFunction callback) is true and isShowPicker isnt true
+                if _.isFunction(callback) is true and isShowPicker isnt true
                     @options.form.setFormData data, true
-                    callback.call _this, _this.options.view, value, featureType
+                    callback.call @, @options.view, value, featureType
                 else
                     @options.form.setFormData data, true
 
