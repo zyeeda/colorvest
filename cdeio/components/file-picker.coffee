@@ -56,8 +56,12 @@ define [
             if @options.multiple is true
                 _.template '''
                     <div class="upload btn-toolbar">
-                        <a id="trigger-<%= id %>" class="btn btn-small icon-cloud-upload">上传</a>
-                        <a id="remove" href="javascript: void 0" class="btn btn-danger btn-small icon-minus">删除</a>
+                        <div class="btn-group">
+                            <a id="trigger-<%= id %>" class="btn btn-small icon-cloud-upload"> 上传</a>
+                        </div>
+                        <div class="btn-group">
+                            <a id="remove" href="javascript: void 0" class="btn btn-danger btn-small icon-minus"> 删除</a>
+                        </div>
                     </div>
 
                     <input type="file" style="display:none" multiple="true" id="hidden-input-<%= id %>"/>

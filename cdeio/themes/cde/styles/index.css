@@ -10,7 +10,7 @@ form {
     margin: 0;
 }
 
-.nav-search {
+.nav-search, .pre {
 	letter-spacing: 0;
 }
 
@@ -334,7 +334,7 @@ form {
 .large-userinfo {
 	width: 60%;
 	float: left;
-	padding-top: 10px;
+	padding-top: 7px;
 }
 
 .large-username {
@@ -427,7 +427,7 @@ form {
 }
 
 .dataTables_empty:hover {
-	background-color: #F9F9F9 !important;
+	background-color: #F5F8FA !important;
 }
 
 .table td[class*="sorting"] {
@@ -491,6 +491,10 @@ fieldset .table.table-bordered td:first-child,
 .table-striped tbody th, .table-striped tbody td {
 	line-height: 28px;
 	color: #626F7F;
+}
+
+.dataTable th[class=sorting_disabled] {
+	color: #20252B;
 }
 
 .dataTable th[class*=sort]:hover {
@@ -660,6 +664,10 @@ input[type="datepicker"] {
 	height: 32px;
 }
 
+.bootbox .modal-body {
+	padding: 15px;
+}
+
 .modal-body {
     padding: 20px 0;
 }
@@ -699,8 +707,19 @@ input[type="datepicker"] {
 	margin-right: 0px;
 }
 
-.btn-toolbar > a.btn {
+.btn-toolbar > .btn-group > a.btn {
 	border-radius: 2px;
+	border-width: 4px !important;
+	font-size: 13px;
+}
+
+.btn-toolbar > .btn-group > [class^="icon-"]:before, .btn-toolbar > .btn-group > [class*="icon-"]:before {
+	width: 11px !important;
+}
+
+button.btn > [class*="icon-"] {
+	display: inline-block;
+	width: 13px;
 }
 
 /* 自定义按钮配色 覆盖bootstrap start */
@@ -780,6 +799,18 @@ input[type="datepicker"] {
 
 .btn-group > .btn + .btn {
 	margin-left: 2px !important;
+}
+
+.ui-layout-west .btn-toolbar > .btn-group > .btn:last-child {
+	margin: 0 6px 0 0 !important;
+}
+
+.ui-layout-west .btn-toolbar > .btn-group > .btn + .btn {
+	margin-left: 2px !important;
+}
+
+.btn-toolbar > .btn-group:last-child > .btn:last-child {
+	margin: 0 !important;
 }
 
 .upload {
