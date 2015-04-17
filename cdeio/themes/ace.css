@@ -180,12 +180,7 @@ html, body {
 .c-action-form .tab-content {
     border: 0;
     background-color: #FFF;
-    padding: 18px 20px;
-}
-
-.c-action-form .tab-content .tab-pane fieldset{
-    border: 1px solid #C5D0DC;
-    border-top: 8px solid #D3DBDF;
+    padding: 0;
 }
 
 .c-action-form .tab-content .tab-pane > .control-group {
