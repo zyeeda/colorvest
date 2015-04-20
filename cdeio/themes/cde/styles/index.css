@@ -37,8 +37,8 @@ form {
 .nav-tabs > li > a {
   margin-right: 2px;
   margin-top: 1px;
-  padding-bottom: 6px;
-  padding-top: 7px;
+  padding-bottom: 8px;
+  padding-top: 8px;
   background-color: #FFF;
 }
 
@@ -55,7 +55,7 @@ form {
   border-left: 0;
   border-right: 0;
   box-shadow: none;
-  padding: 8px 13px;
+  padding: 10px 13px;
 }
 
 .nav-search .show-source{
@@ -479,11 +479,12 @@ fieldset .table.table-bordered td:first-child,
 }
 
 .table.table-hover tbody tr.selected td {
-  background-color: #8ADBDB;
+    /*background-color: #C0ECEC;*/
+    background-color: #DDF4F2;
 }
 
 .table.table-hover tbody tr:hover td {
-  background-color: #DDF4F2;
+    background-color: #DDF4F2;
 }
 
 .table-striped tbody th, .table-striped tbody td {
