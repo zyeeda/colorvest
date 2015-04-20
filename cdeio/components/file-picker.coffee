@@ -52,6 +52,10 @@ define [
     '''
 
     class FilePicker extends Picker.Picker
+        constructor: ->
+            super
+            @options.preview || @options.preview = 'top'
+
         getTemplate: ->
             if @options.multiple is true
                 _.template '''
@@ -322,18 +326,24 @@ define [
 
             @container.find('#trigger-' + @id).click (e) =>
                 t = $(e.currentTarget)
+                # 点击删除按钮后，移除删除按钮显示文件按钮
                 if isdanger = t.hasClass('btn-danger')
                     @value = id: ''
                     t.removeClass('btn-danger')
                     t.html '<i class="icon-file-text"></i>'
                     @container.find('#percent-' + @id).empty()
                     @container.find('#text-' + @id).empty()
+
+                    # 删除下载按钮
+                    download = $('#download-span-' + @id)
+                    download.empty()
                 else
                     input.click()
 
                 if @options.preview
                     if isdanger
                         $('#preview-' + @id).css 'margin-right': '-0.5px'
+
                         popover = $('#popover-span-' + @id)
                         popover.css 'margin-right': '-0.5px'
                         _next = popover.next()
