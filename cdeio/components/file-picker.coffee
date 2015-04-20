@@ -52,12 +52,20 @@ define [
     '''
 
     class FilePicker extends Picker.Picker
+        constructor: ->
+            super
+            @options.preview || @options.preview = 'top'
+
         getTemplate: ->
             if @options.multiple is true
                 _.template '''
                     <div class="upload btn-toolbar">
-                        <a id="trigger-<%= id %>" class="btn btn-small icon-cloud-upload">上传</a>
-                        <a id="remove" href="javascript: void 0" class="btn btn-danger btn-small icon-minus">删除</a>
+                        <div class="btn-group">
+                            <a id="trigger-<%= id %>" class="btn btn-small icon-cloud-upload"> 上传</a>
+                        </div>
+                        <div class="btn-group">
+                            <a id="remove" href="javascript: void 0" class="btn btn-danger btn-small icon-minus"> 删除</a>
+                        </div>
                     </div>
 
                     <input type="file" style="display:none" multiple="true" id="hidden-input-<%= id %>"/>
@@ -163,7 +171,7 @@ define [
                     percent.removeClass('label-info').removeClass('label-important').addClass 'label-success'
                     percent.html '<i class="icon-ok"/>'
                     @setValue data.result
-                    trigger.addClass('btn-danger')
+                    trigger.addClass('btn-remove')
                     trigger.html('<i class="icon-remove"></i>')
                 fail: (e, data) ->
                     percent.removeClass('label-info').removeClass('label-success').addClass 'label-important'
@@ -300,7 +308,7 @@ define [
             # 只有图片类型，才能预览
             _url = url + '/' + rid
             _download = """
-                <a id="download-#{did}" class="btn btn-success" href="#{_url}"  style="margin-right:43px;"><i class="icon-download"/></a>
+                <a id="download-#{did}" class="btn btn-success" href="#{_url}"  style="margin-right:48px;border-radius:0;"><i class="icon-download"/></a>
             """
             $('#download-span-' + did).html _download
 
@@ -318,18 +326,24 @@ define [
 
             @container.find('#trigger-' + @id).click (e) =>
                 t = $(e.currentTarget)
-                if isdanger = t.hasClass('btn-danger')
+                # 点击删除按钮后，移除删除按钮显示文件按钮
+                if isdanger = t.hasClass('btn-remove')
                     @value = id: ''
-                    t.removeClass('btn-danger')
+                    t.removeClass('btn-remove')
                     t.html '<i class="icon-file-text"></i>'
                     @container.find('#percent-' + @id).empty()
                     @container.find('#text-' + @id).empty()
+
+                    # 删除下载按钮
+                    download = $('#download-span-' + @id)
+                    download.empty()
                 else
                     input.click()
 
                 if @options.preview
                     if isdanger
                         $('#preview-' + @id).css 'margin-right': '-0.5px'
+
                         popover = $('#popover-span-' + @id)
                         popover.css 'margin-right': '-0.5px'
                         _next = popover.next()
