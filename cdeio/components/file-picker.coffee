@@ -171,7 +171,7 @@ define [
                     percent.removeClass('label-info').removeClass('label-important').addClass 'label-success'
                     percent.html '<i class="icon-ok"/>'
                     @setValue data.result
-                    trigger.addClass('btn-danger')
+                    trigger.addClass('btn-remove')
                     trigger.html('<i class="icon-remove"></i>')
                 fail: (e, data) ->
                     percent.removeClass('label-info').removeClass('label-success').addClass 'label-important'
@@ -308,7 +308,7 @@ define [
             # 只有图片类型，才能预览
             _url = url + '/' + rid
             _download = """
-                <a id="download-#{did}" class="btn btn-success" href="#{_url}"  style="margin-right:43px;"><i class="icon-download"/></a>
+                <a id="download-#{did}" class="btn btn-success" href="#{_url}"  style="margin-right:48px;border-radius:0;"><i class="icon-download"/></a>
             """
             $('#download-span-' + did).html _download
 
@@ -327,9 +327,9 @@ define [
             @container.find('#trigger-' + @id).click (e) =>
                 t = $(e.currentTarget)
                 # 点击删除按钮后，移除删除按钮显示文件按钮
-                if isdanger = t.hasClass('btn-danger')
+                if isdanger = t.hasClass('btn-remove')
                     @value = id: ''
-                    t.removeClass('btn-danger')
+                    t.removeClass('btn-remove')
                     t.html '<i class="icon-file-text"></i>'
                     @container.find('#percent-' + @id).empty()
                     @container.find('#text-' + @id).empty()
