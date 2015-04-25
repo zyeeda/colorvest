@@ -294,8 +294,8 @@ define [
             if options.preview
                 _url = url + '/' + rid
                 _preview = """
-                    <a id="popover-span-#{did}" class="btn btn-success upload-preview-btn" data-rel="popover" data-placement="#{options.preview}" style="margin-right:96px;" data-content="<img id='preview-img-#{rid}' class='upload-preview' src='#{_url}'' />"><i class="icon-eye-open"/></a>
-                    <a id="preview-#{did}" class="btn btn-success" href="javascript: void 0"  style="margin-right:96px;"><i class="icon-eye-open"/></a>
+                    <a id="popover-span-#{did}" class="btn btn-success upload-preview-btn" data-rel="popover" data-placement="#{options.preview}" style="margin-right:105px;" data-content="<img id='preview-img-#{rid}' class='upload-preview' src='#{_url}'' />"><i class="icon-eye-open"/></a>
+                    <a id="preview-#{did}" class="btn btn-success" href="javascript: void 0"  style="margin-right:105px;"><i class="icon-eye-open"/></a>
                 """
                 $('#preview-span-' + did).html _preview
 
@@ -308,7 +308,7 @@ define [
             # 只有图片类型，才能预览
             _url = url + '/' + rid
             _download = """
-                <a id="download-#{did}" class="btn btn-success" href="#{_url}"  style="margin-right:48px;border-radius:0;"><i class="icon-download"/></a>
+                <a id="download-#{did}" class="btn btn-success" href="#{_url}"  style="margin-right:52px;border-radius:0;"><i class="icon-download"/></a>
             """
             $('#download-span-' + did).html _download
 
