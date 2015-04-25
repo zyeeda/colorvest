@@ -568,7 +568,7 @@ fieldset .table.table-bordered td:first-child,
     background-color: #00B9B6;
     color: #FFF;
 	padding: 10px 15px;
-    font-size: 14px;
+    font-size: 16px;
     border-bottom: none;
 }
 /* 弹出窗口关闭样式，覆盖 bootstrap */
@@ -588,7 +588,7 @@ fieldset .table.table-bordered td:first-child,
 }
 
 .c-form-group-label {
-    margin: 10px 0 10px 0;
+    margin: 0 0 10px 0;
     border-top: 10px solid #EFF3F5;
     border-bottom: none;
 }
@@ -641,6 +641,7 @@ fieldset .table.table-bordered td:first-child,
 
 .select2-container .select2-choice {
 	min-height: 30px;
+    overflow: auto;
 }
 
 /*.select2-container .select2-choice .select2-chosen {
@@ -668,7 +669,7 @@ input[type="datepicker"] {
 }
 
 .modal-body {
-    padding: 20px 0 0 0;
+    padding: 10px 0 0 0;
 }
 
 .modal-body fieldset:first-child .c-form-group-label {
@@ -684,7 +685,7 @@ input[type="datepicker"] {
 }
 
 .modal-body .tab-pane {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .modal-footer {
@@ -694,7 +695,8 @@ input[type="datepicker"] {
 .modal-footer > a.btn {
 	width: 60px;
 	height: 28px;
-	font-size: 18px;
+	font-size: 16px;
+    letter-spacing: 2px;
 }
 
 .modal .c-grid-top {
