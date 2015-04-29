@@ -5,178 +5,147 @@ define [
 ], ($, _, FormField) ->
 
     class FormGroup
-        constructor: (@form, @options, @fieldOptions) ->
-            @options = options = name: options if _.isString options
-            @cols = @options.columns if @options.columns
-            @fieldOptions = fieldOptions = [fieldOptions] if not _.isArray fieldOptions
+        constructor: (form, options, fieldOptions) ->
+            @form = form
+            @options = options
+            @fieldOptions = fieldOptions
+
+            @options = {name: @options} if _.isString @options
+            @fieldOptions = [@fieldOptions] if not _.isArray @fieldOptions
             @containerId = _.uniqueId 'group'
-
             @visible = @options.visible isnt false
+
             @hiddenFields = []
+            hiddenFieldOpts = []
             @fields = []
-            for field in fieldOptions
-                if @options.readOnly is true
-                    field = name: field, type: 'text' if _.isString field
-                    field.readOnly = true
-                if @options.disabled is true
-                    field.disabled = true
-                (if field.type is 'hidden' then @hiddenFields else @fields).push FormField.build field, @, form
+            fieldOpts = []
 
+            for field in @fieldOptions
+                field = {name: field, type: 'text'} if _.isString field
+                field.readOnly = true if @options.readOnly is true
+                field.disabled = true if @options.disabled is true
+                (if field.type is 'hidden' \
+                    then hiddenFieldOpts else fieldOpts).push field
 
-        getColumns: ->
-            if not @cols
-                @cols = 1
-                @cols = 2 for field in @fields when field.colspan is 2
-            throw new Error "unsupported columns:#{@cols}, only can be: 1, 2, 3, 4, 6, 12" if 12 % @cols isnt 0
-            @cols
+            if fieldOpts.length is 1
+                f = fieldOpts[0]
+                f.hideLabel = true
+                f.isTheOnlyField = true
 
-        # getTemplateString: -> '''
-        #     <fieldset id="<%= containerId %>" class="c-form-group-cols-<%= columns %>" style="<% if (!visible) {%>display:none<%}%>">
-        #         <% if (label) { %>
-        #         <legend><span class="label label-info arrowed-in arrowed-in-right"><%= label %></span></legend>
-        #         <% } %>
-        #         <%= groupContent %>
-        #     </fieldset>
-        # '''
-        # <div style="height:35px; background: #20252B; color: #B6C2C9;margin-top:10px;">
-        #     <div><h5><%= label %></h5></div>
-        # </div>
-                        # <legend style="height:35px; background: #20252B; color: #B6C2C9;">
-                        #     <h5 style="padding-top:5px; padding-left:12px;" ><%= label %></h5>
-                        # </legend>
-        # ---------
-        # <% if (isInlineGrid == true) {%>
-        #     <%= groupContent %>
-        # <%} else {%>
-        #     <fieldset id="<%= containerId %>" class="c-form-group-cols-<%= columns %>" 
-        #         <% if (label||single==false) { %>  
-        #             style="border:1px solid #BAC1C8;<% if (index!=0) {%> margin-top:20px;<% } %> 
-        #         <% } %>
-        #         <% if (!visible) {%>display:none<%}%>">
-        #         <% if (label) { %>
-        #             <div style="height:35px; background: #20252B; color: #B6C2C9;">
-        #                 <h5 style="padding-top:5px; padding-left:12px;margin:0" ><%= label %></h5>
-        #             </div>
-        #             <div style="padding: 15px;" >
-        #                 <%= groupContent %>
-        #             </div>
-        #         <% } else{ %>
-        #             <% if (single == true) { %>
-        #                 <%= groupContent %>
-        #             <% } else {%>
-        #                 <div style="padding: 15px;" >
-        #                     <%= groupContent %>
-        #                 </div>                        
-        #             <% } %>
-        #         <% } %>
-        #     </fieldset>
-        # <%}%>
-        getTemplateString: -> '''
-            <% if (isInlineGrid == true) {%>
-                <%= groupContent %>
-            <%} else {%>
-                <fieldset id="<%= containerId %>" class="c-form-group-cols-<%= columns %> 
-                    <% if (label||single==false) { %>  
-                        c-form-group-border 
-                        <% if (index!=0) {%> c-form-group-margin <% } %>
-                    <% } %>
-                    "
-                    <% if (!visible) {%>style="display:none"<%}%> 
-                    >
-                    <% if (label) { %>
-                        <div class="c-form-group-title">
-                            <h5><i class="<%= labelIcon %>" style="margin-right: 5px;"></i><%= label %></h5>
-                        </div>
-                        <div class="c-form-group-container" >
-                            <%= groupContent %>
-                        </div>
-                    <% } else{ %>
-                        <% if (single == true) { %>
-                            <%= groupContent %>
-                        <% } else {%>
-                            <div class="c-form-group-container" >
-                                <%= groupContent %>
-                            </div>
-                        <% } %>
-                    <% } %>
-                </fieldset>
-            <%}%>
-        '''
+            for field in fieldOpts
+                @fields.push FormField.build field, this, form
+            for field in hiddenFieldOpts
+                @hiddenFields.push FormField.build field, this, form
+
+            @columns = @options.columns or 1
+            @columns = 2 if _.some @fields, (f) -> f.colspan is 2
+            # OMG, how can you support 3, 4, 6 and 12 columns?
+            throw new Error \
+                "Unsupported columns: #{@columns}, \
+                only can be: 1, 2, 3, 4, 6, 12" \
+                if 12 % @columns isnt 0
+
         setVisible: (visible) ->
-            @visible = if visible is false then false else true
+            @visible = not not visible
             @form.$(@containerId)[if @visible then 'show' else 'hide']()
             field.setVisible @visible for field in @fields
 
-        getRowTemplate: -> _.template '''
-            <% if (isInlineGrid==true){%>
-                <% if (single==true){%>
-                    <%= items %>
-                <% } else {%>
-                    <fieldset class="c-form-group-cols-1 c-form-group-border <% if (index!=0) {%> c-form-group-margin <% } %>" >
-                        <%= items %>
-                    </fieldset>
+        # REFACTOR: getTemplate and getTemplateString method names are
+        #           confused. getTemplateString should be getTemplate, and
+        #           getTemplate should be getContent or something similar.
+        getTemplateString: -> '''
+            <fieldset
+                id="<%= containerId %>"
+                class="c-form-group-cols-<%= columns %>"
+                <% if (!visible) { %>style="display:none;"<% } %>
+            >
+                <% if (label) { %>
+                    <legend class="c-form-group-label">
+                        <h5>
+                            <i class="<%= labelIcon %> c-form-group-label-icon"></i>&nbsp;<%= label %>
+                        </h5>
+                    </legend>
                 <% } %>
-            <% } else {%>
-                <div class="row-fluid"><%= items %></div>
-            <% } %>
+                <div class="c-form-group-content">
+                    <%= groupContent %>
+                </div>
+            </fieldset>
         '''
-        getItemTemplate: ->_.template  '''
-            <% if (isInlineGrid==false){%>
-                <div class="span<%= span %>" > <%= field %></div>
-            <% } else { %>
+
+        getRowTemplate: -> _.template '''
+            <div class="row-fluid"><%= items %></div>
+        '''
+
+        getItemTemplate: -> _.template '''
+            <% if (isInlineGrid || isMultiFilePicker) { %>
                 <%= field %>
+            <% } else { %>
+                <div class="span<%= span %>"><%= field %></div>
             <% } %>
         '''
 
+        # I don't think these two params are necessary.
+        #
+        # @param [single] wheather the group is the only group
+        # @param [index] the group index of the form
         getTemplate: (single = false, index) ->
             return '' if _.isEmpty @fields
 
             contents = []
-            columns = @getColumns()
-            span = 12 / columns
             row = []
+            spanPerColumn = 12 / @columns
 
-            isInlineGrid = false
-            isInlineGrid = true for field in @fields when field.type is 'inline-grid'
-
-            newRow = (isInlineGrid) =>
-                contents.push @getRowTemplate() 
-                    isInlineGrid: isInlineGrid
+            generateNewRow = (opts) =>
+                contents.push @getRowTemplate()
+                    isInlineGrid: opts.isInlineGrid
+                    isMultiFilePicker: opts.isMultiFilePicker
                     containerId: @containerId
-                    single: single
-                    index: index
-                    items: row.join('')
+                    items: row.join ''
                 row = []
-            # console.log '----fields : ', @fields
 
+            # REFACTOR: Optimize the algorithm to use some counter to count the
+            #           colspan instead of the tricky [1...colspan].
             for field, i in @fields
                 colspan = field.colspan or 1
-                colspan = columns if colspan > columns
+                throw new Error \
+                    'field.colspan cannot be greater than group.columns' \
+                    if colspan > @columns
 
-                newRow(isInlineGrid) if row.length + colspan > columns
-                row.push @getItemTemplate() 
+                isInlineGrid = field.type is 'inline-grid'
+                isMultiFilePicker = \
+                    field.type is 'file-picker' and field.multiple is true
+
+                opts =
                     isInlineGrid: isInlineGrid
-                    span: colspan * span
+                    isMultiFilePicker: isMultiFilePicker
+
+                generateNewRow opts if row.length + colspan > @columns
+                row.push @getItemTemplate()
+                    isInlineGrid: isInlineGrid
+                    isMultiFilePicker: isMultiFilePicker
+                    hasOnlyOneField: @hasOnlyOneField
+                    span: colspan * spanPerColumn
                     field: field.getTemplate()
+
+                # This statement inserts a placeholder when colspan is greater
+                # than 1.
+                #
+                # E.g. colspan is 2, the above row.push inserts a field
+                # template, but since the colspan is 2, so I need an empty
+                # field template to take the hole.
                 row.push '' for i in [1...colspan]
-                newRow(isInlineGrid) if row.length is columns
-            newRow(isInlineGrid) if row.length > 0
+                generateNewRow opts if row.length is @columns
+            generateNewRow opts if row.length > 0
 
-            opts = 
-                label: @options.label or @options.name
+            opts =
+                label: @options.label
                 labelIcon: @options.labelIcon or 'icon-file-text'
-                groupContent: contents.join('')
+                groupContent: contents.join ''
                 containerId: @containerId
-                columns: @getColumns()
+                columns: @columns
                 visible: @visible
-                isInlineGrid: isInlineGrid
-                single: single
-                index: index
 
-            #console.log 'opts', opts
-            # console.log 'getTemplateString', @getTemplateString()
             _.template(@getTemplateString())(opts)
-
 
         getHiddenFieldsTemplate: ->
             (field.getTemplate() for field in @hiddenFields).join ''

@@ -32,42 +32,46 @@ define [
 
     row = H.compile '''
         <tr>
-            <td style="text-align: center;"><input id="check-{{id}}" type="checkbox" /></td>
+            <td style="text-align:center;"><input id="check-{{id}}" type="checkbox" /></td>
             <td>
-                <div class="progress" style="margin-bottom: 0px; margin-top: 5px;">
-                    <div class="bar" id="bar-{{id}}" style="width:1%; color: black;text-align:left;">&nbsp;&nbsp;{{name}}</div>
+                <div class="progress" style="margin-bottom:0px; margin-top:5px;">
+                    <div class="bar" id="bar-{{id}}" style="width:1%; color:black; text-align:left;">&nbsp;&nbsp;{{name}}</div>
                 </div>
             </td>
             <td>
                 {{#preview}}
-                <a id="popover-span-{{../id}}" class="upload-preview-btn upload-multiple-preview" href="javascript: void 0"  data-rel="popover" data-placement="{{../preview}}">&nbsp;</a>
-                {{#if ../isImageFile }}
-                <a id="preview-{{../../id}}" href="javascript: void 0" style="z-index: 1;position: relative;">预览</a>
+                <a id="popover-span-{{../id}}" class="upload-preview-btn upload-multiple-preview" href="javascript:void 0" data-rel="popover" data-placement="{{../preview}}">&nbsp;</a>
+                {{#if ../isImageFile}}
+                <a id="preview-{{../../id}}" href="javascript:void 0" style="z-index:1; position:relative;">预览</a>
                 &nbsp;
                 {{/if}}
-                <a id="download-{{../id}}" target="_blank" href="./{{../url}}" style="z-index: 2;position: relative;">下载</a>
+                <a id="download-{{../id}}" target="_blank" href="./{{../url}}" style="z-index:2; position:relative;">下载</a>
                 {{/preview}}
             </td>
         </tr>
     '''
 
     class FilePicker extends Picker.Picker
+        constructor: ->
+            super
+            @options.preview || @options.preview = 'top'
+
         getTemplate: ->
             if @options.multiple is true
                 _.template '''
                     <div class="upload btn-toolbar">
                         <div class="btn-group">
-                            <a id="trigger-<%= id %>" class="btn btn-small icon-cloud-upload"> 上传</a>
+                            <a id="trigger-<%= id %>" class="btn btn-small btn-info icon-cloud-upload">&nbsp;&nbsp;上传</a>
                         </div>
                         <div class="btn-group">
-                            <a id="remove" href="javascript: void 0" class="btn btn-danger btn-small icon-minus"> 删除</a>
+                            <a id="remove" href="javascript:void 0" class="btn btn-danger btn-small icon-minus">&nbsp;&nbsp;删除</a>
                         </div>
                     </div>
 
                     <input type="file" style="display:none" multiple="true" id="hidden-input-<%= id %>"/>
                     <div id="grid_wrapper" class="dataTables_wrapper" role="grid">
                         <div class="c-grid-body">
-                            <table style="width: 100%;" id="view416-grid" class="table table-striped table-bordered table-hover dataTable">
+                            <table style="width:100%;" id="view416-grid" class="table table-striped table-bordered table-hover dataTable">
                                 <thead>
                                 <tr role="row">
                                     <th class="sorting_disabled" tabindex="0" rowspan="1" colspan="1" aria-label="" style="width: 25px; text-align: center !important;"><input id="checkbox" type="checkbox"/></th>
@@ -75,7 +79,7 @@ define [
                                     <th class="sorting" tabindex="0" rowspan="1" colspan="1" aria-label="操作: activate to sort column ascending">操作</th>
                                 </tr>
                                 </thead>
-                                    <tbody id="files-container-<%= id %>" role="alert"></tbody>
+                                <tbody id="files-container-<%= id %>" role="alert"></tbody>
                             </table>
                         </div>
                     </div>
@@ -103,7 +107,7 @@ define [
                         <input type="file" style="display:none" id="hidden-input-<%= id %>"/>
                     </div>
                 '''
-                
+
         loadData: (data) ->
             super
             value = data[@name]
@@ -290,8 +294,8 @@ define [
             if options.preview
                 _url = url + '/' + rid
                 _preview = """
-                    <a id="popover-span-#{did}" class="btn btn-success upload-preview-btn" data-rel="popover" data-placement="#{options.preview}" style="margin-right:87px;" data-content="<img id='preview-img-#{rid}' class='upload-preview' src='#{_url}'' />"><i class="icon-eye-open"/></a>
-                    <a id="preview-#{did}" class="btn btn-success" href="javascript: void 0"  style="margin-right:87px;"><i class="icon-eye-open"/></a>
+                    <a id="popover-span-#{did}" class="btn btn-success upload-preview-btn" data-rel="popover" data-placement="#{options.preview}" style="margin-right:105px;" data-content="<img id='preview-img-#{rid}' class='upload-preview' src='#{_url}'' />"><i class="icon-eye-open"/></a>
+                    <a id="preview-#{did}" class="btn btn-success" href="javascript: void 0"  style="margin-right:105px;"><i class="icon-eye-open"/></a>
                 """
                 $('#preview-span-' + did).html _preview
 
@@ -304,7 +308,7 @@ define [
             # 只有图片类型，才能预览
             _url = url + '/' + rid
             _download = """
-                <a id="download-#{did}" class="btn btn-success" href="#{_url}"  style="margin-right:48px;border-radius:0;"><i class="icon-download"/></a>
+                <a id="download-#{did}" class="btn btn-success" href="#{_url}"  style="margin-right:52px;border-radius:0;"><i class="icon-download"/></a>
             """
             $('#download-span-' + did).html _download
 
@@ -322,18 +326,24 @@ define [
 
             @container.find('#trigger-' + @id).click (e) =>
                 t = $(e.currentTarget)
+                # 点击删除按钮后，移除删除按钮显示文件按钮
                 if isdanger = t.hasClass('btn-remove')
                     @value = id: ''
                     t.removeClass('btn-remove')
                     t.html '<i class="icon-file-text"></i>'
                     @container.find('#percent-' + @id).empty()
                     @container.find('#text-' + @id).empty()
+
+                    # 删除下载按钮
+                    download = $('#download-span-' + @id)
+                    download.empty()
                 else
                     input.click()
 
                 if @options.preview
                     if isdanger
                         $('#preview-' + @id).css 'margin-right': '-0.5px'
+
                         popover = $('#popover-span-' + @id)
                         popover.css 'margin-right': '-0.5px'
                         _next = popover.next()

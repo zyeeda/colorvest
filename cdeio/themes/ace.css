@@ -180,12 +180,7 @@ html, body {
 .c-action-form .tab-content {
     border: 0;
     background-color: #FFF;
-    padding: 18px 20px;
-}
-
-.c-action-form .tab-content .tab-pane fieldset{
-    border: 1px solid #C5D0DC;
-    border-top: 8px solid #D3DBDF;
+    padding: 0;
 }
 
 .c-action-form .tab-content .tab-pane > .control-group {
@@ -246,6 +241,7 @@ html, body {
     background: #fff;
     border-bottom: 1px solid #D3DBDF;
     /*border-top: 8px solid #D3DBDF;*/
+    cursor: pointer;
 }
 
 .c-form-group-title + .c-form-group-container {
@@ -260,15 +256,20 @@ html, body {
     padding-left: 15px;
 }
 
-/*.c-inline-grid-margin {
-    padding-bottom:10px;
-}*/
+.c-inline-grid-margin {
+    margin-bottom: 10px;
+}
 
 .c-inline-grid-container {
     margin-top: 0px;
     margin-bottom: 0px;
     border-top: 0;
-    padding: 0 15px 0px 15px;
+    padding: 0;
+}
+
+.c-inline-grid-inside {
+    padding: 10px;
+    border: 1px solid #cccccc;
 }
 
 .c-form-group-cols-1 .field-label {
