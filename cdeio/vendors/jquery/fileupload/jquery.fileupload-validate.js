@@ -1,5 +1,5 @@
 /*
- * jQuery File Upload Validation Plugin 1.0.2
+ * jQuery File Upload Validation Plugin 1.1.3
  * https://github.com/blueimp/jQuery-File-Upload
  *
  * Copyright 2013, Sebastian Tschan
@@ -9,8 +9,7 @@
  * http://www.opensource.org/licenses/MIT
  */
 
-/*jslint nomen: true, unparam: true, regexp: true */
-/*global define, window */
+/* global define, require, window */
 
 (function (factory) {
     'use strict';
@@ -20,6 +19,9 @@
             'jquery',
             './jquery.fileupload-process'
         ], factory);
+    } else if (typeof exports === 'object') {
+        // Node/CommonJS:
+        factory(require('jquery'));
     } else {
         // Browser globals:
         factory(
@@ -37,10 +39,10 @@
             // even if the previous action was rejected: 
             always: true,
             // Options taken from the global options map:
-            acceptFileTypes: '@acceptFileTypes',
-            maxFileSize: '@maxFileSize',
-            minFileSize: '@minFileSize',
-            maxNumberOfFiles: '@maxNumberOfFiles',
+            acceptFileTypes: '@',
+            maxFileSize: '@',
+            minFileSize: '@',
+            maxNumberOfFiles: '@',
             disabled: '@disableValidation'
         }
     );
@@ -66,16 +68,12 @@
             // has to be overriden for maxNumberOfFiles validation:
             getNumberOfFiles: $.noop,
 
-            maxFileSize: 100000000,
-            minFileSize: undefined,
-            maxNumberOfFiles: 100,
-
             // Error and info messages:
             messages: {
-                maxNumberOfFiles: '文件个数超过限制',
-                acceptFileTypes: '不支持的文件格式',
-                maxFileSize: '文件大小超过限制',
-                minFileSize: '文件大小超过限制'
+                maxNumberOfFiles: 'Maximum number of files exceeded',
+                acceptFileTypes: 'File type not allowed',
+                maxFileSize: 'File is too large',
+                minFileSize: 'File is too small'
             }
         },
 
@@ -88,31 +86,23 @@
                 var dfd = $.Deferred(),
                     settings = this.options,
                     file = data.files[data.index],
-                    numberOfFiles = settings.getNumberOfFiles(),
-                    reg, acceptFileTypesStr;
-
-                if (numberOfFiles && $.type(options.maxNumberOfFiles) === 'number' &&
-                        numberOfFiles + data.files.length > options.maxNumberOfFiles) {
+                    fileSize;
+                if (options.minFileSize || options.maxFileSize) {
+                    fileSize = file.size;
+                }
+                if ($.type(options.maxNumberOfFiles) === 'number' &&
+                        (settings.getNumberOfFiles() || 0) + data.files.length >
+                            options.maxNumberOfFiles) {
                     file.error = settings.i18n('maxNumberOfFiles');
-                    app.error('请不要上传多于100个的文件');
                 } else if (options.acceptFileTypes &&
                         !(options.acceptFileTypes.test(file.type) ||
                         options.acceptFileTypes.test(file.name))) {
-                    acceptFileTypesStr = options.acceptFileTypes.toString();
-                    acceptFileTypesStr = acceptFileTypesStr.substring(acceptFileTypesStr.lastIndexOf('(') + 1, acceptFileTypesStr.lastIndexOf(')'));
-
-                    reg = new RegExp("\\|","g");
-                    acceptFileTypesStr = acceptFileTypesStr.replace(reg, '、');
-
                     file.error = settings.i18n('acceptFileTypes');
-                    app.error('文件格式不支持，请参照以下格式：</br>' + acceptFileTypesStr);
-                } else if (options.maxFileSize && file.size > options.maxFileSize) {
+                } else if (fileSize > options.maxFileSize) {
                     file.error = settings.i18n('maxFileSize');
-                    app.error('请不要上传大于100MB的文件');
-                } else if ($.type(file.size) === 'number' &&
-                        file.size < options.minFileSize) {
+                } else if ($.type(fileSize) === 'number' &&
+                        fileSize < options.minFileSize) {
                     file.error = settings.i18n('minFileSize');
-                    app.error('请不要上传小于0KB的文件');
                 } else {
                     delete file.error;
                 }
