@@ -34,7 +34,8 @@ define [
             if window.navigator.onLine
                 Sync.online method, model, o
             else
-                Sync.offline method, model, o
+                # 去除在线与离线区别, 避免 chrome 下系统在不联网时无法使用系统
+                Sync.online method, model, o
 
     Backbone.sync = Sync.fn
     Sync
