@@ -17,6 +17,7 @@ define [
             size = size / 1024
             i++
         size.toFixed(2) + ' ' + units[i]
+
     # 图片类型
     types = [
         'image/png'
@@ -64,7 +65,7 @@ define [
                             <a id="trigger-<%= id %>" class="btn btn-small btn-info icon-cloud-upload">&nbsp;&nbsp;上传</a>
                         </div>
                         <div class="btn-group">
-                            <a id="remove" href="javascript:void 0" class="btn btn-danger btn-small icon-minus">&nbsp;&nbsp;删除</a>
+                            <a id="remove" href="javascript:void 0" class="btn btn-danger btn-remove btn-small icon-minus">&nbsp;&nbsp;删除</a>
                         </div>
                     </div>
 
@@ -120,9 +121,9 @@ define [
                 @datas or= {}
 
                 for item in @value or []
-                    if isImage item.contentType 
-                        isImageFile = true 
-                    else 
+                    if isImage item.contentType
+                        isImageFile = true
+                    else
                         isImageFile = false
 
                     ctn.append(row(id: item.id, name: item.filename, url: @options.url + '/' + item.id, isImageFile: isImageFile, preview: @options.preview))
@@ -133,10 +134,16 @@ define [
                         popover = $('#popover-span-' + item.id)
                         @setPopoverData popover, @options.url + '/' + item.id, item.id
 
-                        
             if value and value.id
                 trigger = @container.find '#trigger-' + @id
                 trigger.addClass('btn-danger')
+
+                # 此处新增样式原因：
+                #   1. 此 trigger 在新增和编辑表单都有用到，
+                #   2. 在点击此 trigger 删除附件的时候有通过样式 btn-remove 来判断是否删除附件操作，否则就调用选取附件功能
+                #   3. 如果不添加此样式会导致编辑表单上传文件后点击删除按钮时弹出选取附件对话框
+                trigger.addClass('btn-remove')
+
                 trigger.html('<i class="icon-remove"></i>')
 
                 @downloadSingle @options, @id, value.id, @id, @options.url, value.contentType
@@ -200,7 +207,7 @@ define [
                             type: f.type
                             size: calcSize f.size
                             isImageFile: isImage f.type
-                            # url: 
+                            # url:
                             preview: options.preview
                         $(tpl).appendTo @container.find('#files-container-' + @id)
                         d.submit().done (res) ->
@@ -235,12 +242,12 @@ define [
                 fail: (e, data) ->
                     bar = @container.find '#bar-' + data.id
                     bar.removeClass('bar-success').addClass 'bar-danger'
-                    
+
             @container.delegate 'input[id="checkbox"]', 'click', (e) =>
                 if $(e.target).attr('checked')
                     $(e.target).attr('checked', true);
                     $('tbody input[type="checkbox"]').attr('checked',true);
-                else 
+                else
                     $(e.target).removeAttr('checked');
                     $('tbody input[type="checkbox"]').removeAttr('checked');
 
@@ -287,6 +294,7 @@ define [
                 $('#preview-img-' + id).click ->
                         me.popoverToggle popover, url, id
                         window.open url, id
+
         # 单附件预览
         previewSingle: (options, did, rid, $id, url, contentType) ->
             # 只有图片类型，才能预览
@@ -326,6 +334,7 @@ define [
 
             @container.find('#trigger-' + @id).click (e) =>
                 t = $(e.currentTarget)
+
                 # 点击删除按钮后，移除删除按钮显示文件按钮
                 if isdanger = t.hasClass('btn-remove')
                     @value = id: ''
@@ -348,7 +357,7 @@ define [
                         popover.css 'margin-right': '-0.5px'
                         _next = popover.next()
                         _next.remove()
-                
+
     cdeio.registerComponentHandler 'file-picker', (->), (el, options = {}, view) ->
         opt = _.extend {}, options,
             view: view
