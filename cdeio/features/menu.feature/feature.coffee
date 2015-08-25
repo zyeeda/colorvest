@@ -6,8 +6,6 @@ define ['underscore', 'cdeio/vendors/jquery/jquery.slimscroll.min'], (_) ->
             bottom: 'sidebar-collapse'
 
     views: [
-        name: 'inline:shortcut', region: 'top', avoidLoadingHandlers: true
-    ,
         name: 'menu', region: 'center'
     ,
         name: 'inline:tool', region: 'bottom', events:
