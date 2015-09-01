@@ -8,7 +8,6 @@ define ['config', 'underscore'], (projectConfig, _) ->
         routerFileName: 'routers'
         scriptRoot: '/scripts'
         appRoot: 'app'
-        helperPath: 'invoke/helper'
         cdeioFeaturesPath: 'cdeio/features'
         urlPrefix: 'invoke/scaffold/'
         minimumResultsForSearch: 10

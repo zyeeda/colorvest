@@ -9,10 +9,6 @@ define [
     helperPath = config.helperPath or ''
     if config.noBackend is true
         require.s.contexts._.config.urlArgs = if config.development then '_c=' + (new Date()).getTime() else ''
-    else
-        $.get helperPath + '/development', (data) ->
-            config.development = if data is 'false' then false else true
-            require.s.contexts._.config.urlArgs = if config.development then '_c=' + (new Date()).getTime() else ''
 
     (resource, plugin) ->
         deferred = $.Deferred()
