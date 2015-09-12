@@ -251,13 +251,11 @@ define [
                     $(e.target).removeAttr('checked');
                     $('tbody input[type="checkbox"]').removeAttr('checked');
 
-            @container.delegate 'a[id=^"remove"]', 'click', (e) =>
-                $('tbody input[type="checkbox"]').each (e) ->
-                    if $(this).attr('checked')
-                        id = $(this).attr('id').match(/check-(.*)$/)[1]
-                        delete _this.datas[id]
-                        $(this).closest('tr').remove()
-
+            @container.delegate 'a[id^="remove"]', 'click', (e) =>
+                $('tbody input[type="checkbox"]:checked', @container).each () ->
+                    id = $(@).attr('id').match(/check-(.*)$/)[1]
+                    delete _this.datas[id]
+                    $(@).closest('tr').remove()
 
             if @options.preview
                 @container.delegate 'a[id^="preview"]', 'click', (e) =>
