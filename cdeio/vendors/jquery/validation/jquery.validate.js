@@ -927,6 +927,7 @@ $.extend( $.validator, {
 		email: { email: true },
 		url: { url: true },
 		date: { date: true },
+		datetime: {datetime: true},
 		dateISO: { dateISO: true },
 		number: { number: true },
 		digits: { digits: true },
@@ -1146,6 +1147,12 @@ $.extend( $.validator, {
 		// http://jqueryvalidation.org/date-method/
 		date: function( value, element ) {
 			return this.optional( element ) || !/Invalid|NaN/.test( new Date( value ).toString() );
+		},
+
+		datetime: function( value, element ) {
+			console.log('datetime value = ', value, ' element = ', element);
+
+			return this.optional( element ) || /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01]) ([01]\d|2[0-3])(:[0-5]\d){1,2}$/.test( value );
 		},
 
 		// http://jqueryvalidation.org/dateISO-method/
