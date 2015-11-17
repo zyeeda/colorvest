@@ -11,7 +11,7 @@ define [
             @type = 'dropdown'
 
         getComponents: ->
-            config = 
+            config =
                 selector: @id
                 type: 'select'
                 fieldName: @name
@@ -35,34 +35,64 @@ define [
                     config.initSelection= (e, fn) ->
                         val = $(e).val()
                         results = data.results
-                        # return fn(results[0]) if not val
-                        _(results).each (item) ->
-                            fn(item) if String(item.id) == String(val)  
-                
+
+                        if @multiple
+                            return if not val
+
+                            itmes = []
+                            valArr = val.split ','
+                            for value in valArr
+                                _(results).each (item) ->
+                                    itmes.push(item) if String(item.id) == String(value)
+                                fn(itmes)
+                        else
+                            return fn(results[0]) if not val
+                            _(results).each (item) ->
+                                fn(item) if String(item.id) == String(val)
             else
                 config.data = @options.source
                 config.initSelection = (el, fn) =>
                     val = $(el).val()
                     pickerSource = @options.source
-                    return fn(pickerSource[0]) if not val
-                    _(pickerSource).each (item) ->
-                        fn(item) if String(item.id) == String(val)
+
+                    if @multiple
+                        return if not val
+
+                        itmes = []
+                        valArr = val.split ','
+                        for value in valArr
+                            _(pickerSource).each (item) ->
+                                itmes.push(item) if String(item.id) == String(value)
+                            fn(itmes)
+                    else
+                        return fn(pickerSource[0]) if not val
+                        _(pickerSource).each (item) ->
+                            fn(item) if String(item.id) == String(val)
             [config]
 
         afterRender: ->
             if @options.defaultValue
                 select = @form.findComponent(@id)
                 select.select2?('val', @options.defaultValue)
-        
+
         loadFormData: (value, data) ->
+            valueArr = []
             select = @form.findComponent(@id)
+
             return unless select
             if @readOnly
                 select.loadData(data)
             else
                 if value?
-                    super
-                    _.defer -> select.select2('val', value + '')
+                    if @multiple
+                        vals = value.split ','
+                        for v in vals
+                            valueArr.push v + ''
+
+                        _.defer -> select.select2('val', valueArr)
+                    else
+                        super
+                        _.defer -> select.select2('val', value + '')
                 else
                     select.select2('val', @options.defaultValue or '')
 
