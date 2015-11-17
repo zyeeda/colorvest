@@ -25,11 +25,12 @@ define [
     extend:
         initRenderTarget: (su) ->
             root = @module.getApplication()
-            id = _.uniqueId('dialog')
+            @dialogId = _.uniqueId('dialog')
             viewSize = @startupOptions.view.options.size or 'medium'
-            $('<div class="modal hide c-modal-size-' + viewSize + '" id="' + id + '"><div id="' + @startupOptions.view.cid + '"></div>').appendTo document.body
-            @containerId = id
-            @dialogContainer = c = $('#' + id)
+
+            $('<div class="modal hide c-modal-size-' + viewSize + '" id="' + @dialogId + '"><div id="' + @startupOptions.view.cid + '"></div>').appendTo document.body
+            @containerId = @dialogId
+            @dialogContainer = c = $('#' + @dialogId)
             c.on 'hide', (event) =>
                 event.preventDefault()  if @startedOptions.length > 1
                 @close()
@@ -55,12 +56,17 @@ define [
                     me.modal = $('#' + me.containerId).modal(backdrop: 'static')
                     deferred.resolve me
 
-
             deferred.promise()
 
         show: (su, options) ->
+            # 最新的 dialog 所属 view
             view = $('#' + options.view.cid)
+            # dialog 原有的所属 view
             currentView = @startupOptions.view
+
+            viewSize = options.view.options.size or 'medium'
+            currentViewSize = currentView.options.size or 'medium'
+
             deferred = $.Deferred()
             unless view.size() is 0
                 currentView.dialogFeature = @
@@ -68,6 +74,11 @@ define [
                 @dialogContainer.addClass options.view.options.dialogClass  if options.view.options.dialogClass
                 @startedOptions.push options
                 $('#' + currentView.cid).hide()
+
+                if viewSize != currentViewSize
+                    $('#' + @dialogId).removeClass('c-modal-size-' + currentViewSize)
+                    $('#' + @dialogId).addClass('c-modal-size-' + viewSize)
+
                 view.show()
                 deferred.resolve this
                 deferred
@@ -78,6 +89,11 @@ define [
                     @dialogContainer.removeClass currentView.options.dialogClass  if currentView.options.dialogClass
                     @dialogContainer.addClass options.view.options.dialogClass  if options.view.options.dialogClass
                     $('#' + currentView.cid).hide()
+
+                    if viewSize != currentViewSize
+                        $('#' + @dialogId).removeClass('c-modal-size-' + currentViewSize)
+                        $('#' + @dialogId).addClass('c-modal-size-' + viewSize)
+
                     @startupOptions = options
                     @start().done =>
                         deferred.resolve @
@@ -109,6 +125,14 @@ define [
                 @startupOptions = current
                 $('#' + options.view.cid).hide()
                 $('#' + current.view.cid).show()
+
+                viewSize = options.view.options.size or 'medium'
+                currentViewSize = current.view.options.size or 'medium'
+
+                if viewSize != currentViewSize
+                    $('#' + @dialogId).removeClass('c-modal-size-' + viewSize)
+                    $('#' + @dialogId).addClass('c-modal-size-' + currentViewSize)
+
             else
                 app = @module.getApplication()
                 app.stopFeature this
