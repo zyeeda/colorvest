@@ -15,9 +15,20 @@ define [
 
     cdeio.registerComponentHandler 'select', (->), (el, opt, view) ->
         if opt.readOnly is true
-            return loadData: (data) ->
-                _(opt.data).each (item) ->
-                    el.html(item.text) if String(item.id) == String(data[opt.fieldName])
+            if opt.multiple is true
+                return loadData: (data) ->
+                    dataText = ''
+                    return if not data[opt.fieldName]
+                    valArr = String(data[opt.fieldName]).split ','
+                    for val in valArr
+                        _(opt.data).each (item) ->
+                            dataText += item.text + ', ' if String(item.id) == val
+
+                    el.html dataText.substr(0, dataText.length - 2)
+            else
+                return loadData: (data) ->
+                    _(opt.data).each (item) ->
+                        el.html(item.text) if String(item.id) == String(data[opt.fieldName])
 
         options = _.extend {minimumResultsForSearch: config.minimumResultsForSearch}, opt
         options.width = '100%'
@@ -37,7 +48,7 @@ define [
         id = id.join('-')
         # events = ['change']
         # for e in events
-            # selector.on(e, view.feature.delegateComponentEvent(view, {component: selector}, "select:#{id}:#{e}"))            
+            # selector.on(e, view.feature.delegateComponentEvent(view, {component: selector}, "select:#{id}:#{e}"))
         if options.change && view.feature.options.scaffold.handlers[options.change]
             selector.on 'change', ->
                 view.feature.options.scaffold.handlers[options.change](view, selector)
