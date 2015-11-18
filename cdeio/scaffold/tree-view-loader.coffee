@@ -34,7 +34,7 @@ define [
                 viewLoader.submitHandler.call @,
                     submitSuccess: ->
                         _.extend selected, view.model.toJSON()
-                        tree.refresh()
+                        tree.reload()
                 , 'form:edit', viewLoader.getDialogTitle(@feature.views['form:edit'], 'edit', '编辑'), 'edit'
 
         del: ->
