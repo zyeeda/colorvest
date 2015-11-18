@@ -16,10 +16,12 @@ define [
             data.unshift root
         tree.addNodes parent, data, false
 
-    loadAllData = (view, tree, root) ->
+    loadAllData = (view, tree, root, done) ->
         $.when(view.collection.fetch()).done ->
             data = view.collection.toJSON()
             addTreeData tree, data, null, null, root
+            if _.isFunction done
+                    done.call @
 
     resetId = (nodes, root) ->
         for d in nodes
@@ -114,7 +116,7 @@ define [
                 if root
                     tree.expandNode root, true, false, true, true
 
-        tree.reload = ->
+        tree.reload = (done) ->
             return if options.treeData
 
             data = $.fn.zTree._z.data
@@ -130,7 +132,7 @@ define [
                 else
                     options.callback.onExpand null, tree.setting.treeId, null
             else
-                loadAllData view, tree, root
+                loadAllData view, tree, root, done
 
                 if root
                     tree.expandNode root, true, false, true, true

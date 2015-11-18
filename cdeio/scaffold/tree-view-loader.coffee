@@ -16,10 +16,16 @@ define [
                 submitSuccess: =>
                     @feature.views['form:add'].model.set isParent: true
                     selected = tree.getNodeByParam('id', '-1') if not selected
-                    if selected and selected['__inited__'] is true
-                        tree.addNodes selected, @feature.views['form:add'].model.toJSON(), false
+
+                    if tree['__options__'].isAsync is true
+                        if selected and selected['__inited__'] is true
+                            tree.addNodes selected, @feature.views['form:add'].model.toJSON(), false
+                        else
+                            tree.expandNode selected, true, false, true, true
                     else
-                        tree.expandNode selected, true, false, true, true
+                        tree.reload ->
+                            tree.expandNode tree.getNodeByParam('id', selected.id), true, true, true, true
+
             , 'form:add', viewLoader.getDialogTitle(@feature.views['form:add'], 'add', '新增'), 'add'
 
         edit: ->
