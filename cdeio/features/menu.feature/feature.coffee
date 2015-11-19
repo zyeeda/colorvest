@@ -10,7 +10,6 @@ define ['underscore', 'cdeio/vendors/jquery/jquery.slimscroll.min'], (_) ->
     ,
         name: 'inline:tool', region: 'bottom', events:
             'click btn': 'minMenu'
-    ,   name: 'hide'
     ]
 
     extend:
