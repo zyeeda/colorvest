@@ -70,6 +70,9 @@ define
                         data = form.getFormData()
                         data.id = @fakeId()
                         grid.addRow data
+
+                        if _.isFunction gridView.afterInlineGridDialogConfirm
+                            gridView.afterInlineGridDialogConfirm.call @, 'add', form, data
                 ]
             .done ->
                 form.reset()
@@ -115,6 +118,9 @@ define
                         idx = idx[0] if _.isArray idx
                         grid.fnDeleteRow idx
                         grid.addRow d
+
+                        if _.isFunction gridView.afterInlineGridDialogConfirm
+                            gridView.afterInlineGridDialogConfirm.call @, 'add', form, data
                 ]
             .done ->
                 form.setFormData data, true
