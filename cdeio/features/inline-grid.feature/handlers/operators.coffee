@@ -31,8 +31,11 @@ define
 
         app.confirm '确定要删除选中的记录吗?', (sure) =>
             if sure
+                idx = grid.getSelectedIndex()
+                idx = idx[0] if _.isArray idx
+
                 if _.isFunction gridView.handlers.beforeInlineGridRemove
-                    gridView.handlers.beforeInlineGridRemove.call @, grid, @feature.formView
+                    gridView.handlers.beforeInlineGridRemove.call @, grid, @feature.formView, grid.fnGetData(idx)
 
                 grid.removeSelectedRow()
 
@@ -116,11 +119,12 @@ define
                         # d.id = @fakeId()
                         idx = grid.getSelectedIndex()
                         idx = idx[0] if _.isArray idx
-                        grid.fnDeleteRow idx
-                        grid.addRow d
 
                         if _.isFunction gridView.afterInlineGridDialogConfirm
-                            gridView.afterInlineGridDialogConfirm.call @, 'add', form, data
+                            gridView.afterInlineGridDialogConfirm.call @, 'edit', form, grid.fnGetData(idx), d
+
+                        grid.fnDeleteRow idx
+                        grid.addRow d
                 ]
             .done ->
                 form.setFormData data, true

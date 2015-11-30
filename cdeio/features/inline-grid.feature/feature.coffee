@@ -77,7 +77,6 @@ define [
                             groups: data.groups or []
                             tabs: data.tabs
                         view = if def.custom then new CustomFormView def else new FormView def
-                        grid.initData = grid.fnGetData() if !grid.initData
                         @loadViewFormDeferred.resolve view, data.entityLabel
 
                 if @feature.startupOptions.allowAdd
@@ -143,6 +142,7 @@ define [
             @beforeShowInlineGridDialog = scaffold.beforeShowInlineGridDialog
             @afterShowInlineGridDialog = scaffold.afterShowInlineGridDialog
             @validInlineGridFormData = scaffold.validInlineGridFormData
+            @afterInlineGridDialogConfirm = scaffold.afterInlineGridDialogConfirm
             @beforeShowPicker = scaffold.beforeShowPicker
 
             for column in columns
@@ -163,6 +163,9 @@ define [
             ids = []
             data = grid.fnGetData()
 
+            # 保存表格打开时间的原始数据
+            grid.initData = values
+
             grid.clear()
             for d in data or []
                 ids.push d.id
@@ -174,6 +177,7 @@ define [
             grid = @views['inline:grid'].components[0]
             view = @views['inline:operators']
             data = grid.fnGetData() || []
+
             initData = grid.initData || []
             for inda in initData
                 if !_.findWhere(data, {id: inda.id})
@@ -181,21 +185,10 @@ define [
                     inda['__FORM_TYPE__'] = 'delete'
                     inda['__FORM_FLAG__'] = 'true'
                     data = data.concat inda
+
             ids = []
             for d in data
                 dd = _.extend {}, d
                 delete dd.id if d.id.indexOf('FAKEID-') is 0
                 ids.push dd
             ids
-
-            # return [] if not data.length
-            # ids = []
-            # ids.push d.id for d in data when not view.fakeId(d.id)
-            # for d in data
-            #     if view.fakeId(d.id)
-            #         dd = _.extend {}, d
-            #         delete dd.id
-            #         ids.push dd
-            # ids
-            # return [] if not data.length
-            # data
