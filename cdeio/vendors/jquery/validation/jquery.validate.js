@@ -1150,8 +1150,6 @@ $.extend( $.validator, {
 		},
 
 		datetime: function( value, element ) {
-			console.log('datetime value = ', value, ' element = ', element);
-
 			return this.optional( element ) || /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01]) ([01]\d|2[0-3])(:[0-5]\d){1,2}$/.test( value );
 		},
 
@@ -1245,7 +1243,8 @@ $.extend( $.validator, {
 		equalTo: function( value, element, param ) {
 			// bind to the blur event of the target in order to revalidate whenever the target field is updated
 			// TODO find a way to bind the event just once, avoiding the unbind-rebind overhead
-			var target = $( param );
+			var target = $('input[name="' + param + '"]');
+
 			if ( this.settings.onfocusout ) {
 				target.unbind( ".validate-equalTo" ).bind( "blur.validate-equalTo", function() {
 					$( element ).valid();
