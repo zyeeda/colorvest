@@ -29,13 +29,13 @@ define
         grid = @feature.views['inline:grid'].components[0]
         gridView = @feature.views['inline:grid']
 
+        if _.isFunction gridView.handlers.beforeInlineGridRemove
+            return unless (gridView.handlers.beforeInlineGridRemove.call @, grid, @feature.formView) is true
+
         app.confirm '确定要删除选中的记录吗?', (sure) =>
             if sure
                 idx = grid.getSelectedIndex()
                 idx = idx[0] if _.isArray idx
-
-                if _.isFunction gridView.handlers.beforeInlineGridRemove
-                    gridView.handlers.beforeInlineGridRemove.call @, grid, @feature.formView, grid.fnGetData(idx)
 
                 grid.removeSelectedRow()
 
