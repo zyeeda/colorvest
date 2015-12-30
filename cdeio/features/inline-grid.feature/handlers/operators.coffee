@@ -127,7 +127,7 @@ define
                         grid.addRow d
                 ]
             .done ->
-                form.setFormData data, true
+                form.setFormData data
                 if _.isFunction gridView.afterShowInlineGridDialog
                     gridView.afterShowInlineGridDialog.call @, 'edit', form, data
     showItem: ->
