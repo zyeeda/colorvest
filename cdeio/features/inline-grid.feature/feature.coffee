@@ -176,19 +176,34 @@ define [
         getFormData: ->
             grid = @views['inline:grid'].components[0]
             view = @views['inline:operators']
-            data = grid.fnGetData() || []
 
+            data = grid.fnGetData() || []
             initData = grid.initData || []
+
+            delDataMap = {}
+            delDataIds = []
+
+            formData = []
+
             for inda in initData
                 if !_.findWhere(data, {id: inda.id})
                     inda['__ID__'] = inda.id
                     inda['__FORM_TYPE__'] = 'delete'
                     inda['__FORM_FLAG__'] = 'true'
-                    data = data.concat inda
 
-            ids = []
+                    delDataMap[inda.id] = inda
+                    delDataIds.push inda.id
+
             for d in data
                 dd = _.extend {}, d
-                delete dd.id if d.id.indexOf('FAKEID-') is 0
-                ids.push dd
-            ids
+
+                if d.id and d.id.indexOf('FAKEID-') is 0
+                    delete d.id
+                    formData.push d
+                else
+                    if _.findWhere(delDataIds, {id: dd.id})
+                        formData.push delDataMap[dd.id]
+                    else
+                        formData.push dd
+
+            formData
