@@ -17,7 +17,7 @@
 {{#view "title"}}
 {{#if title}}
 <div class="c-form-group-title">
-    <h5 >{{title}}</h5>
+    <h5>{{title}}</h5>
 </div>
 {{/if}}
 {{/view}}
@@ -42,16 +42,6 @@
     </div>
     <div id="picker" style="display:none"></div>
 </div>
-{{else}}
-    {{#if disableShow}}
-    {{else}}
-    <div id="operators" class="btn-toolbar">
-        <div class="btn-group">
-            <a href="javascript:void 0" id="show" title="查看" class="btn btn-info btn-small icon-eye-open">&nbsp;&nbsp;查看</a>
-        </div>
-        <div id="picker" style="display:none"></div>
-    </div>
-    {{/if}}
 {{/unless}}
 {{/view}}
 
