@@ -185,25 +185,19 @@ define [
 
             formData = []
 
+            for d in data
+                dd = _.extend {}, d
+
+                if dd.id and dd.id.indexOf('FAKEID-') is 0
+                    delete dd.id
+                formData.push dd
+
             for inda in initData
                 if !_.findWhere(data, {id: inda.id})
                     inda['__ID__'] = inda.id
                     inda['__FORM_TYPE__'] = 'delete'
                     inda['__FORM_FLAG__'] = 'true'
 
-                    delDataMap[inda.id] = inda
-                    delDataIds.push inda.id
-
-            for d in data
-                dd = _.extend {}, d
-
-                if d.id and d.id.indexOf('FAKEID-') is 0
-                    delete d.id
-                    formData.push d
-                else
-                    if _.findWhere(delDataIds, {id: dd.id})
-                        formData.push delDataMap[dd.id]
-                    else
-                        formData.push dd
+                    formData.push inda
 
             formData
