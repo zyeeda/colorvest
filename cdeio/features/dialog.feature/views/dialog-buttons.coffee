@@ -18,7 +18,7 @@ define ["underscore"], (_) ->
                         @$(id).addClass('btn-grey')
 
                     result = fn.apply(this, [b])
-                    
+
                     @$(id).removeClass('disabled')
                     @$(id).removeClass('btn-grey')
 
@@ -29,5 +29,4 @@ define ["underscore"], (_) ->
             @$el = @feature.dialogContainer
             @delegateEvents()
             @$el = el
-            console.log this.feature.startupOptions.buttons
             buttons: @feature.startupOptions.buttons
