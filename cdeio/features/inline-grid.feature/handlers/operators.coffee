@@ -34,13 +34,10 @@ define
 
         app.confirm '确定要删除选中的记录吗?', (sure) =>
             if sure
-                idx = grid.getSelectedIndex()
-                idx = idx[0] if _.isArray idx
+                if _.isFunction gridView.handlers.afterInlineGridRemove
+                    gridView.handlers.afterInlineGridRemove.call @, grid, @feature.formView, grid.getSelected()
 
                 grid.removeSelectedRow()
-
-                if _.isFunction gridView.handlers.afterInlineGridRemove
-                    gridView.handlers.afterInlineGridRemove.call @, grid, @feature.formView
 
     createItem: ->
         gridView = @feature.views['inline:grid']
