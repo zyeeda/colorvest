@@ -34,8 +34,19 @@ define
 
         app.confirm '确定要删除选中的记录吗?', (sure) =>
             if sure
+                idxes = []
+                selectedIdx = grid.getSelectedIndex()
+                if !_.isArray selectedIdx
+                    idxes.push selectedIdx
+                else
+                    idxes = selectedIdx
+
+                removedData = []
+                for idx in idxes
+                    removedData.push grid.fnGetData(idx)
+
                 if _.isFunction gridView.handlers.afterInlineGridRemove
-                    gridView.handlers.afterInlineGridRemove.call @, grid, @feature.formView, grid.getSelected()
+                    gridView.handlers.afterInlineGridRemove.call @, grid, @feature.formView, removedData
 
                 grid.removeSelectedRow()
 
