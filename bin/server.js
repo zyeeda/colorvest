@@ -27,7 +27,7 @@ const bootstrap = () => {
     new WebpackIsomorphicTools(require('../webpack/webpack-isomorphic-tools-config'))
     .development(__DEVELOPMENT__)
     .server(rootDir, () => {
-      require('../lib/server/web/server')
+      require('../lib/server/server')
     })
 }
 
