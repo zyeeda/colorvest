@@ -142,6 +142,7 @@ define [
             @beforeShowInlineGridDialog = scaffold.beforeShowInlineGridDialog
             @afterShowInlineGridDialog = scaffold.afterShowInlineGridDialog
             @validInlineGridFormData = scaffold.validInlineGridFormData
+            @beforeInlineGridDialogConfirm = scaffold.beforeInlineGridDialogConfirm
             @afterInlineGridDialogConfirm = scaffold.afterInlineGridDialogConfirm
             @beforeShowPicker = scaffold.beforeShowPicker
 

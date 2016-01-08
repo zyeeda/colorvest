@@ -75,13 +75,14 @@ define
                     fn: =>
                         return false unless form.isValid()
 
+                        data = form.getFormData()
+
                         if _.isFunction gridView.validInlineGridFormData
-                            return false unless (gridView.validInlineGridFormData.call @, 'add', form, form.getFormData(), grid) is true
+                            return false unless (gridView.validInlineGridFormData.call @, 'add', form, data, grid) is true
 
                         if _.isFunction gridView.beforeInlineGridDialogConfirm
-                            return false unless (gridView.beforeInlineGridDialogConfirm.call @, 'add', form, form.getFormData(), grid) is true
+                            return false unless (gridView.beforeInlineGridDialogConfirm.call @, 'add', form, data, grid) is true
 
-                        data = form.getFormData()
                         data.id = @fakeId()
                         grid.addRow data
 
@@ -122,15 +123,17 @@ define
                     fn: =>
                         return false unless form.isValid()
 
+                        d = form.getFormData()
+
                         if _.isFunction gridView.validInlineGridFormData
-                            return false unless (gridView.validInlineGridFormData.call @, 'edit', form, form.getFormData()) is true
+                            return false unless (gridView.validInlineGridFormData.call @, 'edit', form, d) is true
 
                         if _.isFunction gridView.beforeInlineGridDialogConfirm
-                            return false unless (gridView.beforeInlineGridDialogConfirm.call @, 'add', form, form.getFormData(), grid) is true
+                            return false unless (gridView.beforeInlineGridDialogConfirm.call @, 'add', form, d, grid) is true
 
-                        d = form.getFormData()
                         # 更新有id，不需要再自动生成
                         # d.id = @fakeId()
+
                         idx = grid.getSelectedIndex()
                         idx = idx[0] if _.isArray idx
 
