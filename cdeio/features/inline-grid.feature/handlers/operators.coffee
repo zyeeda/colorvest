@@ -52,6 +52,7 @@ define
 
     createItem: ->
         gridView = @feature.views['inline:grid']
+        grid = gridView.components[0]
 
         return if not @loadAddFormDeferred
 
@@ -59,7 +60,6 @@ define
             return unless (gridView.beforeShowInlineGridDialog.call @, 'add', @) is true
 
         @loadAddFormDeferred.done (form, title = '') =>
-            grid = gridView.components[0]
             app.showDialog
                 title: '新增' + title
                 view: form
@@ -76,30 +76,33 @@ define
                         return false unless form.isValid()
 
                         if _.isFunction gridView.validInlineGridFormData
-                            return false unless (gridView.validInlineGridFormData.call @, 'add', form, form.getFormData()) is true
+                            return false unless (gridView.validInlineGridFormData.call @, 'add', form, form.getFormData(), grid) is true
+
+                        if _.isFunction gridView.beforeInlineGridDialogConfirm
+                            return false unless (gridView.beforeInlineGridDialogConfirm.call @, 'add', form, form.getFormData(), grid) is true
 
                         data = form.getFormData()
                         data.id = @fakeId()
                         grid.addRow data
 
                         if _.isFunction gridView.afterInlineGridDialogConfirm
-                            gridView.afterInlineGridDialogConfirm.call @, 'add', form, data
+                            gridView.afterInlineGridDialogConfirm.call @, 'add', form, data, {}, grid
                 ]
             .done ->
                 form.reset()
                 if _.isFunction gridView.afterShowInlineGridDialog
-                    gridView.afterShowInlineGridDialog.call @, 'add', form, form.getFormData()
+                    gridView.afterShowInlineGridDialog.call @, 'add', form, form.getFormData(), grid
 
     updateItem: ->
         gridView = @feature.views['inline:grid']
+        grid = gridView.components[0]
 
         return if not @loadEditFormDeferred
 
         if _.isFunction gridView.beforeShowInlineGridDialog
-            return unless (gridView.beforeShowInlineGridDialog.call @, 'edit', @) is true
+            return unless (gridView.beforeShowInlineGridDialog.call @, 'edit', @, grid) is true
 
         @loadEditFormDeferred.done (form, title = '') =>
-            grid = gridView.components[0]
             index = grid.getSelectedIndex()
             index = index[0] if _.isArray index
             return if index is null
@@ -122,6 +125,9 @@ define
                         if _.isFunction gridView.validInlineGridFormData
                             return false unless (gridView.validInlineGridFormData.call @, 'edit', form, form.getFormData()) is true
 
+                        if _.isFunction gridView.beforeInlineGridDialogConfirm
+                            return false unless (gridView.beforeInlineGridDialogConfirm.call @, 'add', form, form.getFormData(), grid) is true
+
                         d = form.getFormData()
                         # 更新有id，不需要再自动生成
                         # d.id = @fakeId()
@@ -129,7 +135,7 @@ define
                         idx = idx[0] if _.isArray idx
 
                         if _.isFunction gridView.afterInlineGridDialogConfirm
-                            gridView.afterInlineGridDialogConfirm.call @, 'edit', form, grid.fnGetData(idx), d
+                            gridView.afterInlineGridDialogConfirm.call @, 'edit', form, grid.fnGetData(idx), d, grid
 
                         grid.fnDeleteRow idx
                         grid.addRow d
@@ -137,7 +143,7 @@ define
             .done ->
                 form.setFormData data
                 if _.isFunction gridView.afterShowInlineGridDialog
-                    gridView.afterShowInlineGridDialog.call @, 'edit', form, data
+                    gridView.afterShowInlineGridDialog.call @, 'edit', form, data, grid
     showItem: ->
         gridView = @feature.views['inline:grid']
         return if not @loadViewFormDeferred
