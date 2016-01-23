@@ -18,7 +18,6 @@ define [
     'cdeio/core/form/number-range-field'
     'cdeio/core/form/date-range-field'
     'cdeio/core/form/inline-grid-field'
-    'cdeio/vendors/jquery/validation/messages_zh'
     #'cdeio/vendors/jquery/validation/jquery.validate' # check it later
 ], ($, _, View, Handlebars, FormField, FormGroup, loaderPluginManager) ->
 

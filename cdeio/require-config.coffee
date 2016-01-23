@@ -22,12 +22,9 @@ require =
         'cdeio/vendors/jquery/layout/jquery.layout': ['cdeio/vendors/jquery/ui/draggable', 'cdeio/vendors/jquery/ui/effect-slide', 'cdeio/vendors/jquery/ui/effect-drop', 'cdeio/vendors/jquery/ui/effect-scale']
         'cdeio/vendors/jquery/layout/jquery.layout.resizeTabLayout': ['cdeio/vendors/jquery/layout/jquery.layout']
 
-        'cdeio/vendors/jquery/ui/datepicker-zh-CN': ['cdeio/vendors/jquery/ui/datepicker']
         'cdeio/vendors/jquery/timepicker/jquery-ui-timepicker': ['cdeio/vendors/jquery/ui/datepicker']
-        'cdeio/vendors/jquery/timepicker/jquery-ui-timepicker-zh-CN': ['cdeio/vendors/jquery/timepicker/jquery-ui-timepicker']
 
         'cdeio/vendors/jquery/validation/jquery.validate': ['jquery']
-        'cdeio/vendors/jquery/validation/messages_zh': ['cdeio/vendors/jquery/validation/jquery.validate']
 
         'cdeio/vendors/jquery/flot/jquery.flot.min': ['jquery']
         'cdeio/vendors/jquery/flot/jquery.flot.pie.min': ['jquery', 'cdeio/vendors/jquery/flot/jquery.flot.min']

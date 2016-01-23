@@ -17,7 +17,6 @@ define [
     'cdeio/core/form/number-range-field'
     'cdeio/core/form/date-range-field'
     'cdeio/core/form/inline-grid-field'
-    'cdeio/vendors/jquery/validation/messages_zh'
     #'cdeio/vendors/jquery/validation/jquery.validate' # check it later
     'cdeio/vendors/jquery/jquery.tooltipster.min'
 ], ($, _, View, Handlebars, FormField, FormGroup) ->
@@ -147,7 +146,7 @@ define [
         setFormData: (data = {}, onlyExists) ->
             @eachField (field) ->
                 if onlyExists is true
-                    field.loadFormData data[field.name], data if _.has(data, field.name) or ' __ID__ __FORM_TYPE__ __FORM__FLAG__'.indexOf(field.name) > 0  
+                    field.loadFormData data[field.name], data if _.has(data, field.name) or ' __ID__ __FORM_TYPE__ __FORM__FLAG__'.indexOf(field.name) > 0
                 else
                     field.loadFormData data[field.name], data
 
@@ -192,7 +191,7 @@ define [
                         $('#trigger-a-' + field.id, field.form.$el).unbind().css('cursor', 'not-allowed')
                     else
                         field.form.$(field.id).attr('disabled', true)
-            
+
             $.when.apply($, promises).then =>
                 $.when(@bindValidation()).then ->
                     deferred.resolve @
@@ -224,11 +223,11 @@ define [
                 highlight: (label) ->
                     $(label).closest('.control-group').addClass('error')
                 success: (label, element) ->
-                    if options.validation.errorsAppend      
+                    if options.validation.errorsAppend
                         $(label).closest('.control-group').removeClass('error')
                         $(label).remove()
                     else
-                        $(element).tooltipster 'destroy' 
+                        $(element).tooltipster 'destroy'
                         $(element).closest('.control-group').removeClass('error')
                         $(element).attr('title', '')
 
@@ -257,7 +256,7 @@ define [
                 oo = pinedGroups: (group.getTemplate() for group in unused).join(''), lis: lis.join(''), content: contents.join('')
                 o.content = @getTabLayoutTemplate() oo
             else
-                # 排除不包含字段的 group 
+                # 排除不包含字段的 group
                 useableGroups = (group for group in @groups when not _.isEmpty group.fields)
                 single = true if useableGroups.length is 1
                 o.content = (group.getTemplate(single, index) for group, index in useableGroups).join ''
@@ -266,7 +265,7 @@ define [
             _.template(@getTemplateString()) o
 
         renderHtml: (data) ->
-            # console.log 
+            # console.log
             #     template: @getTemplate()
             #     data: data
             Handlebars.compile(@getTemplate()) data
