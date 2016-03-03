@@ -6701,6 +6701,8 @@
 					oSettings.aaSorting[i][1] = oColumn.asSorting[0];
 				}
 
+				oColumn.asSorting = oColumn.asSorting || []
+
 				/* Set the current sorting index based on aoColumns.asSorting */
 				for ( j=0, jLen=oColumn.asSorting.length ; j<jLen ; j++ )
 				{

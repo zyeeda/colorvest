@@ -17,7 +17,7 @@ define [
     'cdeio/core/form/number-range-field'
     'cdeio/core/form/date-range-field'
     'cdeio/core/form/inline-grid-field'
-    #'cdeio/vendors/jquery/validation/jquery.validate' # check it later
+    'cdeio/vendors/jquery/validation/jquery.validate'
     'cdeio/vendors/jquery/jquery.tooltipster.min'
 ], ($, _, View, Handlebars, FormField, FormGroup) ->
 
@@ -198,7 +198,6 @@ define [
             deferred.promise()
 
         bindValidation: ->
-            # check it later
             return if not @options.validation
             options = @options
             validator = @$$('form').validate
