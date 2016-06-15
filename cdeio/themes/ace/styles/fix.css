@@ -59,7 +59,7 @@ div.modal-body {
 }
 
 .filter_column input {
-	height: 22px !important; 
+	height: 22px !important;
 }
 
 .select2-container .select2-choice {
@@ -70,6 +70,15 @@ div.modal-body {
 
 .select2-container-active .select2-choice, .select2-container-active .select2-choices {
     border: 1px solid #5897fb;
+}
+
+.select2-container .select2-choice > .select2-chosen {
+    margin-top: 3px;
+}
+
+.select2-container .select2-choice .select2-arrow b::before {
+    margin-top: 3px;
+    height: 27px;
 }
 
 .select2-search:after {

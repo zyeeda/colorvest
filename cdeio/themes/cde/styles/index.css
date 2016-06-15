@@ -407,7 +407,7 @@ form {
 }
 
 .c-layout-toolbar {
-	background: #FFF;	
+	background: #FFF;
 }
 
 .dataTables_wrapper {
@@ -649,7 +649,7 @@ fieldset .table.table-bordered td:first-child,
 }*/
 
 .select2-container .select2-choice span {
-	margin-top: 3px;
+	margin-top: 0;
 }
 
 .select2-container-active .select2-choice, .select2-drop {
@@ -790,7 +790,7 @@ button.btn > [class*="icon-"] {
 }
 
 .btn-inverse:hover {
-	background-color: 
+	background-color:
 }
 
 .btn-small {
