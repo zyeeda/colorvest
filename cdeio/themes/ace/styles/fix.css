@@ -44,6 +44,10 @@ div.modal {
     position: absolute;
 }
 
+div.bootbox.modal {
+    position: fixed;
+}
+
 div.modal-body {
     max-height: inherit;
 }
