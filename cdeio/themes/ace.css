@@ -39,7 +39,7 @@ html, body {
 }
 
 /*.c-layout-border {
-    border: 1px solid #BAC1C8; 
+    border: 1px solid #BAC1C8;
     margin-top: 20px;
 }*/
 
@@ -158,8 +158,8 @@ html, body {
 
 .c-picker a.btn.btn-success {
     background-color: #00B2AD !important;
-    border-color: #00B2AD;  
-    color: #fff !important;  
+    border-color: #00B2AD;
+    color: #fff !important;
 }
 
 .c-picker a.btn.btn-success:hover {
@@ -251,8 +251,8 @@ html, body {
 
 .c-form-group-title h5 {
     margin: 0;
-    padding-top: 10px; 
-    padding-bottom: 10px; 
+    padding-top: 10px;
+    padding-bottom: 10px;
     padding-left: 15px;
 }
 
@@ -334,7 +334,7 @@ html, body {
 }
 
 .gecko .c-filter-toggle i {
-    margin-left: 4px;
+    margin-left: -2px;
 }
 .webkit .c-filter-toggle i {
     margin-left: -2px;
@@ -383,7 +383,7 @@ html, body {
 .process-tabs .nav-tabs li {
     width: 25%;
     margin: 0;
-    
+
 }
 
 .process-tabs .nav-tabs li > a {
@@ -408,7 +408,7 @@ html, body {
     padding-left:28px;
     font-size:13px;
 }
-.process-tabs .nav-tabs li > a:hover span:last-child, 
+.process-tabs .nav-tabs li > a:hover span:last-child,
 .process-tabs .nav-tabs li.active > a span:last-child {
     color: #FFF;
 }
