@@ -17,7 +17,7 @@ define [
     # 根据 content-type 判断是否为图片
     isImage = (contentType) ->
         _.contains types, contentType
-        
+
     class FilePickerField extends FormField
         constructor: ->
             super
@@ -42,17 +42,20 @@ define [
 
         loadFormData: (value, data) ->
             if @readOnly
-                @form.$(@id).text(value?.name)
                 @value = value
                 if @multiple is true
+                    @form.$(@id).text('')
                     for item in @value
+                        @form.$(@id).append('<a id="' + @form.cid + '-popover-span-' + item.id + '" class="upload-preview-btn upload-multiple-preview" href="javascript: void(0) "  data-rel="popover" data-placement="' + @options.preview + '"  data-content="<img id=\'preview-img-' + item.id + '\' class=\'upload-preview\' src=\'' + @options.url + '/' + item.id + '\' />" data-original-title title>&nbsp;</a>')
+                        @form.$(@id).append('<a id="' + @form.cid + '-preview-' + item.id + '" target="_blank" style="z-index: 1;position: relative;" href="javascript: void 0">' + item.filename + '</a></br>')
+
                         @previewSingle @options, item.id, item.id, item.id, @options.url, item.contentType
                 else
                     @previewSingle @options, @id, @value.id, @id, @options.url, @value.contentType if @value
             else
                 picker = @form.findComponent('a-' + @id)
                 return unless picker
-                picker.loadData data 
+                picker.loadData data
 
         previewSingle: (options, did, rid, $id, url, contentType) ->
             # 只有图片类型，才能预览
@@ -77,8 +80,8 @@ define [
                 popover.popover html: true
                 popover.popover 'show'
                 $('#preview-img-' + id).click =>
-                        @popoverToggle popover, url, id
-                        window.open url, id
+                    @popoverToggle popover, url, id
+                    window.open url, id
         getFormData: ->
             if @readOnly
                 @value?.id
@@ -92,7 +95,6 @@ define [
                 return obj if obj and obj.id
                 id: null
 
-                        # <a target="_blank" style="word-break:break-all;" href="<%= options.url %>/{{id}}">{{filename}}</a>
         getTemplateString: -> '''
             <% if (readOnly) { %>
                 <div class="c-view-form-field">
