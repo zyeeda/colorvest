@@ -71,7 +71,7 @@ define [
         getSelectedItems: ->
             grid = @view.components[0]
             selected = grid.getSelected()
-            return false unless selected
+            return unless selected
 
             selected = [selected] unless @picker.options.multiple is true
 
@@ -79,6 +79,10 @@ define [
             for model in selected
                 items.push model.toJSON()
             items
+
+        getSelectedIndex: ->
+            grid = @view.components[0]
+            grid.getSelectedIndex()
 
         show: ->
             feature = @view.feature
@@ -108,9 +112,13 @@ define [
                     status: 'btn-primary'
                     fn: =>
                         selected = @getSelectedItems()
-                        if not selected
+                        selectIdx = @getSelectedIndex() || []
+
+                        if selectIdx.length is 0
                             @app.error '请选择记录'
                             return false
+                        else if not selected
+                            return
 
                         selected = selected[0] if not @picker.options.multiple
 
