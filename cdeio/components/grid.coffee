@@ -62,7 +62,7 @@ define [ 'jquery'
         settings.jqXHR = view.collection.fetch(data: params).done ->
             data = view.collection.toJSON()
             data = settings.oInit.afterRequest.call view, data if settings.oInit.afterRequest
-            d['_i'] = (i+1) for d, i in data
+            d['_i'] = (params['_first'] || 0) + i + 1 for d, i in data
 
             json =
                 aaData: data
