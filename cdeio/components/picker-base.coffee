@@ -112,13 +112,18 @@ define [
                     status: 'btn-primary'
                     fn: =>
                         selected = @getSelectedItems()
-                        selectIdx = @getSelectedIndex() || []
 
-                        if selectIdx.length is 0
-                            @app.error '请选择记录'
-                            return false
-                        else if not selected
-                            return
+                        if @picker['__options__'] is 'grid-picker' or @picker['__options__'] is 'multi-grid-picker'
+                            selectIdx = @getSelectedIndex() || []
+                            if selectIdx.length is 0
+                                @app.error '请选择记录'
+                                return false
+                            else if not selected
+                                return
+                        else
+                            if not selected
+                                @app.error '请选择记录'
+                                return false
 
                         selected = selected[0] if not @picker.options.multiple
 
@@ -221,7 +226,7 @@ define [
             # else
             #     id @value or {}
 
-            textKey = @options.textKey or 'name'
+            # textKey = @options.textKey or 'name'
             if _.isArray @value
                 for item in @value
                     return {} if !item
