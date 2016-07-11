@@ -318,6 +318,16 @@ html, body {
     margin-left: -480px;
 }
 
+.c-modal-size-xlarge {
+    width: 1160px;
+    margin-left: -580px;
+}
+
+.c-modal-size-xxlarge {
+    width: 1360px;
+    margin-left: -680px;
+}
+
 .filter_column {
     text-align: center;
     display: block;
