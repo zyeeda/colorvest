@@ -258,7 +258,15 @@ define [
             handlers = scaffold.handlers or {}
             callback = handlers[@callback]
 
-            text = @options.toText or (data) => if data then data[@options.textKey] or data.name else ''
+            text = @options.toText or (data) =>
+                if data
+                    if @options.displayString
+                        tpl = H.compile @options.displayString
+                        tpl(data)
+                    else
+                        data.name or ''
+                else
+                    ''
 
             if _.isArray value
                 t = (text item for item in value).join ','

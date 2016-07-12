@@ -29,6 +29,7 @@ define [
             form: @form
             multiple: !!@options.multiple
             textKey: @options.textKey
+            displayString: @options.displayString or '{{name}}'
 
         getComponents: ->
             if @readOnly then [] else [@getComponent()]
