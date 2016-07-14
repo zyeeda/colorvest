@@ -9,9 +9,29 @@ define [ 'jquery'
 ], ($, _, cdeio) ->
 
     searchExp = /^sSearch_(\d+)$/
+    alignArr = ['left', 'center', 'right']
     typeMap =
         select: 'eq', text: 'like', number: 'eq'
         'number-range': 'between', 'date-range': 'between'
+
+    getDeepVal = (obj, path) ->
+        pathArr = path.split '.'
+        val = obj
+
+        for i in [0 .. pathArr.length - 1]
+            val = val[pathArr[i]]
+
+        val
+
+    setDeepVal = (obj, path, val) ->
+        pathArr = path.split '.'
+        tmpObj = obj
+
+        for i in [0 .. pathArr.length - 2]
+            tmpObj = tmpObj[pathArr[i]]
+
+        tmpObj[pathArr[pathArr.length - 1]] = val
+        tmpObj
 
     extractFilters = (data, settings) ->
         filters = []
@@ -62,7 +82,18 @@ define [ 'jquery'
         settings.jqXHR = view.collection.fetch(data: params).done ->
             data = view.collection.toJSON()
             data = settings.oInit.afterRequest.call view, data if settings.oInit.afterRequest
-            d['_i'] = (params['_first'] || 0) + i + 1 for d, i in data
+
+            for d, i in data
+                d['_i'] = (params['_first'] || 0) + i + 1
+
+                for col in view.components[0]['__options__'].columns
+                    colName = col.name
+
+                    if col.align and _.contains alignArr, col.align
+                        if colName.indexOf('.') > 0
+                            setDeepVal(d, colName, '<div style="text-align:' + col.align + ';">' + getDeepVal(d, colName) + '</div>')
+                        else
+                            d[colName] = '<div style="text-align:' + col.align + ';">' + d[colName] + '</div>'
 
             json =
                 aaData: data
@@ -245,7 +276,6 @@ define [ 'jquery'
                     filters.push null
                 footers.push "<th></th>"
                 adaptColumn col, view
-
 
         opt.aaData = options.data if options.data
         opt.iDeferLoading = options.deferLoading if _.has options, 'deferLoading'
