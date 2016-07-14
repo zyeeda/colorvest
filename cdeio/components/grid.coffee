@@ -20,7 +20,6 @@ define [ 'jquery'
 
         for i in [0 .. pathArr.length - 1]
             val = val[pathArr[i]]
-
         val
 
     setDeepVal = (obj, path, val) ->
@@ -31,7 +30,6 @@ define [ 'jquery'
             tmpObj = tmpObj[pathArr[i]]
 
         tmpObj[pathArr[pathArr.length - 1]] = val
-        tmpObj
 
     extractFilters = (data, settings) ->
         filters = []
