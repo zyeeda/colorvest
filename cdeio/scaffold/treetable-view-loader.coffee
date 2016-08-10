@@ -51,16 +51,28 @@ define [
 
             scaffold = gridView.feature.options.scaffold or {}
             _handlers = scaffold.handlers or {}
+
             if _.isFunction _handlers.beforeDel
-                return if (_handlers.beforeDel.call gridView, gridView, grid, selected.toJSON()) is false
+                if selected not instanceof Array
+                    selectedRows = [selected]
+                return if (_handlers.beforeDel.call gridView, gridView, grid, selectedRows) is false
 
             app.confirm '确定要删除选中的记录吗?', (confirmed) =>
                 return if not confirmed
+                if selected instanceof Array
+                    ids = []
+                    for item in selected or []
+                        ids.push item.id
 
-                @feature.model.set 'id', selected
-                $.when(@feature.model.destroy()).then (data) =>
-                    grid.delTreeNode selected
-                    grid.trigger 'reloadGrid'
+                    @feature.request(url: 'delete', type: 'post', data: ids: ids).done ->
+                        for item in selected or []
+                            grid.delTreeNode item
+                        grid.trigger 'reloadGrid'
+                else
+                    @feature.model.set 'id', selected
+                    $.when(@feature.model.destroy()).then (data) =>
+                        grid.delTreeNode selected
+                        grid.trigger 'reloadGrid'
 
         show: ->
             app = @feature.module.getApplication()

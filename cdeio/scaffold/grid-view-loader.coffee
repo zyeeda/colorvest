@@ -34,21 +34,31 @@ define [
             selected = grid.getSelected()
             app = @feature.module.getApplication()
             return app.info '请选择要操作的记录' if not selected
-            selected = selected[0] if selected instanceof Array
 
             scaffold = gridView.feature.options.scaffold or {}
             _handlers = scaffold.handlers or {}
+
             if _.isFunction _handlers.beforeDel
-                return if (_handlers.beforeDel.call gridView, gridView, grid, selected.toJSON()) is false
+                if selected not instanceof Array
+                    selectedRows = [selected]
+                return if (_handlers.beforeDel.call gridView, gridView, grid, selectedRows) is false
 
             app.confirm '确定要删除选中的记录吗?', (confirmed) =>
                 return if not confirmed
 
-                @feature.model.set selected
-                $.when(@feature.model.destroy()).then (data) =>
-                    grid.refresh()
-                .always =>
-                    @feature.model.clear()
+                if selected instanceof Array
+                    ids = []
+                    for item in selected or []
+                        ids.push item.id
+
+                    @feature.request(url: 'delete', type: 'post', data: ids: ids).done ->
+                        grid.refresh()
+                else
+                    @feature.model.set selected
+                    $.when(@feature.model.destroy()).then (data) =>
+                        grid.refresh()
+                    .always =>
+                        @feature.model.clear()
 
         show: ->
             grid = @feature.views['grid:body'].components[0]

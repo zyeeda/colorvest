@@ -52,15 +52,26 @@ define [
 
             scaffold = treeView.feature.options.scaffold or {}
             _handlers = scaffold.handlers or {}
+
             if _.isFunction _handlers.beforeDel
-                return if (_handlers.beforeDel.call treeView, treeView, tree, selected.toJSON()) is false
+                if selected not instanceof Array
+                    selectedRows = [selected]
+                return if (_handlers.beforeDel.call treeView, treeView, tree, selectedRows) is false
 
             app.confirm '确定要删除选中的记录吗?', (confirmed) =>
                 return if not confirmed
+                if selected instanceof Array
+                    ids = []
+                    for item in selected or []
+                        ids.push item.id
 
-                @feature.model.set 'id', selected.id
-                $.when(@feature.model.destroy()).then (data) =>
-                    tree.removeNode selected
+                    @feature.request(url: 'delete', type: 'post', data: ids: ids).done ->
+                        for item in selected or []
+                            tree.removeNode item
+                else
+                    @feature.model.set 'id', selected.id
+                    $.when(@feature.model.destroy()).then (data) =>
+                        tree.removeNode selected
 
         show: ->
             app = @feature.module.getApplication()
