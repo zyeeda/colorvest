@@ -1118,14 +1118,34 @@ $.extend( $.validator, {
 			if ( !this.depend( param, element ) ) {
 				return "dependency-mismatch";
 			}
+
 			if ( element.nodeName.toLowerCase() === "select" ) {
 				// could be an array for select-multiple or a string, both are fine this way
 				var val = $( element ).val();
 				return val && val.length > 0;
 			}
-			if ( this.checkable( element ) ) {
-				return this.getLength( value, element ) > 0;
+
+			// is element type is mask, we need to generate regExp with it's pattern to test element's value.
+			if ($(element).hasClass('mask')) {
+				var pattern = element.pattern;
+				var patternArr = pattern.split('')
+
+				for (var i = 0; i < patternArr.length; i++) {
+					if ('9' !== patternArr[i] && 'a' !== patternArr[i] && '*' !== patternArr[i] && '/' !== patternArr[i]) {
+						patternArr[i] = '[' + patternArr[i] + ']';
+					}
+				}
+
+				pattern = patternArr.join('');
+				pattern = pattern.replace(/[9]/g, '[0-9]').replace(/[a]/g, '[a-zA-Z]').replace(/[*]/g, '[\\S\\s]').replace(/[\/]/g, '\\/');
+
+				return (new RegExp(pattern)).test(value);
+			} else { // other text field only need to check length of value.
+				if ( this.checkable( element ) ) {
+					return this.getLength( value, element ) > 0;
+				}
 			}
+
 			return $.trim( value ).length > 0;
 		},
 
