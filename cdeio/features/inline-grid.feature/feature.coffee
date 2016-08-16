@@ -147,14 +147,14 @@ define [
             @beforeShowPicker = scaffold.beforeShowPicker
 
             alignArr = ['left', 'center', 'right']
-            for column in columns
+            for col in columns
                 if col.align and _.contains alignArr, col.align
-                    column.renderer = (data, param, gridData) ->
+                    col.renderer = (data, param, gridData) ->
                         """
                             <div style='text-align:#{col.align};'>#{data}</div>
                         """
 
-                column.renderer = renderers[column.renderer] if _.isString(column.renderer)
+                col.renderer = renderers[col.renderer] if _.isString(col.renderer)
 
             _.extend
                 type: 'grid'
