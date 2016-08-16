@@ -146,7 +146,14 @@ define [
             @afterInlineGridDialogConfirm = scaffold.afterInlineGridDialogConfirm
             @beforeShowPicker = scaffold.beforeShowPicker
 
+            alignArr = ['left', 'center', 'right']
             for column in columns
+                if col.align and _.contains alignArr, col.align
+                    column.renderer = (data, param, gridData) ->
+                        """
+                            <div style='text-align:#{col.align};'>#{data}</div>
+                        """
+
                 column.renderer = renderers[column.renderer] if _.isString(column.renderer)
 
             _.extend
