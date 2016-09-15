@@ -36,7 +36,22 @@ define [
 
         loadFormData: (value, data) ->
             if @readOnly
-                @form.$(@id).text(value?.name)
+                text = (data) =>
+                    if data
+                        if @options.displayString
+                            tpl = Handlebars.compile @options.displayString
+                            tpl(data)
+                        else
+                            data.name or ''
+                    else
+                        ''
+
+                if _.isArray value
+                    t = (text item for item in value).join ','
+                else
+                    t = text value
+
+                @form.$(@id).text(t)
                 @value = value
             else
                 picker = @form.findComponent('a-' + @id)
